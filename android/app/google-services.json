@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "499780464226",
+    "project_id": "imob-projeto-expmed",
+    "storage_bucket": "imob-projeto-expmed.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:499780464226:android:be50e0f0848274e303ab3b",
+        "android_client_info": {
+          "package_name": "com.example.projeto_imobiliaria"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANyr_cTj9B6WG2zl6dM_hAr8WzRyDz44I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
