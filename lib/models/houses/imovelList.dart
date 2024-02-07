@@ -48,8 +48,7 @@ class ImovelList with ChangeNotifier {
                 value['info'] as Map<String, dynamic>?;
 
             if (infoData != null) {
-              print('longitude: ${infoData['longitude']}');
-              print('latitude: ${infoData['latitude']}');
+             
               final Map<String, dynamic> infoMap = {
                 'area_privativa': infoData['area_privativa'] ?? '',
                 'area_privativa_casa': infoData['area_privativa_casa'] ?? '',

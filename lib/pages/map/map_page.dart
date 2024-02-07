@@ -15,24 +15,27 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
+  bool isDarkMode = false;
   late GoogleMapController mapController;
-
+  late List<Imovel> loadedProducts = [];
   List<Marker> filteredMarkers = [];
   bool showInfoScreen = false;
   String selectedMarkerTitle = '';
+  String selectedMarkerTerreno = '';
+  String selectedMarkerLocation = '';
+  String selectedMarkerOrigalPrice = '';
+  List<String> urlsImage = [];
 
-@override
+  @override
   void initState() {
     super.initState();
 
     final provider = Provider.of<ImovelList>(context, listen: false);
-    final List<Imovel> loadedProducts = provider.items;
+    loadedProducts = provider.items;
 
-    // Criar marcadores usando os dados dos produtos
     filteredMarkers = loadedProducts
         .take(50) // Pegue apenas os 50 primeiros itens
         .expand((imovel) => imovel.infoList.map((info) {
-
               // Parse latitude and longitude only if they are valid doubles
               double latitude = double.tryParse(info['latitude']) ?? 0.0;
               double longitude = double.tryParse(info['longitude']) ?? 0.0;
@@ -43,8 +46,15 @@ class _MapPageState extends State<MapPage> {
                 infoWindow: InfoWindow(title: info['nome_imovel'].toString()),
                 onTap: () {
                   setState(() {
+                    urlsImage = [];
                     showInfoScreen = true;
                     selectedMarkerTitle = info['nome_imovel'].toString();
+                    selectedMarkerTerreno = info['terreno'].toString();
+                    selectedMarkerLocation = info['localizacao'].toString();
+                    selectedMarkerOrigalPrice =
+                        info['preco_original'].toString();
+                    // Convertendo para Iterable<String> antes de adicionar à lista
+                    urlsImage.addAll(info['image_urls'].cast<String>());
                   });
                 },
               );
@@ -52,11 +62,8 @@ class _MapPageState extends State<MapPage> {
         .toList();
   }
 
-
   @override
   Widget build(BuildContext context) {
- 
-
     return Scaffold(
       appBar: CustomAppBar(
         subtitle: "Localização dos hospitais",
@@ -91,7 +98,13 @@ class _MapPageState extends State<MapPage> {
                           showInfoScreen = false;
                         });
                       },
-                      child: InfoMapPage(selectedMarkerTitle),
+                      child: InfoMapPage(
+                          selectedMarkerTitle,
+                          selectedMarkerTerreno,
+                          selectedMarkerLocation,
+                          selectedMarkerOrigalPrice,
+                          urlsImage,
+                          isDarkMode),
                     )
                   : GestureDetector(
                       onTap: () {
@@ -105,9 +118,7 @@ class _MapPageState extends State<MapPage> {
                             padding: const EdgeInsets.all(8.0),
                             child: TextField(
                               onChanged: (value) {
-                                setState(() {
-                                  
-                                });
+                                setState(() {});
                               },
                               decoration: InputDecoration(
                                 labelText: 'Pesquisar',
@@ -125,15 +136,43 @@ class _MapPageState extends State<MapPage> {
                             child: ListView.builder(
                               itemCount: filteredMarkers.length,
                               itemBuilder: (context, index) {
-                                final marker = filteredMarkers[index];
+                                final marker = loadedProducts[index];
+                                // Acessando as informações do marcador diretamente
+                                String title = marker.infoList[index]
+                                        ['nome_imovel']
+                                    .toString();
+                                String terreno = marker.infoList[index]
+                                        ['terreno']
+                                    .toString();
+                                String localizacao = marker.infoList[index]
+                                        ['localizacao']
+                                    .toString();
+                                String precoOriginal = marker.infoList[index]
+                                        ['preco_original']
+                                    .toString();
+                                List<String> imageUrls = [];
+                                imageUrls.addAll(marker.infoList[index]
+                                        ['image_urls']
+                                    .cast<String>());
                                 return ListTile(
-                                  title: Text(marker.infoWindow.title ?? '',style: TextStyle(color: Colors.black),),
+                                  title: Text(
+                                    title,
+                                    style: TextStyle(color: Colors.black),
+                                  ),
                                   onTap: () {
-                                    setState(() {
-                                      showInfoScreen = true;
-                                      selectedMarkerTitle =
-                                          marker.infoWindow.title ?? '';
-                                    });
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => InfoMapPage(
+                                          title, // Título do imóvel
+                                          terreno, // Terreno do imóvel
+                                          localizacao, // Localização do imóvel
+                                          precoOriginal, // Preço original do imóvel
+                                          imageUrls, // URLs das imagens do imóvel
+                                          isDarkMode, // Modo escuro
+                                        ),
+                                      ),
+                                    );
                                   },
                                   tileColor: Colors.grey,
                                   selectedTileColor: Colors.grey,
@@ -149,6 +188,14 @@ class _MapPageState extends State<MapPage> {
         ],
       ),
       drawer: DrawerPage(isDarkMode: false),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          setState(() {
+            isDarkMode = !isDarkMode; // Alterna o valor de isDarkMode
+          });
+        },
+        child: Icon(Icons.lightbulb),
+      ),
     );
   }
 }
