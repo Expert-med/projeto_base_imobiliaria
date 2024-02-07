@@ -5,12 +5,12 @@ import 'package:firebase_core/firebase_core.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:projeto_imobiliaria/models/houses/imovelList.dart';
 import 'package:projeto_imobiliaria/pages/home_page.dart';
 import 'package:provider/provider.dart';
 
 import 'checkPage.dart';
 import 'core/services/firebase/firebase_options.dart';
-import 'models/houses/house_list.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,7 +18,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  bool isDarkMode = false; // Adicione esta linha para definir o modo claro como padrão
+  bool isDarkMode = false; // Define o modo claro como padrão
   runApp(MyApp(isDarkMode: isDarkMode));
 }
 
@@ -49,9 +49,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(providers: [
-       ChangeNotifierProvider(
-          create: (_) => ProductList(),
+        ChangeNotifierProvider(
+          create: (_) => ImovelList(),
         ),
+        
     ],
     child:GetMaterialApp(
       title: 'CME Projeto',

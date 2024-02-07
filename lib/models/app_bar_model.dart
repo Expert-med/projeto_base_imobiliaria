@@ -133,18 +133,18 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 ],
               ),
               Spacer(),
-              if (!isSmallScreen)
-                Image.asset(
-                  'logoExpertMed1.png',
-                  height: 100,
-                  width: 100,
-                ),
-              if (isSmallScreen)
-                Image.asset(
-                  'logoExpertMed1.png',
-                  height: 50,
-                  width: 50,
-                ),
+              // if (!isSmallScreen)
+              //   Image.asset(
+              //     'logoExpertMed1.png',
+              //     height: 100,
+              //     width: 100,
+              //   ),
+              // if (isSmallScreen)
+              //   Image.asset(
+              //     'logoExpertMed1.png',
+              //     height: 50,
+              //     width: 50,
+              //   ),
               if (widget.showNotificacao == 1)
                 NotificationButton(
                   displayedNotifications: 5,

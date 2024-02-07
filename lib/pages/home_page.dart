@@ -4,7 +4,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
 import '../components/custom_menu.dart';
-import '../components/house_grid.dart';
+import '../components/imovel/imovel_grid.dart';
 import '../components/search_row.dart';
 import 'authentication/login_page.dart';
 
@@ -81,7 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   SizedBox(height: 20),
                   SearchRow(isDarkMode: isDarkMode),
                   SizedBox(height: 20,),
-                   HouseGrid(false, isDarkMode),
+                   ImovelGrid(false, isDarkMode),
                   ElevatedButton(
                     onPressed: () {
                       logOut();

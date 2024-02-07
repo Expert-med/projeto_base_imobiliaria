@@ -1,57 +1,67 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:projeto_imobiliaria/models/houses/imovel.dart';
 import 'package:provider/provider.dart';
-import '../models/houses/house.dart';
 
-class HouseItem extends StatefulWidget {
+
+class ImovelItem extends StatefulWidget {
   final bool isDarkMode;
-
-  const HouseItem(this.isDarkMode, {Key? key}) : super(key: key);
+  final int index;
+  
+  const ImovelItem(this.isDarkMode, this.index, {Key? key}) : super(key: key);
 
   @override
-  _HouseItemState createState() => _HouseItemState();
+  _ImovelItemState createState() => _ImovelItemState();
 }
 
-class _HouseItemState extends State<HouseItem> {
+class _ImovelItemState extends State<ImovelItem> {
   Color containerColor = Color.fromARGB(255, 238, 238, 238);
 
   @override
   Widget build(BuildContext context) {
-    final product = Provider.of<Product>(context, listen: false);
+    final product = Provider.of<Imovel>(context, listen: false);
 
     return AspectRatio(
       aspectRatio: 16 / 9, // Defina a proporção desejada
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),
         child: GridTile(
-          child: GestureDetector(
-            child: Image.network(
-              product.imageUrl,
-              fit: BoxFit.cover,
-            ),
-            onTap: () {
-              setState(() {
-                containerColor = Colors.black; // Altera a cor de fundo do Container para preto
-              });
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: product.infoList[widget.index]['image_urls'].length,
+            itemBuilder: (context, index) {
+              return Image.network(
+                product.infoList[widget.index]['image_urls'][index],
+                fit: BoxFit.cover,
+              );
             },
           ),
-          footer: Container(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            color: containerColor, // Utiliza a cor de fundo controlada pelo estado
-            child: Row(
+          footer: _buildFooter(product),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFooter(Imovel product) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      color: containerColor, // Utiliza a cor de fundo controlada pelo estado
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'R\$ ${product.price.toStringAsFixed(2)}',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: widget.isDarkMode ? Colors.white : Colors.black54,
-                        ),
-                      ),
+                Text(
+                  '${product.infoList[widget.index]['preco_original']}',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: widget.isDarkMode ? Colors.white : Colors.black54,
+                  ),
+                ),
+                
                       SizedBox(height: 4),
                       Row(
                         children: [
@@ -64,7 +74,7 @@ class _HouseItemState extends State<HouseItem> {
                               ),
                               SizedBox(width: 4), // Espaço entre o ícone e o texto
                               Text(
-                                '${product.id}',
+                                '${product.infoList[widget.index]['total_dormitorios'] + ' suítes:' + product.infoList[widget.index]['total_suites'] }',
                                 style: TextStyle(
                                   color: widget.isDarkMode ? Colors.white : Colors.black54,
                                 ),
@@ -80,7 +90,7 @@ class _HouseItemState extends State<HouseItem> {
                               ),
                               SizedBox(width: 4), // Espaço entre o ícone e o texto
                               Text(
-                                '${product.id}',
+                                '${product.infoList[widget.index]['vagas_garagem'] }',
                                 style: TextStyle(
                                   color: widget.isDarkMode ? Colors.white : Colors.black54,
                                 ),
@@ -90,16 +100,13 @@ class _HouseItemState extends State<HouseItem> {
                           Spacer(), // Spacer para distribuir o espaço restante
                           Row(
                             children: [
-                              Text(
-                                'm²',
-                                style: TextStyle(
-                                  color: widget.isDarkMode ? Colors.white : Colors.black54,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                               Icon(
+                                Icons.area_chart,
+                                color: widget.isDarkMode ? Colors.white : Colors.black54,
                               ),
                               SizedBox(width: 4), // Espaço entre o texto "m²" e o valor
                               Text(
-                                '${product.id}',
+                                '${product.infoList[widget.index]['area_total'] }',
                                 style: TextStyle(
                                   color: widget.isDarkMode ? Colors.white : Colors.black54,
                                 ),
@@ -119,7 +126,7 @@ class _HouseItemState extends State<HouseItem> {
                             SizedBox(width: 4), // Espaço entre o ícone e o texto
                             Flexible(
                               child: Text(
-                                '${product.endereco}',
+                                '${product.infoList[widget.index]['localizacao'] }',
                                 style: TextStyle(
                                   color: widget.isDarkMode ? Colors.white : Colors.black54,
                                 ),
@@ -132,17 +139,15 @@ class _HouseItemState extends State<HouseItem> {
                     ],
                   ),
                 ),
-                IconButton(
-                  onPressed: () {
-                    // Adicione a lógica do carrinho de compras aqui
-                  },
-                  icon: const Icon(Icons.shopping_cart),
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-              ],
-            ),
+        
+          IconButton(
+            onPressed: () {
+              // Adicione a lógica do carrinho de compras aqui
+            },
+            icon: const Icon(Icons.shopping_cart),
+            color: Theme.of(context).colorScheme.secondary,
           ),
-        ),
+        ],
       ),
     );
   }

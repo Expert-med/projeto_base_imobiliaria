@@ -10,7 +10,7 @@ import 'authentication/login_page.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'map_page.dart';
+import 'map/map_page.dart';
 
 class DrawerPage extends StatefulWidget {
   final bool isDarkMode;
@@ -192,7 +192,7 @@ class _DrawerPageState extends State<DrawerPage> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => MapSearchPage(),
+                  builder: (context) => MapPage(),
                 ),
               );
             },

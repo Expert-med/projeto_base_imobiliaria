@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:projeto_imobiliaria/models/houses/imovel.dart';
+import 'package:projeto_imobiliaria/models/houses/imovelList.dart';
 import 'package:provider/provider.dart';
+import 'imovel_item.dart';
 
-import '../models/houses/house.dart';
-import '../models/houses/house_list.dart';
-import 'house_item.dart';
 
-class HouseGrid extends StatelessWidget {
+class ImovelGrid extends StatelessWidget {
   final bool isDarkMode;
   final bool showFavoriteOnly;
 
-  const HouseGrid(this.showFavoriteOnly, this.isDarkMode, {Key? key}) : super(key: key);
+  const ImovelGrid(this.showFavoriteOnly, this.isDarkMode, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<ProductList>(context);
-    final List<Product> loadedProducts =
-        showFavoriteOnly ? provider.favoriteItems : provider.items;
+    final provider = Provider.of<ImovelList>(context);
+    final List<Imovel> loadedProducts = provider.items.take(50).toList();
 
     return CarouselSlider.builder(
       itemCount: loadedProducts.length,
@@ -37,7 +36,7 @@ class HouseGrid extends StatelessWidget {
       itemBuilder: (BuildContext context, int index, int realIndex) {
         return ChangeNotifierProvider.value(
           value: loadedProducts[index],
-          child: HouseItem(isDarkMode),
+          child: ImovelItem(isDarkMode,index),
         );
       },
     );

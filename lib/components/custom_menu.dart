@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import '../core/services/firebase/auth/checkPage.dart';
 import '../pages/authentication/cadastro_page.dart';
 import '../pages/authentication/login_page.dart';
-import '../pages/map_page.dart';
+import '../pages/imovel_page.dart';
+import '../pages/map/map_page.dart';
 import '../util/dark_color_util.dart';
 
 class CustomMenu extends StatefulWidget {
@@ -49,12 +50,12 @@ class _CustomMenuState extends State<CustomMenu> {
                     : Color(0xFF6e58e9),
                 size: 40,
               ),
-              title:  Text(
+              title: Text(
                 'Home',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-               color: widget.isDarkMode ? Colors.white : Colors.black54,
-              ),
+                  color: widget.isDarkMode ? Colors.white : Colors.black54,
+                ),
               ),
               onTap: () {
                 Navigator.pop(context);
@@ -74,15 +75,39 @@ class _CustomMenuState extends State<CustomMenu> {
                   ? darkenColor(Color(0xFF6e58e9), 0.5)
                   : Color(0xFF6e58e9),
             ),
-            title:Text('Mapa',style: TextStyle(
-               color: widget.isDarkMode ? Colors.white : Colors.black54,
-              ),),
+            title: Text(
+              'Mapa',
+              style: TextStyle(
+                color: widget.isDarkMode ? Colors.white : Colors.black54,
+              ),
+            ),
             onTap: () {
-              Navigator.pop(context);
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => MapSearchPage(),
+                  builder: (context) => MapPage(),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            leading: Icon(
+              Icons.text_snippet_rounded,
+              color: widget.isDarkMode
+                  ? darkenColor(Color(0xFF6e58e9), 0.5)
+                  : Color(0xFF6e58e9),
+            ),
+            title: Text(
+              'Imovel',
+              style: TextStyle(
+                color: widget.isDarkMode ? Colors.white : Colors.black54,
+              ),
+            ),
+            onTap: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ImovelPage(),
                 ),
               );
             },
@@ -97,11 +122,10 @@ class _CustomMenuState extends State<CustomMenu> {
             title: Text(
               'Cadastrar Conta',
               style: TextStyle(
-                  color: widget.isDarkMode ? Colors.white : Colors.black54,
+                color: widget.isDarkMode ? Colors.white : Colors.black54,
               ),
             ),
             onTap: () {
-              Navigator.pop(context);
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -117,9 +141,12 @@ class _CustomMenuState extends State<CustomMenu> {
                   ? darkenColor(Color(0xFF6e58e9), 0.5)
                   : Color(0xFF6e58e9),
             ),
-            title:  Text('Log Out',style: TextStyle(
-              color: widget.isDarkMode ? Colors.white : Colors.black54,
-              ),),
+            title: Text(
+              'Log Out',
+              style: TextStyle(
+                color: widget.isDarkMode ? Colors.white : Colors.black54,
+              ),
+            ),
             onTap: () {
               logOut(context);
             },
