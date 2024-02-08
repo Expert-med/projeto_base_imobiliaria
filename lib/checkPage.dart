@@ -3,11 +3,8 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:projeto_imobiliaria/pages/authentication/login_page.dart';
+import 'package:projeto_imobiliaria/pages/auth/auth_page.dart';
 import 'package:projeto_imobiliaria/pages/home_page.dart';
-
-
-
 
 class checkPage extends StatefulWidget {
   const checkPage({super.key});
@@ -36,7 +33,7 @@ class _checkPageState extends State<checkPage> {
     streamSubscription = FirebaseAuth.instance .authStateChanges()
       .listen((User? user) async {
         if (user == null) {
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AuthPage()));
         } else {
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyHomePage()));
         }

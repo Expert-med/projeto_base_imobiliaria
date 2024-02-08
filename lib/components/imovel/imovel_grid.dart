@@ -1,44 +1,88 @@
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:projeto_imobiliaria/models/houses/imovel.dart';
-import 'package:projeto_imobiliaria/models/houses/imovelList.dart';
+import 'package:projeto_imobiliaria/components/imovel/imovel_item.dart';
 import 'package:provider/provider.dart';
-import 'imovel_item.dart';
 
+import '../../models/houses/imovel.dart';
+import '../../models/houses/imovelList.dart';
 
-class ImovelGrid extends StatelessWidget {
+class ImovelGrid extends StatefulWidget {
   final bool isDarkMode;
   final bool showFavoriteOnly;
 
   const ImovelGrid(this.showFavoriteOnly, this.isDarkMode, {Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final provider = Provider.of<ImovelList>(context);
-    final List<Imovel> loadedProducts = provider.items.take(50).toList();
+  _ImovelGridState createState() => _ImovelGridState();
+}
 
-    return CarouselSlider.builder(
-      itemCount: loadedProducts.length,
-      options: CarouselOptions(
-        height: 250, // Define a altura do carousel
-        aspectRatio: 16 / 9, // Proporção da imagem
-       viewportFraction: 1 / 3,
-        initialPage: 0,
-        enableInfiniteScroll: true,
-        reverse: false,
-        autoPlay: true,
-        autoPlayInterval: Duration(seconds: 5), // Intervalo entre cada slide
-        autoPlayAnimationDuration: Duration(milliseconds: 800),
-        autoPlayCurve: Curves.fastOutSlowIn,
-        enlargeCenterPage: true,
-        scrollDirection: Axis.horizontal, // Direção do carousel
-      ),
-      itemBuilder: (BuildContext context, int index, int realIndex) {
-        return ChangeNotifierProvider.value(
-          value: loadedProducts[index],
-          child: ImovelItem(isDarkMode,index),
-        );
+class _ImovelGridState extends State<ImovelGrid> {
+  late ScrollController _scrollController;
+  late List<Imovel> _loadedProducts;
+  int _numberOfItemsToShow = 50;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+    _loadedProducts = [];
+    _loadMoreItems();
+    _scrollController.addListener(_scrollListener);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_scrollListener);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollListener() {
+    if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+      _loadMoreItems();
+    }
+  }
+
+  void _loadMoreItems() {
+    final provider = Provider.of<ImovelList>(context, listen: false);
+    final List<Imovel> additionalProducts = provider.items.skip(_loadedProducts.length).take(50).toList();
+    setState(() {
+      _loadedProducts.addAll(additionalProducts);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.builder(
+      controller: _scrollController,
+      padding: const EdgeInsets.all(10),
+      itemCount: _loadedProducts.length + 1, // Add 1 for the load more button
+      itemBuilder: (ctx, i) {
+        if (i == _loadedProducts.length) {
+          return _buildLoadMoreButton();
+        } else {
+          return ChangeNotifierProvider.value(
+            value: _loadedProducts[i],
+            child: ImovelItem(widget.isDarkMode, i),
+          );
+        }
       },
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 4,
+        childAspectRatio: 3 / 2,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+      ),
+    );
+  }
+
+  Widget _buildLoadMoreButton() {
+    return Container(
+      alignment: Alignment.center,
+      padding: const EdgeInsets.symmetric(vertical: 20),
+      child: ElevatedButton(
+        onPressed: _loadMoreItems,
+        child: Text('Carregar Mais'),
+      ),
     );
   }
 }

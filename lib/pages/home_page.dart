@@ -2,104 +2,130 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:projeto_imobiliaria/models/app_bar_model.dart';
 
 import '../components/custom_menu.dart';
-import '../components/imovel/imovel_grid.dart';
+import '../components/imovel/imovel_carrousel.dart';
 import '../components/search_row.dart';
-import 'authentication/login_page.dart';
+
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+  const MyHomePage({Key? key}) : super(key: key);
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-    bool isDarkMode = false;
+  late bool isDarkMode;
+  late User? currentUser;
 
-  void logOut() async {
-    try {
-      await FirebaseAuth.instance.signOut();
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => LoginPage()),
-        (route) => false, // Remove todas as rotas até a raiz
-      );
-    } catch (e) {
-      print('Erro ao sair da conta: $e');
-    }
+  @override
+  void initState() {
+    super.initState();
+    isDarkMode = false;
+    getCurrentUser();
   }
+
+  void getCurrentUser() {
+    User? user = FirebaseAuth.instance.currentUser;
+    setState(() {
+      currentUser = user;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-     String getGreeting() {
+    bool isSmallScreen = MediaQuery.of(context).size.width < 900;
+
+    String getGreeting() {
       var hour = DateTime.now().hour;
 
       if (hour >= 6 && hour < 12) {
-        return 'Bom dia, Nome!';
+        return 'Bom dia, ${currentUser?.displayName?.toString()}!';
       } else if (hour >= 12 && hour < 19) {
-        return 'Boa tarde, Nome!';
+        return 'Boa tarde, ${currentUser?.displayName?.toString()}!';
       } else {
-        return 'Boa noite, Nome!';
+        return 'Boa noite, ${currentUser?.displayName?.toString()}!';
       }
     }
-    
-    return Scaffold(
-      body: Row(
-        children: [
-          CustomMenu(isDarkMode: isDarkMode), // CustomMenu no lado esquerdo
-          Expanded(
-            child: Container(
-              color: isDarkMode ? Colors.black : Colors.white, // Define a cor de fundo com base em isDarkMode
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    getGreeting(),
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                       color: isDarkMode ? Colors.white : Colors.black54,
-                    ),
-                  ),
-                  Text(
-                    'Descubra o valor da sua casa e o acompanhe!',
-                    style: TextStyle(
-                      fontSize: 18,
-                       color: isDarkMode ? Colors.white : Colors.black54,
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  Text(
-                    'Encontre sua melhor residência!',
-                    style: TextStyle(
-                      fontSize: 18,
-                       color: isDarkMode ? Colors.white : Colors.black54,
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  SearchRow(isDarkMode: isDarkMode),
-                  SizedBox(height: 20,),
-                   ImovelGrid(false, isDarkMode),
-                  ElevatedButton(
-                    onPressed: () {
-                      logOut();
-                    },
-                    child: Text('logout'),
-                  ),
 
-                ],
+    return Scaffold(
+      appBar: isSmallScreen ? CustomAppBar(subtitle: '', title: 'Home',isDarkMode: isDarkMode,) : null,
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return Row(
+            children: [
+              if(!isSmallScreen)
+              CustomMenu(isDarkMode: isDarkMode),
+              Expanded(
+                child: Container(
+                  color: isDarkMode ? Colors.black : Colors.white,
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            'LarHub',
+                            style: TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
+                              color: isDarkMode ? Colors.white : Colors.black87,
+                            ),
+                          ),
+                          Icon(Icons.home_outlined,
+                              color: isDarkMode ? Colors.white : Colors.black87,
+                              size: 40)
+                        ],
+                      ),
+                      Text(
+                        getGreeting(),
+                        style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                          color: isDarkMode ? Colors.white : Colors.black54,
+                        ),
+                      ),
+                      Text(
+                        'Descubra sua residência ideal e a acompanhe!',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: isDarkMode ? Colors.white : Colors.black54,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        'Encontre sua melhor residência!',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: isDarkMode ? Colors.white : Colors.black54,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      SearchRow(isDarkMode: isDarkMode),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      ImovelCarousel(false, isDarkMode),
+                    ],
+                  ),
+                ),
               ),
-            ),
-          ),
-         
-        ],
+            ],
+          );
+        },
       ),
+      drawer: isSmallScreen ? CustomMenu(isDarkMode: isDarkMode) : null,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
-            isDarkMode = !isDarkMode; // Alterna o valor de isDarkMode
+            isDarkMode = !isDarkMode;
           });
         },
         child: Icon(Icons.lightbulb),

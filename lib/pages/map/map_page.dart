@@ -5,8 +5,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:projeto_imobiliaria/models/app_bar_model.dart';
 import 'package:projeto_imobiliaria/models/houses/imovel.dart';
+import '../../components/custom_menu.dart';
 import '../../models/houses/imovelList.dart';
-import '../drawer_page.dart';
 import 'map_info_page.dart';
 
 class MapPage extends StatefulWidget {
@@ -68,6 +68,7 @@ class _MapPageState extends State<MapPage> {
       appBar: CustomAppBar(
         subtitle: "Localização dos hospitais",
         title: "MAPA EXPERTMED",
+        isDarkMode: isDarkMode,
       ),
       body: Stack(
         children: [
@@ -187,7 +188,7 @@ class _MapPageState extends State<MapPage> {
           ),
         ],
       ),
-      drawer: DrawerPage(isDarkMode: false),
+      drawer: CustomMenu(isDarkMode: false),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {

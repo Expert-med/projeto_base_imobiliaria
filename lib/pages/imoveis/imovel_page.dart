@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_imobiliaria/components/imovel/imovel_grid.dart';
+import 'package:projeto_imobiliaria/components/custom_menu.dart';
+import 'package:projeto_imobiliaria/components/imovel/imovel_carrousel.dart';
 import 'package:provider/provider.dart';
-import '../models/houses/imovelList.dart';
+import '../../components/imovel/imovel_grid.dart';
+import '../../models/houses/imovelList.dart';
 
 class ImovelPage extends StatelessWidget {
   @override
@@ -34,6 +36,7 @@ class ImovelPage extends StatelessWidget {
           }
         },
       ),
+      drawer: CustomMenu(isDarkMode: false),
     );
   }
 }

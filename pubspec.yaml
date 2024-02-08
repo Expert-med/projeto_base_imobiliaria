@@ -29,6 +29,12 @@ dependencies:
   carousel_slider: ^4.2.1
   firebase_database: ^10.4.0
   json_serializable: ^6.6.2
+  latlong2: ^0.8.2
+  flutter_map: ^4.0.0
+  url_launcher: ^6.1.11
+  flutter_map_marker_popup: ^5.0.0
+  cached_network_image: ^3.2.3
+  image_picker: ^1.0.4
   
 
 dev_dependencies:
@@ -48,6 +54,7 @@ flutter:
   assets:
   - assets/
   - assets/images/no_availablle.jpg
+  - assets/images/fundo_claro_login.jpg
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
-import '../core/services/firebase/auth/checkPage.dart';
-import '../pages/authentication/cadastro_page.dart';
-import '../pages/authentication/login_page.dart';
-import '../pages/imovel_page.dart';
+import 'package:projeto_imobiliaria/pages/auth/auth_page.dart';
+import 'package:projeto_imobiliaria/pages/imoveis/cad_imovel_page.dart';
+import '../checkPage.dart';
+import '../pages/imoveis/imovel_page.dart';
+import '../pages/map/map_flutter.dart';
 import '../pages/map/map_page.dart';
 import '../util/dark_color_util.dart';
 
@@ -23,7 +23,7 @@ class _CustomMenuState extends State<CustomMenu> {
       await FirebaseAuth.instance.signOut();
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => LoginPage()),
+        MaterialPageRoute(builder: (context) => AuthPage()),
         (route) => false, // Remove todas as rotas até a raiz
       );
     } catch (e) {
@@ -33,6 +33,7 @@ class _CustomMenuState extends State<CustomMenu> {
 
   @override
   Widget build(BuildContext context) {
+    
     return Container(
       width: 300.0,
       color: widget.isDarkMode
@@ -90,6 +91,28 @@ class _CustomMenuState extends State<CustomMenu> {
               );
             },
           ),
+          // ListTile(
+          //   leading: Icon(
+          //     Icons.text_snippet_rounded,
+          //     color: widget.isDarkMode
+          //         ? darkenColor(Color(0xFF6e58e9), 0.5)
+          //         : Color(0xFF6e58e9),
+          //   ),
+          //   title: Text(
+          //     'Mapa Flutter',
+          //     style: TextStyle(
+          //       color: widget.isDarkMode ? Colors.white : Colors.black54,
+          //     ),
+          //   ),
+          //   onTap: () {
+          //     Navigator.pushReplacement(
+          //       context,
+          //       MaterialPageRoute(
+          //         builder: (context) => MapPageFlutter(),
+          //       ),
+          //     );
+          //   },
+          // ),
           ListTile(
             leading: Icon(
               Icons.text_snippet_rounded,
@@ -98,7 +121,7 @@ class _CustomMenuState extends State<CustomMenu> {
                   : Color(0xFF6e58e9),
             ),
             title: Text(
-              'Imovel',
+              'Imoveis',
               style: TextStyle(
                 color: widget.isDarkMode ? Colors.white : Colors.black54,
               ),
@@ -120,6 +143,28 @@ class _CustomMenuState extends State<CustomMenu> {
                   : Color(0xFF6e58e9),
             ),
             title: Text(
+              'Cadastrar Imóvel',
+              style: TextStyle(
+                color: widget.isDarkMode ? Colors.white : Colors.black54,
+              ),
+            ),
+            onTap: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CadastroImovel(),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            leading: Icon(
+              Icons.text_snippet_rounded,
+              color: widget.isDarkMode
+                  ? darkenColor(Color(0xFF6e58e9), 0.5)
+                  : Color(0xFF6e58e9),
+            ),
+            title: Text(
               'Cadastrar Conta',
               style: TextStyle(
                 color: widget.isDarkMode ? Colors.white : Colors.black54,
@@ -129,7 +174,7 @@ class _CustomMenuState extends State<CustomMenu> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => RegistrationPage(),
+                  builder: (context) => AuthPage(),
                 ),
               );
             },

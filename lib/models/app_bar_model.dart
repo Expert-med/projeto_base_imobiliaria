@@ -9,12 +9,14 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
   final Widget? leading;
   final showNotificacao;
+  final bool isDarkMode;
 
   CustomAppBar({
     required this.subtitle,
     required this.title,
     this.leading,
     this.showNotificacao,
+    required this.isDarkMode
   });
 
   @override
@@ -85,20 +87,21 @@ class _CustomAppBarState extends State<CustomAppBar> {
 
   @override
   Widget build(BuildContext context) {
-    double fontSize = MediaQuery.of(context).size.width * 0.015;
 
     bool isSmallScreen = MediaQuery.of(context).size.width < 900;
 
     return AppBar(
-      toolbarHeight: 150,
+      toolbarHeight: 50,
       flexibleSpace: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xFF3e88f3),
-              Color(0xFF6e58e9),
+              // Color(0xFF3e88f3),
+              // Color(0xFF6e58e9),
+              Color.fromARGB(255, 233, 233, 233),
+              Color.fromARGB(255, 233, 233, 233),
             ],
             stops: [0, 1],
           ),
@@ -113,12 +116,13 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+                   
                   Text(
                     widget.title,
                     style: TextStyle(
                       fontFamily: 'CoreMellow',
                       fontSize: isSmallScreen ? 15 : 23,
-                      color: Colors.white,
+                      color: Color(0xFF6e58e9),
                       fontWeight: FontWeight.bold,
                     ),
                   ),
