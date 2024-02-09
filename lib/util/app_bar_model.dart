@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../util/NotificationButton.dart';
+import 'NotificationButton.dart';
 //import 'package:projeto_cme_novo/autenticacao/checkPage.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {

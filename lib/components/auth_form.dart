@@ -52,8 +52,11 @@ class _AuthFormState extends State<AuthForm> {
 
   @override
   Widget build(BuildContext context) {
+    bool isSmallScreen = MediaQuery.of(context).size.width < 1200;
+
     return Card(
-      margin: const EdgeInsets.all(20),
+      
+      margin: isSmallScreen ? const EdgeInsets.all(10) : const EdgeInsets.only(left:500, right: 500, top: 10, bottom: 10) ,
       child: Container(
         decoration: BoxDecoration(
           color: !widget.isDarkMode ? Colors.white : Colors.black38,
@@ -263,6 +266,15 @@ class _AuthFormState extends State<AuthForm> {
                 ElevatedButton(
                   onPressed: _submit,
                   child: Text(_formData.isLogin ? 'Entrar' : 'Cadastrar'),
+                   style: ElevatedButton.styleFrom(
+                      elevation: 10.0,
+                      backgroundColor: Color(0xFF6e58e9),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 20.0, vertical: 20.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
                 ),
                 TextButton(
                   onPressed: () {

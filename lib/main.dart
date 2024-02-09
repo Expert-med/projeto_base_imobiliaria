@@ -5,7 +5,8 @@ import 'package:firebase_core/firebase_core.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
-import 'package:projeto_imobiliaria/models/houses/imovelList.dart';
+import 'package:projeto_imobiliaria/models/imobiliarias/imobiliariasList.dart';
+import 'package:projeto_imobiliaria/models/imoveis/imovelList.dart';
 import 'package:projeto_imobiliaria/pages/home_page.dart';
 import 'package:provider/provider.dart';
 
@@ -48,50 +49,54 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(providers: [
+    return MultiProvider(
+      providers: [
         ChangeNotifierProvider(
           create: (_) => ImovelList(),
         ),
-        
-    ],
-    child:GetMaterialApp(
-      title: 'CME Projeto',
-      theme: isDarkMode
-          ? ThemeData(
-              primarySwatch: myPrimaryColor,
-              brightness: Brightness.dark,
-            )
-          : ThemeData(
-              colorScheme: ThemeData().colorScheme.copyWith(
-                primary:Color(0xFF6e58e9),
-                secondary:Color(0xFF6e58e9),
-              ),
-              textTheme: TextTheme(
-                bodyText2: TextStyle(
-                  fontFamily: 'Montserrat',
-                ),
-                bodyText1: TextStyle(
-                  fontFamily: 'Montserrat',
-                ),
-              ),
-            ),
-      darkTheme: ThemeData(
-        primarySwatch: myPrimaryColor,
-        brightness: Brightness.dark,
-      ),
-      initialRoute: '/',
-      getPages: [
-        GetPage(
-          name: '/',
-          page: () => checkPage(),
+        ChangeNotifierProvider(
+          create: (_) => ImobiliariaList(),
         ),
       ],
-      home: checkPage(),
-      debugShowCheckedModeBanner: false,
-    ),);
-  
+      child: GetMaterialApp(
+        title: 'CME Projeto',
+        theme: isDarkMode
+            ? ThemeData(
+                primarySwatch: myPrimaryColor,
+                brightness: Brightness.dark,
+              )
+            : ThemeData(
+                colorScheme: ThemeData().colorScheme.copyWith(
+                      primary: Color(0xFF6e58e9),
+                      secondary: Color(0xFF6e58e9),
+                    ),
+                textTheme: TextTheme(
+                  bodyText2: TextStyle(
+                    fontFamily: 'Montserrat',
+                  ),
+                  bodyText1: TextStyle(
+                    fontFamily: 'Montserrat',
+                  ),
+                ),
+              ),
+        darkTheme: ThemeData(
+          primarySwatch: myPrimaryColor,
+          brightness: Brightness.dark,
+        ),
+        initialRoute: '/',
+        getPages: [
+          GetPage(
+            name: '/',
+            page: () => checkPage(),
+          ),
+        ],
+        home: checkPage(),
+        debugShowCheckedModeBanner: false,
+      ),
+    );
+  }
 }
-}
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();

@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_imobiliaria/pages/auth/auth_page.dart';
+import 'package:projeto_imobiliaria/pages/imobiliaria/cad_imob_page.dart';
 import 'package:projeto_imobiliaria/pages/imoveis/cad_imovel_page.dart';
 import '../checkPage.dart';
+import '../pages/imobiliaria/imobiliarias_page.dart';
 import '../pages/imoveis/imovel_page.dart';
 import '../pages/map/map_flutter.dart';
 import '../pages/map/map_page.dart';
@@ -153,6 +155,50 @@ class _CustomMenuState extends State<CustomMenu> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => CadastroImovel(),
+                ),
+              );
+            },
+          ),
+           ListTile(
+            leading: Icon(
+              Icons.text_snippet_rounded,
+              color: widget.isDarkMode
+                  ? darkenColor(Color(0xFF6e58e9), 0.5)
+                  : Color(0xFF6e58e9),
+            ),
+            title: Text(
+              'Cadastrar Imobiliaria',
+              style: TextStyle(
+                color: widget.isDarkMode ? Colors.white : Colors.black54,
+              ),
+            ),
+            onTap: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CadastroImobiliaria(),
+                ),
+              );
+            },
+          ),
+           ListTile(
+            leading: Icon(
+              Icons.text_snippet_rounded,
+              color: widget.isDarkMode
+                  ? darkenColor(Color(0xFF6e58e9), 0.5)
+                  : Color(0xFF6e58e9),
+            ),
+            title: Text(
+              'Imobiliarias',
+              style: TextStyle(
+                color: widget.isDarkMode ? Colors.white : Colors.black54,
+              ),
+            ),
+            onTap: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ImobiliariasPage(),
                 ),
               );
             },

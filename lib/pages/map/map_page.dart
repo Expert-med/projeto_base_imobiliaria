@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:projeto_imobiliaria/models/app_bar_model.dart';
-import 'package:projeto_imobiliaria/models/houses/imovel.dart';
+import 'package:projeto_imobiliaria/util/app_bar_model.dart';
+import 'package:projeto_imobiliaria/models/imoveis/imovel.dart';
 import '../../components/custom_menu.dart';
-import '../../models/houses/imovelList.dart';
-import 'map_info_page.dart';
+import '../../models/imoveis/imovelList.dart';
+import '../../components/imovel/imovel_info_component.dart';
 
 class MapPage extends StatefulWidget {
   @override
@@ -25,6 +25,9 @@ class _MapPageState extends State<MapPage> {
   String selectedMarkerLocation = '';
   String selectedMarkerOrigalPrice = '';
   List<String> urlsImage = [];
+  String selectedMarkerCodigo = '';
+  String selectedMarkerAreaTotal = '';
+  String selectedMarkerLink = '';
 
   @override
   void initState() {
@@ -55,6 +58,10 @@ class _MapPageState extends State<MapPage> {
                         info['preco_original'].toString();
                     // Convertendo para Iterable<String> antes de adicionar à lista
                     urlsImage.addAll(info['image_urls'].cast<String>());
+
+                    selectedMarkerCodigo = imovel.codigo;
+                    selectedMarkerAreaTotal = info['area_total'].toString();
+                    selectedMarkerLink = imovel.link;
                   });
                 },
               );
@@ -64,6 +71,10 @@ class _MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    bool isSmallScreen = MediaQuery.of(context).size.width < 900;
+
+
     return Scaffold(
       appBar: CustomAppBar(
         subtitle: "Localização dos hospitais",
@@ -99,13 +110,17 @@ class _MapPageState extends State<MapPage> {
                           showInfoScreen = false;
                         });
                       },
-                      child: InfoMapPage(
-                          selectedMarkerTitle,
-                          selectedMarkerTerreno,
-                          selectedMarkerLocation,
-                          selectedMarkerOrigalPrice,
-                          urlsImage,
-                          isDarkMode),
+                      child: ImovelInfoComponent(
+                        selectedMarkerTitle,
+                        selectedMarkerTerreno,
+                        selectedMarkerLocation,
+                        selectedMarkerOrigalPrice,
+                        urlsImage,
+                        isDarkMode,
+                        selectedMarkerCodigo,
+                        selectedMarkerAreaTotal,
+                        selectedMarkerLink,
+                      ),
                     )
                   : GestureDetector(
                       onTap: () {
@@ -164,13 +179,16 @@ class _MapPageState extends State<MapPage> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => InfoMapPage(
+                                        builder: (context) => ImovelInfoComponent(
                                           title, // Título do imóvel
                                           terreno, // Terreno do imóvel
                                           localizacao, // Localização do imóvel
                                           precoOriginal, // Preço original do imóvel
                                           imageUrls, // URLs das imagens do imóvel
-                                          isDarkMode, // Modo escuro
+                                          isDarkMode,
+                                          selectedMarkerCodigo,
+                                          selectedMarkerAreaTotal,
+                                          selectedMarkerLink,
                                         ),
                                       ),
                                     );

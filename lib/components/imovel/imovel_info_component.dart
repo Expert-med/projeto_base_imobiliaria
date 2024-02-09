@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-import '../../models/houses/imovel.dart';
-import '../../models/houses/imovelList.dart';
+import '../../models/imoveis/imovel.dart';
+import '../../models/imoveis/imovelList.dart';
 
-class InfoMapPage extends StatelessWidget {
+class ImovelInfoComponent extends StatelessWidget {
   final String nome_imovel;
   final String terreno;
   final String location;
   final String originalPrice;
   final List<String> urlsImage;
+  final String codigo;
+  final String area_total;
+  final String link;
   bool isDarkMode;
 
-  InfoMapPage(this.nome_imovel, this.terreno, this.location, this.originalPrice,
-      this.urlsImage, this.isDarkMode);
+  ImovelInfoComponent(this.nome_imovel, this.terreno, this.location, this.originalPrice,
+      this.urlsImage, this.isDarkMode, this.codigo,this.area_total,this.link);
 
   // Indice da imagem atual
   int _currentIndex = 0;
@@ -22,14 +26,24 @@ class InfoMapPage extends StatelessWidget {
   // Controlador do CarouselSlider
   final CarouselController _carouselController = CarouselController();
 
+ void _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Não foi possível abrir o link: $url';
+    }
+  }
+  
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Detalhes'),
-        backgroundColor: Color(0xFF466B50),
-      ),
-      body: SingleChildScrollView(
+Widget build(BuildContext context) {
+  Color backgroundColor = isDarkMode ? Colors.black87 : Colors.white;
+Color textColor = !isDarkMode ? Colors.black87 : Colors.white;
+
+  return Scaffold(
+    
+    body: Container(
+      color: backgroundColor,
+      child: SingleChildScrollView(
         child: Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
@@ -39,22 +53,30 @@ class InfoMapPage extends StatelessWidget {
               children: [
                 Text(
                   'Informações sobre ${nome_imovel}',
-                  style: TextStyle(fontSize: 15),
+                  style: TextStyle(fontSize: 15, color:textColor),
+                ),
+                Text(
+                  'Imóvel cód. ${codigo}',
+                  style: TextStyle(fontSize: 15, color:textColor),
                 ),
                 SizedBox(height: 8,),
                 Text(
                   'Terreno: ${terreno}',
-                  style: TextStyle(fontSize: 13),
+                  style: TextStyle(fontSize: 13, color:textColor),
+                ),
+                Text(
+                  'Área total: ${area_total}',
+                  style: TextStyle(fontSize: 13, color:textColor),
                 ),
                 SizedBox(height: 8,),
                 Text(
                   'Localização ${location}',
-                  style: TextStyle(fontSize: 13),
+                  style: TextStyle(fontSize: 13, color:textColor),
                 ),
                 SizedBox(height: 8,),
                 Text(
                   'Preço Original ${originalPrice}',
-                  style: TextStyle(fontSize: 13),
+                  style: TextStyle(fontSize: 13, color:textColor),
                 ),
                 SizedBox(height: 8,),
                 CarouselSlider(
@@ -107,11 +129,45 @@ class InfoMapPage extends StatelessWidget {
                     ),
                   ],
                 ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.purple, // Cor de fundo roxo
+                    borderRadius: BorderRadius.circular(10), // Borda arredondada
+                  ),
+                  padding: EdgeInsets.all(10), // Espaçamento interno
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20),
+                        child: Text(
+                          'Acesse o imóvel',
+                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold), // Cor do texto
+                        ),
+                      ),
+                      Spacer(),
+                      InkWell(
+                        onTap: () {
+                          _launchURL(link);
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(5),
+                          child: Icon(
+                            Icons.open_in_new,
+                            color: Colors.white,
+                            size: 30,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
+
 }

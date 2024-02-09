@@ -5,8 +5,8 @@ import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../models/houses/imovel.dart';
-import '../../models/houses/imovelList.dart';
+import '../../models/imoveis/imovel.dart';
+import '../../models/imoveis/imovelList.dart';
 
 class MapPageFlutter extends StatefulWidget {
   @override

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_imobiliaria/models/app_bar_model.dart';
+import 'package:projeto_imobiliaria/util/app_bar_model.dart';
 
 import '../../components/cad_imovel_form.dart';
 import '../../components/custom_menu.dart';

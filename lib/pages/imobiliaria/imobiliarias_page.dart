@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_imobiliaria/components/custom_menu.dart';
-import 'package:projeto_imobiliaria/components/imovel/imovel_carrousel.dart';
+import 'package:projeto_imobiliaria/models/imobiliarias/imobiliariasList.dart';
 import 'package:provider/provider.dart';
-import '../../components/imovel/imovel_grid.dart';
+import '../../components/imobiliaria/imobiliaria_grid.dart';
 import '../../models/imoveis/imovelList.dart';
 
-class ImovelPage extends StatelessWidget {
+class ImobiliariasPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Lista de Imóveis'),
+        title: Text('Lista de Imobiliarias'),
       ),
       body: FutureBuilder(
-        future: Provider.of<ImovelList>(context, listen: false).lerImoveis(),
+        future: Provider.of<ImobiliariaList>(context, listen: false).lerImobiliarias(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
@@ -31,7 +31,7 @@ class ImovelPage extends StatelessWidget {
                 child: Text('Nenhum imóvel encontrado'),
               );
             } else {
-              return    ImovelGrid(false, false);
+              return    ImobiliariaGrid(false, false);
             }
           }
         },

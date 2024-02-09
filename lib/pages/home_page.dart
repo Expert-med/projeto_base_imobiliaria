@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:projeto_imobiliaria/models/app_bar_model.dart';
+import 'package:projeto_imobiliaria/util/app_bar_model.dart';
 
 import '../components/custom_menu.dart';
 import '../components/imovel/imovel_carrousel.dart';

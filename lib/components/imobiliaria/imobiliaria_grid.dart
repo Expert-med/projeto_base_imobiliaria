@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_imobiliaria/components/imovel/imovel_item.dart';
+import 'package:projeto_imobiliaria/models/imobiliarias/imobiliaria.dart';
+import 'package:projeto_imobiliaria/models/imobiliarias/imobiliariasList.dart';
 import 'package:provider/provider.dart';
+import 'imobiliaria_item.dart';
 
-import '../../models/imoveis/imovel.dart';
-import '../../models/imoveis/imovelList.dart';
 
-class ImovelGrid extends StatefulWidget {
+class ImobiliariaGrid extends StatefulWidget {
   final bool isDarkMode;
   final bool showFavoriteOnly;
 
-  const ImovelGrid(this.showFavoriteOnly, this.isDarkMode, {Key? key}) : super(key: key);
+  const ImobiliariaGrid(this.showFavoriteOnly, this.isDarkMode, {Key? key}) : super(key: key);
 
   @override
-  _ImovelGridState createState() => _ImovelGridState();
+  _ImobiliariaGridState createState() => _ImobiliariaGridState();
 }
 
-class _ImovelGridState extends State<ImovelGrid> {
+class _ImobiliariaGridState extends State<ImobiliariaGrid> {
   late ScrollController _scrollController;
-  late List<Imovel> _loadedProducts;
+  late List<Imobiliaria> _loadedProducts;
   int _numberOfItemsToShow = 50;
 
   @override
@@ -43,8 +43,8 @@ class _ImovelGridState extends State<ImovelGrid> {
   }
 
   void _loadMoreItems() {
-    final provider = Provider.of<ImovelList>(context, listen: false);
-    final List<Imovel> additionalProducts = provider.items.skip(_loadedProducts.length).take(50).toList();
+    final provider = Provider.of<ImobiliariaList>(context, listen: false);
+    final List<Imobiliaria> additionalProducts = provider.items.skip(_loadedProducts.length).take(50).toList();
     setState(() {
       _loadedProducts.addAll(additionalProducts);
     });
@@ -62,7 +62,7 @@ class _ImovelGridState extends State<ImovelGrid> {
         } else {
           return ChangeNotifierProvider.value(
             value: _loadedProducts[i],
-            child: ImovelItem(widget.isDarkMode, i),
+            child: ImobiliariaItem(widget.isDarkMode, i),
           );
         }
       },

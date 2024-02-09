@@ -489,6 +489,7 @@ class _CadImovelFormState extends State<CadImovelForm> {
                     ),
                     onSaved: (value) => _formData.areaTotal = value,
                   ),
+                  SizedBox(height: 10,),
                   ElevatedButton(
                     onPressed: () {
                       _formKey.currentState?.save();
@@ -497,6 +498,15 @@ class _CadImovelFormState extends State<CadImovelForm> {
                       // Você pode obter os valores dos TextFormField usando _formData.codigo, _formData.name, etc.
                     },
                     child: Text('Salvar'),
+                     style: ElevatedButton.styleFrom(
+                      elevation: 10.0,
+                      backgroundColor: Color(0xFF6e58e9),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 20.0, vertical: 20.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
                   ),
                 ],
               ),
