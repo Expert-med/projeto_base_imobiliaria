@@ -174,37 +174,51 @@ class _ImovelItemState extends State<ImovelItem> {
                   );
                 },
               ),
-              SizedBox(height: 3,),
-               IconButton(
-            onPressed: () {
-             List<String> imageUrls = [];
-    // Converter explicitamente para List<String>
-    List<dynamic> rawImageUrls = product.infoList[widget.index]['image_urls'];
-    imageUrls.addAll(rawImageUrls.map((url) => url.toString()));
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ImoveisInfoPage(
-          nome_imovel:product.infoList[widget.index]['nome_imovel'],
-          terreno:product.infoList[widget.index]['terreno'],
-          originalPrice: product.infoList[widget.index]['preco_original'],
-          location: product.infoList[widget.index]['localizacao'],
-          urlsImage:imageUrls,
-          isDarkMode:widget.isDarkMode,
-          codigo:product.codigo,
-          area_total:product.infoList[widget.index]['area_total'],
-          link:product.link,
-        ),
-      ),
-    );
-            },
-            icon: Icon(Icons.info),
-            color: Theme.of(context).colorScheme.secondary,
-          ),
+              SizedBox(
+                height: 3,
+              ),
+              IconButton(
+                onPressed: () {
+                  List<String> imageUrls = [];
+                  // Converter explicitamente para List<String>
+                  List<dynamic> rawImageUrls =
+                      product.infoList[widget.index]['image_urls'];
+                  imageUrls.addAll(rawImageUrls.map((url) => url.toString()));
+print(product.infoList[widget.index]);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ImoveisInfoPage(
+                        nome_imovel: product.infoList[widget.index]
+                            ['nome_imovel'],
+                        terreno: product.infoList[widget.index]['terreno'],
+                        originalPrice: product.infoList[widget.index]
+                            ['preco_original'],
+                        location: product.infoList[widget.index]['localizacao'],
+                        urlsImage: imageUrls,
+                        codigo: product.codigo,
+                        area_total: product.infoList[widget.index]
+                            ['area_total'],
+                        link: product.link,
+                        Vagasgaragem: product.infoList[widget.index]
+                            ['total_garagem'] ?? '',
+                        Totaldormitorios: product.infoList[widget.index]
+                            ['total_dormitorios']?? '',
+                         Totalsuites: product.infoList[widget.index]
+                            ['total_suites']?? '',
+                            latitude: product.infoList[widget.index]
+                            ['latitude']?? '',
+                            longitude: product.infoList[widget.index]
+                            ['longitude']?? '',
+                      ),
+                    ),
+                  );
+                },
+                icon: Icon(Icons.info),
+                color: Theme.of(context).colorScheme.secondary,
+              ),
             ],
           ),
-         
         ],
       ),
     );

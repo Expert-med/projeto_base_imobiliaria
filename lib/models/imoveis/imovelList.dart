@@ -21,6 +21,9 @@ class ImovelList with ChangeNotifier {
     _items.addAll(imoveis);
     notifyListeners();
   }
+   List<Imovel> get favoriteItems =>
+      _items.where((prod) => prod.isFavorite).toList();
+
 
   Future<List<Imovel>> lerImoveis() async {
     print('Entrou em lerImoveis agora');

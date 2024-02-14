@@ -96,6 +96,8 @@ Widget build(BuildContext context) {
                   'assets/images/fundo_claro_login.jpg'), // Substitua pelo caminho da sua imagem
               fit: BoxFit.cover,
             ),
+           borderRadius: BorderRadius.circular(10),
+
           ),
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5), 

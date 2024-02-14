@@ -4,7 +4,9 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:projeto_imobiliaria/util/app_bar_model.dart';
 
+import '../../components/custom_menu.dart';
 import '../../components/imovel/imovel_info_component.dart';
+
 
 class ImoveisInfoPage extends StatefulWidget {
   final String nome_imovel;
@@ -12,10 +14,14 @@ class ImoveisInfoPage extends StatefulWidget {
   final String location;
   final String originalPrice;
   final List<String> urlsImage;
-  bool isDarkMode;
   final String codigo;
   final String area_total;
   final String link;
+  final int Vagasgaragem;
+  final String Totaldormitorios;
+  final String Totalsuites;
+  final String longitude;
+  final String latitude;
 
   ImoveisInfoPage({
     Key? key,
@@ -27,53 +33,50 @@ class ImoveisInfoPage extends StatefulWidget {
     required this.codigo,
     required this.area_total,
     required this.link,
-    required this.isDarkMode,
+    required this.Vagasgaragem,
+    required this.Totaldormitorios,
+    required this.Totalsuites,
+    required this.longitude,
+    required this.latitude
   }) : super(key: key);
 
   @override
   State<ImoveisInfoPage> createState() => _ImoveisInfoPageState();
 }
 
+
 class _ImoveisInfoPageState extends State<ImoveisInfoPage> {
-  late User? currentUser;
-
-  @override
-  void initState() {
-    super.initState();
-    getCurrentUser();
-  }
-
-  void getCurrentUser() {
-    User? user = FirebaseAuth.instance.currentUser;
-    setState(() {
-      currentUser = user;
-    });
-  }
-
+  bool isDarkMode=false;
   @override
   Widget build(BuildContext context) {
-    bool isSmallScreen = MediaQuery.of(context).size.width < 900;
-
     return Scaffold(
       appBar: AppBar(
-      title: Text('Detalhes'),
-    ),
-      backgroundColor: widget.isDarkMode ? Colors.black : Colors.white,
-      body: ImovelInfoComponent(
-        widget.nome_imovel,
-        widget.terreno,
-        widget.location,
-        widget.originalPrice,
-        widget.urlsImage,
-        widget.isDarkMode,
-        widget.codigo,
-        widget.area_total,
-        widget.link,
+        title: Text('${widget.nome_imovel}'),
+      ),
+      body: Container(
+        child: ImovelInfoComponent(
+          widget.nome_imovel,
+          widget.terreno,
+          widget.location,
+          widget.originalPrice,
+          widget.urlsImage,
+          isDarkMode,
+          widget.codigo,
+          widget.area_total,
+          widget.link,
+          widget.Vagasgaragem,
+          widget.Totaldormitorios,
+          widget.Totalsuites,
+widget.latitude,
+widget.longitude
+        ),
+    
+    
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
-            widget.isDarkMode = !widget.isDarkMode;
+            isDarkMode = !isDarkMode;
           });
         },
         child: Icon(Icons.lightbulb),

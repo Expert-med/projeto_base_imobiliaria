@@ -17,17 +17,18 @@ class ImovelGrid extends StatefulWidget {
 
 class _ImovelGridState extends State<ImovelGrid> {
   late ScrollController _scrollController;
-  late List<Imovel> _loadedProducts;
-  int _numberOfItemsToShow = 50;
+     late final ImovelList provider;
 
-  @override
-  void initState() {
-    super.initState();
-    _scrollController = ScrollController();
-    _loadedProducts = [];
-    _loadMoreItems();
-    _scrollController.addListener(_scrollListener);
-  }
+ late List<Imovel> _loadedProducts;
+int _numberOfItemsToShow = 50;
+
+@override
+void initState() {
+  super.initState();
+  _scrollController = ScrollController(); // Initialize here
+  _scrollController.addListener(_scrollListener);
+}
+
 
   @override
   void dispose() {
@@ -42,16 +43,21 @@ class _ImovelGridState extends State<ImovelGrid> {
     }
   }
 
-  void _loadMoreItems() {
-    final provider = Provider.of<ImovelList>(context, listen: false);
-    final List<Imovel> additionalProducts = provider.items.skip(_loadedProducts.length).take(50).toList();
-    setState(() {
-      _loadedProducts.addAll(additionalProducts);
-    });
-  }
+void _loadMoreItems() {
+  final provider = Provider.of<ImovelList>(context, listen: false);
+  _loadedProducts ??= []; // Initialize _loadedProducts if it's null
+  final List<Imovel> additionalProducts = provider.items.skip(_loadedProducts.length).take(50).toList();
+  setState(() {
+    _loadedProducts.addAll(additionalProducts);
+  });
+}
+
 
   @override
   Widget build(BuildContext context) {
+     final provider = Provider.of<ImovelList>(context);
+  _loadedProducts = widget.showFavoriteOnly ? provider.favoriteItems : provider.items;
+
     return GridView.builder(
       controller: _scrollController,
       padding: const EdgeInsets.all(10),

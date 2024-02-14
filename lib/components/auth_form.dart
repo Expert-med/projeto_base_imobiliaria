@@ -45,8 +45,6 @@ class _AuthFormState extends State<AuthForm> {
       return _showError('Selecione se você é cliente ou corretor.');
     }
 
-   
-
     widget.onSubmit(_formData);
   }
 
@@ -54,130 +52,64 @@ class _AuthFormState extends State<AuthForm> {
   Widget build(BuildContext context) {
     bool isSmallScreen = MediaQuery.of(context).size.width < 1200;
 
-    return Card(
-      
-      margin: isSmallScreen ? const EdgeInsets.all(10) : const EdgeInsets.only(left:500, right: 500, top: 10, bottom: 10) ,
-      child: Container(
-        decoration: BoxDecoration(
-          color: !widget.isDarkMode ? Colors.white : Colors.black38,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                if (_formData.isSignup)
-                  Padding(
-                    padding:
-                        EdgeInsets.all(15), //apply padding to all four sides
-                    child: Text(
-                      "Nome",
-                      style: TextStyle(
-                        color: Color(0xFF6e58e9),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                if (_formData.isSignup)
-                  TextFormField(
-  key: const ValueKey('name'),
-  initialValue: _formData.name,
-  onChanged: (name) => _formData.name = name,
-  decoration: InputDecoration(
-    filled: true,
-    fillColor: Colors.black12,
-    border: OutlineInputBorder(
-      borderSide: BorderSide.none,
+    return ClipRRect(
       borderRadius: BorderRadius.circular(20),
-    ),
-    
-  ),
-   style: TextStyle(color: !widget.isDarkMode ? Colors.black : Colors.white), 
-  validator: (localName) {
-    final name = localName ?? '';
-    if (name.trim().length < 5) {
-      return 'Nome deve ter no mínimo 5 caracteres.';
-    }
-    return null;
-  },
-),
-
-                Padding(
-                  padding: EdgeInsets.all(15), //apply padding to all four sides
-                  child: Text(
-                    "Email",
-                    style: TextStyle(
-                      color: Color(0xFF6e58e9),
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
+      child: Card(
+        margin: isSmallScreen
+            ? const EdgeInsets.all(10)
+            : const EdgeInsets.only(left: 500, right: 500, top: 10, bottom: 10),
+        child: Container(
+          decoration: BoxDecoration(
+            color: !widget.isDarkMode ? Colors.white : Colors.black38,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  if (_formData.isSignup)
+                    Padding(
+                      padding:
+                          EdgeInsets.all(15), //apply padding to all four sides
+                      child: Text(
+                        "Nome",
+                        style: TextStyle(
+                          color: Color(0xFF6e58e9),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                TextFormField(
-                  key: const ValueKey('email'),
-                  initialValue: _formData.email,
-                  onChanged: (email) => _formData.email = email,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.black12,
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(20),
+                  if (_formData.isSignup)
+                    TextFormField(
+                      key: const ValueKey('name'),
+                      initialValue: _formData.name,
+                      onChanged: (name) => _formData.name = name,
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.black12,
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                      style: TextStyle(
+                          color:
+                              !widget.isDarkMode ? Colors.black : Colors.white),
+                      validator: (localName) {
+                        final name = localName ?? '';
+                        if (name.trim().length < 5) {
+                          return 'Nome deve ter no mínimo 5 caracteres.';
+                        }
+                        return null;
+                      },
                     ),
-                     
-              
-                  ),
-                     style: TextStyle(color: !widget.isDarkMode ? Colors.black : Colors.white), 
-                  validator: (localEmail) {
-                    final email = localEmail ?? '';
-                    if (!email.contains('@')) {
-                      return 'E-mail nformado não é válido.';
-                    }
-                    return null;
-                  },
-                ),
-                Padding(
-                  padding: EdgeInsets.all(15), //apply padding to all four sides
-                  child: Text(
-                    "Senha",
-                    style: TextStyle(
-                      color: Color(0xFF6e58e9),
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
-                TextFormField(
-                  key: const ValueKey('password'),
-                  initialValue: _formData.password,
-                  onChanged: (password) => _formData.password = password,
-                  obscureText: true,
-                     style: TextStyle(color: !widget.isDarkMode ? Colors.black : Colors.white), 
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.black12,
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-
-                  ),
-                  validator: (localPassword) {
-                    final password = localPassword ?? '';
-                    if (password.length < 6) {
-                      return 'Nome deve ter no mínimo 6 caracteres.';
-                    }
-                    return null;
-                  },
-                ),
-                if (_formData.isSignup)
                   Padding(
                     padding:
                         EdgeInsets.all(15), //apply padding to all four sides
                     child: Text(
-                      "Tipo de conta",
+                      "Email",
                       style: TextStyle(
                         color: Color(0xFF6e58e9),
                         fontWeight: FontWeight.bold,
@@ -185,88 +117,160 @@ class _AuthFormState extends State<AuthForm> {
                       ),
                     ),
                   ),
-                if (_formData.isSignup)
-                  Row(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(8),
-                        child: Row(
-                          children: [
-                            Text(
-                              "Cliente",
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  color: !widget.isDarkMode
-                                      ? Colors.black
-                                      : Colors.white),
-                            ),
-                            Checkbox(
-                              value: isClientSelected,
-                              activeColor:Color(0xFF6e58e9),
-                              checkColor: !widget.isDarkMode
-                                  ? Colors.white
-                                  : Colors.black,
-                              onChanged: (value) {
-                                setState(() {
-                                  isClientSelected = value ?? false;
-                                  if (isClientSelected) {
-                                    isBrokerSelected = false;
-                                    _formData.tipoUsuario = 0;
-                                  }
-                                });
-                              },
-                              side: BorderSide(
-                                color: !widget.isDarkMode
-                                    ? Colors.black
-                                    : Color(0xFF6e58e9),
-                              ),
-                            ),
-                          ],
-                        ),
+                  TextFormField(
+                    key: const ValueKey('email'),
+                    initialValue: _formData.email,
+                    onChanged: (email) => _formData.email = email,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.black12,
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(20),
                       ),
-                      Padding(
-                        padding: EdgeInsets.all(8),
-                        child: Row(
-                          children: [
-                            Text(
-                              "Corretor",
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  color: !widget.isDarkMode
-                                      ? Colors.black
-                                      : Colors.white),
-                            ),
-                            Checkbox(
-                              value: isBrokerSelected,
-                              activeColor:Color(0xFF6e58e9),
-                              checkColor: !widget.isDarkMode
-                                  ? Colors.white
-                                  : Colors.black,
-                              side: BorderSide(
-                                color: !widget.isDarkMode
-                                    ? Colors.black
-                                    : Color(0xFF6e58e9),
-                              ),
-                              onChanged: (value) {
-                                setState(() {
-                                  isBrokerSelected = value ?? false;
-                                  if (isBrokerSelected) {
-                                    isClientSelected = false;
-                                    _formData.tipoUsuario = 1;
-                                  }
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                    ),
+                    style: TextStyle(
+                        color:
+                            !widget.isDarkMode ? Colors.black : Colors.white),
+                    validator: (localEmail) {
+                      final email = localEmail ?? '';
+                      if (!email.contains('@')) {
+                        return 'E-mail nformado não é válido.';
+                      }
+                      return null;
+                    },
                   ),
-                const SizedBox(height: 12),
-                ElevatedButton(
-                  onPressed: _submit,
-                  child: Text(_formData.isLogin ? 'Entrar' : 'Cadastrar'),
-                   style: ElevatedButton.styleFrom(
+                  Padding(
+                    padding:
+                        EdgeInsets.all(15), //apply padding to all four sides
+                    child: Text(
+                      "Senha",
+                      style: TextStyle(
+                        color: Color(0xFF6e58e9),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                  TextFormField(
+                    key: const ValueKey('password'),
+                    initialValue: _formData.password,
+                    onChanged: (password) => _formData.password = password,
+                    obscureText: true,
+                    style: TextStyle(
+                        color:
+                            !widget.isDarkMode ? Colors.black : Colors.white),
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.black12,
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                    validator: (localPassword) {
+                      final password = localPassword ?? '';
+                      if (password.length < 6) {
+                        return 'Nome deve ter no mínimo 6 caracteres.';
+                      }
+                      return null;
+                    },
+                  ),
+                  if (_formData.isSignup)
+                    Padding(
+                      padding:
+                          EdgeInsets.all(15), //apply padding to all four sides
+                      child: Text(
+                        "Tipo de conta",
+                        style: TextStyle(
+                          color: Color(0xFF6e58e9),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  if (_formData.isSignup)
+                    Row(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.all(8),
+                          child: Row(
+                            children: [
+                              Text(
+                                "Cliente",
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: !widget.isDarkMode
+                                        ? Colors.black
+                                        : Colors.white),
+                              ),
+                              Checkbox(
+                                value: isClientSelected,
+                                activeColor: Color(0xFF6e58e9),
+                                checkColor: !widget.isDarkMode
+                                    ? Colors.white
+                                    : Colors.black,
+                                onChanged: (value) {
+                                  setState(() {
+                                    isClientSelected = value ?? false;
+                                    if (isClientSelected) {
+                                      isBrokerSelected = false;
+                                      _formData.tipoUsuario = 0;
+                                    }
+                                  });
+                                },
+                                side: BorderSide(
+                                  color: !widget.isDarkMode
+                                      ? Colors.black
+                                      : Color(0xFF6e58e9),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(8),
+                          child: Row(
+                            children: [
+                              Text(
+                                "Corretor",
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: !widget.isDarkMode
+                                        ? Colors.black
+                                        : Colors.white),
+                              ),
+                              Checkbox(
+                                value: isBrokerSelected,
+                                activeColor: Color(0xFF6e58e9),
+                                checkColor: !widget.isDarkMode
+                                    ? Colors.white
+                                    : Colors.black,
+                                side: BorderSide(
+                                  color: !widget.isDarkMode
+                                      ? Colors.black
+                                      : Color(0xFF6e58e9),
+                                ),
+                                onChanged: (value) {
+                                  setState(() {
+                                    isBrokerSelected = value ?? false;
+                                    if (isBrokerSelected) {
+                                      isClientSelected = false;
+                                      _formData.tipoUsuario = 1;
+                                    }
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  const SizedBox(height: 12),
+                  ElevatedButton(
+                    onPressed: _submit,
+                    child: Text(_formData.isLogin ? 'Entrar' : 'Cadastrar'),
+                    style: ElevatedButton.styleFrom(
                       elevation: 10.0,
                       backgroundColor: Color(0xFF6e58e9),
                       padding: EdgeInsets.symmetric(
@@ -275,20 +279,21 @@ class _AuthFormState extends State<AuthForm> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                     ),
-                ),
-                TextButton(
-                  onPressed: () {
-                    setState(() {
-                      _formData.toggleAuthMode();
-                    });
-                  },
-                  child: Text(
-                    _formData.isLogin
-                        ? 'Criar uma nova conta?'
-                        : 'Já possui conta?',
                   ),
-                ),
-              ],
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        _formData.toggleAuthMode();
+                      });
+                    },
+                    child: Text(
+                      _formData.isLogin
+                          ? 'Criar uma nova conta?'
+                          : 'Já possui conta?',
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

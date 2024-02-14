@@ -29,6 +29,12 @@ class _MapPageState extends State<MapPage> {
   String selectedMarkerAreaTotal = '';
   String selectedMarkerLink = '';
 
+  int selectedVagasgaragem = 0;
+  String selectedTotaldormitorios = '';
+  String selectedTotalsuites = '';
+  String selectedMarkerLongitude = '';
+  String selectedMarkerLatitude = '';
+
   @override
   void initState() {
     super.initState();
@@ -62,6 +68,13 @@ class _MapPageState extends State<MapPage> {
                     selectedMarkerCodigo = imovel.codigo;
                     selectedMarkerAreaTotal = info['area_total'].toString();
                     selectedMarkerLink = imovel.link;
+                    selectedVagasgaragem = info['vagas_garagem'] ?? 0 ;
+                    selectedTotaldormitorios =
+                        info['total_dormitorios'].toString();
+                    selectedTotalsuites = info['total_suites'].toString();
+                    
+                    selectedMarkerLongitude = info['longitude'].toString();
+                    selectedMarkerLatitude = info['latitude'].toString();
                   });
                 },
               );
@@ -71,19 +84,18 @@ class _MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
-
     bool isSmallScreen = MediaQuery.of(context).size.width < 900;
-
 
     return Scaffold(
       appBar: CustomAppBar(
-        subtitle: "Localização dos hospitais",
-        title: "MAPA EXPERTMED",
+        subtitle: "",
+        title: "Localização dos imóveis",
         isDarkMode: isDarkMode,
       ),
       body: Stack(
         children: [
           GoogleMap(
+            scrollGesturesEnabled: false,
             initialCameraPosition: CameraPosition(
               target: LatLng(-28.25977676240336, -52.41321612830699),
               zoom: 15,
@@ -111,16 +123,20 @@ class _MapPageState extends State<MapPage> {
                         });
                       },
                       child: ImovelInfoComponent(
-                        selectedMarkerTitle,
-                        selectedMarkerTerreno,
-                        selectedMarkerLocation,
-                        selectedMarkerOrigalPrice,
-                        urlsImage,
-                        isDarkMode,
-                        selectedMarkerCodigo,
-                        selectedMarkerAreaTotal,
-                        selectedMarkerLink,
-                      ),
+                          selectedMarkerTitle,
+                          selectedMarkerTerreno,
+                          selectedMarkerLocation,
+                          selectedMarkerOrigalPrice,
+                          urlsImage,
+                          isDarkMode,
+                          selectedMarkerCodigo,
+                          selectedMarkerAreaTotal,
+                          selectedMarkerLink,
+                          selectedVagasgaragem,
+                          selectedTotaldormitorios,
+                          selectedTotalsuites,
+                          selectedMarkerLatitude ?? '',
+                          selectedMarkerLongitude ?? ''),
                     )
                   : GestureDetector(
                       onTap: () {
@@ -180,16 +196,20 @@ class _MapPageState extends State<MapPage> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => ImovelInfoComponent(
-                                          title, // Título do imóvel
-                                          terreno, // Terreno do imóvel
-                                          localizacao, // Localização do imóvel
-                                          precoOriginal, // Preço original do imóvel
-                                          imageUrls, // URLs das imagens do imóvel
-                                          isDarkMode,
-                                          selectedMarkerCodigo,
-                                          selectedMarkerAreaTotal,
-                                          selectedMarkerLink,
-                                        ),
+                                            title, // Título do imóvel
+                                            terreno, // Terreno do imóvel
+                                            localizacao, // Localização do imóvel
+                                            precoOriginal, // Preço original do imóvel
+                                            imageUrls, // URLs das imagens do imóvel
+                                            isDarkMode,
+                                            selectedMarkerCodigo,
+                                            selectedMarkerAreaTotal,
+                                            selectedMarkerLink,
+                                            selectedVagasgaragem,
+                                            selectedTotaldormitorios,
+                                            selectedTotalsuites,
+                                            selectedMarkerLatitude ?? '',
+                                            selectedMarkerLongitude?? ''),
                                       ),
                                     );
                                   },
@@ -207,13 +227,16 @@ class _MapPageState extends State<MapPage> {
         ],
       ),
       drawer: CustomMenu(isDarkMode: false),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            isDarkMode = !isDarkMode; // Alterna o valor de isDarkMode
-          });
-        },
-        child: Icon(Icons.lightbulb),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(right: 40.0),
+        child: FloatingActionButton(
+          onPressed: () {
+            setState(() {
+              isDarkMode = !isDarkMode; // Alterna o valor de isDarkMode
+            });
+          },
+          child: Icon(Icons.lightbulb),
+        ),
       ),
     );
   }
