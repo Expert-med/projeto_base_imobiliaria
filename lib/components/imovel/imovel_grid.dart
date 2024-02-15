@@ -9,7 +9,8 @@ class ImovelGrid extends StatefulWidget {
   final bool isDarkMode;
   final bool showFavoriteOnly;
 
-  const ImovelGrid(this.showFavoriteOnly, this.isDarkMode, {Key? key}) : super(key: key);
+  const ImovelGrid(this.showFavoriteOnly, this.isDarkMode, {Key? key})
+      : super(key: key);
 
   @override
   _ImovelGridState createState() => _ImovelGridState();
@@ -17,18 +18,19 @@ class ImovelGrid extends StatefulWidget {
 
 class _ImovelGridState extends State<ImovelGrid> {
   late ScrollController _scrollController;
-     late final ImovelList provider;
-
- late List<Imovel> _loadedProducts;
-int _numberOfItemsToShow = 50;
+  late final ImovelList provider;
+  late List<Imovel> _loadedProducts;
+  int _numberOfItemsToShow = 50;
+  String searchTerm = '';
+  bool showFiltradas = false;
 
 @override
 void initState() {
   super.initState();
   _scrollController = ScrollController(); // Initialize here
   _scrollController.addListener(_scrollListener);
+  provider = Provider.of<ImovelList>(context, listen: false);
 }
-
 
   @override
   void dispose() {
@@ -38,48 +40,83 @@ void initState() {
   }
 
   void _scrollListener() {
-    if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
       _loadMoreItems();
     }
   }
 
-void _loadMoreItems() {
-  final provider = Provider.of<ImovelList>(context, listen: false);
-  _loadedProducts ??= []; // Initialize _loadedProducts if it's null
-  final List<Imovel> additionalProducts = provider.items.skip(_loadedProducts.length).take(50).toList();
-  setState(() {
-    _loadedProducts.addAll(additionalProducts);
-  });
-}
-
+  void _loadMoreItems() {
+    final provider = Provider.of<ImovelList>(context, listen: false);
+    _loadedProducts ??= []; // Initialize _loadedProducts if it's null
+    final List<Imovel> additionalProducts =
+        provider.items.skip(_loadedProducts.length).take(50).toList();
+    setState(() {
+      _loadedProducts.addAll(additionalProducts);
+    });
+  }
 
   @override
-  Widget build(BuildContext context) {
-     final provider = Provider.of<ImovelList>(context);
-  _loadedProducts = widget.showFavoriteOnly ? provider.favoriteItems : provider.items;
+Widget build(BuildContext context) {
+ 
+  List<Imovel> displayedProducts = widget.showFavoriteOnly
+      ? provider.favoriteItems
+      : provider.items;
 
-    return GridView.builder(
-      controller: _scrollController,
-      padding: const EdgeInsets.all(10),
-      itemCount: _loadedProducts.length + 1, // Add 1 for the load more button
-      itemBuilder: (ctx, i) {
-        if (i == _loadedProducts.length) {
-          return _buildLoadMoreButton();
-        } else {
-          return ChangeNotifierProvider.value(
-            value: _loadedProducts[i],
-            child: ImovelItem(widget.isDarkMode, i),
-          );
-        }
-      },
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 4,
-        childAspectRatio: 3 / 2,
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
-      ),
-    );
+  // Filtragem com base no termo de pesquisa
+  if (searchTerm.isNotEmpty) {
+    displayedProducts = displayedProducts.where((imovel) {
+      return imovel.infoList.any((info) =>
+          info['localizacao'] != null &&
+          info['localizacao']
+              .toLowerCase()
+              .contains(searchTerm.toLowerCase()));
+    }).toList();
   }
+
+  return Column(
+    children: [
+      // Padding(
+      //   padding: const EdgeInsets.all(8.0),
+      //   child: TextField(
+      //     decoration: InputDecoration(
+      //       hintText: 'Pesquisar imóveis...',
+      //       prefixIcon: Icon(Icons.search),
+      //       border: OutlineInputBorder(),
+      //     ),
+      //     onChanged: (query) {
+      //       setState(() {
+      //         searchTerm = query.toLowerCase();
+      //       });
+      //     },
+      //   ),
+      // ),
+      Expanded(
+        child: GridView.builder(
+          controller: _scrollController,
+          padding: const EdgeInsets.all(10),
+          itemCount: displayedProducts.length + 1,
+          itemBuilder: (ctx, i) {
+            if (i == displayedProducts.length) {
+              return _buildLoadMoreButton();
+            } else {
+              return ChangeNotifierProvider.value(
+                value: displayedProducts[i],
+                child: ImovelItem(widget.isDarkMode, i),
+              );
+            }
+          },
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 4,
+            childAspectRatio: 3 / 2,
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+          ),
+        ),
+      ),
+    ],
+  );
+}
 
   Widget _buildLoadMoreButton() {
     return Container(

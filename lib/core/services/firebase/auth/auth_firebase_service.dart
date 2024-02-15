@@ -56,7 +56,8 @@ class AuthFirebaseService implements AuthService {
 
       // 3. salvar usuário no banco de dados (opcional)
       _currentUser = _toChatUser(credential.user!, name, imageUrl,tipoUsuario);
-      await _saveChatUser(_currentUser!);
+      
+        await _saveChatUser(_currentUser!, credential.user!.uid.toString());
     }
 
     await signup.delete();
@@ -108,7 +109,7 @@ Uuid uuid = Uuid();
     return id;
   }
 
-  Future<void> _saveChatUser(ChatUser user) async {
+  Future<void> _saveChatUser(ChatUser user, String vddUid) async {
     final store = FirebaseFirestore.instance;
       final uid = generateId();
       if(user.tipoUsuario == 0){
@@ -119,7 +120,8 @@ Uuid uuid = Uuid();
       'name': user.name,
       'email': user.email,
       'imageUrl': user.imageUrl,
-      'tipo_usuario': user.tipoUsuario
+      'tipo_usuario': user.tipoUsuario,
+      "uid":vddUid,
     });
       }else{
  final docRef = store.collection('corretores').doc(uid);

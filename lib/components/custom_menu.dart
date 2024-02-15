@@ -5,6 +5,7 @@ import 'package:projeto_imobiliaria/pages/imobiliaria/cad_imob_page.dart';
 import 'package:projeto_imobiliaria/pages/imoveis/cad_imovel_page.dart';
 import '../checkPage.dart';
 import '../pages/imobiliaria/imobiliarias_page.dart';
+import '../pages/imoveis/imovel_grid_completa_page.dart';
 import '../pages/imoveis/imovel_page.dart';
 import '../pages/map/map_flutter.dart';
 import '../pages/map/map_page.dart';
@@ -20,6 +21,21 @@ class CustomMenu extends StatefulWidget {
 }
 
 class _CustomMenuState extends State<CustomMenu> {
+  bool isExpandedImoveis = false;
+  bool isExpandedImobiliarias = false;
+
+  void handleExpansionImoveisChanged(bool expanded) {
+    setState(() {
+      isExpandedImoveis = expanded;
+    });
+  }
+
+  void handleExpansionImobiliariasChanged(bool expanded) {
+    setState(() {
+      isExpandedImobiliarias = expanded;
+    });
+  }
+
   void logOut(BuildContext context) async {
     try {
       await FirebaseAuth.instance.signOut();
@@ -35,7 +51,6 @@ class _CustomMenuState extends State<CustomMenu> {
 
   @override
   Widget build(BuildContext context) {
-    
     return Container(
       width: 300.0,
       color: widget.isDarkMode
@@ -73,13 +88,13 @@ class _CustomMenuState extends State<CustomMenu> {
           ),
           ListTile(
             leading: Icon(
-              Icons.text_snippet_rounded,
+              Icons.map_outlined,
               color: widget.isDarkMode
                   ? darkenColor(Color(0xFF6e58e9), 0.5)
                   : Color(0xFF6e58e9),
             ),
             title: Text(
-              'Mapa',
+              'Mapa dos imóveis',
               style: TextStyle(
                 color: widget.isDarkMode ? Colors.white : Colors.black54,
               ),
@@ -115,116 +130,177 @@ class _CustomMenuState extends State<CustomMenu> {
           //     );
           //   },
           // ),
-          ListTile(
-            leading: Icon(
-              Icons.text_snippet_rounded,
-              color: widget.isDarkMode
-                  ? darkenColor(Color(0xFF6e58e9), 0.5)
-                  : Color(0xFF6e58e9),
-            ),
-            title: Text(
-              'Imoveis',
-              style: TextStyle(
-                color: widget.isDarkMode ? Colors.white : Colors.black54,
+
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: AnimatedContainer(
+              duration: Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+              color: isExpandedImoveis ? Color(0xFF6e58e9) : null,
+              child: ListTile(
+                leading: Icon(
+                  Icons.add,
+                  color: isExpandedImoveis ? Colors.white : Color(0xFF6e58e9),
+                ),
+                title: Text(
+                  'Imóveis',
+                  style: TextStyle(
+                    color: widget.isDarkMode ? Colors.white : Colors.black54,
+                  ),
+                ),
+                onTap: () {
+                  handleExpansionImoveisChanged(!isExpandedImoveis);
+                },
               ),
             ),
-            onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ImovelPage(),
-                ),
-              );
-            },
           ),
-          ListTile(
-            leading: Icon(
-              Icons.text_snippet_rounded,
-              color: widget.isDarkMode
-                  ? darkenColor(Color(0xFF6e58e9), 0.5)
-                  : Color(0xFF6e58e9),
-            ),
-            title: Text(
-              'Cadastrar Imóvel',
-              style: TextStyle(
-                color: widget.isDarkMode ? Colors.white : Colors.black54,
+          if (isExpandedImoveis)
+            Padding(
+              padding: const EdgeInsets.only(left: 8, right: 8),
+              child: ListTile(
+                leading: Icon(
+                  Icons.house,
+                  color:  Color(0xFF6e58e9),
+                ),
+                title: Text(
+                  'Lista de imóveis',
+                  style: TextStyle(
+                    color: widget.isDarkMode ? Colors.white : Colors.black54,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ImovelPage(),
+                    ),
+                  );
+                },
               ),
             ),
-            onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => CadastroImovel(),
+          if (isExpandedImoveis)
+            Padding(
+              padding: const EdgeInsets.only(left: 8, right: 8),
+              child: ListTile(
+                leading: Icon(
+                  Icons.house,
+                  color:  Color(0xFF6e58e9),
                 ),
-              );
-            },
-          ),
-           ListTile(
-            leading: Icon(
-              Icons.text_snippet_rounded,
-              color: widget.isDarkMode
-                  ? darkenColor(Color(0xFF6e58e9), 0.5)
-                  : Color(0xFF6e58e9),
-            ),
-            title: Text(
-              'Cadastrar Imobiliaria',
-              style: TextStyle(
-                color: widget.isDarkMode ? Colors.white : Colors.black54,
+                title: Text(
+                  'Busca de imóveis',
+                  style: TextStyle(
+                    color: widget.isDarkMode ? Colors.white : Colors.black54,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ImovelGridCompletaSemComponente(),
+                    ),
+                  );
+                },
               ),
             ),
-            onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => CadastroImobiliaria(),
+          if (isExpandedImoveis)
+            Padding(
+              padding: const EdgeInsets.only(left: 8, right: 8),
+              child: ListTile(
+                leading: Icon(
+                  Icons.house,
+                  color:  Color(0xFF6e58e9),
                 ),
-              );
-            },
-          ),
-           ListTile(
-            leading: Icon(
-              Icons.text_snippet_rounded,
-              color: widget.isDarkMode
-                  ? darkenColor(Color(0xFF6e58e9), 0.5)
-                  : Color(0xFF6e58e9),
-            ),
-            title: Text(
-              'Imobiliarias',
-              style: TextStyle(
-                color: widget.isDarkMode ? Colors.white : Colors.black54,
+                title: Text(
+                  'Cadastrar Imóvel',
+                  style: TextStyle(
+                    color: widget.isDarkMode ? Colors.white : Colors.black54,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CadastroImovel(),
+                    ),
+                  );
+                },
               ),
             ),
-            onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ImobiliariasPage(),
+
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: AnimatedContainer(
+              duration: Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+              color: isExpandedImobiliarias ? Color(0xFF6e58e9) : null,
+              child: ListTile(
+                leading: Icon(
+                  Icons.add,
+                  color:
+                      isExpandedImobiliarias ? Colors.white : Color(0xFF6e58e9),
                 ),
-              );
-            },
-          ),
-          ListTile(
-            leading: Icon(
-              Icons.text_snippet_rounded,
-              color: widget.isDarkMode
-                  ? darkenColor(Color(0xFF6e58e9), 0.5)
-                  : Color(0xFF6e58e9),
-            ),
-            title: Text(
-              'Cadastrar Conta',
-              style: TextStyle(
-                color: widget.isDarkMode ? Colors.white : Colors.black54,
+                title: Text(
+                  'Imobiliarias',
+                  style: TextStyle(
+                    color: widget.isDarkMode ? Colors.white : Colors.black54,
+                  ),
+                ),
+                onTap: () {
+                  handleExpansionImobiliariasChanged(!isExpandedImobiliarias);
+                },
               ),
             ),
-            onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AuthPage(),
-                ),
-              );
-            },
           ),
+          if (isExpandedImobiliarias)
+            Padding(
+              padding: const EdgeInsets.only(left: 8, right: 8),
+              child: ListTile(
+                leading: Icon(
+                  Icons.home_work,
+                  color:  Color(0xFF6e58e9),
+                ),
+                title: Text(
+                  'Cadastrar Imobiliaria',
+                  style: TextStyle(
+                    color: widget.isDarkMode ? Colors.white : Colors.black54,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CadastroImobiliaria(),
+                    ),
+                  );
+                },
+              ),
+            ),
+          if (isExpandedImobiliarias)
+            Padding(
+              padding: const EdgeInsets.only(left: 8, right: 8),
+              child: ListTile(
+                leading: Icon(
+                  Icons.home_work,
+                  color:  Color(0xFF6e58e9),
+                ),
+                title: Text(
+                  'Imobiliarias',
+                  style: TextStyle(
+                    color: widget.isDarkMode ? Colors.white : Colors.black54,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ImobiliariasPage(),
+                    ),
+                  );
+                },
+              ),
+            ),
+
+          Divider(),
           ListTile(
             leading: Icon(
               Icons.logout,

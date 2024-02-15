@@ -59,7 +59,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: GetMaterialApp(
-        title: 'CME Projeto',
+        title: 'LarHub',
         theme: isDarkMode
             ? ThemeData(
                 primarySwatch: myPrimaryColor,

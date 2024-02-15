@@ -11,19 +11,18 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   final showNotificacao;
   final bool isDarkMode;
 
-  CustomAppBar({
-    required this.subtitle,
-    required this.title,
-    this.leading,
-    this.showNotificacao,
-    required this.isDarkMode
-  });
+  CustomAppBar(
+      {required this.subtitle,
+      required this.title,
+      this.leading,
+      this.showNotificacao,
+      required this.isDarkMode});
 
   @override
   _CustomAppBarState createState() => _CustomAppBarState();
 
   @override
-  Size get preferredSize => Size.fromHeight(150.0);
+  Size get preferredSize => Size.fromHeight(60.0);
 }
 
 class _CustomAppBarState extends State<CustomAppBar> {
@@ -87,27 +86,18 @@ class _CustomAppBarState extends State<CustomAppBar> {
 
   @override
   Widget build(BuildContext context) {
-
     bool isSmallScreen = MediaQuery.of(context).size.width < 900;
 
     return AppBar(
       toolbarHeight: 50,
       flexibleSpace: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              // Color(0xFF3e88f3),
-              // Color(0xFF6e58e9),
-              Color.fromARGB(255, 233, 233, 233),
-              Color.fromARGB(255, 233, 233, 233),
-            ],
-            stops: [0, 1],
-          ),
+          color: widget.isDarkMode
+              ? Colors.black
+              : Color.fromARGB(255, 238, 238, 238),
         ),
         child: Padding(
-          padding: EdgeInsets.only(left: 50, bottom: 30, right: 50),
+          padding: EdgeInsets.only(left: 50, bottom: 20, right: 50),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -116,7 +106,6 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                   
                   Text(
                     widget.title,
                     style: TextStyle(

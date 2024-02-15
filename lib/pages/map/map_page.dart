@@ -95,7 +95,7 @@ class _MapPageState extends State<MapPage> {
       body: Stack(
         children: [
           GoogleMap(
-            scrollGesturesEnabled: false,
+            scrollGesturesEnabled: true,
             initialCameraPosition: CameraPosition(
               target: LatLng(-28.25977676240336, -52.41321612830699),
               zoom: 15,

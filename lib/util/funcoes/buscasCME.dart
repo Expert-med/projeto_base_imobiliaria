@@ -519,46 +519,28 @@ class buscasCME {
     }
   }
 
-  Future<List<Map<String, dynamic>>> buscarInstrumentaisPorTipo(
-      DocumentReference userDoc, int eHospital, int idTipo) async {
+  Future<List<Map<String, dynamic>>> buscarTodosImoveis() async {
     List<Map<String, dynamic>> filteredInstrumentais = [];
 
-    if (eHospital == 1) {
-      QuerySnapshot snapshot = await userDoc
-          .collection("instrumentais")
-          .where("tipo", isEqualTo: idTipo)
-          .get();
+    QuerySnapshot snapshot = await db.collection("imoveis").get();
 
-      if (snapshot.docs.isNotEmpty) {
-        filteredInstrumentais = snapshot.docs.map((doc) {
-          Map<String, dynamic> instrumentalData =
-              doc.data() as Map<String, dynamic>;
-          return instrumentalData;
-        }).toList();
-      }
-    } else {
-      QuerySnapshot snapshot = await userDoc.collection("instrumentais").get();
-
-      if (snapshot.docs.isNotEmpty) {
-        filteredInstrumentais = snapshot.docs.map((doc) {
-          Map<String, dynamic> instrumentalData =
-              doc.data() as Map<String, dynamic>;
-          return instrumentalData;
-        }).toList();
-      }
+    if (snapshot.docs.isNotEmpty) {
+      filteredInstrumentais = snapshot.docs.map((doc) {
+        Map<String, dynamic> instrumentalData =
+            doc.data() as Map<String, dynamic>;
+        return instrumentalData;
+      }).toList();
     }
 
     return filteredInstrumentais;
   }
 
-   Future<List<Map<String, dynamic>>> buscarTodosInstrumentais(
+  Future<List<Map<String, dynamic>>> buscarTodosInstrumentais(
       DocumentReference userDoc, int eHospital) async {
     List<Map<String, dynamic>> filteredInstrumentais = [];
 
     if (eHospital == 1) {
-      QuerySnapshot snapshot = await userDoc
-          .collection("instrumentais")
-          .get();
+      QuerySnapshot snapshot = await userDoc.collection("instrumentais").get();
 
       if (snapshot.docs.isNotEmpty) {
         filteredInstrumentais = snapshot.docs.map((doc) {
@@ -1049,8 +1031,7 @@ class buscasCME {
     }
   }
 
-
-Future<void> inserirIDTemporario(
+  Future<void> inserirIDTemporario(
     BuildContext context,
     String idHospital,
     String idCliente,
@@ -1074,8 +1055,7 @@ Future<void> inserirIDTemporario(
     }
   }
 
-  
-Future<void> removerIdTemporario(
+  Future<void> removerIdTemporario(
     BuildContext context,
     String idCliente,
   ) async {
@@ -1088,7 +1068,7 @@ Future<void> removerIdTemporario(
           clienteSnapshot.data() as Map<String, dynamic>? ?? {};
 
       await clienteDoc.update({
-        "valida":0,
+        "valida": 0,
         "id_temp": '',
       });
 
@@ -1097,5 +1077,4 @@ Future<void> removerIdTemporario(
       print('Erro ao inserir elemento na subcoleção "especifico": $e');
     }
   }
-
 }

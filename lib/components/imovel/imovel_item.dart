@@ -18,7 +18,6 @@ class ImovelItem extends StatefulWidget {
 }
 
 class _ImovelItemState extends State<ImovelItem> {
-  Color containerColor = Color.fromARGB(255, 238, 238, 238);
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +47,8 @@ class _ImovelItemState extends State<ImovelItem> {
   }
 
   Widget _buildFooter(Imovel product) {
+      Color containerColor = widget.isDarkMode ? Colors.black: Color.fromARGB(255, 238, 238, 238);
+
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       color: containerColor, // Utiliza a cor de fundo controlada pelo estado
