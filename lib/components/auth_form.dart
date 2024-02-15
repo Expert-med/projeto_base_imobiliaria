@@ -57,6 +57,9 @@ class _AuthFormState extends State<AuthForm> {
               Text('Um email para resetar sua senha foi enviado para $email'),
         ),
       );
+       setState(() {
+                          esqueceuSenha = false;
+                        });
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -368,12 +371,23 @@ class _AuthFormState extends State<AuthForm> {
                   if (esqueceuSenha == true)
                     ElevatedButton(
                       onPressed: () {
+                        
+                        _resetPassword(_formData.email.trim());
+                       
+                      },
+                      child: Text('Resetar Senha'),
+                    ),
+                    if (esqueceuSenha == true)
+                    SizedBox(height: 10,),
+                    if (esqueceuSenha == true)
+                    TextButton(
+                      onPressed: () {
                         setState(() {
                           esqueceuSenha = false;
                         });
-                        _resetPassword(_formData.email.trim());
+                       
                       },
-                      child: Text('Resetar Senha'),
+                      child: Text('Fazer Login'),
                     ),
                 ],
               ),
