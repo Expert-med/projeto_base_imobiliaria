@@ -4,8 +4,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:provider/provider.dart';
 
-import '../core/models/user.dart';
+import '../core/models/UserProvider.dart';
+import '../core/models/User_firebase_service.dart';
 
 class UserConfig extends StatefulWidget {
   const UserConfig({Key? key}) : super(key: key);
@@ -15,7 +17,14 @@ class UserConfig extends StatefulWidget {
 }
 
 class _UserConfigState extends State<UserConfig> {
-  late ChatUser _user;
+  
+  late ChatUser _user = ChatUser(
+    id: '',
+    name: '',
+    email: '',
+    imageUrl: '',
+    tipoUsuario: 50,
+  );
   late TextEditingController _nameController;
   bool isDarkMode = true;
 
@@ -23,6 +32,7 @@ class _UserConfigState extends State<UserConfig> {
   void initState() {
     super.initState();
     _nameController = TextEditingController();
+    Provider.of<UserProvider>(context, listen: false).initializeUser();
     _initializeData();
   }
 
@@ -33,27 +43,52 @@ class _UserConfigState extends State<UserConfig> {
   }
 
   Future<void> _initializeData() async {
-    try {
-      User? user = FirebaseAuth.instance.currentUser;
+  try {
+    User? user = FirebaseAuth.instance.currentUser;
 
-      if (user != null) {
-        // Set the user information to the state
-        setState(() {
-          _user = ChatUser(
-            id: user.uid,
-            name: user.displayName ?? '',
-            email: user.email ?? '',
-            imageUrl: user.photoURL ?? '',
-            tipoUsuario: 0, // Define the user type as needed
-          );
-          _nameController.text = _user.name;
-          print(_user.imageUrl);
-        });
+    if (user != null) {
+      QuerySnapshot<Map<String, dynamic>> clientesSnapshot =
+          await FirebaseFirestore.instance
+              .collection('clientes')
+              .where('uid', isEqualTo: user.uid)
+              .get();
+
+      QuerySnapshot<Map<String, dynamic>> corretoresSnapshot =
+          await FirebaseFirestore.instance
+              .collection('corretores')
+              .where('uid', isEqualTo: user.uid)
+              .get();
+
+      QuerySnapshot<Map<String, dynamic>> querySnapshot;
+      if (clientesSnapshot.docs.isNotEmpty) {
+        querySnapshot = clientesSnapshot;
+      } else if (corretoresSnapshot.docs.isNotEmpty) {
+        querySnapshot = corretoresSnapshot;
+      } else {
+        print('Usuário não encontrado nas coleções clientes e corretores');
+        return;
       }
-    } catch (e) {
-      print('Error initializing data: $e');
+
+      Map<String, dynamic> data = querySnapshot.docs.first.data();
+      print(data);
+
+      setState(() {
+        _user = ChatUser(
+          id: user.uid,
+          name: data['name'] ?? '',
+          email: data['email'] ?? '',
+          imageUrl: data['imageUrl'] ?? '',
+          tipoUsuario: data['tipo_usuario'] ?? 0,
+        );
+        _nameController.text = _user.name;
+        print(_user.imageUrl);
+      });
     }
+  } catch (e) {
+    print('Error initializing data: $e');
   }
+}
+
 
   Future<void> pickAndUploadImage(String idConta) async {
     FilePickerResult? result =
@@ -143,6 +178,7 @@ class _UserConfigState extends State<UserConfig> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Configurações do Usuário'),
@@ -200,7 +236,7 @@ class _UserConfigState extends State<UserConfig> {
                           ),
                         ],
                       ),
-                       Row(
+                      Row(
                         children: [
                           Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -254,7 +290,6 @@ class _UserConfigState extends State<UserConfig> {
                         },
                         child: Text('Salvar Informações'),
                       ),
-                      
                     ],
                   )
                 : CircularProgressIndicator(),

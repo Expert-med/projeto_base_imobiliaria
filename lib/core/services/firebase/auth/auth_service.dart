@@ -1,5 +1,5 @@
 import 'dart:io';
-import '../../../models/user.dart';
+import '../../../models/UserProvider.dart';
 import 'auth_firebase_service.dart';
 
 abstract class AuthService {

@@ -9,7 +9,7 @@ import '../components/custom_menu.dart';
 import '../components/custom_popup_menu.dart';
 import '../components/imovel/imovel_carrousel.dart';
 import '../components/search_row.dart';
-import '../core/models/user.dart';
+import '../core/models/UserProvider.dart';
 import '../core/services/firebase/auth/auth_service.dart';
 import 'auth/auth_page.dart';
 

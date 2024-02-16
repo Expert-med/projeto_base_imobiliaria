@@ -11,6 +11,7 @@ import 'package:projeto_imobiliaria/pages/home_page.dart';
 import 'package:provider/provider.dart';
 
 import 'checkPage.dart';
+import 'core/models/User_firebase_service.dart';
 import 'core/services/firebase/firebase_options.dart';
 
 void main() async {
@@ -56,6 +57,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => ImobiliariaList(),
+        ),
+          ChangeNotifierProvider(
+          create: (_) => UserProvider(),
         ),
       ],
       child: GetMaterialApp(
