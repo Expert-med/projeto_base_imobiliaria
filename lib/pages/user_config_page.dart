@@ -42,6 +42,7 @@ class _UserConfigState extends State<UserConfig> {
     super.dispose();
   }
 
+
   Future<void> _initializeData() async {
   try {
     User? user = FirebaseAuth.instance.currentUser;
