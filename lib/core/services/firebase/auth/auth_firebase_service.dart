@@ -73,7 +73,12 @@ class AuthFirebaseService implements AuthService {
 
   @override
   Future<void> logout() async {
-    FirebaseAuth.instance.signOut();
+     try {
+      await FirebaseAuth.instance.signOut();
+     
+    } catch (e) {
+      print('Erro ao sair da conta: $e');
+    };
   }
 
 Future<String?> _uploadUserImage(File? image, String imageName) async {

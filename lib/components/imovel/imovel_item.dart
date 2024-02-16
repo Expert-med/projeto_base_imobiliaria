@@ -22,7 +22,7 @@ class _ImovelItemState extends State<ImovelItem> {
   @override
   Widget build(BuildContext context) {
     final product = Provider.of<Imovel>(context, listen: false);
-
+print('product.infoList ${product.infoList}');
     return AspectRatio(
       aspectRatio: 16 / 9, // Defina a proporção desejada
       child: ClipRRect(

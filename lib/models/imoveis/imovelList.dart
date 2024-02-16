@@ -17,82 +17,46 @@ class ImovelList with ChangeNotifier {
   }
 
   Future<void> _carregarImoveis() async {
-    final List<Imovel> imoveis = await lerImoveis();
+    final List<Imovel> imoveis = await buscarImoveis();
     _items.addAll(imoveis);
     notifyListeners();
   }
-   List<Imovel> get favoriteItems =>
+
+  List<Imovel> get favoriteItems =>
       _items.where((prod) => prod.isFavorite).toList();
 
+  Future<List<Imovel>> buscarImoveis() async {
+    print('entrou em buscarImoveis');
+    CollectionReference<Map<String, dynamic>> imoveisRef =
+        FirebaseFirestore.instance.collection('imoveis');
 
-  Future<List<Imovel>> lerImoveis() async {
-    print('Entrou em lerImoveis agora');
+    try {
+      print("entrou no try");
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await imoveisRef.get();
 
-    final List<Map<String, dynamic>> infoList = [];
-    final List<Imovel> imoveis = [];
+      List<Imovel> imoveis = [];
 
-    final firebaseApp = Firebase.app();
-    final rtdb = FirebaseDatabase.instanceFor(
-      app: firebaseApp,
-      databaseURL: 'https://imob-projeto-expmed-default-rtdb.firebaseio.com/',
-    );
-    DatabaseReference imoveisRef =
-        rtdb.ref().child('imobiliarias/-NpvkuGYUlb2YswfRZ3Y/imoveis');
-
-    await imoveisRef.onValue.first.then((event) async {
-      final data = event.snapshot.value;
-
-      if (data != null) {
-        if (data is Map<String, dynamic>) {
-          data.forEach((key, value) {
-            final Map<String, dynamic>? infoData =
-                value['info'] as Map<String, dynamic>?;
-
-            if (infoData != null) {
-              final Map<String, dynamic> infoMap = {
-                'area_privativa': infoData['area_privativa'] ?? '',
-                'area_privativa_casa': infoData['area_privativa_casa'] ?? '',
-                'area_total': infoData['area_total'] ?? '',
-                'image_urls': infoData['image_urls'] ?? '',
-                'latitude': infoData['latitude'] ?? 0.0,
-                'localizacao': infoData['localizacao'] ?? '',
-                'longitude': infoData['longitude'] ?? 0.0,
-                'mobilia': infoData['mobilia'] ?? '',
-                'nome_imovel': infoData['nome_imovel'] ?? '',
-                'perfil': infoData['perfil'] ?? '',
-                'preco_original': infoData['preco_original'] ?? 0.0,
-                'preco_promocional': infoData['preco_promocional'] ?? 0.0,
-                'terreno': infoData['terreno'] ?? '',
-                'total_dormitorios': infoData['total_dormitorios'] ?? 0,
-                'total_suites': infoData['total_suites'] ?? 0,
-                'total_garagem': infoData['total_garagem'] ?? 0,
-              };
-
-              infoList.add(infoMap);
-            } else {
-              print('Dados de info não encontrados para a chave $key');
-            }
-
-            final imovel = Imovel(
-              codigo: key,
-              data: value['data'],
-              infoList: infoList,
-              link: value['link'],
-            );
-            imoveis.add(imovel);
-          });
-
-          // Após obter a lista de imóveis, chame a função para salvar os imóveis favoritos
-          await salvarImoveisFavoritos(imoveis);
-        } else {
-          print('Dados no formato inválido');
-        }
-      } else {
-        print('Nenhum dado encontrado');
-      }
-    });
-
-    return imoveis;
+      querySnapshot.docs
+          .forEach((QueryDocumentSnapshot<Map<String, dynamic>> doc) {
+        final resultado = doc.data();
+        final infoList = resultado['info'] ?? <String, dynamic>{};
+        final imovel = Imovel(
+          codigo: resultado['codigo'],
+          data: resultado['data'],
+          infoList: resultado['info'] ?? {},
+          link: resultado['link'],
+        );
+        print(
+            'imovel encontrado: ${resultado['codigo']} ${resultado['data']} ${resultado['link']} ${resultado['info']}');
+        imoveis.add(imovel);
+      });
+      print(imoveis);
+      return imoveis;
+    } catch (e) {
+      print('Erro ao buscar os imóveis: $e');
+      return []; // Retorna uma lista vazia em caso de erro
+    }
   }
 
   Future<void> salvarImoveisFavoritos(List<Imovel> imoveis) async {
@@ -126,7 +90,7 @@ class ImovelList with ChangeNotifier {
     }
   }
 
-Future<void> marcarImoveisFavoritos(
+  Future<void> marcarImoveisFavoritos(
       List<Imovel> imoveis, List<String> imoveisFavoritos) async {
     print('marcarImoveisFavoritos');
     print(imoveisFavoritos);

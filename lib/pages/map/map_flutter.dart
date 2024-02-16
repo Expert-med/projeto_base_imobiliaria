@@ -50,36 +50,36 @@ class _MapWidgetState extends State<MapWidget> {
     super.initState();
   
 
-  final List<Marker> _todosMakers = loadedProducts
-      .take(50) // Pegue apenas os 50 primeiros itens
-      .expand((imovel) => imovel.infoList.map((info) {
-            // Parse latitude and longitude only if they are valid doubles
-            double latitude = double.tryParse(info['latitude']) ?? 0.0;
-            double longitude = double.tryParse(info['longitude']) ?? 0.0;
+  // final List<Marker> _todosMakers = loadedProducts
+  //     .take(50) // Pegue apenas os 50 primeiros itens
+  //     .expand((imovel) => imovel.infoList.map((info) {
+  //           // Parse latitude and longitude only if they are valid doubles
+  //           double latitude = double.tryParse(info['latitude']) ?? 0.0;
+  //           double longitude = double.tryParse(info['longitude']) ?? 0.0;
 
-            return Marker(
-              width: 40,
-              height: 40,
-              point: LatLng(latitude, longitude),
-              builder: (ctx) => Container(
-                child: Column(
-                  children: [
-                    Icon(
-                      Icons.location_on,
-                      size: 40,
-                      color: Colors.black,
-                    ),
-                    Text(
-                      '${info['nome_imovel']}',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ],
-                ),
-              ),
+  //           return Marker(
+  //             width: 40,
+  //             height: 40,
+  //             point: LatLng(latitude, longitude),
+  //             builder: (ctx) => Container(
+  //               child: Column(
+  //                 children: [
+  //                   Icon(
+  //                     Icons.location_on,
+  //                     size: 40,
+  //                     color: Colors.black,
+  //                   ),
+  //                   Text(
+  //                     '${info['nome_imovel']}',
+  //                     style: TextStyle(color: Colors.white),
+  //                   ),
+  //                 ],
+  //               ),
+  //             ),
               
-            );
-          }))
-      .toList();
+  //           );
+  //         }))
+  //     .toList();
 
  
   }

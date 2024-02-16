@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Imovel with ChangeNotifier {
   final String codigo;
   final String data;
-  final List<Map<String, dynamic>> infoList;
+  final Map<String, dynamic> infoList; 
   final String link;
   bool isFavorite;
 

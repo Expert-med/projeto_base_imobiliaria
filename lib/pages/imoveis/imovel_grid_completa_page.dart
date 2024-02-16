@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:projeto_imobiliaria/components/custom_menu.dart';
 
 import '../../util/app_bar_model.dart';
-import '../../util/funcoes/buscasCME.dart';
-import '../../util/funcoes/delete/funcoesDelete.dart';
+import '../../util/funcoes/buscas.dart';
 import '../imobiliaria/imobi_info_page.dart';
 
 class ImovelGridCompletaSemComponente extends StatefulWidget {
@@ -21,7 +20,7 @@ class _ImovelGridCompletaSemComponenteState
   bool isDarkMode = false;
   FirebaseFirestore db = FirebaseFirestore.instance;
   List<Map<String, dynamic>> filteredInstrumentais = [];
-  final buscasCME instanciaBuscasCME = buscasCME();
+  final Buscas instanciaBuscas = Buscas();
 
   String searchTerm = '';
   bool showFiltradas = false;
@@ -35,7 +34,7 @@ class _ImovelGridCompletaSemComponenteState
 
   Future<void> _initializeData() async {
     List<Map<String, dynamic>> instrumentais =
-        await instanciaBuscasCME.buscarTodosImoveis();
+        await instanciaBuscas.buscarTodosImoveis();
 
     setState(() {
       filteredInstrumentais = instrumentais;

@@ -2,10 +2,11 @@ class ChatUser {
   final String id;
   final String name;
   final String email;
-  final String imageUrl;
+  String imageUrl; // Remova o modificador final
+
   final int tipoUsuario;
 
-  const ChatUser({
+  ChatUser({
     required this.id,
     required this.name,
     required this.email,

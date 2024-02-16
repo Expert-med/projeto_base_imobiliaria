@@ -4,6 +4,7 @@ import 'package:projeto_imobiliaria/pages/auth/auth_page.dart';
 import 'package:projeto_imobiliaria/pages/imobiliaria/cad_imob_page.dart';
 import 'package:projeto_imobiliaria/pages/imoveis/cad_imovel_page.dart';
 import '../checkPage.dart';
+import '../core/services/firebase/auth/auth_service.dart';
 import '../pages/imobiliaria/imobiliarias_page.dart';
 import '../pages/imoveis/imovel_grid_completa_page.dart';
 import '../pages/imoveis/imovel_page.dart';
@@ -34,19 +35,6 @@ class _CustomMenuState extends State<CustomMenu> {
     setState(() {
       isExpandedImobiliarias = expanded;
     });
-  }
-
-  void logOut(BuildContext context) async {
-    try {
-      await FirebaseAuth.instance.signOut();
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => AuthPage()),
-        (route) => false, // Remove todas as rotas até a raiz
-      );
-    } catch (e) {
-      print('Erro ao sair da conta: $e');
-    }
   }
 
   @override
@@ -160,7 +148,7 @@ class _CustomMenuState extends State<CustomMenu> {
               child: ListTile(
                 leading: Icon(
                   Icons.house,
-                  color:  Color(0xFF6e58e9),
+                  color: Color(0xFF6e58e9),
                 ),
                 title: Text(
                   'Lista de imóveis',
@@ -184,7 +172,7 @@ class _CustomMenuState extends State<CustomMenu> {
               child: ListTile(
                 leading: Icon(
                   Icons.house,
-                  color:  Color(0xFF6e58e9),
+                  color: Color(0xFF6e58e9),
                 ),
                 title: Text(
                   'Busca de imóveis',
@@ -208,7 +196,7 @@ class _CustomMenuState extends State<CustomMenu> {
               child: ListTile(
                 leading: Icon(
                   Icons.house,
-                  color:  Color(0xFF6e58e9),
+                  color: Color(0xFF6e58e9),
                 ),
                 title: Text(
                   'Cadastrar Imóvel',
@@ -257,7 +245,7 @@ class _CustomMenuState extends State<CustomMenu> {
               child: ListTile(
                 leading: Icon(
                   Icons.home_work,
-                  color:  Color(0xFF6e58e9),
+                  color: Color(0xFF6e58e9),
                 ),
                 title: Text(
                   'Cadastrar Imobiliaria',
@@ -281,7 +269,7 @@ class _CustomMenuState extends State<CustomMenu> {
               child: ListTile(
                 leading: Icon(
                   Icons.home_work,
-                  color:  Color(0xFF6e58e9),
+                  color: Color(0xFF6e58e9),
                 ),
                 title: Text(
                   'Imobiliarias',
@@ -315,7 +303,12 @@ class _CustomMenuState extends State<CustomMenu> {
               ),
             ),
             onTap: () {
-              logOut(context);
+              AuthService().logout;
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => AuthPage()),
+                (route) => false,
+              );
             },
           ),
         ],

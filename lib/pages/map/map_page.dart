@@ -44,42 +44,39 @@ class _MapPageState extends State<MapPage> {
 
     filteredMarkers = loadedProducts
         .take(50) // Pegue apenas os 50 primeiros itens
-        .expand((imovel) => imovel.infoList.map((info) {
-              // Parse latitude and longitude only if they are valid doubles
-              double latitude = double.tryParse(info['latitude']) ?? 0.0;
-              double longitude = double.tryParse(info['longitude']) ?? 0.0;
+        .map((imovel) {
+      // Criando um marcador para cada imóvel
+      double latitude = double.tryParse(imovel.infoList['latitude']) ?? 0.0;
+      double longitude = double.tryParse(imovel.infoList['longitude']) ?? 0.0;
 
-              return Marker(
-                markerId: MarkerId(info['nome_imovel']),
-                position: LatLng(latitude, longitude),
-                infoWindow: InfoWindow(title: info['nome_imovel'].toString()),
-                onTap: () {
-                  setState(() {
-                    urlsImage = [];
-                    showInfoScreen = true;
-                    selectedMarkerTitle = info['nome_imovel'].toString();
-                    selectedMarkerTerreno = info['terreno'].toString();
-                    selectedMarkerLocation = info['localizacao'].toString();
-                    selectedMarkerOrigalPrice =
-                        info['preco_original'].toString();
-                    // Convertendo para Iterable<String> antes de adicionar à lista
-                    urlsImage.addAll(info['image_urls'].cast<String>());
+      return Marker(
+        markerId: MarkerId(imovel.infoList['nomeImovel']),
+        position: LatLng(latitude, longitude),
+        infoWindow: InfoWindow(title: imovel.infoList['nomeImovel']),
+        onTap: () {
+          setState(() {
+            urlsImage = [];
+            showInfoScreen = true;
+            selectedMarkerTitle = imovel.infoList['nome_imovel'];
+            selectedMarkerTerreno = imovel.infoList['terreno'];
+            selectedMarkerLocation = imovel.infoList['localizacao'];
+            selectedMarkerOrigalPrice = imovel.infoList['preco_original'];
+            // Convertendo para Iterable<String> antes de adicionar à lista
+            urlsImage.addAll(imovel.infoList['image_urls'] ?? '');
 
-                    selectedMarkerCodigo = imovel.codigo;
-                    selectedMarkerAreaTotal = info['area_total'].toString();
-                    selectedMarkerLink = imovel.link;
-                    selectedVagasgaragem = info['vagas_garagem'] ?? 0 ;
-                    selectedTotaldormitorios =
-                        info['total_dormitorios'].toString();
-                    selectedTotalsuites = info['total_suites'].toString();
-                    
-                    selectedMarkerLongitude = info['longitude'].toString();
-                    selectedMarkerLatitude = info['latitude'].toString();
-                  });
-                },
-              );
-            }))
-        .toList();
+            selectedMarkerCodigo = imovel.codigo;
+            selectedMarkerAreaTotal = imovel.infoList['area_total'];
+            selectedMarkerLink = imovel.link;
+            selectedVagasgaragem = imovel.infoList['vagas_garagem'] ?? 0;
+            selectedTotaldormitorios = imovel.infoList['total_dormitorios'];
+            selectedTotalsuites = imovel.infoList['area_total'];
+
+            selectedMarkerLongitude = imovel.infoList['longitude'];
+            selectedMarkerLatitude = imovel.infoList['latitude'];
+          });
+        },
+      );
+    }).toList();
   }
 
   @override
@@ -106,7 +103,7 @@ class _MapPageState extends State<MapPage> {
                 showInfoScreen = false;
               });
             },
-            markers: filteredMarkers.toSet(),
+            markers: Set<Marker>.of(filteredMarkers),
           ),
           Positioned(
             top: 0,
