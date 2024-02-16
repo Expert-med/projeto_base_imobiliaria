@@ -26,12 +26,12 @@ class ImovelList with ChangeNotifier {
       _items.where((prod) => prod.isFavorite).toList();
 
   Future<List<Imovel>> buscarImoveis() async {
-    print('entrou em buscarImoveis');
+
     CollectionReference<Map<String, dynamic>> imoveisRef =
         FirebaseFirestore.instance.collection('imoveis');
 
     try {
-      print("entrou no try");
+
       QuerySnapshot<Map<String, dynamic>> querySnapshot =
           await imoveisRef.get();
 
@@ -47,11 +47,10 @@ class ImovelList with ChangeNotifier {
           infoList: resultado['info'] ?? {},
           link: resultado['link'],
         );
-        print(
-            'imovel encontrado: ${resultado['codigo']} ${resultado['data']} ${resultado['link']} ${resultado['info']}');
+        
         imoveis.add(imovel);
       });
-      print(imoveis);
+
       return imoveis;
     } catch (e) {
       print('Erro ao buscar os imóveis: $e');

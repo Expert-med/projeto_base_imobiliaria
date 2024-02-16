@@ -22,7 +22,8 @@ class _ImovelItemState extends State<ImovelItem> {
   @override
   Widget build(BuildContext context) {
     final product = Provider.of<Imovel>(context, listen: false);
-print('product.infoList ${product.infoList}');
+
+      print(product.infoList['image_urls'][0]);
     return AspectRatio(
       aspectRatio: 16 / 9, // Defina a proporção desejada
       child: ClipRRect(
@@ -30,10 +31,10 @@ print('product.infoList ${product.infoList}');
         child: GridTile(
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: product.infoList[widget.index]['image_urls'].length,
+            itemCount: 10,
             itemBuilder: (context, index) {
               return CachedNetworkImage(
-                imageUrl: product.infoList[widget.index]['image_urls'][index],
+                imageUrl: product.infoList['image_urls'][0],
                 fit: BoxFit.cover,
                 placeholder: (context, url) => CircularProgressIndicator(),
                 errorWidget: (context, url, error) => Icon(Icons.error),
@@ -60,7 +61,7 @@ print('product.infoList ${product.infoList}');
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '${product.infoList[widget.index]['preco_original']}',
+                  '${product.infoList['preco_original']}',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
@@ -80,7 +81,7 @@ print('product.infoList ${product.infoList}');
                         ),
                         SizedBox(width: 4), // Espaço entre o ícone e o texto
                         SelectableText(
-                          '${product.infoList[widget.index]['total_dormitorios']} suítes: ${product.infoList[widget.index]['total_suites']}',
+                          '${product.infoList['total_dormitorios']?? 0} suítes: ${product.infoList['total_suites'] ?? 0}',
                           style: TextStyle(
                             color: widget.isDarkMode
                                 ? Colors.white
@@ -99,7 +100,7 @@ print('product.infoList ${product.infoList}');
                         ),
                         SizedBox(width: 4), // Espaço entre o ícone e o texto
                         SelectableText(
-                          '${product.infoList[widget.index]['vagas_garagem']}',
+                          '${product.infoList['vagas_garagem']}',
                           style: TextStyle(
                             color: widget.isDarkMode
                                 ? Colors.white
@@ -119,7 +120,7 @@ print('product.infoList ${product.infoList}');
                         SizedBox(
                             width: 4), // Espaço entre o texto "m²" e o valor
                         SelectableText(
-                          '${product.infoList[widget.index]['area_total']}',
+                          '${product.infoList['area_total']}',
                           style: TextStyle(
                             color: widget.isDarkMode
                                 ? Colors.white
@@ -143,7 +144,7 @@ print('product.infoList ${product.infoList}');
                       SizedBox(width: 4), // Espaço entre o ícone e o texto
                       Flexible(
                         child: SelectableText(
-                          '${product.infoList[widget.index]['localizacao']}',
+                          '${product.infoList['localizacao']}',
                           style: TextStyle(
                             color: widget.isDarkMode
                                 ? Colors.white
@@ -185,7 +186,7 @@ print('product.infoList ${product.infoList}');
                   List<dynamic> rawImageUrls =
                       product.infoList[widget.index]['image_urls'];
                   imageUrls.addAll(rawImageUrls.map((url) => url.toString()));
-print(product.infoList[widget.index]);
+
                   Navigator.push(
                     context,
                     MaterialPageRoute(
