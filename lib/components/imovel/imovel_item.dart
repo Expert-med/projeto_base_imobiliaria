@@ -184,33 +184,33 @@ class _ImovelItemState extends State<ImovelItem> {
                   List<String> imageUrls = [];
                   // Converter explicitamente para List<String>
                   List<dynamic> rawImageUrls =
-                      product.infoList[widget.index]['image_urls'];
+                      product.infoList['image_urls'];
                   imageUrls.addAll(rawImageUrls.map((url) => url.toString()));
 
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => ImoveisInfoPage(
-                        nome_imovel: product.infoList[widget.index]
+                        nome_imovel: product.infoList
                             ['nome_imovel'],
-                        terreno: product.infoList[widget.index]['terreno'],
-                        originalPrice: product.infoList[widget.index]
+                        terreno: product.infoList['terreno'],
+                        originalPrice: product.infoList
                             ['preco_original'],
-                        location: product.infoList[widget.index]['localizacao'],
+                        location: product.infoList['localizacao'],
                         urlsImage: imageUrls,
                         codigo: product.codigo,
-                        area_total: product.infoList[widget.index]
+                        area_total: product.infoList
                             ['area_total'],
                         link: product.link,
-                        Vagasgaragem: product.infoList[widget.index]
-                            ['total_garagem'] ?? '',
-                        Totaldormitorios: product.infoList[widget.index]
+                        Vagasgaragem: product.infoList
+                            ['total_garagem'] ?? 0,
+                        Totaldormitorios: product.infoList
                             ['total_dormitorios']?? '',
-                         Totalsuites: product.infoList[widget.index]
+                         Totalsuites: product.infoList
                             ['total_suites']?? '',
-                            latitude: product.infoList[widget.index]
+                            latitude: product.infoList
                             ['latitude']?? '',
-                            longitude: product.infoList[widget.index]
+                            longitude: product.infoList
                             ['longitude']?? '',
                       ),
                     ),
