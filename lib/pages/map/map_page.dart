@@ -50,29 +50,29 @@ class _MapPageState extends State<MapPage> {
       double longitude = double.tryParse(imovel.infoList['longitude']) ?? 0.0;
 
       return Marker(
-        markerId: MarkerId(imovel.infoList['nomeImovel']),
+        markerId: MarkerId(imovel.infoList['nome_imovel'] ?? ""),
         position: LatLng(latitude, longitude),
-        infoWindow: InfoWindow(title: imovel.infoList['nomeImovel']),
+        infoWindow: InfoWindow(title: imovel.infoList['nome_imovel'] ?? ""),
         onTap: () {
           setState(() {
             urlsImage = [];
             showInfoScreen = true;
-            selectedMarkerTitle = imovel.infoList['nome_imovel'];
-            selectedMarkerTerreno = imovel.infoList['terreno'];
-            selectedMarkerLocation = imovel.infoList['localizacao'];
-            selectedMarkerOrigalPrice = imovel.infoList['preco_original'];
+            selectedMarkerTitle = imovel.infoList['nome_imovel'] ?? "";
+            selectedMarkerTerreno = imovel.infoList['terreno'] ?? "";
+            selectedMarkerLocation = imovel.infoList['localizacao'] ?? "";
+            selectedMarkerOrigalPrice = imovel.infoList['preco_original'] ?? "";
             // Convertendo para Iterable<String> antes de adicionar à lista
             urlsImage.addAll(imovel.infoList['image_urls'] ?? '');
 
             selectedMarkerCodigo = imovel.codigo;
-            selectedMarkerAreaTotal = imovel.infoList['area_total'];
+            selectedMarkerAreaTotal = imovel.infoList['area_total'] ?? "";
             selectedMarkerLink = imovel.link;
-            selectedVagasgaragem = imovel.infoList['vagas_garagem'] ?? 0;
-            selectedTotaldormitorios = imovel.infoList['total_dormitorios'];
-            selectedTotalsuites = imovel.infoList['area_total'];
+            selectedVagasgaragem = imovel.infoList['vagas_garagem'] ?? "";
+            selectedTotaldormitorios = imovel.infoList['total_dormitorios'] ?? "";
+            selectedTotalsuites = imovel.infoList['area_total'] ?? "";
 
-            selectedMarkerLongitude = imovel.infoList['longitude'];
-            selectedMarkerLatitude = imovel.infoList['latitude'];
+            selectedMarkerLongitude = imovel.infoList['longitude'] ?? "";
+            selectedMarkerLatitude = imovel.infoList['latitude'] ?? "";
           });
         },
       );
@@ -132,8 +132,8 @@ class _MapPageState extends State<MapPage> {
                           selectedVagasgaragem,
                           selectedTotaldormitorios,
                           selectedTotalsuites,
-                          selectedMarkerLatitude ?? '',
-                          selectedMarkerLongitude ?? ''),
+                          selectedMarkerLatitude,
+                          selectedMarkerLongitude),
                     )
                   : GestureDetector(
                       onTap: () {
@@ -166,21 +166,18 @@ class _MapPageState extends State<MapPage> {
                               itemCount: filteredMarkers.length,
                               itemBuilder: (context, index) {
                                 final marker = loadedProducts[index];
-                                // Acessando as informações do marcador diretamente
-                                String title = marker.infoList[index]
-                                        ['nome_imovel']
-                                    .toString();
-                                String terreno = marker.infoList[index]
+                                String title = marker.infoList['nome_imovel'].toString() ?? "";
+                                String terreno = marker.infoList
                                         ['terreno']
                                     .toString();
-                                String localizacao = marker.infoList[index]
+                                String localizacao = marker.infoList
                                         ['localizacao']
                                     .toString();
-                                String precoOriginal = marker.infoList[index]
+                                String precoOriginal = marker.infoList
                                         ['preco_original']
                                     .toString();
                                 List<String> imageUrls = [];
-                                imageUrls.addAll(marker.infoList[index]
+                                imageUrls.addAll(marker.infoList
                                         ['image_urls']
                                     .cast<String>());
                                 return ListTile(
@@ -205,8 +202,8 @@ class _MapPageState extends State<MapPage> {
                                             selectedVagasgaragem,
                                             selectedTotaldormitorios,
                                             selectedTotalsuites,
-                                            selectedMarkerLatitude ?? '',
-                                            selectedMarkerLongitude?? ''),
+                                            selectedMarkerLatitude,
+                                            selectedMarkerLongitude),
                                       ),
                                     );
                                   },
