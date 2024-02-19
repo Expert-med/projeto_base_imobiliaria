@@ -316,7 +316,7 @@ class _CustomMenuState extends State<CustomMenu> {
                   child: AnimatedContainer(
                     duration: Duration(milliseconds: 300),
                     curve: Curves.easeInOut,
-                    color: isExpandedImoveis ? Color(0xFF6e58e9) : null,
+                    color: isExpandedCorretor ? Color(0xFF6e58e9) : null,
                     child: ListTile(
                       leading: Icon(
                         Icons.add,
@@ -353,10 +353,11 @@ class _CustomMenuState extends State<CustomMenu> {
                       ),
                     ),
                     onTap: () {
+                      print(widget.isDarkMode);
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => CorretorClientesPage(),
+                          builder: (context) => CorretorClientesPage(isDarkMode: widget.isDarkMode),
                         ),
                       );
                     },
