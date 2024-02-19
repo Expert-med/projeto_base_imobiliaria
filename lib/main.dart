@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 import 'checkPage.dart';
 import 'core/models/User_firebase_service.dart';
 import 'core/services/firebase/firebase_options.dart';
+import 'models/clientes/clientesList.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -60,6 +61,9 @@ class MyApp extends StatelessWidget {
         ),
           ChangeNotifierProvider(
           create: (_) => UserProvider(),
+        ),
+         ChangeNotifierProvider(
+          create: (_) => ClientesList(),
         ),
       ],
       child: GetMaterialApp(
