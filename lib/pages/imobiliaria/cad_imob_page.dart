@@ -20,7 +20,7 @@ class _CadastroImobiliariaState extends State<CadastroImobiliaria> {
 
   @override
   Widget build(BuildContext context) {
-    bool isSmallScreen = MediaQuery.of(context).size.width < 1200;
+    bool isSmallScreen = MediaQuery.of(context).size.width < 900;
 
 
 Future<void> _handleSubmit(ImobiliariaFormData formData) async {

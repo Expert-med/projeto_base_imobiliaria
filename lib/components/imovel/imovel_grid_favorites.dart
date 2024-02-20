@@ -10,7 +10,9 @@ class FavoriteImoveisGrid extends StatefulWidget {
   final bool showFavoriteOnly;
   final List<String> idsToShow; // Lista de IDs para exibir
 
-  const FavoriteImoveisGrid(this.showFavoriteOnly, this.isDarkMode, this.idsToShow, {Key? key})
+  const FavoriteImoveisGrid(
+      this.showFavoriteOnly, this.isDarkMode, this.idsToShow,
+      {Key? key})
       : super(key: key);
 
   @override
@@ -23,6 +25,15 @@ class _FavoriteImoveisGridState extends State<FavoriteImoveisGrid> {
   int _numberOfItemsToShow = 50;
   TextEditingController _searchController = TextEditingController();
   String _searchText = '';
+
+  void removeFromIdsToShow(String productCode) {
+    setState(() {
+      _loadedProducts = [];
+
+      widget.idsToShow.remove(productCode);
+      _loadMoreItems();
+    });
+  }
 
   @override
   void initState() {
@@ -54,42 +65,55 @@ class _FavoriteImoveisGridState extends State<FavoriteImoveisGrid> {
     setState(() {
       _loadedProducts.addAll(additionalProducts);
     });
+    print("widget: ${widget.idsToShow}");
   }
 
   List<Imovel> _filterProducts() {
     if (_searchText.isEmpty) {
-      return _loadedProducts.where((imovel) => widget.idsToShow.contains(imovel.codigo)).toList();
+      return _loadedProducts
+          .where((imovel) => widget.idsToShow.contains(imovel.codigo))
+          .toList();
     } else {
       return _loadedProducts
           .where((imovel) =>
-              imovel.codigo.toLowerCase().contains(_searchText.toLowerCase()) && widget.idsToShow.contains(imovel.codigo))
+              imovel.codigo.toLowerCase().contains(_searchText.toLowerCase()) &&
+              widget.idsToShow.contains(imovel.codigo))
           .toList();
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    bool isSmallScreen = MediaQuery.of(context).size.width < 900;
+
     return Column(
       children: [
-       
         Expanded(
           child: GridView.builder(
             controller: _scrollController,
             padding: const EdgeInsets.all(10),
             itemCount:
-                _filterProducts().length
-                , // Add 1 for the load more button
+                _filterProducts().length, // Add 1 for the load more button
             itemBuilder: (ctx, i) {
-             
-                return ChangeNotifierProvider.value(
-                  value: _filterProducts()[i],
-                  child: ImovelItem(widget.isDarkMode, i),
-                );
-              
+              return ChangeNotifierProvider.value(
+                value: _filterProducts()[i],
+                child: ImovelItem(
+                  widget.isDarkMode,
+                  i,
+                  _filterProducts().length,
+                  0,
+                  (String productCode) {
+                    setState(() {
+                      // Remove o código do produto da lista idsToShow
+                      removeFromIdsToShow(productCode);
+                    });
+                  },
+                ),
+              );
             },
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 4,
-              childAspectRatio: 3 / 2,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: isSmallScreen ? 1 : 4,
+              childAspectRatio: isSmallScreen ? 3 / 2 : 3 / 3,
               crossAxisSpacing: 10,
               mainAxisSpacing: 10,
             ),
@@ -98,6 +122,4 @@ class _FavoriteImoveisGridState extends State<FavoriteImoveisGrid> {
       ],
     );
   }
-
- 
 }

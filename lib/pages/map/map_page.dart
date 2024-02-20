@@ -84,12 +84,16 @@ class _MapPageState extends State<MapPage> {
     bool isSmallScreen = MediaQuery.of(context).size.width < 900;
 
     return Scaffold(
-      appBar: CustomAppBar(
+      appBar: isSmallScreen ?CustomAppBar(
         subtitle: "",
         title: "Localização dos imóveis",
         isDarkMode: isDarkMode,
-      ),
-      body: Stack(
+      ) : null,
+      body: LayoutBuilder(builder: (context, constraints) {
+        return Row(
+          children: [
+            if (!isSmallScreen) CustomMenu(isDarkMode: isDarkMode),
+            Expanded(child: Stack(
         children: [
           GoogleMap(
             scrollGesturesEnabled: true,
@@ -133,7 +137,7 @@ class _MapPageState extends State<MapPage> {
                           selectedTotaldormitorios,
                           selectedTotalsuites,
                           selectedMarkerLatitude,
-                          selectedMarkerLongitude),
+                          selectedMarkerLongitude,1),
                     )
                   : GestureDetector(
                       onTap: () {
@@ -203,7 +207,7 @@ class _MapPageState extends State<MapPage> {
                                             selectedTotaldormitorios,
                                             selectedTotalsuites,
                                             selectedMarkerLatitude,
-                                            selectedMarkerLongitude),
+                                            selectedMarkerLongitude,1),
                                       ),
                                     );
                                   },
@@ -219,7 +223,10 @@ class _MapPageState extends State<MapPage> {
             ),
           ),
         ],
-      ),
+      ),)
+          ],
+        );
+      }),
       drawer: CustomMenu(isDarkMode: false),
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(right: 40.0),

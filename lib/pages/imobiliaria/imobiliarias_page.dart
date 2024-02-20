@@ -6,15 +6,26 @@ import '../../components/imobiliaria/imobiliaria_grid.dart';
 import '../../models/imoveis/imovelList.dart';
 
 class ImobiliariasPage extends StatelessWidget {
+    final bool isDarkMode;
+
+  ImobiliariasPage({required this.isDarkMode});
+
   @override
   Widget build(BuildContext context) {
+bool isSmallScreen = MediaQuery.of(context).size.width < 900;
+
     return Scaffold(
-      appBar: AppBar(
+      appBar: isSmallScreen ? AppBar(
         title: Text('Lista de Imobiliarias'),
-      ),
-      body: FutureBuilder(
+      ) : null,
+      body: LayoutBuilder(builder: (context, constraints) {
+        return Row(
+          children: [
+            if (!isSmallScreen) CustomMenu(isDarkMode: isDarkMode),
+            Expanded(child: FutureBuilder(
         future: Provider.of<ImobiliariaList>(context, listen: false).lerImobiliarias(),
         builder: (context, snapshot) {
+           
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
               child: CircularProgressIndicator(),
@@ -31,11 +42,19 @@ class ImobiliariasPage extends StatelessWidget {
                 child: Text('Nenhum imóvel encontrado'),
               );
             } else {
-              return    ImobiliariaGrid(false, false);
+              return    Row(
+                children: [
+                  
+                  Expanded(child: ImobiliariaGrid(false, false)),
+                ],
+              );
             }
           }
         },
-      ),
+      ),)
+          ],
+        );
+      }),
       drawer: CustomMenu(isDarkMode: false),
     );
   }

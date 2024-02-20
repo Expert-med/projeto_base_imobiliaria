@@ -24,6 +24,7 @@ class ImovelInfoComponent extends StatefulWidget {
   final String total_dormitorios;
   final String total_suites;
 
+  final int tipo_pagina;
   ImovelInfoComponent(
       this.nome_imovel,
       this.terreno,
@@ -38,7 +39,8 @@ class ImovelInfoComponent extends StatefulWidget {
       this.total_dormitorios,
       this.total_suites,
       this.latitude,
-      this.longitude);
+      this.longitude,
+      this.tipo_pagina);
 
   @override
   _ImovelInfoComponentState createState() => _ImovelInfoComponentState();
@@ -347,17 +349,26 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
                     SizedBox(
                       height: 8,
                     ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SelectableText(
+                        'Localização do imóvel:',
+                        style: TextStyle(
+                          color:
+                              widget.isDarkMode ? Colors.white : Colors.black54,
+                        ),
+                      ),
+                    ),
                     Container(
-                      height: 300, 
+                      height: 300,
                       decoration: BoxDecoration(
                         border: Border.all(
-                            color:widget.isDarkMode ? Colors.black :Colors.white), 
-                        borderRadius: BorderRadius.circular(
-                            10),
+                            color: widget.isDarkMode
+                                ? Colors.black
+                                : Colors.white),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                       child: GoogleMap(
-                        
-                   
                         initialCameraPosition: CameraPosition(
                           target: LatLng(double.parse(widget.latitude),
                               double.parse(widget.longitude)),
@@ -400,7 +411,7 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
                             child: Text(
                               'Acesse o imóvel',
                               style: TextStyle(
-                                  color: Colors.white,
+                                 
                                   fontWeight: FontWeight.bold),
                             ),
                           ),

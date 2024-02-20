@@ -9,6 +9,7 @@ import '../core/models/User_firebase_service.dart';
 import '../core/services/firebase/auth/auth_service.dart';
 import '../pages/corretor_clientes/corretor_clientes.dart';
 import '../pages/imobiliaria/imobiliarias_page.dart';
+import '../pages/imoveis/imoveis_Favoritos.dart';
 import '../pages/imoveis/imovel_grid_completa_page.dart';
 import '../pages/imoveis/imovel_page.dart';
 import '../pages/map/map_flutter.dart';
@@ -70,6 +71,8 @@ class _CustomMenuState extends State<CustomMenu> {
 
   @override
   Widget build(BuildContext context) {
+    bool isSmallScreen = MediaQuery.of(context).size.width < 900;
+
     return Container(
       width: 300.0,
       color: widget.isDarkMode
@@ -99,7 +102,7 @@ class _CustomMenuState extends State<CustomMenu> {
                     ),
                   ),
                   onTap: () {
-                    Navigator.pop(context);
+                    if (isSmallScreen) Navigator.pop(context);
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
@@ -108,6 +111,28 @@ class _CustomMenuState extends State<CustomMenu> {
                     );
                   },
                 ),
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.favorite,
+                  color: widget.isDarkMode
+                      ? darkenColor(Color(0xFF6e58e9), 0.5)
+                      : Color(0xFF6e58e9),
+                ),
+                title: Text(
+                  'Imóveis favoritos',
+                  style: TextStyle(
+                    color: widget.isDarkMode ? Colors.white : Colors.black54,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ImoveisFavoritos(isDarkMode: widget.isDarkMode),
+                    ),
+                  );
+                },
               ),
               ListTile(
                 leading: Icon(
@@ -175,38 +200,40 @@ class _CustomMenuState extends State<CustomMenu> {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ImovelPage(),
+                          builder: (context) => ImovelPage(widget.isDarkMode),
+                          fullscreenDialog:
+                              true, // Isso impede que o usuário retorne com gestos de deslize
                         ),
                       );
                     },
                   ),
                 ),
-              if (isExpandedImoveis)
-                Padding(
-                  padding: const EdgeInsets.only(left: 8, right: 8),
-                  child: ListTile(
-                    leading: Icon(
-                      Icons.house,
-                      color: Color(0xFF6e58e9),
-                    ),
-                    title: Text(
-                      'Busca de imóveis',
-                      style: TextStyle(
-                        color:
-                            widget.isDarkMode ? Colors.white : Colors.black54,
-                      ),
-                    ),
-                    onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              ImovelGridCompletaSemComponente(),
-                        ),
-                      );
-                    },
-                  ),
-                ),
+              // if (isExpandedImoveis)
+              //   Padding(
+              //     padding: const EdgeInsets.only(left: 8, right: 8),
+              //     child: ListTile(
+              //       leading: Icon(
+              //         Icons.house,
+              //         color: Color(0xFF6e58e9),
+              //       ),
+              //       title: Text(
+              //         'Busca de imóveis',
+              //         style: TextStyle(
+              //           color:
+              //               widget.isDarkMode ? Colors.white : Colors.black54,
+              //         ),
+              //       ),
+              //       onTap: () {
+              //         Navigator.pushReplacement(
+              //           context,
+              //           MaterialPageRoute(
+              //             builder: (context) =>
+              //                 ImovelGridCompletaSemComponente(),
+              //           ),
+              //         );
+              //       },
+              //     ),
+              //   ),
               if (isExpandedImoveis &&
                   _user?.tipoUsuario == 1) // Verifica se o usuário é um cliente
                 Padding(
@@ -304,7 +331,8 @@ class _CustomMenuState extends State<CustomMenu> {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ImobiliariasPage(),
+                          builder: (context) =>
+                              ImobiliariasPage(isDarkMode: widget.isDarkMode),
                         ),
                       );
                     },
@@ -357,7 +385,8 @@ class _CustomMenuState extends State<CustomMenu> {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => CorretorClientesPage(isDarkMode: widget.isDarkMode),
+                          builder: (context) => CorretorClientesPage(
+                              isDarkMode: widget.isDarkMode),
                         ),
                       );
                     },

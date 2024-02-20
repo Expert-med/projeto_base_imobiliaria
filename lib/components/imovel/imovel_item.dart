@@ -4,34 +4,47 @@ import 'package:projeto_imobiliaria/models/imoveis/imovel.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-import '../../pages/imobiliaria/imobi_info_page.dart';
+import '../../pages/imobiliaria/imovel_info_page.dart';
 import 'imovel_info_component.dart';
 
 class ImovelItem extends StatefulWidget {
   final bool isDarkMode;
   final int index;
+  final int count;
+  final int tipo_pagina;
+final Function(String) onFavoriteClicked; // Callback para o código do produto
 
-  const ImovelItem(this.isDarkMode, this.index, {Key? key}) : super(key: key);
+  const ImovelItem(
+    this.isDarkMode,
+    this.index,
+    this.count,
+    this.tipo_pagina,
+    this.onFavoriteClicked, // Adiciona o callback como parâmetro
+    {Key? key}
+  ) : super(key: key);
 
   @override
   _ImovelItemState createState() => _ImovelItemState();
 }
 
 class _ImovelItemState extends State<ImovelItem> {
+   void _onFavoriteClicked(String codigo) {
+    // Chama o callback com o código do produto
+    widget.onFavoriteClicked(codigo);
+  }
 
   @override
   Widget build(BuildContext context) {
     final product = Provider.of<Imovel>(context, listen: false);
-
-      print(product.infoList['image_urls'][0]);
+ 
     return AspectRatio(
-      aspectRatio: 16 / 9, // Defina a proporção desejada
+      aspectRatio: 25 / 13, // Defina a proporção desejada
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),
         child: GridTile(
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: 10,
+            itemCount: widget.count,
             itemBuilder: (context, index) {
               return CachedNetworkImage(
                 imageUrl: product.infoList['image_urls'][0],
@@ -48,7 +61,8 @@ class _ImovelItemState extends State<ImovelItem> {
   }
 
   Widget _buildFooter(Imovel product) {
-      Color containerColor = widget.isDarkMode ? Colors.black: Color.fromARGB(255, 238, 238, 238);
+    Color containerColor =
+        widget.isDarkMode ? Colors.black : Color.fromARGB(255, 238, 238, 238);
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -61,7 +75,7 @@ class _ImovelItemState extends State<ImovelItem> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '${product.infoList['preco_original']}',
+                  '${product.infoList['preco_original'] == 'N/A' ? 'Preço não informado' : product.infoList['preco_original']} ()',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
@@ -81,7 +95,7 @@ class _ImovelItemState extends State<ImovelItem> {
                         ),
                         SizedBox(width: 4), // Espaço entre o ícone e o texto
                         SelectableText(
-                          '${product.infoList['total_dormitorios']?? 0} suítes: ${product.infoList['total_suites'] ?? 0}',
+                          '${product.infoList['total_dormitorios'] ?? 0} suítes: ${product.infoList['total_suites'] ?? 0}',
                           style: TextStyle(
                             color: widget.isDarkMode
                                 ? Colors.white
@@ -166,7 +180,10 @@ class _ImovelItemState extends State<ImovelItem> {
                   return Consumer<Imovel>(
                     builder: (ctx, product, _) => IconButton(
                       onPressed: () {
-                        product.toggleFavorite();
+                        setState(() {
+                          product.toggleFavorite();
+                        });
+                        _onFavoriteClicked(product.codigo);
                       },
                       icon: Icon(product.isFavorite
                           ? Icons.favorite
@@ -183,35 +200,28 @@ class _ImovelItemState extends State<ImovelItem> {
                 onPressed: () {
                   List<String> imageUrls = [];
                   // Converter explicitamente para List<String>
-                  List<dynamic> rawImageUrls =
-                      product.infoList['image_urls'];
+                  List<dynamic> rawImageUrls = product.infoList['image_urls'];
                   imageUrls.addAll(rawImageUrls.map((url) => url.toString()));
 
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => ImoveisInfoPage(
-                        nome_imovel: product.infoList
-                            ['nome_imovel'],
+                        nome_imovel: product.infoList['nome_imovel'],
                         terreno: product.infoList['terreno'],
-                        originalPrice: product.infoList
-                            ['preco_original'],
+                        originalPrice: product.infoList['preco_original'],
                         location: product.infoList['localizacao'],
                         urlsImage: imageUrls,
                         codigo: product.codigo,
-                        area_total: product.infoList
-                            ['area_total'],
+                        area_total: product.infoList['area_total'],
                         link: product.link,
-                        Vagasgaragem: product.infoList
-                            ['total_garagem'] ?? 0,
-                        Totaldormitorios: product.infoList
-                            ['total_dormitorios']?? '',
-                         Totalsuites: product.infoList
-                            ['total_suites']?? '',
-                            latitude: product.infoList
-                            ['latitude']?? '',
-                            longitude: product.infoList
-                            ['longitude']?? '',
+                        Vagasgaragem: product.infoList['total_garagem'] ?? 0,
+                        Totaldormitorios:
+                            product.infoList['total_dormitorios'] ?? '',
+                        Totalsuites: product.infoList['total_suites'] ?? '',
+                        latitude: product.infoList['latitude'] ?? '',
+                        longitude: product.infoList['longitude'] ?? '',
+                        tipo_pagina: widget.tipo_pagina,
                       ),
                     ),
                   );

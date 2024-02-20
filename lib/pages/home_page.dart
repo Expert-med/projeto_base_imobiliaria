@@ -166,15 +166,16 @@ class _MyHomePageState extends State<MyHomePage> {
                       SizedBox(
                         height: 10,
                       ),
-                      SearchRow(isDarkMode: isDarkMode),
+                      //SearchRow(isDarkMode: isDarkMode),
                       SizedBox(
                         height: 10,
                       ),
-                      ImovelCarousel(false, isDarkMode),
+                     ImovelCarousel(false, isDarkMode),
                     ],
                   ),
                 ),
               ),
+               
             ],
           );
         },

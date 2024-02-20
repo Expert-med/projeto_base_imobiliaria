@@ -5,7 +5,7 @@ import 'package:projeto_imobiliaria/components/custom_menu.dart';
 
 import '../../util/app_bar_model.dart';
 import '../../util/funcoes/buscas.dart';
-import '../imobiliaria/imobi_info_page.dart';
+import '../imobiliaria/imovel_info_page.dart';
 
 class ImovelGridCompletaSemComponente extends StatefulWidget {
   ImovelGridCompletaSemComponente();
@@ -44,6 +44,8 @@ class _ImovelGridCompletaSemComponenteState
 
   @override
   Widget build(BuildContext context) {
+     bool isSmallScreen = MediaQuery.of(context).size.width < 900;
+
     Color containerColor =
         isDarkMode ? Colors.black : Color.fromARGB(255, 238, 238, 238);
 
@@ -58,12 +60,16 @@ class _ImovelGridCompletaSemComponenteState
     }
 
     return Scaffold(
-      appBar: CustomAppBar(
+      appBar: isSmallScreen ? CustomAppBar(
         subtitle: '',
         title: 'Imóveis',
         isDarkMode: isDarkMode,
-      ),
-      body: Container(
+      ) : null,
+      body: LayoutBuilder(builder: (context, constraints) {
+        return Row(
+          children: [
+            if (!isSmallScreen) CustomMenu(isDarkMode: isDarkMode),
+            Expanded(child: Container(
         color: isDarkMode ? Colors.black87 : Colors.white,
         child: Column(
           children: [
@@ -325,6 +331,7 @@ class _ImovelGridCompletaSemComponenteState
                                                   longitude: infoList[i]
                                                           ['longitude'] ??
                                                       '',
+                                                      tipo_pagina: 0,
                                                 ),
                                               ),
                                             );
@@ -350,7 +357,10 @@ class _ImovelGridCompletaSemComponenteState
             ),
           ],
         ),
-      ),
+      ),)
+          ],
+        );
+      }),
       drawer: CustomMenu(isDarkMode: false),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

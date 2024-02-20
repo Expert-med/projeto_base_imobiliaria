@@ -22,7 +22,7 @@ class ImoveisInfoPage extends StatefulWidget {
   final String Totalsuites;
   final String longitude;
   final String latitude;
-
+final int tipo_pagina;
   ImoveisInfoPage({
     Key? key,
     required this.nome_imovel,
@@ -37,7 +37,8 @@ class ImoveisInfoPage extends StatefulWidget {
     required this.Totaldormitorios,
     required this.Totalsuites,
     required this.longitude,
-    required this.latitude
+    required this.latitude,
+    required this.tipo_pagina,
   }) : super(key: key);
 
   @override
@@ -68,7 +69,8 @@ class _ImoveisInfoPageState extends State<ImoveisInfoPage> {
           widget.Totaldormitorios,
           widget.Totalsuites,
 widget.latitude,
-widget.longitude
+widget.longitude,
+widget.tipo_pagina
         ),
     
     

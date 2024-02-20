@@ -3,20 +3,21 @@ import 'package:provider/provider.dart';
 
 import '../../models/imoveis/imovel.dart';
 import '../../models/imoveis/imovelList.dart';
-import 'imovel_item.dart';
 
-class ImovelGrid extends StatefulWidget {
+import 'imovel_item_list.dart';
+
+class ImovelListView extends StatefulWidget {
   final bool isDarkMode;
   final bool showFavoriteOnly;
 
-  const ImovelGrid(this.showFavoriteOnly, this.isDarkMode, {Key? key})
+  const ImovelListView(this.showFavoriteOnly, this.isDarkMode, {Key? key})
       : super(key: key);
 
   @override
-  _ImovelGridState createState() => _ImovelGridState();
+  _ImovelListViewState createState() => _ImovelListViewState();
 }
 
-class _ImovelGridState extends State<ImovelGrid> {
+class _ImovelListViewState extends State<ImovelListView> {
   late ScrollController _scrollController;
   late List<Imovel> _loadedProducts;
   int _numberOfItemsToShow = 50;
@@ -68,8 +69,6 @@ class _ImovelGridState extends State<ImovelGrid> {
 
   @override
   Widget build(BuildContext context) {
-    bool isSmallScreen = MediaQuery.of(context).size.width < 900;
-
     return Container(
       color: widget.isDarkMode ? Colors.black : Colors.white,
       child: Column(
@@ -78,31 +77,30 @@ class _ImovelGridState extends State<ImovelGrid> {
             padding: const EdgeInsets.all(10.0),
             child: TextField(
               controller: _searchController,
-               decoration: InputDecoration(
-                        labelText: 'Procurar',
-                        labelStyle: TextStyle(
-                          color: Color(0xFF6e58e9),
-                        ),
-                        prefixIcon: Icon(
-                          Icons.search,
-                          color: Color(0xFF6e58e9),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(
-                            color:
-                                Color(0xFF6e58e9), // Cor do contorno ao clicar
-                          ),
-                        ),
-                        fillColor: widget.isDarkMode
-                            ? Colors.grey[800]
-                            : Colors.grey[200], // Cor do fundo
-                        filled: true,
-                      ),
+              decoration: InputDecoration(
+                labelText: 'Procurar',
+                labelStyle: TextStyle(
+                  color: Color(0xFF6e58e9),
+                ),
+                prefixIcon: Icon(
+                  Icons.search,
+                  color: Color(0xFF6e58e9),
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(color: Colors.grey),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(
+                    color: Color(0xFF6e58e9), // Cor do contorno ao clicar
+                  ),
+                ),
+                fillColor: widget.isDarkMode
+                    ? Colors.grey[800]
+                    : Colors.grey[200], // Cor do fundo
+                filled: true,
+              ),
               onChanged: (value) {
                 setState(() {
                   _searchText = value;
@@ -111,28 +109,22 @@ class _ImovelGridState extends State<ImovelGrid> {
             ),
           ),
           Expanded(
-            child: GridView.builder(
+            child: ListView.builder(
               controller: _scrollController,
               padding: const EdgeInsets.all(10),
-              itemCount:
-                  _filterProducts().length + 1, // Add 1 for the load more button
+              itemCount: _filterProducts().length +
+                  1, // Add 1 for the load more button
               itemBuilder: (ctx, i) {
                 if (i == _filterProducts().length) {
                   return _buildLoadMoreButton();
                 } else {
                   return ChangeNotifierProvider.value(
                     value: _filterProducts()[i],
-                    child: ImovelItem(widget.isDarkMode, i,_filterProducts().length,0, (String productCode) {}),
+                    child: ImovelItemList(
+                        widget.isDarkMode, i, _filterProducts().length),
                   );
                 }
               },
-              
-              gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: isSmallScreen ? 1 : 4,
-                childAspectRatio: isSmallScreen ? 3/2: 3 / 3,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-              ),
             ),
           ),
         ],
