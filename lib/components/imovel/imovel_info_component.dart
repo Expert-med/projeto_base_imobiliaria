@@ -75,33 +75,74 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text.rich(
-                  TextSpan(
+                child: Container(
+                  color: Color.fromARGB(255, 238, 238, 238),
+                  child: Column(
                     children: [
-                      TextSpan(
-                        text:
-                            '${widget.nome_imovel.substring(0, widget.nome_imovel.indexOf('Cód'))}',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: textColor,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5, vertical:5),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                               
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left:10,right:10,top:8, bottom: 8),
+                                  child: Text.rich(
+                                    TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text:
+                                              '${widget.nome_imovel.substring(0, widget.nome_imovel.indexOf('Cód'))}',
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                            color: textColor,
+                                          ),
+                                        ),
+                                        TextSpan(
+                                          text: 'Cód',
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                        TextSpan(
+                                          text:
+                                              '${widget.nome_imovel.substring(widget.nome_imovel.indexOf('Cód') + 3)}',
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      TextSpan(
-                        text: 'Cód',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.grey,
-                        ),
-                      ),
-                      TextSpan(
-                        text:
-                            '${widget.nome_imovel.substring(widget.nome_imovel.indexOf('Cód') + 3)}',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.grey,
-                        ),
-                      ),
+                       Padding(
+                         padding: const EdgeInsets.only(left:10,right:10,top:8, bottom: 8),
+                         child: Row(
+                          children: [
+                             Icon(
+                              Icons.place,
+                              color:
+                                  widget.isDarkMode ? Colors.white : Colors.black54,
+                            ),
+                            SizedBox(width: 4),
+                            Flexible(
+                              child: Text(
+                                '${widget.location}',
+                                style: TextStyle(fontSize: 15, color: textColor),
+                              ),
+                            ),
+                          ],
+                                             ),
+                       ),
                     ],
                   ),
                 ),
@@ -410,9 +451,7 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
                             padding: const EdgeInsets.only(left: 20),
                             child: Text(
                               'Acesse o imóvel',
-                              style: TextStyle(
-                                 
-                                  fontWeight: FontWeight.bold),
+                              style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ),
                           Spacer(),

@@ -5,10 +5,13 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:projeto_imobiliaria/pages/user_config_page.dart';
 import 'package:projeto_imobiliaria/util/app_bar_model.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import '../components/clientes/clientes_home_lista.dart';
 import '../components/custom_menu.dart';
 import '../components/custom_popup_menu.dart';
 import '../components/imovel/imovel_carrousel.dart';
+import '../components/negociacao/negociacao_coluna.dart';
 import '../components/search_row.dart';
+import '../components/tarefas/tarefas_coluna.dart';
 import '../core/models/UserProvider.dart';
 import '../core/services/firebase/auth/auth_service.dart';
 import 'auth/auth_page.dart';
@@ -171,6 +174,35 @@ class _MyHomePageState extends State<MyHomePage> {
                         height: 10,
                       ),
                      ImovelCarousel(false, isDarkMode),
+                   Padding(
+  padding: const EdgeInsets.all(8.0),
+  child: Row(
+    children: [
+      Expanded(
+        child: Container(
+          color: Colors.grey,
+          child: TarefasColumn(),
+        ),
+      ),
+      SizedBox(width: 10), // Adiciona um espaço de 10 pixels
+      Expanded(
+        child: Container(
+          color: Colors.grey,
+          child: ClientesHomeLista(),
+        ),
+      ),
+      SizedBox(width: 10), // Adiciona um espaço de 10 pixels
+      Expanded(
+        child: Container(
+          color: Colors.grey,
+          child: NegociacaoColuna(),
+        ),
+      ),
+    ],
+  ),
+)
+
+
                     ],
                   ),
                 ),

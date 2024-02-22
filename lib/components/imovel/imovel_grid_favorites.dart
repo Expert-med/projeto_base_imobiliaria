@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../models/imoveis/imovel.dart';
 import '../../models/imoveis/imovelList.dart';
 import 'imovel_item.dart';
+import 'imovel_item_sem_barra.dart';
 
 class FavoriteImoveisGrid extends StatefulWidget {
   final bool isDarkMode;
@@ -97,7 +98,7 @@ class _FavoriteImoveisGridState extends State<FavoriteImoveisGrid> {
             itemBuilder: (ctx, i) {
               return ChangeNotifierProvider.value(
                 value: _filterProducts()[i],
-                child: ImovelItem(
+                child: ImovelItemSemBarra(
                   widget.isDarkMode,
                   i,
                   _filterProducts().length,

@@ -26,7 +26,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _CustomAppBarState extends State<CustomAppBar> {
-  late int? valida = 0;
+
   FirebaseFirestore db = FirebaseFirestore.instance;
   late DocumentReference hospitalDoc;
   late DocumentReference clienteDoc;
@@ -34,55 +34,14 @@ class _CustomAppBarState extends State<CustomAppBar> {
   @override
   void initState() {
     super.initState();
-    _initializeData();
-    print(valida);
+   
   }
 
-  Future<void> _initializeData() async {
-    buscaValida();
-  }
 
-  Future<void> buscaValida() async {
-    try {
-      DocumentSnapshot clienteSnapshot = await clienteDoc.get();
 
-      if (clienteSnapshot.exists) {
-        setState(() {
-          valida = clienteSnapshot.get('valida');
-          print(valida);
-        });
-      } else {
-        print('Cliente document not found.');
-      }
-    } catch (e) {
-      print('Error fetching valida field: $e');
-    }
-  }
 
-  Future<void> sairDoHospital() async {
-    try {
-      await clienteDoc.update({'valida': 0, 'id_temp': ""});
 
-      setState(() {
-        valida = 0;
-      });
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Você saiu do hospital com sucesso!'),
-          duration: Duration(seconds: 2),
-        ),
-      );
-    } catch (e) {
-      print('Erro ao sair do hospital: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Erro ao sair do hospital.'),
-          duration: Duration(seconds: 2),
-        ),
-      );
-    }
-  }
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -142,46 +101,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 NotificationButton(
                   displayedNotifications: 5,
                 ),
-              if (valida == 1)
-                ElevatedButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text("Sair da instituição"),
-                          content: Text(
-                              "Tem certeza de que deseja sair da instituição que está logado?"),
-                          actions: [
-                            TextButton(
-                              child: Text("Cancelar"),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                            TextButton(
-                              child: Text("Sair da instituição"),
-                              onPressed: () {
-                                sairDoHospital();
-                                /*Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => checkPage(),
-                                    ),
-                                  );*/
-                              },
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  },
-                  child: Text("Sair do hospital"),
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromARGB(255, 212, 20, 7),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20))),
-                ),
+              
             ],
           ),
         ),

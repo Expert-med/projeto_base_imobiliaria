@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_imobiliaria/pages/auth/auth_page.dart';
+import 'package:projeto_imobiliaria/pages/corretores/lista_corretores_page.dart';
 import 'package:projeto_imobiliaria/pages/imobiliaria/cad_imob_page.dart';
 import 'package:projeto_imobiliaria/pages/imoveis/cad_imovel_page.dart';
 import 'package:provider/provider.dart';
@@ -152,6 +153,28 @@ class _CustomMenuState extends State<CustomMenu> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => MapPage(),
+                    ),
+                  );
+                },
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.people,
+                  color: widget.isDarkMode
+                      ? darkenColor(Color(0xFF6e58e9), 0.5)
+                      : Color(0xFF6e58e9),
+                ),
+                title: Text(
+                  'Lista de corretores',
+                  style: TextStyle(
+                    color: widget.isDarkMode ? Colors.white : Colors.black54,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CorretoresListPage(isDarkMode: widget.isDarkMode),
                     ),
                   );
                 },
