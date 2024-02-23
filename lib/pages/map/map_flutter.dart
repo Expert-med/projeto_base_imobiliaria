@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
+import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
+import '../../components/custom_menu.dart';
 import '../../models/imoveis/imovel.dart';
 import '../../models/imoveis/imovelList.dart';
+import '../../components/imovel/imovel_info_component.dart';
+import '../../util/app_bar_model.dart';
 
 class MapPageFlutter extends StatefulWidget {
   @override
@@ -14,180 +16,270 @@ class MapPageFlutter extends StatefulWidget {
 }
 
 class _MapPageFlutterState extends State<MapPageFlutter> {
+  late List<Imovel> loadedProducts = [];
+  late List<Marker> filteredMarkers = [];
+  bool showInfoScreen = false;
+  String selectedMarkerTitle = '';
+  String selectedMarkerTerreno = '';
+  String selectedMarkerLocation = '';
+  String selectedMarkerOrigalPrice = '';
+  List<String> urlsImage = [];
+  String selectedMarkerCodigo = '';
+  String selectedMarkerAreaTotal = '';
+  String selectedMarkerLink = '';
+  int selectedVagasgaragem = 0;
+  String selectedTotaldormitorios = '';
+  String selectedTotalsuites = '';
+  String selectedMarkerLongitude = '';
+  String selectedMarkerLatitude = '';
+
+  late List<Marker> markers;
   final PopupController _popupController = PopupController();
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Map Demo'),
-      ),
-      body: MapWidget(
-        popupController: _popupController,
-      ),
-    );
-  }
-}
-
-class MapWidget extends StatefulWidget {
-  final PopupController popupController;
-
-  MapWidget({required this.popupController});
-
-  @override
-  _MapWidgetState createState() => _MapWidgetState();
-}
-
-class _MapWidgetState extends State<MapWidget> {
-  late List<Imovel> loadedProducts = [];
-  List<Marker> filteredMarkers = [];
+  bool isDarkMode = false;
 
   @override
   void initState() {
-    final provider = Provider.of<ImovelList>(context, listen: false);
-    loadedProducts = provider.items;
-
     super.initState();
-  
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      final provider = Provider.of<ImovelList>(context, listen: false);
+      loadedProducts = provider.items;
 
-  // final List<Marker> _todosMakers = loadedProducts
-  //     .take(50) // Pegue apenas os 50 primeiros itens
-  //     .expand((imovel) => imovel.infoList.map((info) {
-  //           // Parse latitude and longitude only if they are valid doubles
-  //           double latitude = double.tryParse(info['latitude']) ?? 0.0;
-  //           double longitude = double.tryParse(info['longitude']) ?? 0.0;
+      filteredMarkers = loadedProducts
+          .take(50)
+          .map((imovel) {
+            double latitude = double.tryParse(imovel.infoList['latitude']) ?? 0.0;
+            double longitude = double.tryParse(imovel.infoList['longitude']) ?? 0.0;
 
-  //           return Marker(
-  //             width: 40,
-  //             height: 40,
-  //             point: LatLng(latitude, longitude),
-  //             builder: (ctx) => Container(
-  //               child: Column(
-  //                 children: [
-  //                   Icon(
-  //                     Icons.location_on,
-  //                     size: 40,
-  //                     color: Colors.black,
-  //                   ),
-  //                   Text(
-  //                     '${info['nome_imovel']}',
-  //                     style: TextStyle(color: Colors.white),
-  //                   ),
-  //                 ],
-  //               ),
-  //             ),
-              
-  //           );
-  //         }))
-  //     .toList();
+            return Marker(
+              point: LatLng(latitude, longitude),
+              width: 40,
+              height: 40,
+              builder: (context) => GestureDetector(
+                onTap: () {
+                  setState(() {
+                    urlsImage = [];
+                    showInfoScreen = true;
+                    selectedMarkerTitle = imovel.infoList['nome_imovel'] ?? "";
+                    selectedMarkerTerreno = imovel.infoList['terreno'] ?? "";
+                    selectedMarkerLocation = imovel.infoList['localizacao'] ?? "";
+                    selectedMarkerOrigalPrice = imovel.infoList['preco_original'] ?? "";
+                    urlsImage.addAll(imovel.infoList['image_urls']?.cast<String>() ?? []);
 
- 
+                    selectedMarkerCodigo = imovel.codigo;
+                    selectedMarkerAreaTotal = imovel.infoList['area_total'] ?? "";
+                    selectedMarkerLink = imovel.link;
+                    
+                    // Convertendo para int ou mantendo 0 se for nulo ou não puder ser convertido
+                    selectedVagasgaragem = int.tryParse(imovel.infoList['vagas_garagem'] ?? "") ?? 0;
+                    
+                    selectedTotaldormitorios = imovel.infoList['total_dormitorios'] ?? "";
+                    selectedTotalsuites = imovel.infoList['area_total'] ?? "";
+
+                    selectedMarkerLongitude = imovel.infoList['longitude'] ?? "";
+                    selectedMarkerLatitude = imovel.infoList['latitude'] ?? "";
+});
+                },
+                child: Icon(
+                  Icons.location_on,
+                  size: 40,
+                  color: Color.fromARGB(255, 255, 17, 0), 
+                ),
+              ),
+            );
+          })
+          .toList();
+
+      setState(() {
+        markers = filteredMarkers;
+      });
+    });
   }
 
-   final List<Marker> _markers = [
-    Marker(
-      width: 40,
-      height: 40,
-      point: LatLng(-28.25977676240336, -52.41321612830699),
-      builder: (ctx) => Container(
-        child: Column(
-          children: [
-            Icon(
-              Icons.location_on,
-              size: 40,
-              color: Colors.black,
-            ),
-            Text(
-              '<--',
-              style: TextStyle(color: Colors.white),
-            ),
-          ],
-        ),
-      ),
-    ),
-    Marker(
-      width: 40,
-      height: 40,
-      point: LatLng(-50.25977676240336, -120.41321612830699),
-      builder: (ctx) => Container(
-        child: Column(
-          children: [
-            Icon(
-              Icons.location_on,
-              size: 40,
-              color: Colors.black,
-            ),
-            Text(
-              '<--',
-              style: TextStyle(color: Colors.white),
-            ),
-          ],
-        ),
-      ),
-    ),
-    Marker(
-      width: 40,
-      height: 40,
-      point: LatLng(-20.25977676240336, -50.41321612830699),
-      builder: (ctx) => Container(
-        child: Column(
-          children: [
-            Icon(
-              Icons.location_on,
-              size: 40,
-              color: Colors.black,
-            ),
-            Text(
-              '<--',
-              style: TextStyle(color: Colors.white),
-            ),
-          ],
-        ),
-      ),
-    ),
-  ];
   @override
   Widget build(BuildContext context) {
-    return FlutterMap(
-      options: MapOptions(
-        center: LatLng(-28.25977676240336, -52.41321612830699),
-        zoom: 12.0,
-      ),
-      children: [
-        TileLayer(
-          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-          userAgentPackageName: 'com.example.app',
-        ),
-        MarkerLayer(
-          markers: _markers,
-        ),
-        PopupMarkerLayer(
-          options: PopupMarkerLayerOptions(
-            markers: _markers,
-            popupDisplayOptions: PopupDisplayOptions(
-              builder: (BuildContext context, Marker marker) =>
-                  ExamplePopup(marker),
+    bool isSmallScreen = MediaQuery.of(context).size.width < 900;
+
+    return Scaffold(
+      appBar: isSmallScreen ?CustomAppBar(
+        subtitle: "",
+        title: "Localização dos imóveis",
+        isDarkMode: isDarkMode,
+      ) : null,
+      body: LayoutBuilder(builder: (context, constraints) {
+        return Row(
+          children: [
+            if (!isSmallScreen) CustomMenu(isDarkMode: isDarkMode),
+            Expanded(child: Stack(
+        children: [
+          FlutterMap(
+            options: MapOptions(
+              center: LatLng(-28.25977676240336, -52.41321612830699),
+              zoom: 13.0,
+            ),
+            children: <Widget>[
+              TileLayer(
+                        urlTemplate:
+                            'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                        subdomains: ['a', 'b', 'c'],
+                      ),
+              MarkerClusterLayerWidget(
+                options: MarkerClusterLayerOptions(
+                  maxClusterRadius: 120,
+                  size: Size(40, 40),
+                  markers: markers ?? [],
+                  polygonOptions: PolygonOptions(
+                    borderColor: Color.fromARGB(255, 255, 1, 1),
+                    color: Colors.black12,
+                    borderStrokeWidth: 3,
+                  ),
+                  builder: (context, markers) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Color.fromARGB(255, 255, 0, 0),
+                      ),
+                      child: Center(
+                        child: Text(
+                          markers.length.toString(),
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+          Positioned(
+            top: 0,
+            bottom: 0,
+            left: 0,
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.3,
+              color: Colors.white,
+              child: showInfoScreen
+                  ? GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          showInfoScreen = false;
+                        });
+                      },
+                      child: ImovelInfoComponent(
+                          selectedMarkerTitle,
+                          selectedMarkerTerreno,
+                          selectedMarkerLocation,
+                          selectedMarkerOrigalPrice,
+                          urlsImage,
+                          isDarkMode,
+                          selectedMarkerCodigo,
+                          selectedMarkerAreaTotal,
+                          selectedMarkerLink,
+                          selectedVagasgaragem,
+                          selectedTotaldormitorios,
+                          selectedTotalsuites,
+                          selectedMarkerLatitude,
+                          selectedMarkerLongitude,1),
+                    )
+                  : GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          showInfoScreen = false;
+                        });
+                      },
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextField(
+                              onChanged: (value) {
+                                setState(() {});
+                              },
+                              decoration: InputDecoration(
+                                labelText: 'Pesquisar',
+                                labelStyle: TextStyle(
+                                  color: Color(0xFF466B66),
+                                ),
+                                prefixIcon: Icon(
+                                  Icons.search,
+                                  color: Color(0xFF466B66),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: ListView.builder(
+                              itemCount: filteredMarkers.length,
+                              itemBuilder: (context, index) {
+                                final marker = loadedProducts[index];
+                                String title = marker.infoList['nome_imovel'].toString() ?? "";
+                                String terreno = marker.infoList
+                                        ['terreno']
+                                    .toString();
+                                String localizacao = marker.infoList
+                                        ['localizacao']
+                                    .toString();
+                                String precoOriginal = marker.infoList
+                                        ['preco_original']
+                                    .toString();
+                                List<String> imageUrls = [];
+                                imageUrls.addAll(marker.infoList
+                                        ['image_urls']
+                                    .cast<String>());
+                                return ListTile(
+                                  title: Text(
+                                    title,
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ImovelInfoComponent(
+                                            title, // Título do imóvel
+                                            terreno, // Terreno do imóvel
+                                            localizacao, // Localização do imóvel
+                                            precoOriginal, // Preço original do imóvel
+                                            imageUrls, // URLs das imagens do imóvel
+                                            isDarkMode,
+                                            selectedMarkerCodigo,
+                                            selectedMarkerAreaTotal,
+                                            selectedMarkerLink,
+                                            selectedVagasgaragem,
+                                            selectedTotaldormitorios,
+                                            selectedTotalsuites,
+                                            selectedMarkerLatitude,
+                                            selectedMarkerLongitude,1),
+                                      ),
+                                    );
+                                  },
+                                  tileColor: Colors.grey,
+                                  selectedTileColor: Colors.grey,
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
             ),
           ),
+        ],
+       ) ,)
+          ],
+        );
+      }),
+      drawer: CustomMenu(isDarkMode: false),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(right: 40.0),
+        child: FloatingActionButton(
+          onPressed: () {
+            setState(() {
+              isDarkMode = !isDarkMode; // Alterna o valor de isDarkMode
+            });
+          },
+          child: Icon(Icons.lightbulb),
         ),
-      ],
-    );
-  }
-}
-
-class ExamplePopup extends StatelessWidget {
-  final Marker marker;
-
-  ExamplePopup(this.marker);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(8),
-      color: Colors.white,
-      child: Text(
-        'Nome do Marcador',
-        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
       ),
     );
   }

@@ -478,14 +478,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.0"
-  flutter_map_marker_popup:
+  flutter_map_marker_cluster:
     dependency: "direct main"
     description:
-      name: flutter_map_marker_popup
-      sha256: d4e22a00dd46f95a6f54c60b92950bd6f41021ca36629b1cf3fa0bf4fd39f421
+      name: flutter_map_marker_cluster
+      sha256: "362088b16311b6743a7930857129ec6c7c807ecca777fe1033c0ad6688339e36"
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.0"
+    version: "1.1.1"
+  flutter_map_marker_popup:
+    dependency: transitive
+    description:
+      name: flutter_map_marker_popup
+      sha256: "7cf30fab25ffe1ba04a9e0fbe1227f44a83c73256d4d70be1c26cf141ce5c41d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.1.0"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -752,6 +760,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  maplibre_gl:
+    dependency: "direct main"
+    description:
+      name: maplibre_gl
+      sha256: "825154b717ea6fda2802e95e2fb39c16356d8802d98bfc090e732e6678e42b99"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.16.0"
+  maplibre_gl_platform_interface:
+    dependency: transitive
+    description:
+      name: maplibre_gl_platform_interface
+      sha256: fe80e69346275fc8e0b027d01b3b766781beb15eb2fff2c067fb453d94898b7e
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.16.0"
   matcher:
     dependency: transitive
     description:
