@@ -103,28 +103,29 @@ class _CadImobiliariaFormState extends State<CadImobiliariaForm> {
                       ),
                     ),
                   ),
-                    TextFormField(
-  key: const ValueKey('url_base'),
-  initialValue: _formData.url_base,
-  onChanged: (url_base) => _formData.url_base = url_base,
-  decoration: InputDecoration(
-    filled: true,
-    fillColor: Colors.black12,
-    border: OutlineInputBorder(
-      borderSide: BorderSide.none,
-      borderRadius: BorderRadius.circular(20),
-    ),
-    
-  ),
-   style: TextStyle(color: !widget.isDarkMode ? Colors.black : Colors.white), 
-  validator: (localName) {
-    final name = localName ?? '';
-    if (name.trim().length < 5) {
-      return 'Nome deve ter no mínimo 5 caracteres.';
-    }
-    return null;
-  },
-),
+                  TextFormField(
+                    key: const ValueKey('url_base'),
+                    initialValue: _formData.url_base,
+                    onChanged: (url_base) => _formData.url_base = url_base,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.black12,
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                    style: TextStyle(
+                        color:
+                            !widget.isDarkMode ? Colors.black : Colors.white),
+                    validator: (localName) {
+                      final name = localName ?? '';
+                      if (name.trim().length < 5) {
+                        return 'Nome deve ter no mínimo 5 caracteres.';
+                      }
+                      return null;
+                    },
+                  ),
                   Padding(
                     padding:
                         EdgeInsets.all(15), //apply padding to all four sides
@@ -137,28 +138,29 @@ class _CadImobiliariaFormState extends State<CadImobiliariaForm> {
                       ),
                     ),
                   ),
-                    TextFormField(
-  key: const ValueKey('url_logo'),
-  initialValue: _formData.url_logo,
-  onChanged: (url_logo) => _formData.url_logo = url_logo,
-  decoration: InputDecoration(
-    filled: true,
-    fillColor: Colors.black12,
-    border: OutlineInputBorder(
-      borderSide: BorderSide.none,
-      borderRadius: BorderRadius.circular(20),
-    ),
-    
-  ),
-   style: TextStyle(color: !widget.isDarkMode ? Colors.black : Colors.white), 
-  validator: (localName) {
-    final name = localName ?? '';
-    if (name.trim().length < 5) {
-      return 'Nome deve ter no mínimo 5 caracteres.';
-    }
-    return null;
-  },
-),
+                  TextFormField(
+                    key: const ValueKey('url_logo'),
+                    initialValue: _formData.url_logo,
+                    onChanged: (url_logo) => _formData.url_logo = url_logo,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.black12,
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                    style: TextStyle(
+                        color:
+                            !widget.isDarkMode ? Colors.black : Colors.white),
+                    validator: (localName) {
+                      final name = localName ?? '';
+                      if (name.trim().length < 5) {
+                        return 'Nome deve ter no mínimo 5 caracteres.';
+                      }
+                      return null;
+                    },
+                  ),
                   SizedBox(
                     height: 10,
                   ),

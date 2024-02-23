@@ -24,7 +24,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late ChatUser _user;
+  late CurrentUser _user;
   late bool isDarkMode;
   late User? currentUser;
 
@@ -43,12 +43,18 @@ class _MyHomePageState extends State<MyHomePage> {
       if (user != null) {
         // Set the user information to the state
         setState(() {
-          _user = ChatUser(
+          _user = CurrentUser(
             id: user.uid,
             name: user.displayName ?? '',
             email: user.email ?? '',
             imageUrl: user.photoURL ?? '',
-            tipoUsuario: 0, // Define the user type as needed
+            tipoUsuario: 0,
+            contato: {},
+            preferencias: [],
+            historico: [],
+            historicoBusca: [],
+            imoveisFavoritos: [],
+            UID: '',
           );
           loadLogo(_user.id);
           print(user);
@@ -146,7 +152,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           CircleAvatar(
                             backgroundImage: NetworkImage(_user.imageUrl),
                           ),
-                         CustomPopupMenu(isDarkMode: isDarkMode),
+                          CustomPopupMenu(isDarkMode: isDarkMode),
                         ],
                       ),
                       Text(
@@ -173,41 +179,40 @@ class _MyHomePageState extends State<MyHomePage> {
                       SizedBox(
                         height: 10,
                       ),
-                     ImovelCarousel(false, isDarkMode),
-                   Padding(
-  padding: const EdgeInsets.all(8.0),
-  child: Row(
-    children: [
-      Expanded(
-        child: Container(
-          color: Colors.grey,
-          child: TarefasColumn(),
-        ),
-      ),
-      SizedBox(width: 10), // Adiciona um espaço de 10 pixels
-      Expanded(
-        child: Container(
-          color: Colors.grey,
-          child: ClientesHomeLista(),
-        ),
-      ),
-      SizedBox(width: 10), // Adiciona um espaço de 10 pixels
-      Expanded(
-        child: Container(
-          color: Colors.grey,
-          child: NegociacaoColuna(),
-        ),
-      ),
-    ],
-  ),
-)
-
-
+                      ImovelCarousel(false, isDarkMode),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                color: Colors.grey,
+                                child: TarefasColumn(),
+                              ),
+                            ),
+                            SizedBox(
+                                width: 10), // Adiciona um espaço de 10 pixels
+                            Expanded(
+                              child: Container(
+                                color: Colors.grey,
+                                child: ClientesHomeLista(),
+                              ),
+                            ),
+                            SizedBox(
+                                width: 10), // Adiciona um espaço de 10 pixels
+                            Expanded(
+                              child: Container(
+                                color: Colors.grey,
+                                child: NegociacaoColuna(),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
                     ],
                   ),
                 ),
               ),
-               
             ],
           );
         },

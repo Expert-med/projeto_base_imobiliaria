@@ -6,6 +6,14 @@ class AuthFormData {
   String name = '';
   String email = '';
   String password = '';
+  String bairro = '';
+  String cep = '';
+  String cidade = '';
+  String complemento = '';
+  String estado = '';
+  String logradouro = '';
+  String numero = '';
+  
   File? image;
   int tipoUsuario = 0;
   AuthMode _mode = AuthMode.login;

@@ -3,9 +3,9 @@ import '../../../models/UserProvider.dart';
 import 'auth_firebase_service.dart';
 
 abstract class AuthService {
-  ChatUser? get currentUser;
+  CurrentUser? get currentUser;
 
-  Stream<ChatUser?> get userChanges;
+  Stream<CurrentUser?> get userChanges;
 
   Future<void> signup(
     String name,
@@ -13,6 +13,13 @@ abstract class AuthService {
     String password,
     File? image,
     int tipoUsuario,
+      String bairro,
+  String cep,
+  String cidade,
+  String complemento,
+  String estado,
+  String logradouro,
+  String numero,
   );
 
   Future<void> login(

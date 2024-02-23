@@ -19,86 +19,123 @@ class NewCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isSmallScreen = MediaQuery.of(context).size.width < 900;
+
     return AppBar(
-      title: Text(
-        title,
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      actions: <Widget>[
-        IconButton(
-          icon: Row(
+      backgroundColor:
+          isDarkMode ? Colors.black : Color.fromARGB(255, 238, 238, 238),
+      elevation: 0,
+      centerTitle: true,
+      bottom: PreferredSize(
+        preferredSize: Size.fromHeight(80),
+        child: Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Icon(Icons.favorite),
-              SizedBox(
-                width: 5,
+              Row(
+                children: [
+                  IconButton(
+                    icon: Icon( color: isDarkMode
+                      ? darkenColor(Color(0xFF6e58e9), 0.5)
+                      : Color(0xFF6e58e9),Icons.home),
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/');
+                    },
+                  ),
+                  Text(
+                    'Home',
+                    style: TextStyle(
+                            color: isDarkMode ? Colors.white : Colors.black54,
+                          ),
+                  ),
+                ],
               ),
-              Text('Imóveis favoritos'),
-            ],
-          ),
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ImoveisFavoritos(isDarkMode: isDarkMode),
-              ),
-            );
-          },
-        ),
-       Column(
-        children: [
-          IconButton(
-          icon: Row(
-            children: [
-              Icon(Icons.map_outlined),
-              SizedBox(
-                width: 5,
-              ),
-              Text('Mapa dos imoveis'),
-            ],
-          ),
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MapPage(),
-              ),
-            );
-          },
-        ),
-        IconButton(
-          icon: Row(
-            children: [
-              Icon(Icons.people),
-              SizedBox(
-                width: 5,
-              ),
-              Text('Lista de corretores'),
-            ],
-          ),
-          onPressed: () {
-            Navigator.pushReplacement(
+              GestureDetector(
+                child: Row(
+                  children: [
+                    IconButton(
+                      icon: Icon( color: isDarkMode
+                      ? darkenColor(Color(0xFF6e58e9), 0.5)
+                      : Color(0xFF6e58e9),Icons.home),
+                      onPressed: () {},
+                    ),
+                    Text(
+                      'Imóveis favoritos',
+                      style: TextStyle(
+                            color: isDarkMode ? Colors.white : Colors.black54,
+                          ),
+                    ),
+                  ],
+                ),
+                onTap: () {
+                  Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => CorretoresListPage(isDarkMode:isDarkMode),
+                      builder: (context) =>
+                          ImoveisFavoritos(isDarkMode: isDarkMode),
                     ),
                   );
-          },
-        ),
-        ],
-       ),
-      ],
-      bottom: PreferredSize(
-        preferredSize: Size.fromHeight(40.0),
-        child: Container(
-          color: Colors.white,
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: TextField(
-            decoration: InputDecoration(
-              hintText: 'Imóveis favoritos',
-              prefixIcon: Icon(Icons.search),
-            ),
+                },
+              ),
+              Column(
+                children: [
+                  GestureDetector(
+                    child: Row(
+                      children: [
+                        IconButton(
+                          icon: Icon( color: isDarkMode
+                      ? darkenColor(Color(0xFF6e58e9), 0.5)
+                      : Color(0xFF6e58e9),Icons.map),
+                          onPressed: () {},
+                        ),
+                        Text(
+                          'Mapa dos imóveis',
+                          style: TextStyle(
+                            color: isDarkMode ? Colors.white : Colors.black54,
+                          ),
+                        ),
+                      ],
+                    ),
+                    onTap: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MapPage(),
+                        ),
+                      );
+                    },
+                  ),
+                  GestureDetector(
+                    child: Row(
+                      children: [
+                        IconButton(
+                          icon: Icon( color: isDarkMode
+                      ? darkenColor(Color(0xFF6e58e9), 0.5)
+                      : Color(0xFF6e58e9),Icons.map),
+                          onPressed: () {},
+                        ),
+                        Text(
+                          'Lista de Corretores',
+                          style: TextStyle(
+                            color: isDarkMode ? Colors.white : Colors.black54,
+                          ),
+                        ),
+                      ],
+                    ),
+                    onTap: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              CorretoresListPage(isDarkMode: isDarkMode),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),

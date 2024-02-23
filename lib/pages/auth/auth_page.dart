@@ -40,13 +40,19 @@ class _AuthPageState extends State<AuthPage> {
           ),
         );
       } else {
-        // Signup
         await AuthService().signup(
           formData.name,
           formData.email,
           formData.password,
           formData.image,
           formData.tipoUsuario,
+          formData.bairro,
+          formData.cep,
+          formData.cidade,
+          formData.complemento,
+          formData.estado,
+          formData.logradouro,
+          formData.numero,
         );
 
         // Após o cadastro ser um sucesso, navegue para a HomePage
@@ -83,54 +89,55 @@ class _AuthPageState extends State<AuthPage> {
     }
   }
 
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    body: Stack(
-      children: [
-        // Background da imagem com efeito de desfoque
-        Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(
-                  'assets/images/fundo_claro_login.jpg'), // Substitua pelo caminho da sua imagem
-              fit: BoxFit.cover,
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Stack(
+        children: [
+          // Background da imagem com efeito de desfoque
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(
+                    'assets/images/fundo_claro_login.jpg'), // Substitua pelo caminho da sua imagem
+                fit: BoxFit.cover,
+              ),
+              borderRadius: BorderRadius.circular(10),
             ),
-           borderRadius: BorderRadius.circular(10),
-
-          ),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5), 
-            child: Container(
-              color: isDarkMode
-                  ? Colors.black.withOpacity(0.8)
-                  : Colors.black.withOpacity(0.5), 
-              child: Center(
-                child: SingleChildScrollView(
-                  child: AuthForm(onSubmit: _handleSubmit, isDarkMode: isDarkMode,),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+              child: Container(
+                color: isDarkMode
+                    ? Colors.black.withOpacity(0.8)
+                    : Colors.black.withOpacity(0.5),
+                child: Center(
+                  child: SingleChildScrollView(
+                    child: AuthForm(
+                      onSubmit: _handleSubmit,
+                      isDarkMode: isDarkMode,
+                    ),
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-        if (_isLoading)
-          Container(
-            color: Color.fromRGBO(0, 0, 0, 0.5),
-            child: Center(
-              child: CircularProgressIndicator(),
+          if (_isLoading)
+            Container(
+              color: Color.fromRGBO(0, 0, 0, 0.5),
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
             ),
-          ),
-      ],
-    ),
-    floatingActionButton: FloatingActionButton(
-      onPressed: () {
-        setState(() {
-          isDarkMode = !isDarkMode; // Alterna o valor de isDarkMode
-        });
-      },
-      child: Icon(Icons.lightbulb),
-    ),
-  );
-}
-
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          setState(() {
+            isDarkMode = !isDarkMode; // Alterna o valor de isDarkMode
+          });
+        },
+        child: Icon(Icons.lightbulb),
+      ),
+    );
+  }
 }

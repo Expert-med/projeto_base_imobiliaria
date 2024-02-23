@@ -15,6 +15,7 @@ import '../pages/imoveis/imovel_grid_completa_page.dart';
 import '../pages/imoveis/imovel_page.dart';
 import '../pages/map/map_flutter.dart';
 import '../pages/map/map_page.dart';
+import '../pages/teste.dart';
 import '../util/dark_color_util.dart';
 
 import 'package:flutter/material.dart';
@@ -35,7 +36,7 @@ class _CustomMenuState extends State<CustomMenu> {
   bool isExpandedImoveis = false;
   bool isExpandedImobiliarias = false;
   bool isExpandedCorretor = false;
-  ChatUser? _user;
+  CurrentUser? _user;
 
   @override
   void initState() {
@@ -131,6 +132,28 @@ class _CustomMenuState extends State<CustomMenu> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => ImoveisFavoritos(isDarkMode: widget.isDarkMode),
+                    ),
+                  );
+                },
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.favorite,
+                  color: widget.isDarkMode
+                      ? darkenColor(Color(0xFF6e58e9), 0.5)
+                      : Color(0xFF6e58e9),
+                ),
+                title: Text(
+                  'teste page',
+                  style: TextStyle(
+                    color: widget.isDarkMode ? Colors.white : Colors.black54,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => TestePage(),
                     ),
                   );
                 },
