@@ -39,24 +39,24 @@ class UserProvider extends ChangeNotifier {
         Map<String, dynamic> data = querySnapshot.docs.first.data();
         print(data);
 
-   dynamic preferenciasData = data['preferencias'];
-List<Map<String, dynamic>> preferencias = [];
+        dynamic preferenciasData = data['preferencias'];
+        List<Map<String, dynamic>> preferencias = [];
 
-if (preferenciasData != null) {
-  if (preferenciasData is Map) {
-    // Convertendo o mapa dinâmico para um mapa de string
-    Map<String, dynamic> preferenciasMap = {};
-    preferenciasData.forEach((key, value) {
-      preferenciasMap[key.toString()] = value;
-    });
+        if (preferenciasData != null) {
+          if (preferenciasData is Map) {
+            // Convertendo o mapa dinâmico para um mapa de string
+            Map<String, dynamic> preferenciasMap = {};
+            preferenciasData.forEach((key, value) {
+              preferenciasMap[key.toString()] = value;
+            });
 
-    // Adicionando o mapa convertido à lista de preferencias
-    preferencias.add(preferenciasMap);
-  } else {
-    // Handle other data types or unexpected data format
-    print('Erro: formato inesperado para preferencias');
-  }
-}
+            // Adicionando o mapa convertido à lista de preferencias
+            preferencias.add(preferenciasMap);
+          } else {
+            // Handle other data types or unexpected data format
+            print('Erro: formato inesperado para preferencias');
+          }
+        }
 
         List<String> historico = [];
         if (data['historico'] != null) {
@@ -80,7 +80,7 @@ if (preferenciasData != null) {
         List<String> historicoBusca = [];
         if (data['historico_busca'] != null) {
           if (data['historico_busca'] is List) {
-            imoveisFavoritos = List<String>.from(data['historico_busca']);
+            historicoBusca = List<String>.from(data['historico_busca']);
           } else {
             print('Erro: historico_busca não é uma lista');
           }

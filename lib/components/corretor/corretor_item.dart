@@ -1,19 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:url_launcher/url_launcher.dart';
-
 import '../../models/corretores/corretor.dart';
-import '../../pages/corretor_clientes/corretor_info_page.dart';
 
 
 
 class CorretorItem extends StatelessWidget {
   final bool isDarkMode;
-  final Corretor cliente;
+  final Corretor corretor;
 
-  const CorretorItem(this.isDarkMode, this.cliente, {Key? key})
+  const CorretorItem(this.isDarkMode, this.corretor, {Key? key})
       : super(key: key);
 
   @override
@@ -25,7 +20,7 @@ class CorretorItem extends StatelessWidget {
       child: Row(
         children: [
           CircleAvatar(
-            backgroundImage: NetworkImage(cliente.imageUrl),
+            backgroundImage: NetworkImage(corretor.logoUrl),
           ),
           SizedBox(
             width: 10,
@@ -37,7 +32,7 @@ class CorretorItem extends StatelessWidget {
                 alignment: Alignment.topCenter,
                 child: IntrinsicHeight(
                   child: Text(
-                    '${cliente.name}',
+                    '${corretor.name}',
                     style: TextStyle(
                       color: !isDarkMode ? Colors.black :Colors.white,
                       fontSize: isSmallScreen ? 15 : 18,
@@ -50,7 +45,7 @@ class CorretorItem extends StatelessWidget {
                 alignment: Alignment.topCenter,
                 child: IntrinsicHeight(
                   child: Text(
-                    '${cliente.email}',
+                    '${corretor.email}',
                     style: TextStyle(
                       fontSize: 14,
                       color: !isDarkMode ? Colors.black :Colors.white,
@@ -63,7 +58,7 @@ class CorretorItem extends StatelessWidget {
           Spacer(),
           InkWell(
             onTap: () {
-              Get.toNamed('/corretor/${cliente.id}');
+              Get.toNamed('/corretor/${corretor.id}');
 
             },
             child: Container(

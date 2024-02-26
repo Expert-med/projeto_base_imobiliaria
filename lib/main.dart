@@ -164,17 +164,21 @@ class MyApp extends StatelessWidget {
               docSnapshot.data() as Map<String, dynamic>;
           Corretor corretor = Corretor(
             id: corretorId,
-            name: data['name'] ?? '',
-            email: data['email'] ?? '',
-            imageUrl: data['imageUrl'] ?? '',
-            imageBanner: data['imageBanner'] ?? '',
-            permissoes: data['permissoes'] ?? '',
-            tipoUsuario: data['tipoUsuario'] ?? 0,
-            creci: data['creci'] ?? '',
-            textoCorretor: data['texto_corretor'] ?? '',
-            imoveisCadastrados:
-                List<String>.from(data['imoveis_cadastrados'] ?? []),
-            contato: data['contato'] ?? '',
+          name: data['name'] ?? '',
+          tipoUsuario: data['tipoUsuario'] ?? 0,
+          email: data['email'] ?? '',
+          logoUrl: data['logo_url']?? '',
+          dataCadastro: data['data_cadastro'] ?? '',
+          permissoes: data['permissoes'] ?? '',
+          imoveisCadastrados: List<String>.from(data['imoveis_cadastrados'] ?? []),
+          visitas: List<String>.from(data['visitas'] ?? []),
+          negociacoes: List<String>.from(data['negociacoes'] ?? []),
+          contato: data['contato'] ?? {},
+          dadosProfissionais: data['dados_profissionais'] ?? {},
+          metas: data['metas'] ?? {},
+          desempenhoAtualMetas: data['desempenho_atual_metas'] ?? {},
+          infoBanner: data['info_banner'] ?? {},
+          uid: data['uid'] ?? '',
           );
           return corretor;
         } else {

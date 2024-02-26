@@ -13,6 +13,7 @@ import '../pages/imobiliaria/imobiliarias_page.dart';
 import '../pages/imoveis/imoveis_Favoritos.dart';
 import '../pages/imoveis/imovel_grid_completa_page.dart';
 import '../pages/imoveis/imovel_page.dart';
+import '../pages/imoveis/virtual_imovel_tour/virtual_iframe.dart';
 import '../pages/map/map_flutter.dart';
 import '../pages/map/map_page.dart';
 import '../pages/teste.dart';
@@ -198,6 +199,28 @@ class _CustomMenuState extends State<CustomMenu> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => CorretoresListPage(isDarkMode: widget.isDarkMode),
+                    ),
+                  );
+                },
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.people,
+                  color: widget.isDarkMode
+                      ? darkenColor(Color(0xFF6e58e9), 0.5)
+                      : Color(0xFF6e58e9),
+                ),
+                title: Text(
+                  'VirtualTour',
+                  style: TextStyle(
+                    color: widget.isDarkMode ? Colors.white : Colors.black54,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => VirtualTourIFrame(),
                     ),
                   );
                 },

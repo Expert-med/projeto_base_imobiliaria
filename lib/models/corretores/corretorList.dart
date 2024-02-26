@@ -31,18 +31,26 @@ class CorretorList with ChangeNotifier {
       // Iterar sobre os documentos obtidos e criar objetos Corretor
       querySnapshot.docs.forEach((corretorDoc) {
         Map<String, dynamic> data = corretorDoc.data() as Map<String, dynamic>;
+
+    
+
         corretores.add(Corretor(
           id: corretorDoc.id,
           name: data['name'] ?? '',
-          email: data['email'] ?? '',
-          imageUrl: data['imageUrl'] ?? '',
-          imageBanner: data['imageBanner'] ?? '',
-          permissoes: data['permissoes'] ?? '',
           tipoUsuario: data['tipoUsuario'] ?? 0,
-          creci: data['creci'] ?? '',
-          textoCorretor: data['texto_corretor'] ?? '',
+          email: data['email'] ?? '',
+          logoUrl: data['logo_url']?? '',
+          dataCadastro: data['data_cadastro'] ?? '',
+          uid: data['uid'] ?? '',
+          permissoes: data['permissoes'] ?? '',
           imoveisCadastrados: List<String>.from(data['imoveis_cadastrados'] ?? []),
-          contato: data['contato'] ?? '',
+          visitas: List<String>.from(data['visitas'] ?? []),
+          negociacoes: List<String>.from(data['negociacoes'] ?? []),
+          contato: data['contato'] ?? {},
+          dadosProfissionais: data['dados_profissionais'] ?? {},
+          metas: data['metas'] ?? {},
+          desempenhoAtualMetas: data['desempenho_atual_metas'] ?? {},
+          infoBanner: data['info_banner'] ?? {},
         ));
       });
     } else {

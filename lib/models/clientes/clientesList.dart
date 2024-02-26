@@ -66,9 +66,17 @@ class ClientesList with ChangeNotifier {
               final imovel = Clientes(
                 email: resultado['email'],
                 id: clienteId,
-                imageUrl: resultado['imageUrl'],
+                logoUrl: resultado['imageUrl'],
                 name: resultado['name'],
                 tipoUsuario: resultado['tipo_usuario'],
+                contato: resultado['contato'],
+                UID: resultado['uid'],
+                historico: List<String>.from(resultado['historico'] ?? []),
+                historicoBusca:
+                    List<String>.from(resultado['negociacoes'] ?? []),
+                imoveisFavoritos:
+                    List<String>.from(resultado['imoveis_favoritos'] ?? []),
+                preferencias: resultado['negociacoes'] ?? [],
               );
 
               clientes.add(imovel);
@@ -127,8 +135,16 @@ class ClientesList with ChangeNotifier {
               id: clienteDoc.id,
               name: clienteDoc['name'],
               email: clienteDoc['email'],
-              imageUrl: clienteDoc['imageUrl'],
+              logoUrl: clienteDoc['imageUrl'],
               tipoUsuario: clienteDoc['tipo_usuario'],
+              contato: clienteDoc['contato'],
+              UID: clienteDoc['uid'],
+              historico: List<String>.from(clienteDoc['historico'] ?? []),
+              historicoBusca:
+                  List<String>.from(clienteDoc['negociacoes'] ?? []),
+              imoveisFavoritos:
+                  List<String>.from(clienteDoc['imoveis_favoritos'] ?? []),
+              preferencias: clienteDoc['negociacoes'] ?? [],
             );
             clientesList.add(cliente);
           } else {
@@ -168,8 +184,15 @@ class ClientesList with ChangeNotifier {
           id: clienteDoc.id,
           name: clienteDoc['name'],
           email: clienteDoc['email'],
-          imageUrl: clienteDoc['imageUrl'],
+          logoUrl: clienteDoc['imageUrl'],
           tipoUsuario: clienteDoc['tipo_usuario'],
+          contato: clienteDoc['contato'],
+          UID: clienteDoc['uid'],
+          historico: List<String>.from(clienteDoc['historico'] ?? []),
+          historicoBusca: List<String>.from(clienteDoc['historico_busca'] ?? []),
+          imoveisFavoritos:
+              List<String>.from(clienteDoc['imoveis_favoritos'] ?? []),
+          preferencias: clienteDoc['negociacoes'] ?? [],
         );
         return cliente;
       } else {

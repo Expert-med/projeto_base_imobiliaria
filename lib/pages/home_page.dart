@@ -55,6 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
             historicoBusca: [],
             imoveisFavoritos: [],
             UID: '',
+
           );
           loadLogo(_user.id);
           print(user);

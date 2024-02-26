@@ -22,7 +22,7 @@ class ClienteItem extends StatelessWidget {
       child: Row(
         children: [
           CircleAvatar(
-            backgroundImage: NetworkImage(cliente.imageUrl),
+            backgroundImage: NetworkImage(cliente.logoUrl),
           ),
           SizedBox(
             width: 10,

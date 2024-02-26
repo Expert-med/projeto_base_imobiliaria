@@ -38,7 +38,7 @@ class _CorretorInfoPageState extends State<CorretorInfoPage> {
 
   @override
   Widget build(BuildContext context) {
-    String imageBannerUrl = widget.corretor.imageBanner.toString();
+    String imageBannerUrl = widget.corretor.infoBanner['image_banner'].toString();
 
     if (imageBannerUrl.isEmpty) {
       imageBannerUrl = 'https://www.cbde.org.br/images/default.jpg';
@@ -128,7 +128,7 @@ class _CorretorInfoPageState extends State<CorretorInfoPage> {
                 ),
               ),
             ),
-            if (widget.corretor.textoCorretor.toString() != '')
+            if (widget.corretor.infoBanner['about_text'].toString() != '')
               Padding(
                 padding:
                     EdgeInsets.only(left: 10, right: 10, top: 20, bottom: 10),
@@ -140,7 +140,7 @@ class _CorretorInfoPageState extends State<CorretorInfoPage> {
                         child: Padding(
                           padding: const EdgeInsets.all(10),
                           child: Text(
-                            '${widget.corretor.textoCorretor[0].toUpperCase()}${widget.corretor.textoCorretor.substring(1)}',
+                            '${widget.corretor.infoBanner['about_text'][0].toUpperCase()}${widget.corretor.infoBanner['about_text'].substring(1)}',
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,

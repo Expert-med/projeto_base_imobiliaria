@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 import '../../../models/UserProvider.dart';
 import 'auth_service.dart';
@@ -65,13 +66,7 @@ class AuthFirebaseService implements AuthService {
       await credential.user?.updateDisplayName(name);
       await credential.user?.updatePhotoURL(imageUrl);
       await login(email, password);
-      print(bairro);
-      print(cep);
-      print(cidade);
-      print(complemento);
-      print(estado);
-      print(logradouro);
-      print(numero);
+
       // 2. Adicionar informações do endereço à lista de contato
       Map<String, dynamic> endereco = {
         'logradouro': logradouro,
@@ -97,12 +92,7 @@ class AuthFirebaseService implements AuthService {
 
       // 3. Criar o objeto CurrentUser
       _currentUser = _toCurrentUser(
-        credential.user!,
-        name,
-        imageUrl,
-        tipoUsuario,
-        contato, // Passar a lista de contato como parâmetro
-      );
+          credential.user!, name, imageUrl, tipoUsuario, contato);
 
       // 4. Salvar o usuário no banco de dados (opcional)
       await _saveCurrentUser(_currentUser!, credential.user!.uid.toString());
@@ -164,30 +154,34 @@ class AuthFirebaseService implements AuthService {
   }
 
   Future<void> _saveCurrentUser(CurrentUser user, String vddUid) async {
+    DateTime now = DateTime.now();
+
+    String data_atual_formatada = DateFormat('yyyy-MM-dd').format(now);
     final store = FirebaseFirestore.instance;
     final uid = generateId();
     if (user.tipoUsuario == 0) {
       final docRef = store.collection('clientes').doc(uid);
 
       await docRef.set({
-        'id': user.id,
+        'id': uid,
         'name': user.name ?? '',
         'email': user.email ?? '',
         'imageUrl': user.imageUrl ?? '',
         'tipo_usuario': user.tipoUsuario ?? 0,
         'uid': vddUid ?? '',
+        'data_cadastro': data_atual_formatada,
         'contato': {
           'email': user.email ?? '',
           'telefone_fixo': user.contato['telefone_fixo'] ?? '',
           'celular': user.contato['celular'] ?? '',
           'endereco': {
-            'logradouro': user.contato['endereco']['logradouro']?? '',
-            'numero': user.contato['endereco']['numero']?? '',
-            'complemento': user.contato['endereco']['complemento']?? '',
-            'bairro': user.contato['endereco']['bairro']?? '',
-            'cidade': user.contato['endereco']['cidade']?? '',
-            'estado': user.contato['endereco']['estado']?? '',
-            'cep': user.contato['endereco']['cep']?? '',
+            'logradouro': user.contato['endereco']['logradouro'] ?? '',
+            'numero': user.contato['endereco']['numero'] ?? '',
+            'complemento': user.contato['endereco']['complemento'] ?? '',
+            'bairro': user.contato['endereco']['bairro'] ?? '',
+            'cidade': user.contato['endereco']['cidade'] ?? '',
+            'estado': user.contato['endereco']['estado'] ?? '',
+            'cep': user.contato['endereco']['cep'] ?? '',
           },
           'redes_sociais': {
             'facebook': '',
@@ -195,8 +189,9 @@ class AuthFirebaseService implements AuthService {
             'linkedin': '',
           },
         },
+        "negociacoes": [],
         'preferencias': {},
-        'historico': [],
+        'historico_corretor': [],
         'historico_busca': [],
         'imoveis_favoritos': [],
       });
@@ -204,12 +199,15 @@ class AuthFirebaseService implements AuthService {
       final docRef = store.collection('corretores').doc(uid);
 
       await docRef.set({
-        'id': user.id,
+        'id': uid,
         'name': user.name ?? '',
         'email': user.email ?? '',
-        'imageUrl': user.imageUrl ?? '',
-        'tipo_usuario': user.tipoUsuario ?? 0,
+        'logoUrl': user.imageUrl ?? '',
+        'tipo_usuario': user.tipoUsuario ?? 1,
         'uid': vddUid ?? '',
+        'permissoes': '',
+        'imoveis_cadastrados': [],
+        'data_cadastro': data_atual_formatada,
         'contato': {
           'email': user.email ?? '',
           'telefone_fixo': user.contato['telefone_fixo'] ?? '',
@@ -229,10 +227,37 @@ class AuthFirebaseService implements AuthService {
             'linkedin': '',
           },
         },
-        'preferencias': {},
-        'historico': [],
-        'historico_busca': [],
-        'imoveis_favoritos': [],
+        'dados_profissionais': {
+          'registro': '',
+          'especialidades': [],
+          'regiao_atuacao': [],
+        },
+        'metas': {
+          'mensal': {
+            'vendas': 0,
+            'aluguel': 0,
+          },
+          'anual': {
+            'vendas': 0,
+            'aluguel': 0,
+          },
+        },
+        'desempenho_atual': {
+          'mensal': {
+            'vendas': 0,
+            'aluguel': 0,
+          },
+          'anual': {
+            'vendas': 0,
+            'aluguel': 0,
+          },
+        },
+        'visitas': [],
+        "negociacoes": [],
+        "info_banner": {
+          "image_url": '',
+          "about_text": '',
+        }
       });
     }
   }

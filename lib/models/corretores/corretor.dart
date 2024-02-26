@@ -5,28 +5,36 @@ import 'package:flutter/material.dart';
 class Corretor with ChangeNotifier {
   final String id;
   final String name;
-  final String email;
-  final String imageUrl;
-  final String imageBanner;
-   final String permissoes;
   final int tipoUsuario;
-  final String creci;
-  final String textoCorretor;
+  final String email;
+  final String logoUrl;
+  final String dataCadastro;
+  final String permissoes;
+  final String uid;
   final List<String> imoveisCadastrados;
-  final String contato;
+  final List<String> visitas;
+  final List<String> negociacoes;
+  final Map<String, dynamic> contato;
+  final Map<String, dynamic> dadosProfissionais;
+  final Map<String, dynamic> metas;
+  final Map<String, dynamic> desempenhoAtualMetas;
+  final Map<String, dynamic> infoBanner;
 
-  Corretor({
-    required this.id,
-    required this.name,
-    required this.email,
-    required this.imageUrl,
-    required this.imageBanner,
-    required this.permissoes,
-    required this.tipoUsuario,
-    required this.creci,
-    required this.textoCorretor,
-    required this.imoveisCadastrados,
-    required this.contato,
-  });
-
+  Corretor(
+      {required this.id,
+      required this.name,
+      required this.email,
+      required this.logoUrl,
+      required this.dataCadastro,
+      required this.permissoes,
+      required this.uid,
+      required this.tipoUsuario,
+      required this.imoveisCadastrados,
+      required this.visitas,
+      required this.negociacoes,
+      required this.contato,
+      required this.dadosProfissionais,
+      required this.metas,
+      required this.desempenhoAtualMetas,
+      required this.infoBanner});
 }
