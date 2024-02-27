@@ -46,6 +46,7 @@ class AuthFirebaseService implements AuthService {
     String estado,
     String logradouro,
     String numero,
+    String num_identificacao,
   ) async {
     final signup = await Firebase.initializeApp(
       name: 'userSignup',
@@ -92,7 +93,7 @@ class AuthFirebaseService implements AuthService {
 
       // 3. Criar o objeto CurrentUser
       _currentUser = _toCurrentUser(
-          credential.user!, name, imageUrl, tipoUsuario, contato);
+          credential.user!, name, imageUrl, tipoUsuario, contato,num_identificacao);
 
       // 4. Salvar o usuário no banco de dados (opcional)
       await _saveCurrentUser(_currentUser!, credential.user!.uid.toString());
@@ -213,13 +214,13 @@ class AuthFirebaseService implements AuthService {
           'telefone_fixo': user.contato['telefone_fixo'] ?? '',
           'celular': user.contato['celular'] ?? '',
           'endereco': {
-            'logradouro': '',
-            'numero': '',
-            'complemento': '',
-            'bairro': '',
-            'cidade': '',
-            'estado': '',
-            'cep': '',
+             'logradouro': user.contato['endereco']['logradouro'] ?? '',
+            'numero': user.contato['endereco']['numero'] ?? '',
+            'complemento': user.contato['endereco']['complemento'] ?? '',
+            'bairro': user.contato['endereco']['bairro'] ?? '',
+            'cidade': user.contato['endereco']['cidade'] ?? '',
+            'estado': user.contato['endereco']['estado'] ?? '',
+            'cep': user.contato['endereco']['cep'] ?? '',
           },
           'redes_sociais': {
             'facebook': '',
@@ -267,11 +268,13 @@ class AuthFirebaseService implements AuthService {
       String? imageUrl,
       int? tipoUsuario,
       Map<String, dynamic>? contato,
+      String? num_identificacao,
       List<Map<String, dynamic>>? preferencias,
       List<String>? historico,
       List<String>? historicoBusca,
       List<String>? imoveisFavoritos,
-      String? UID]) {
+      String? UID,
+      ]) {
     return CurrentUser(
       id: user.uid,
       name: name ?? user.displayName ?? user.email!.split('@')[0],
@@ -284,6 +287,7 @@ class AuthFirebaseService implements AuthService {
       historicoBusca: historicoBusca ?? [],
       imoveisFavoritos: imoveisFavoritos ?? [],
       UID: UID ?? '',
+      num_identificacao: num_identificacao ??'',
     );
   }
 }

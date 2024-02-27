@@ -53,6 +53,7 @@ class _AuthPageState extends State<AuthPage> {
           formData.estado,
           formData.logradouro,
           formData.numero,
+          formData.num_identificacao,
         );
 
         // Após o cadastro ser um sucesso, navegue para a HomePage

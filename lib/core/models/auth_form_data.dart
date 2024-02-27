@@ -13,6 +13,7 @@ class AuthFormData {
   String estado = '';
   String logradouro = '';
   String numero = '';
+  String num_identificacao = '';
   
   File? image;
   int tipoUsuario = 0;

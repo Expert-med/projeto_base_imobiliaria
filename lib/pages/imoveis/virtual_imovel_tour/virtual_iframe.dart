@@ -17,7 +17,7 @@ class _VirtualTourIFrameState extends State<VirtualTourIFrame> {
   void initState() {
     _iFrameElement.style.height = '100%';
     _iFrameElement.style.width = '100%';
-    _iFrameElement.src = 'https://matterport.com/discover/space/KYoLdw4ygkd';
+    _iFrameElement.src = 'https://kuula.co/share/collection/7JJvB?logo=1&info=1&fs=1&vr=0&sd=1&thumbs=1&inst=pt';
     _iFrameElement.style.border = 'none';
 
 // ignore: undefined_prefixed_name
@@ -37,17 +37,19 @@ class _VirtualTourIFrameState extends State<VirtualTourIFrame> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: CustomAppBar(subtitle: '', title: 'VirtualTour', isDarkMode: false),
-      // drawer: CustomMenu(isDarkMode: false),
+      appBar: CustomAppBar(subtitle: '', title: 'VirtualTour', isDarkMode: false),
+      drawer: CustomMenu(isDarkMode: false),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              child: _iframeWidget,
-            )
-          ],
+        child: Center(
+          child: Column(
+            children: [
+              SizedBox(
+                height: MediaQuery.of(context).size.height - 100,
+                width: MediaQuery.of(context).size.width - 100,
+                child: _iframeWidget,
+              )
+            ],
+          ),
         ),
       ),
      

@@ -31,7 +31,7 @@ class _AuthFormState extends State<AuthForm> {
   final TextEditingController bairroController = TextEditingController();
   final TextEditingController localidadeController = TextEditingController();
   final TextEditingController ufController = TextEditingController();
-   final TextEditingController numero = TextEditingController();
+  final TextEditingController numero = TextEditingController();
   bool loading = false;
   var viacepModel = ViaCepModel();
   var viaCepRepository = ViaCepRepository();
@@ -84,14 +84,14 @@ class _AuthFormState extends State<AuthForm> {
 
   @override
   Widget build(BuildContext context) {
-    bool isSmallScreen = MediaQuery.of(context).size.width < 1200;
+    bool isSmallScreen = MediaQuery.of(context).size.width < 900;
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(20),
       child: Card(
         margin: isSmallScreen
             ? const EdgeInsets.all(10)
-            : const EdgeInsets.only(left: 500, right: 500, top: 10, bottom: 10),
+            : const EdgeInsets.only(left: 400, right: 400, top: 10, bottom: 10),
         child: Container(
           decoration: BoxDecoration(
             color: !widget.isDarkMode ? Colors.white : Colors.black38,
@@ -120,6 +120,8 @@ class _AuthFormState extends State<AuthForm> {
                       initialValue: _formData.email,
                       onChanged: (email) => _formData.email = email,
                       decoration: InputDecoration(
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 5, horizontal: 15),
                         filled: true,
                         fillColor: Colors.black12,
                         border: OutlineInputBorder(
@@ -145,7 +147,7 @@ class _AuthFormState extends State<AuthForm> {
                     if (_formData.isSignup)
                       Padding(
                         padding: EdgeInsets.all(
-                            15), //apply padding to all four sides
+                            10), // apply padding to all four sides
                         child: Text(
                           "Nome",
                           style: TextStyle(
@@ -161,6 +163,8 @@ class _AuthFormState extends State<AuthForm> {
                         initialValue: _formData.name,
                         onChanged: (name) => _formData.name = name,
                         decoration: InputDecoration(
+                          contentPadding:
+                              EdgeInsets.symmetric(vertical: 5, horizontal: 15),
                           filled: true,
                           fillColor: Colors.black12,
                           border: OutlineInputBorder(
@@ -169,6 +173,7 @@ class _AuthFormState extends State<AuthForm> {
                           ),
                         ),
                         style: TextStyle(
+                            fontSize: 14, // adjust font size here
                             color: !widget.isDarkMode
                                 ? Colors.black
                                 : Colors.white),
@@ -197,6 +202,8 @@ class _AuthFormState extends State<AuthForm> {
                       initialValue: _formData.email,
                       onChanged: (email) => _formData.email = email,
                       decoration: InputDecoration(
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 5, horizontal: 15),
                         filled: true,
                         fillColor: Colors.black12,
                         border: OutlineInputBorder(
@@ -236,6 +243,8 @@ class _AuthFormState extends State<AuthForm> {
                           color:
                               !widget.isDarkMode ? Colors.black : Colors.white),
                       decoration: InputDecoration(
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 5, horizontal: 15),
                         filled: true,
                         fillColor: Colors.black12,
                         border: OutlineInputBorder(
@@ -251,97 +260,7 @@ class _AuthFormState extends State<AuthForm> {
                         return null;
                       },
                     ),
-                    if (_formData.isSignup)
-                      Padding(
-                        padding: EdgeInsets.all(
-                            15), //apply padding to all four sides
-                        child: Text(
-                          "Tipo de conta",
-                          style: TextStyle(
-                            color: Color(0xFF6e58e9),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                    if (_formData.isSignup)
-                      Row(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.all(8),
-                            child: Row(
-                              children: [
-                                Text(
-                                  "Cliente",
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color: !widget.isDarkMode
-                                          ? Colors.black
-                                          : Colors.white),
-                                ),
-                                Checkbox(
-                                  value: isClientSelected,
-                                  activeColor: Color(0xFF6e58e9),
-                                  checkColor: !widget.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      isClientSelected = value ?? false;
-                                      if (isClientSelected) {
-                                        isBrokerSelected = false;
-                                        _formData.tipoUsuario = 0;
-                                      }
-                                    });
-                                  },
-                                  side: BorderSide(
-                                    color: !widget.isDarkMode
-                                        ? Colors.black
-                                        : Color(0xFF6e58e9),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(8),
-                            child: Row(
-                              children: [
-                                Text(
-                                  "Corretor",
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color: !widget.isDarkMode
-                                          ? Colors.black
-                                          : Colors.white),
-                                ),
-                                Checkbox(
-                                  value: isBrokerSelected,
-                                  activeColor: Color(0xFF6e58e9),
-                                  checkColor: !widget.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black,
-                                  side: BorderSide(
-                                    color: !widget.isDarkMode
-                                        ? Colors.black
-                                        : Color(0xFF6e58e9),
-                                  ),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      isBrokerSelected = value ?? false;
-                                      if (isBrokerSelected) {
-                                        isClientSelected = false;
-                                        _formData.tipoUsuario = 1;
-                                      }
-                                    });
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    if (isClientSelected) ...[
+                    if (_formData.isSignup) ...[
                       Row(
                         children: [
                           Flexible(
@@ -361,6 +280,8 @@ class _AuthFormState extends State<AuthForm> {
                                 ),
                                 TextField(
                                   decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: 5, horizontal: 15),
                                     filled: true,
                                     fillColor: Colors.black12,
                                     border: OutlineInputBorder(
@@ -395,16 +316,18 @@ class _AuthFormState extends State<AuthForm> {
                                             viacepModel.localidade ?? '';
                                         ufController.text =
                                             viacepModel.uf ?? '';
-                                        
-                                       
-                                        _formData.bairro = viacepModel.bairro ??'';
-                                        _formData.cep = viacepModel.cep ??'';
-                                        _formData.cidade = viacepModel.localidade??'';
-                                        _formData.complemento = viacepModel.complemento ??'';
-                                        _formData.estado = viacepModel.uf ??'';
-                                        _formData.logradouro =  viacepModel.logradouro.toString() ??
+
+                                        _formData.bairro =
+                                            viacepModel.bairro ?? '';
+                                        _formData.cep = viacepModel.cep ?? '';
+                                        _formData.cidade =
+                                            viacepModel.localidade ?? '';
+                                        _formData.complemento =
+                                            viacepModel.complemento ?? '';
+                                        _formData.estado = viacepModel.uf ?? '';
+                                        _formData.logradouro =
+                                            viacepModel.logradouro.toString() ??
                                                 '';
-                                      
                                       });
                                     }
                                   },
@@ -436,6 +359,8 @@ class _AuthFormState extends State<AuthForm> {
                                 : Colors.white),
                         controller: logradouroController,
                         decoration: InputDecoration(
+                          contentPadding:
+                              EdgeInsets.symmetric(vertical: 5, horizontal: 15),
                           filled: true,
                           fillColor: Colors.black12,
                           border: OutlineInputBorder(
@@ -463,6 +388,8 @@ class _AuthFormState extends State<AuthForm> {
                                 ? Colors.black
                                 : Colors.white),
                         decoration: InputDecoration(
+                          contentPadding:
+                              EdgeInsets.symmetric(vertical: 5, horizontal: 15),
                           filled: true,
                           fillColor: Colors.black12,
                           border: OutlineInputBorder(
@@ -497,6 +424,8 @@ class _AuthFormState extends State<AuthForm> {
                                           ? Colors.black
                                           : Colors.white),
                                   decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: 5, horizontal: 15),
                                     filled: true,
                                     fillColor: Colors.black12,
                                     border: OutlineInputBorder(
@@ -531,6 +460,8 @@ class _AuthFormState extends State<AuthForm> {
                                           ? Colors.black
                                           : Colors.white),
                                   decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: 5, horizontal: 15),
                                     filled: true,
                                     fillColor: Colors.black12,
                                     border: OutlineInputBorder(
@@ -565,6 +496,8 @@ class _AuthFormState extends State<AuthForm> {
                                           ? Colors.black
                                           : Colors.white),
                                   decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: 5, horizontal: 15),
                                     filled: true,
                                     fillColor: Colors.black12,
                                     border: OutlineInputBorder(
@@ -572,14 +505,147 @@ class _AuthFormState extends State<AuthForm> {
                                       borderRadius: BorderRadius.circular(20),
                                     ),
                                   ),
-                                 onSaved: (value) =>
-                                  _formData.numero = value ?? '',
+                                  onSaved: (value) =>
+                                      _formData.numero = value ?? '',
                                 ),
                               ],
                             ),
                           ),
                         ],
                       ),
+                      if (_formData.isSignup)
+                        Padding(
+                          padding: EdgeInsets.all(
+                              15), //apply padding to all four sides
+                          child: Text(
+                            "Tipo de conta",
+                            style: TextStyle(
+                              color: Color(0xFF6e58e9),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      if (_formData.isSignup)
+                        Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.all(8),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Cliente",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        color: !widget.isDarkMode
+                                            ? Colors.black
+                                            : Colors.white),
+                                  ),
+                                  Checkbox(
+                                    value: isClientSelected,
+                                    activeColor: Color(0xFF6e58e9),
+                                    checkColor: !widget.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        isClientSelected = value ?? false;
+                                        if (isClientSelected) {
+                                          isBrokerSelected = false;
+                                          _formData.tipoUsuario = 0;
+                                        }
+                                      });
+                                    },
+                                    side: BorderSide(
+                                      color: !widget.isDarkMode
+                                          ? Colors.black
+                                          : Color(0xFF6e58e9),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(8),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Corretor",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        color: !widget.isDarkMode
+                                            ? Colors.black
+                                            : Colors.white),
+                                  ),
+                                  Checkbox(
+                                    value: isBrokerSelected,
+                                    activeColor: Color(0xFF6e58e9),
+                                    checkColor: !widget.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black,
+                                    side: BorderSide(
+                                      color: !widget.isDarkMode
+                                          ? Colors.black
+                                          : Color(0xFF6e58e9),
+                                    ),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        isBrokerSelected = value ?? false;
+                                        if (isBrokerSelected) {
+                                          isClientSelected = false;
+                                          _formData.tipoUsuario = 1;
+                                        }
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      if (_formData.tipoUsuario == 1) ...[
+                        if (_formData.isSignup)
+                          Padding(
+                            padding: EdgeInsets.all(
+                                15), //apply padding to all four sides
+                            child: Text(
+                              "N° de registro",
+                              style: TextStyle(
+                                color: Color(0xFF6e58e9),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                        if (_formData.isSignup)
+                          TextFormField(
+                            key: const ValueKey('num_registro'),
+                            initialValue: _formData.num_identificacao,
+                            onChanged: (num_identificacao) =>
+                                _formData.num_identificacao = num_identificacao,
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 15),
+                              filled: true,
+                              fillColor: Colors.black12,
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide.none,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            ),
+                            style: TextStyle(
+                                color: !widget.isDarkMode
+                                    ? Colors.black
+                                    : Colors.white),
+                            validator: (num_identificacao) {
+                              final name = num_identificacao ?? '';
+                              if (name.trim().length < 3) {
+                                return 'O número deve ser maior.';
+                              }
+                              return null;
+                            },
+                          ),
+                      ],
                     ],
                     const SizedBox(height: 12),
                     ElevatedButton(

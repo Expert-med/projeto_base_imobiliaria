@@ -21,18 +21,13 @@ class CorretorList with ChangeNotifier {
   try {
     final firestore = FirebaseFirestore.instance;
 
-    // Consulta para obter todos os documentos da coleção "corretores"
     QuerySnapshot querySnapshot = await firestore.collection('corretores').get();
 
     List<Corretor> corretores = [];
 
-    // Verifica se a consulta retornou documentos
     if (querySnapshot.docs.isNotEmpty) {
-      // Iterar sobre os documentos obtidos e criar objetos Corretor
       querySnapshot.docs.forEach((corretorDoc) {
         Map<String, dynamic> data = corretorDoc.data() as Map<String, dynamic>;
-
-    
 
         corretores.add(Corretor(
           id: corretorDoc.id,
@@ -60,8 +55,30 @@ class CorretorList with ChangeNotifier {
     return corretores;
   } catch (error) {
     print('Erro ao buscar corretores: $error');
-    return []; // Retorna uma lista vazia em caso de erro
+    return []; 
   }
 }
 
+
+Future<void> adicionarNegociacaoAoCorretor(String idCorretor, String idNegociacao) async {
+  try {
+    DocumentReference corretorRef = FirebaseFirestore.instance.collection('corretores').doc(idCorretor);
+
+    DocumentSnapshot corretorDoc = await corretorRef.get();
+
+    if (corretorDoc.exists) {
+      List<dynamic> negociacoes = corretorDoc['negociacoes'] ?? [];
+
+      negociacoes.add(idNegociacao);
+
+      await corretorRef.update({'negociacoes': negociacoes});
+
+      print('Negociação adicionada com sucesso ao corretor com ID: $idCorretor');
+    } else {
+      print('Corretor com ID: $idCorretor não encontrado');
+    }
+  } catch (e) {
+    print('Erro ao adicionar negociação ao corretor: $e');
+  }
+}
 }

@@ -55,11 +55,9 @@ class _MyHomePageState extends State<MyHomePage> {
             historicoBusca: [],
             imoveisFavoritos: [],
             UID: '',
-
+            num_identificacao: '',
           );
           loadLogo(_user.id);
-          print(user);
-          print('_user : ${_user.imageUrl}');
         });
       }
     } catch (e) {

@@ -20,6 +20,7 @@ abstract class AuthService {
   String estado,
   String logradouro,
   String numero,
+  String num_identificacao,
   );
 
   Future<void> login(

@@ -128,6 +128,7 @@ void initState() {
             historicoBusca: _user!.historicoBusca,
             imoveisFavoritos: _user!.imoveisFavoritos,
             UID: _user!.UID,
+            num_identificacao: _user!.num_identificacao,
           );
           _nameController.text = newName;
         });

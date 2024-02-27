@@ -73,10 +73,10 @@ class ClientesList with ChangeNotifier {
                 UID: resultado['uid'],
                 historico: List<String>.from(resultado['historico'] ?? []),
                 historicoBusca:
-                    List<String>.from(resultado['negociacoes'] ?? []),
+                    List<String>.from(resultado['preferencias'] ?? []),
                 imoveisFavoritos:
                     List<String>.from(resultado['imoveis_favoritos'] ?? []),
-                preferencias: resultado['negociacoes'] ?? [],
+                preferencias: resultado['preferencias'] ?? [],
               );
 
               clientes.add(imovel);
@@ -95,6 +95,8 @@ class ClientesList with ChangeNotifier {
     return []; // Retorna uma lista vazia se o corretor não for encontrado
   }
 
+
+
   Future<List<Clientes>> buscarClientesDoCorretor() async {
     final user = FirebaseAuth.instance.currentUser;
     final corretorId = user?.uid ?? '';
@@ -102,7 +104,6 @@ class ClientesList with ChangeNotifier {
     try {
       final firestore = FirebaseFirestore.instance;
 
-      // Busca o documento do corretor pelo UID
       final querySnapshot = await firestore
           .collection('corretores')
           .where('uid', isEqualTo: corretorId)
@@ -111,47 +112,54 @@ class ClientesList with ChangeNotifier {
       if (querySnapshot.docs.isNotEmpty) {
         final docId = querySnapshot.docs[0].id;
 
-        // Obtém a referência da subcoleção 'meus_clientes' do corretor
         final collection = firestore
             .collection('corretores')
             .doc(docId)
             .collection('meus_clientes');
 
-        // Busca todos os documentos da subcoleção 'meus_clientes' do corretor
         final querySnapshotClientes = await collection.get();
 
-        // Lista para armazenar os clientes
         List<Clientes> clientesList = [];
 
-        // Para cada documento em 'meus_clientes', busca os detalhes completos do cliente na coleção 'clientes'
         for (DocumentSnapshot clienteSnapshot in querySnapshotClientes.docs) {
-          final clienteId = clienteSnapshot['clienteId'];
-          // Busca o cliente na coleção 'clientes' pelo clienteId
-          final clienteDoc =
-              await firestore.collection('clientes').doc(clienteId).get();
-          if (clienteDoc.exists) {
-            // Converte o documento do cliente em um objeto Clientes
-            Clientes cliente = Clientes(
-              id: clienteDoc.id,
-              name: clienteDoc['name'],
-              email: clienteDoc['email'],
-              logoUrl: clienteDoc['imageUrl'],
-              tipoUsuario: clienteDoc['tipo_usuario'],
-              contato: clienteDoc['contato'],
-              UID: clienteDoc['uid'],
-              historico: List<String>.from(clienteDoc['historico'] ?? []),
-              historicoBusca:
-                  List<String>.from(clienteDoc['negociacoes'] ?? []),
-              imoveisFavoritos:
-                  List<String>.from(clienteDoc['imoveis_favoritos'] ?? []),
-              preferencias: clienteDoc['negociacoes'] ?? [],
-            );
-            clientesList.add(cliente);
-          } else {
-            print(
-                'Cliente com ID $clienteId não encontrado na coleção de clientes.');
-          }
-        }
+  final clienteId = clienteSnapshot['clienteId'];
+  final clienteDoc = await firestore.collection('clientes').doc(clienteId).get();
+
+  if (clienteDoc.exists) {
+    dynamic preferenciasData = clienteDoc['preferencias'];
+    List<Map<String, dynamic>> preferencias = [];
+
+    if (preferenciasData is List<dynamic>) {
+      preferencias = preferenciasData
+          .map<Map<String, dynamic>>(
+              (etapa) => etapa as Map<String, dynamic>)
+          .toList();
+    } else if (preferenciasData is Map<String, dynamic>) {
+      // Se `preferenciasData` for um mapa, adiciona-o à lista `preferencias`
+      preferencias.add(preferenciasData);
+    }
+
+    Clientes cliente = Clientes(
+      id: clienteDoc.id,
+      name: clienteDoc['name'],
+      email: clienteDoc['email'],
+      logoUrl: clienteDoc['imageUrl'],
+      tipoUsuario: clienteDoc['tipo_usuario'],
+      contato: clienteDoc['contato'],
+      UID: clienteDoc['uid'],
+      historico: List<String>.from(clienteDoc['historico'] ?? []),
+      historicoBusca:
+          List<String>.from(clienteDoc['historico_busca'] ?? []),
+      imoveisFavoritos:
+          List<String>.from(clienteDoc['imoveis_favoritos'] ?? []),
+      preferencias: preferencias,
+    );
+    clientesList.add(cliente);
+  } else {
+    print('Cliente com ID $clienteId não encontrado na coleção de clientes.');
+  }
+}
+
         print('buscar clientes do corretor $clientesList');
         return clientesList;
       } else {
@@ -179,20 +187,32 @@ class ClientesList with ChangeNotifier {
           await firestore.collection('clientes').doc(clienteId).get();
 
       if (clienteDoc.exists) {
-        // Converte o documento do cliente em um objeto Clientes
+        dynamic preferenciasData = clienteDoc['preferencias'];
+    List<Map<String, dynamic>> preferencias = [];
+
+    if (preferenciasData is List<dynamic>) {
+      preferencias = preferenciasData
+          .map<Map<String, dynamic>>(
+              (etapa) => etapa as Map<String, dynamic>)
+          .toList();
+    } else if (preferenciasData is Map<String, dynamic>) {
+      // Se `preferenciasData` for um mapa, adiciona-o à lista `preferencias`
+      preferencias.add(preferenciasData);
+    }
         final cliente = Clientes(
           id: clienteDoc.id,
-          name: clienteDoc['name'],
-          email: clienteDoc['email'],
-          logoUrl: clienteDoc['imageUrl'],
-          tipoUsuario: clienteDoc['tipo_usuario'],
-          contato: clienteDoc['contato'],
-          UID: clienteDoc['uid'],
-          historico: List<String>.from(clienteDoc['historico'] ?? []),
-          historicoBusca: List<String>.from(clienteDoc['historico_busca'] ?? []),
-          imoveisFavoritos:
-              List<String>.from(clienteDoc['imoveis_favoritos'] ?? []),
-          preferencias: clienteDoc['negociacoes'] ?? [],
+      name: clienteDoc['name'],
+      email: clienteDoc['email'],
+      logoUrl: clienteDoc['imageUrl'],
+      tipoUsuario: clienteDoc['tipo_usuario'],
+      contato: clienteDoc['contato'],
+      UID: clienteDoc['uid'],
+      historico: List<String>.from(clienteDoc['historico'] ?? []),
+      historicoBusca:
+          List<String>.from(clienteDoc['historico_busca'] ?? []),
+      imoveisFavoritos:
+          List<String>.from(clienteDoc['imoveis_favoritos'] ?? []),
+      preferencias: preferencias,
         );
         return cliente;
       } else {

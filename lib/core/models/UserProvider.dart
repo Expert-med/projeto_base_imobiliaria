@@ -11,6 +11,7 @@ class CurrentUser {
   final List<String> historicoBusca;
   final List<String> imoveisFavoritos;
   final String UID;
+  final String num_identificacao;
 
   CurrentUser({
     required this.id,
@@ -24,5 +25,6 @@ class CurrentUser {
     required this.historicoBusca,
     required this.imoveisFavoritos,
     required this.UID,
+    required this.num_identificacao,
   });
 }

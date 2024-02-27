@@ -97,6 +97,7 @@ class UserProvider extends ChangeNotifier {
           historicoBusca: historicoBusca,
           imoveisFavoritos: imoveisFavoritos,
           UID: data['UID'] ?? '',
+          num_identificacao:  data['dados_profissionais']['registro'] ?? '',
         );
         notifyListeners();
       }

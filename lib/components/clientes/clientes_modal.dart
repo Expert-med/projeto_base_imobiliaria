@@ -12,10 +12,13 @@ class ClientesModal extends StatefulWidget {
   final Clientes? clienteSelecionado;
   final OnClienteAdicionado? onClienteAdicionado;
 
+  final int
+      parametro_clientes_do_corretor; //1 para receber clientes do corretor; 0 para receber todos os clientes que não são do corretor
   const ClientesModal({
     required this.clientesList,
     this.clienteSelecionado,
     this.onClienteAdicionado,
+    required this.parametro_clientes_do_corretor,
   });
 
   @override
@@ -56,8 +59,9 @@ class _ClientesModalState extends State<ClientesModal> {
           ),
           Expanded(
             child: FutureBuilder<List<Clientes>>(
-              future:
-                  widget.clientesList.buscarClientesNaoPertencemAoCorretor(),
+              future: widget.parametro_clientes_do_corretor == 1
+                  ? widget.clientesList.buscarClientesDoCorretor()
+                  : widget.clientesList.buscarClientesNaoPertencemAoCorretor(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(
@@ -84,8 +88,13 @@ class _ClientesModalState extends State<ClientesModal> {
                         title: Text(cliente.name),
                         subtitle: Text('ID do cliente: ${cliente.id}'),
                         onTap: () async {
-                          _adicionarCliente(cliente.id);
+                          if (widget.parametro_clientes_do_corretor == 0) {
+                            _adicionarCliente(cliente.id);
+                            Navigator.pop(context);
+                          } else {
+                            widget.onClienteAdicionado?.call(cliente!);
                           Navigator.pop(context);
+                          }
                         },
                       );
                     },

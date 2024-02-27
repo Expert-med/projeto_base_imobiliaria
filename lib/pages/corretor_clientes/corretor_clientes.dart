@@ -123,6 +123,7 @@ class _CorretorClientesPageState extends State<CorretorClientesPage> {
           context: context,
           builder: (BuildContext context) {
             return ClientesModal(
+              parametro_clientes_do_corretor: 0,
               clientesList: clientesList,
               onClienteAdicionado: (cliente) {
                 setState(() {

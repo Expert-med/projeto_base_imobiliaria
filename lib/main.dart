@@ -17,6 +17,7 @@ import 'core/models/User_firebase_service.dart';
 import 'core/services/firebase/firebase_options.dart';
 import 'models/clientes/clientesList.dart';
 import 'models/corretores/corretor.dart';
+import 'models/negociacao/negociacaoList.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -70,6 +71,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => CorretorList(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => NegociacaoList(),
         ),
       ],
       child: GetMaterialApp(
