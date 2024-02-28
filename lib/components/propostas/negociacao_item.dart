@@ -24,37 +24,12 @@ class NegociacaoItem extends StatefulWidget {
 class _NegociacaoItemState extends State<NegociacaoItem> {
   @override
   Widget build(BuildContext context) {
-    final product = Provider.of<Negociacao>(context, listen: false);
-
-    return AspectRatio(
-      aspectRatio: 25 / 13,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(10),
-        child: GridTile(
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: widget.count,
-            itemBuilder: (context, index) {
-              return CachedNetworkImage(
-                imageUrl: product.cliente,
-                fit: BoxFit.cover,
-                placeholder: (context, url) => CircularProgressIndicator(),
-                errorWidget: (context, url, error) => Icon(Icons.error),
-              );
-            },
-          ),
-          footer: _buildFooter(product),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildFooter(Negociacao product) {
+    final negociacao = Provider.of<Negociacao>(context, listen: false);
     Color containerColor =
         widget.isDarkMode ? Colors.black : Color.fromARGB(255, 238, 238, 238);
 
     return FutureBuilder<Clientes?>(
-      future: buscaCliente(product.cliente),
+      future: buscaCliente(negociacao.cliente),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           // Retorna um widget de carregamento enquanto o Future está em execução
@@ -64,17 +39,16 @@ class _NegociacaoItemState extends State<NegociacaoItem> {
             child: CircularProgressIndicator(),
           );
         } else if (snapshot.hasError) {
-          // Retorna um widget de erro se o Future falhar
           return Container(
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             color: containerColor,
             child: Text('Erro ao carregar o cliente'),
           );
         } else {
-          // Retorna o widget com base no resultado do Future
           Clientes? cliente = snapshot.data;
-          print('cliente buscado ${cliente!.name}');
+          
           return Container(
+            margin: EdgeInsets.only(bottom: 10),
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             color: containerColor,
             child: Row(
@@ -85,16 +59,7 @@ class _NegociacaoItemState extends State<NegociacaoItem> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        product.id ?? '',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color:
-                              widget.isDarkMode ? Colors.white : Colors.black54,
-                        ),
-                      ),
-                      Text(
-                        cliente.name ?? '',
+                        'Negociação n° ${negociacao.id}',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -103,6 +68,16 @@ class _NegociacaoItemState extends State<NegociacaoItem> {
                         ),
                       ),
                       SizedBox(height: 4),
+                      Text(
+                        'Cliente: ${cliente!.name}',
+                        style: TextStyle(
+                                                 fontSize: 16,
+                          color:
+                              widget.isDarkMode ? Colors.white : Colors.black54,
+                        ),
+                      ),
+                     
+                   
                     ],
                   ),
                 ),
@@ -118,14 +93,12 @@ class _NegociacaoItemState extends State<NegociacaoItem> {
                           MaterialPageRoute(
                             builder: (context) => NegociacaoInfoComponent(
                               isDarkMode: widget.isDarkMode,
-                              negociacao: product,
+                              negociacao: negociacao,
                               cliente: cliente,
                             ),
-                            fullscreenDialog:
-                                true, 
+                            fullscreenDialog: true,
                           ),
                         );
-                       
                       },
                       icon: Icon(Icons.info),
                       color: Theme.of(context).colorScheme.secondary,
@@ -139,6 +112,7 @@ class _NegociacaoItemState extends State<NegociacaoItem> {
       },
     );
   }
+
 
   Future<Clientes?> buscaCliente(String idcliente) async {
     Clientes? cliente = await ClientesList().buscarClientePorId(idcliente);

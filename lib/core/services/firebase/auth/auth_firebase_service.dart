@@ -78,7 +78,6 @@ class AuthFirebaseService implements AuthService {
         'estado': estado,
         'cep': cep,
       };
-      print('info do endereço $endereco');
       Map<String, dynamic> contato = {
         'email': email,
         'telefone_fixo': '', // Adicione outros campos conforme necessário

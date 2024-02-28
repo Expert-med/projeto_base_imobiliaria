@@ -22,7 +22,7 @@ class UserRepository {
 
       if (corretorQuery.docs.isNotEmpty) {
         DocumentSnapshot corretorSnapshot = corretorQuery.docs.first;
-        print('é corretor');
+
         return Corretor(
           id: corretorSnapshot['id'] ?? '',
           name: corretorSnapshot['name'] ?? '',
@@ -56,7 +56,7 @@ class UserRepository {
 
       if (clienteQuery.docs.isNotEmpty) {
         DocumentSnapshot clienteSnapshot = clienteQuery.docs.first;
-        print('é cliente');
+  
         return Clientes(
           id: clienteSnapshot['id'],
           name: clienteSnapshot['name'],

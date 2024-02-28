@@ -115,7 +115,6 @@ class MyApp extends StatelessWidget {
                 // Aqui você pode buscar os dados do corretor no Firestore
                 future: _fetchCorretorData(),
                 builder: (context, snapshot) {
-                  print('tentando entrar na rota');
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     // Se os dados estiverem sendo carregados, você pode exibir um indicador de progresso
                     return CircularProgressIndicator();

@@ -7,7 +7,7 @@ class Negociacao with ChangeNotifier {
   final String corretor;
   final Map<String, dynamic> etapas;
   final List<String> documentos;
-  final List<Map<String, dynamic>> resultados;
+  final Map<String, dynamic> resultados;
   final String data_cadastro;
   final String data_ultima_atualizacao;
   

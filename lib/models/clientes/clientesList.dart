@@ -84,7 +84,6 @@ class ClientesList with ChangeNotifier {
           },
         );
 
-        print('clientes: $clientes');
         return clientes;
       } catch (e) {
         print('Erro ao buscar os clientes: $e');
@@ -225,4 +224,26 @@ class ClientesList with ChangeNotifier {
       return null;
     }
   }
+
+  Future<void> adicionarNegociacaoAoCliente(String idCliente, String idNegociacao) async {
+  try {
+    DocumentReference corretorRef = FirebaseFirestore.instance.collection('clientes').doc(idCliente);
+
+    DocumentSnapshot corretorDoc = await corretorRef.get();
+
+    if (corretorDoc.exists) {
+      List<dynamic> negociacoes = corretorDoc['negociacoes'] ?? [];
+
+      negociacoes.add(idNegociacao);
+
+      await corretorRef.update({'negociacoes': negociacoes});
+
+      print('Negociação adicionada com sucesso ao corretor com ID: $idCliente');
+    } else {
+      print('Corretor com ID: $idCliente não encontrado');
+    }
+  } catch (e) {
+    print('Erro ao adicionar negociação ao corretor: $e');
+  }
+}
 }

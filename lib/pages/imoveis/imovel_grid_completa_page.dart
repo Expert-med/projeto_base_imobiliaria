@@ -287,7 +287,7 @@ class _ImovelGridCompletaSemComponenteState
                                                 infoList[i]['image_urls'];
                                             imageUrls.addAll(rawImageUrls
                                                 .map((url) => url.toString()));
-                                            print(infoList[i]);
+                                    
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(

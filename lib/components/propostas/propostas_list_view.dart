@@ -5,70 +5,42 @@ import 'package:provider/provider.dart';
 
 import 'negociacao_item.dart';
 
-
 class PropostaListView extends StatefulWidget {
   final bool isDarkMode;
 
-
-  const PropostaListView( this.isDarkMode, {Key? key})
-      : super(key: key);
+  const PropostaListView(this.isDarkMode, {Key? key}) : super(key: key);
 
   @override
   _PropostaListViewState createState() => _PropostaListViewState();
 }
 
 class _PropostaListViewState extends State<PropostaListView> {
-  late ScrollController _scrollController;
-  late List<Negociacao> _loadedProducts;
-  int _numberOfItemsToShow = 50;
   TextEditingController _searchController = TextEditingController();
   String _searchText = '';
 
   @override
-  void initState() {
-    super.initState();
-    _scrollController = ScrollController();
-    _loadedProducts = [];
-    _loadMoreItems();
-    _scrollController.addListener(_scrollListener);
-  }
-
-  @override
-  void dispose() {
-    _scrollController.removeListener(_scrollListener);
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  void _scrollListener() {
-    if (_scrollController.position.pixels ==
-        _scrollController.position.maxScrollExtent) {
-      _loadMoreItems();
-    }
-  }
-
-  void _loadMoreItems() {
-    final provider = Provider.of<NegociacaoList>(context, listen: false);
-    final List<Negociacao> additionalProducts =
-        provider.items.skip(_loadedProducts.length).take(50).toList();
-    setState(() {
-      _loadedProducts.addAll(additionalProducts);
-    });
-  }
-
-  List<Negociacao> _filterProducts() {
-    if (_searchText.isEmpty) {
-      return _loadedProducts;
-    } else {
-      return _loadedProducts
-          .where((imovel) =>
-              imovel.id.toLowerCase().contains(_searchText.toLowerCase()))
-          .toList();
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
+    List<Negociacao> _loadedProducts =
+        Provider.of<NegociacaoList>(context).items;
+
+List<Negociacao> negociacoesNaoIniciado = findNegociacoesNaoIniciado(_loadedProducts);
+List<Negociacao> negociacoesEmAndamento = findNegociacoesEmAndamento(_loadedProducts);
+List<Negociacao> negociacoesConcluidas = findNegociacoesConcluidas(_loadedProducts);
+
+print('negociacoesEmAndamento: ${negociacoesEmAndamento}');
+    // Filtrar os produtos com base na pesquisa
+    List<Negociacao> _filteredProducts = _searchText.isEmpty
+        ? _loadedProducts
+        : _loadedProducts.where((negociacao) {
+            return negociacao.id
+                .toLowerCase()
+                .contains(_searchText.toLowerCase());
+          }).toList();
+
+
+
+
+
     return Container(
       color: widget.isDarkMode ? Colors.black : Colors.white,
       child: Column(
@@ -93,12 +65,11 @@ class _PropostaListViewState extends State<PropostaListView> {
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: BorderSide(
-                    color: Color(0xFF6e58e9), // Cor do contorno ao clicar
+                    color: Color(0xFF6e58e9),
                   ),
                 ),
-                fillColor: widget.isDarkMode
-                    ? Colors.grey[800]
-                    : Colors.grey[200], // Cor do fundo
+                fillColor:
+                    widget.isDarkMode ? Colors.grey[800] : Colors.grey[200],
                 filled: true,
               ),
               onChanged: (value) {
@@ -109,22 +80,95 @@ class _PropostaListViewState extends State<PropostaListView> {
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              controller: _scrollController,
-              padding: const EdgeInsets.all(10),
-              itemCount: _filterProducts().length +
-                  1, // Add 1 for the load more button
-              itemBuilder: (ctx, i) {
-                if (i == _filterProducts().length) {
-                  return _buildLoadMoreButton();
-                } else {
-                  return ChangeNotifierProvider.value(
-                    value: _filterProducts()[i],
-                    child: NegociacaoItem(
-                        widget.isDarkMode, i, _filterProducts().length),
-                  );
-                }
-              },
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    children: [
+                      Text('Não iniciada',
+                          style: TextStyle(
+                              color: widget.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black)),
+                      Expanded(
+                        child: ListView.builder(
+                          padding: const EdgeInsets.all(10),
+                          itemCount: negociacoesNaoIniciado.length,
+                          itemBuilder: (ctx, i) {
+                            return ChangeNotifierProvider.value(
+                              value: negociacoesNaoIniciado[i],
+                              child: NegociacaoItem(
+                                  widget.isDarkMode, i, negociacoesNaoIniciado.length),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                VerticalDivider(
+                  color: Colors.grey, // Cor do divisor
+                  thickness: 1, // Espessura do divisor
+                  width: 20, // Largura do divisor
+                  indent: 10, // Espaçamento superior do divisor
+                  endIndent: 10, // Espaçamento inferior do divisor
+                ),
+                Expanded(
+                  child: Column(
+                    children: [
+                      Text('Em andamento',
+                          style: TextStyle(
+                              color: widget.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black)),
+                      Expanded(
+                        child: ListView.builder(
+                          padding: const EdgeInsets.all(10),
+                          itemCount: negociacoesEmAndamento.length,
+                          itemBuilder: (ctx, i) {
+                            return ChangeNotifierProvider.value(
+                              value: negociacoesEmAndamento[i],
+                              child: NegociacaoItem(widget.isDarkMode, i,
+                                  negociacoesEmAndamento.length),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                VerticalDivider(
+                  color: Colors.grey, // Cor do divisor
+                  thickness: 1, // Espessura do divisor
+                  width: 20, // Largura do divisor
+                  indent: 10, // Espaçamento superior do divisor
+                  endIndent: 10, // Espaçamento inferior do divisor
+                ),
+                Expanded(
+                  child: Column(
+                    children: [
+                      Text('Finalizada',
+                          style: TextStyle(
+                              color: widget.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black)),
+                      Expanded(
+                        child: ListView.builder(
+                          padding: const EdgeInsets.all(10),
+                          itemCount: negociacoesConcluidas.length,
+                          itemBuilder: (ctx, i) {
+                            return ChangeNotifierProvider.value(
+                              value: negociacoesConcluidas[i],
+                              child: NegociacaoItem(widget.isDarkMode, i,
+                                  negociacoesConcluidas.length),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
         ],
@@ -132,14 +176,87 @@ class _PropostaListViewState extends State<PropostaListView> {
     );
   }
 
-  Widget _buildLoadMoreButton() {
-    return Container(
-      alignment: Alignment.center,
-      padding: const EdgeInsets.symmetric(vertical: 20),
-      child: ElevatedButton(
-        onPressed: _loadMoreItems,
-        child: Text('Carregar Mais'),
-      ),
-    );
+
+List<Negociacao> findNegociacoesEmAndamento(List<Negociacao> loadedProducts) {
+  List<Negociacao> negociacoesEmAndamento = [];
+
+  for (var negociacao in loadedProducts) {
+    var visitaStatus = negociacao.etapas['visita']?['status'];
+    var propostaStatus = negociacao.etapas['proposta']?['status'];
+    var fechamentoStatus = negociacao.etapas['fechamento']?['status'];
+
+    // Verifica se a visita está 'Em andamento'
+    var visitaEmAndamento = visitaStatus == 'Em andamento';
+
+    // Verifica se a proposta não foi iniciada
+    var propostaNaoIniciado = propostaStatus == 'Não iniciado';
+
+    // Verifica se o fechamento não foi iniciado
+    var fechamentoNaoIniciado = fechamentoStatus == 'Não iniciado';
+
+    // Verifica se pelo menos uma das condições para estar em andamento é verdadeira
+    if ((visitaEmAndamento && propostaNaoIniciado && fechamentoNaoIniciado) ||
+        (visitaStatus == 'Concluído' && propostaNaoIniciado && fechamentoNaoIniciado) ||
+        (visitaStatus == 'Concluído' && propostaStatus == 'Em andamento' && fechamentoNaoIniciado) ||
+        (visitaStatus == 'Concluído' && propostaStatus == 'Concluído' && fechamentoNaoIniciado) ||
+        (visitaStatus == 'Concluído' && propostaStatus == 'Concluído' && fechamentoStatus == 'Em andamento')) {
+      negociacoesEmAndamento.add(negociacao);
+    }
   }
+
+  return negociacoesEmAndamento;
+}
+
+
+
+
+List<Negociacao> findNegociacoesNaoIniciado(List<Negociacao> loadedProducts) {
+  List<Negociacao> negociacoesNaoIniciado = [];
+
+  for (var negociacao in loadedProducts) {
+    var emAndamento = false;
+    var concluido = false;
+
+    for (var etapaKey in negociacao.etapas.keys) {
+      var etapa = negociacao.etapas[etapaKey];
+      if (etapa.containsKey('status')) {
+        if (etapa['status'] == 'Em andamento') {
+          emAndamento = true;
+        } else if (etapa['status'] == 'Concluído') {
+          concluido = true;
+        }
+      }
+    }
+
+    if (!emAndamento && !concluido) {
+      negociacoesNaoIniciado.add(negociacao);
+    }
+  }
+
+  return negociacoesNaoIniciado;
+}
+
+List<Negociacao> findNegociacoesConcluidas(List<Negociacao> loadedProducts) {
+  List<Negociacao> negociacoesConcluidas = [];
+
+  for (var negociacao in loadedProducts) {
+    var concluido = false;
+
+    // Verifica se a etapa "fechamento" está presente e seu status é "Concluído"
+    if (negociacao.etapas.containsKey('fechamento') &&
+        negociacao.etapas['fechamento']['status'] == 'Concluído') {
+      concluido = true;
+    }
+
+    // Se a negociação estiver "Concluída", adiciona à lista de negociações concluídas
+    if (concluido) {
+      negociacoesConcluidas.add(negociacao);
+    }
+  }
+
+  return negociacoesConcluidas;
+}
+
+
+
 }

@@ -5,6 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:projeto_imobiliaria/models/corretores/corretorList.dart';
 import 'package:projeto_imobiliaria/models/negociacao/negociacao.dart';
 
+import '../clientes/clientesList.dart';
+
 class NegociacaoList with ChangeNotifier {
   late final List<Negociacao> _items;
 
@@ -29,36 +31,29 @@ class NegociacaoList with ChangeNotifier {
 
       List<Negociacao> negociacoes = [];
 
-      querySnapshot.docs
-          .forEach((QueryDocumentSnapshot<Map<String, dynamic>> doc) {
+      querySnapshot.docs.forEach((doc) {
         final resultado = doc.data();
-        final infoList = resultado['info'] ?? <String, dynamic>{};
-        final List<dynamic>? resultadosData =
-            resultado['resultados'] as List<dynamic>?;
-        final List<Map<String, dynamic>> resultados = resultadosData != null
-            ? resultadosData
-                .map<Map<String, dynamic>>(
-                    (etapa) => etapa as Map<String, dynamic>)
-                .toList()
-            : [];
 
-            
+        // Convertendo o resultado para um mapa
+        final Map<String, dynamic> resultados = resultado['resultados'] ?? {};
 
         final negociacao = Negociacao(
           id: resultado['id'] ?? '',
           imovel: resultado['imovel'] ?? '',
           cliente: resultado['cliente'] ?? '',
           corretor: resultado['corretor'] ?? '',
-          etapas: resultado['etapas'],
+          etapas: resultado['etapas'] ??
+              {}, // Usando um mapa vazio como valor padrão
           documentos: List<String>.from(resultado['documentos'] ?? []),
-          resultados: resultados,
+          resultados: resultados, // Usando o mapa de resultados
           data_cadastro: resultado['data_cadastro'] ?? '',
           data_ultima_atualizacao: resultado['data_ultima_atualizacao'] ?? '',
         );
 
+   
         negociacoes.add(negociacao);
       });
-  print('negociacoes: $negociacoes');
+
       return negociacoes;
     } catch (e) {
       print('Erro ao buscar os imóveis: $e');
@@ -92,26 +87,31 @@ class NegociacaoList with ChangeNotifier {
         etapas: {
           "visita": {
             "id": '',
-            "status": "",
+            "status": "Não iniciado",
             "data": "",
             "observacao": "",
             "proposta_preco": "",
           },
           "proposta": {
-            "status": "",
+            "status": "Não iniciado",
             "data": "",
             "observacao": "",
             "proposta_preco": "",
           },
           "fechamento": {
-            "status": "",
+            "status": "Não iniciado",
             "data": "",
             "observacao": "",
             "proposta_preco": "",
           },
         },
         documentos: [],
-        resultados: [],
+        resultados: {
+          'resultado': '',
+          'data_conclusao': '',
+          'preco_final': '',
+          'motivo': '',
+        },
         data_cadastro: formattedDate,
         data_ultima_atualizacao: formattedDate,
       );
@@ -130,10 +130,36 @@ class NegociacaoList with ChangeNotifier {
 
       List<Negociacao> negociacoes = [negociacao];
       CorretorList().adicionarNegociacaoAoCorretor(corretor, negociacao.id);
+      ClientesList().adicionarNegociacaoAoCliente(cliente, negociacao.id);
+           _items.add(negociacao);
+           notifyListeners();
       return negociacoes;
     } catch (e) {
       print('Erro ao buscar os imóveis: $e');
       return [];
+    }
+  }
+
+  Future<void> atualizarNegociacao(Negociacao negociacao) async {
+    CollectionReference<Map<String, dynamic>> negociacoesRef =
+        FirebaseFirestore.instance.collection('negociacoes');
+ DateTime now = DateTime.now();
+    String formattedDate = DateFormat('yyyy-MM-dd').format(now);
+
+    try {
+      await negociacoesRef.doc(negociacao.id).update({
+        'imovel': negociacao.imovel,
+        'cliente': negociacao.cliente,
+        'corretor': negociacao.corretor,
+        'etapas': negociacao.etapas,
+        'documentos': negociacao.documentos,
+        'resultados': negociacao.resultados,
+        'data_ultima_atualizacao':formattedDate,
+      });
+      print('Negociação atualizada com sucesso!');
+    } catch (e) {
+      print('Erro ao atualizar a negociação: $e');
+      throw e;
     }
   }
 
