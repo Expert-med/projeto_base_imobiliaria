@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:provider/provider.dart';
-import 'package:projeto_imobiliaria/models/imoveis/imovel.dart';
+
+import '../../models/imoveis/newImovel.dart';
 import '../../pages/imobiliaria/imovel_info_page.dart';
 import 'imovel_info_component.dart';
 
@@ -22,7 +23,7 @@ class _ImovelItemListState extends State<ImovelItemList> {
 
   @override
   Widget build(BuildContext context) {
-    final product = Provider.of<Imovel>(context, listen: false);
+    final product = Provider.of<NewImovel>(context, listen: false);
     bool isSmallScreen = MediaQuery.of(context).size.width < 900;
 
     return Padding(
@@ -51,7 +52,7 @@ class _ImovelItemListState extends State<ImovelItemList> {
                   duration: Duration(milliseconds: 300),
                   curve: Curves.easeInOut,
                   child: CachedNetworkImage(
-                    imageUrl: product.infoList['image_urls'][0],
+                    imageUrl: product.imagens[0],
                     placeholder: (context, url) => CircularProgressIndicator(),
                     errorWidget: (context, url, error) => Icon(Icons.error),
                     fit: BoxFit.cover,
@@ -68,20 +69,20 @@ class _ImovelItemListState extends State<ImovelItemList> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-  '${(product.infoList['total_dormitorios'] != 'N/A' && product.infoList['total_suites'] != 'N/A') ? (int.parse(product.infoList['total_dormitorios']) + int.parse(product.infoList['total_suites'])) : '0 dormitórios informados'}',
-  style: TextStyle(
-    color: !widget.isDarkMode ? Colors.black : Colors.white,
-    fontSize: isSmallScreen ? 15 : 18,
-    fontWeight: FontWeight.bold,
-  ),
-),
-
+                        '${(product.detalhes['total_dormitorios'] != 'N/A' && product.detalhes['total_suites'] != 'N/A') ? (int.parse(product.detalhes['total_dormitorios']) + int.parse(product.detalhes['total_suites'])) : '0 dormitórios informados'}',
+                        style: TextStyle(
+                          color:
+                              !widget.isDarkMode ? Colors.black : Colors.white,
+                          fontSize: isSmallScreen ? 15 : 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       SizedBox(
                         width: 20,
                       ),
                       IntrinsicHeight(
                         child: Text(
-                          '${product.infoList['preco_original'] == 'N/A' ? 'N/A' : product.infoList['preco_original']}',
+                          '${product.detalhes['preco_original'] == 'N/A' ? 'N/A' : product.detalhes['preco_original']}',
                           style: TextStyle(
                             color: !widget.isDarkMode
                                 ? Colors.black
@@ -104,7 +105,7 @@ class _ImovelItemListState extends State<ImovelItemList> {
                         child: IntrinsicHeight(
                           child: Flexible(
                             child: Text(
-                              '${product.infoList['localizacao']}',
+                              '${product.detalhes['localizacao']}',
                               style: TextStyle(
                                 color: widget.isDarkMode
                                     ? Colors.white
@@ -115,7 +116,6 @@ class _ImovelItemListState extends State<ImovelItemList> {
                           ),
                         ),
                       ),
-                     
                     ],
                   ),
                   Row(
@@ -125,7 +125,7 @@ class _ImovelItemListState extends State<ImovelItemList> {
                         child: IntrinsicHeight(
                           child: Flexible(
                             child: Text(
-                              '${product.infoList['area_total']}',
+                              '${product.detalhes['area_total']}',
                               style: TextStyle(
                                 color: widget.isDarkMode
                                     ? Colors.white
@@ -148,7 +148,7 @@ class _ImovelItemListState extends State<ImovelItemList> {
                     children: [
                       StatefulBuilder(
                         builder: (BuildContext context, StateSetter setState) {
-                          return Consumer<Imovel>(
+                          return Consumer<NewImovel>(
                             builder: (ctx, product, _) => IconButton(
                               onPressed: () {
                                 product.toggleFavorite();
@@ -167,8 +167,7 @@ class _ImovelItemListState extends State<ImovelItemList> {
                       IconButton(
                         onPressed: () {
                           List<String> imageUrls = [];
-                          List<dynamic> rawImageUrls =
-                              product.infoList['image_urls'];
+                          List<dynamic> rawImageUrls = product.imagens;
                           imageUrls.addAll(
                               rawImageUrls.map((url) => url.toString()));
 
@@ -176,23 +175,24 @@ class _ImovelItemListState extends State<ImovelItemList> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => ImoveisInfoPage(
-                                nome_imovel: product.infoList['nome_imovel'],
-                                terreno: product.infoList['terreno'],
+                                nome_imovel: product.detalhes['nome_imovel'],
+                                terreno: product.detalhes['terreno'],
                                 originalPrice:
-                                    product.infoList['preco_original'],
-                                location: product.infoList['localizacao'],
+                                    product.detalhes['preco_original'],
+                                location: product.detalhes['localizacao'],
                                 urlsImage: imageUrls,
-                                codigo: product.codigo,
-                                area_total: product.infoList['area_total'],
-                                link: product.link,
+                                codigo: product.id,
+                                area_total: product.detalhes['area_total'],
+                                link: product.link_imovel,
                                 Vagasgaragem:
-                                    product.infoList['total_garagem'] ?? 0,
+                                    product.detalhes['total_garagem'] ?? 0,
                                 Totaldormitorios:
-                                    product.infoList['total_dormitorios'] ?? '',
+                                    product.detalhes['total_dormitorios'] ?? '',
                                 Totalsuites:
-                                    product.infoList['total_suites'] ?? '',
-                                latitude: product.infoList['latitude'] ?? '',
-                                longitude: product.infoList['longitude'] ?? '',
+                                    product.detalhes['total_suites'] ?? '',
+                                latitude: product.localizacao['latitude'] ?? '',
+                                longitude:
+                                    product.localizacao['longitude'] ?? '',
                                 tipo_pagina: 0,
                               ),
                             ),

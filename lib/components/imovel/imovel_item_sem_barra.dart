@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projeto_imobiliaria/models/imoveis/imovel.dart';
+import 'package:projeto_imobiliaria/models/imoveis/newImovel.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-
 import '../../pages/imobiliaria/imovel_info_page.dart';
 import 'imovel_info_component.dart';
 
@@ -30,7 +29,7 @@ class ImovelItemSemBarra extends StatefulWidget {
 class _ImovelItemSemBarraState extends State<ImovelItemSemBarra> {
   @override
   Widget build(BuildContext context) {
-    final product = Provider.of<Imovel>(context, listen: false);
+    final product = Provider.of<NewImovel>(context, listen: false);
 
     return AspectRatio(
       aspectRatio: 25 / 13, // Defina a proporção desejada
@@ -48,7 +47,7 @@ class _ImovelItemSemBarraState extends State<ImovelItemSemBarra> {
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image: NetworkImage(
-                        product.infoList['image_urls']
+                        product.imagens
                             [0], // Usa a primeira imagem da lista
                       ),
                       fit: BoxFit.cover,
@@ -91,9 +90,9 @@ class _ImovelItemSemBarraState extends State<ImovelItemSemBarra> {
                         Row(
                           children: [
                             Text(
-                              product.infoList != null &&
-                                      product.infoList['preco_original'] != null
-                                  ? product.infoList['preco_original']
+                              product.detalhes != null &&
+                                      product.detalhes['preco_original'] != null
+                                  ? product.detalhes['preco_original']
                                   : 'Não informado',
                               style: TextStyle(
                                 color: Colors.white,
@@ -108,7 +107,7 @@ class _ImovelItemSemBarraState extends State<ImovelItemSemBarra> {
                           children: [
                             Flexible(
                               child: Text(
-                                product.infoList['localizacao'],
+                                product.localizacao['endereco']['logradouro'] + ', '+ product.localizacao['endereco']['logradouro'] + ' - '+ product.localizacao['endereco']['cidade']+'/'+product.localizacao['endereco']['uf'],
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 10,
@@ -120,7 +119,7 @@ class _ImovelItemSemBarraState extends State<ImovelItemSemBarra> {
                             Spacer(),
                             Flexible(
                               child: Text(
-                                ' ${product.infoList['total_dormitorios']} \ndorm.',
+                                ' ${product.detalhes['total_dormitorios']} \ndorm.',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 10,
@@ -134,7 +133,7 @@ class _ImovelItemSemBarraState extends State<ImovelItemSemBarra> {
                             ),
                             Flexible(
                               child: Text(
-                                ' ${product.infoList['total_suites']} \nsuites',
+                                ' ${product.detalhes['total_suites']} \nsuites',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 10,
@@ -148,7 +147,7 @@ class _ImovelItemSemBarraState extends State<ImovelItemSemBarra> {
                             ),
                             Flexible(
                               child: Text(
-                                ' ${product.infoList['vagas_garagem']} \ndorm.',
+                                ' ${product.detalhes['vagas_garagem']} \ndorm.',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 10,
@@ -175,29 +174,29 @@ class _ImovelItemSemBarraState extends State<ImovelItemSemBarra> {
     widget.onFavoriteClicked(codigo);
   }
 
-  void _navigateToImovelInfoPage(BuildContext context, Imovel product) {
+  void _navigateToImovelInfoPage(BuildContext context, NewImovel product) {
     List<String> imageUrls = [];
     // Converter explicitamente para List<String>
-    List<dynamic> rawImageUrls = product.infoList['image_urls'];
+    List<dynamic> rawImageUrls = product.imagens;
     imageUrls.addAll(rawImageUrls.map((url) => url.toString()));
 
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => ImoveisInfoPage(
-          nome_imovel: product.infoList['nome_imovel'],
-          terreno: product.infoList['terreno'],
-          originalPrice: product.infoList['preco_original'],
-          location: product.infoList['localizacao'],
+          nome_imovel: product.detalhes['nome_imovel'],
+          terreno: product.detalhes['terreno'],
+          originalPrice: product.detalhes['preco_original'],
+          location:  product.localizacao['endereco']['logradouro'] + ', '+ product.localizacao['endereco']['logradouro'] + ' - '+ product.localizacao['endereco']['cidade']+'/'+product.localizacao['endereco']['uf'],
           urlsImage: imageUrls,
-          codigo: product.codigo,
-          area_total: product.infoList['area_total'],
-          link: product.link,
-          Vagasgaragem: product.infoList['total_garagem'] ?? 0,
-          Totaldormitorios: product.infoList['total_dormitorios'] ?? '',
-          Totalsuites: product.infoList['total_suites'] ?? '',
-          latitude: product.infoList['latitude'] ?? '',
-          longitude: product.infoList['longitude'] ?? '',
+          codigo: product.id,
+          area_total: product.detalhes['area_total'],
+          link: product.link_imovel,
+          Vagasgaragem: product.detalhes['total_garagem'] ?? 0,
+          Totaldormitorios: product.detalhes['total_dormitorios'] ?? '',
+          Totalsuites: product.detalhes['total_suites'] ?? '',
+          latitude: product.localizacao['latitude'] ?? '',
+          longitude: product.localizacao['longitude'] ?? '',
           tipo_pagina: widget.tipo_pagina,
         ),
       ),

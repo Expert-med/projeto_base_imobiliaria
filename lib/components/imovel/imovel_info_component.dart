@@ -4,8 +4,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../models/imoveis/imovel.dart';
-import '../../models/imoveis/imovelList.dart';
 
 class ImovelInfoComponent extends StatefulWidget {
   final String nome_imovel;
@@ -65,6 +63,9 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
   Widget build(BuildContext context) {
     Color backgroundColor = widget.isDarkMode ? Colors.black45 : Colors.white;
     Color textColor = !widget.isDarkMode ? Colors.black87 : Colors.white;
+
+    double latitude = double.tryParse(widget.latitude) ?? 0;
+    double longitude = double.tryParse(widget.longitude) ?? 0;
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -411,8 +412,7 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
                       ),
                       child: GoogleMap(
                         initialCameraPosition: CameraPosition(
-                          target: LatLng(double.parse(widget.latitude),
-                              double.parse(widget.longitude)),
+                          target: LatLng(latitude, longitude),
                           zoom: 15,
                         ),
                         onMapCreated: (controller) =>
@@ -425,8 +425,7 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
                           [
                             Marker(
                               markerId: MarkerId(widget.nome_imovel),
-                              position: LatLng(double.parse(widget.latitude),
-                                  double.parse(widget.longitude)),
+                              position: LatLng(latitude, longitude),
                               infoWindow: InfoWindow(title: widget.nome_imovel),
                               onTap: () {
                                 setState(() {});

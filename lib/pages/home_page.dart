@@ -114,7 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
         builder: (context, constraints) {
           return Row(
             children: [
-              if (!isSmallScreen) CustomMenu(isDarkMode: isDarkMode),
+              if (!isSmallScreen) Container(child: CustomMenu(isDarkMode: isDarkMode)),
               Expanded(
                 child: Container(
                   color: isDarkMode ? Colors.black : Colors.white,

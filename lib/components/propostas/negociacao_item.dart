@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:projeto_imobiliaria/models/clientes/clientesList.dart';
-import 'package:projeto_imobiliaria/models/imoveis/imovel.dart';
 import 'package:projeto_imobiliaria/models/negociacao/negociacao.dart';
 import 'package:provider/provider.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-
 import '../../models/clientes/Clientes.dart';
 import 'negociacao_info.dart';
 

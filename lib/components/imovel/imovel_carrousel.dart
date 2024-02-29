@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:projeto_imobiliaria/models/imoveis/imovel.dart';
-import 'package:projeto_imobiliaria/models/imoveis/imovelList.dart';
+import 'package:projeto_imobiliaria/models/imoveis/newImovel.dart';
+import 'package:projeto_imobiliaria/models/imoveis/newImovelList.dart';
 import 'package:provider/provider.dart';
 import 'imovel_item.dart';
 
@@ -13,9 +13,10 @@ class ImovelCarousel extends StatelessWidget {
   const ImovelCarousel(this.showFavoriteOnly, this.isDarkMode, {Key? key}) : super(key: key);
 
   Widget build(BuildContext context) {
-  final provider = Provider.of<ImovelList>(context);
-  final List<Imovel> loadedProducts = provider.items.take(50).toList();
+  final provider = Provider.of<NewImovelList>(context);
+  final List<NewImovel> loadedProducts = provider.items.take(50).toList();
 bool isSmallScreen = MediaQuery.of(context).size.width < 900;
+print('loadedProducts $loadedProducts');
 
   return loadedProducts.isEmpty
       ? Container() // ou outro widget de fallback

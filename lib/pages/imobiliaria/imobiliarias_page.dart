@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_imobiliaria/components/custom_menu.dart';
 import 'package:projeto_imobiliaria/models/imobiliarias/imobiliariasList.dart';
+import 'package:projeto_imobiliaria/models/imoveis/newImovelList.dart';
 import 'package:provider/provider.dart';
 import '../../components/imobiliaria/imobiliaria_grid.dart';
-import '../../models/imoveis/imovelList.dart';
 
 class ImobiliariasPage extends StatelessWidget {
     final bool isDarkMode;
@@ -35,7 +35,7 @@ bool isSmallScreen = MediaQuery.of(context).size.width < 900;
               child: Text('Erro ao carregar os imóveis'),
             );
           } else {
-            final imoveis = Provider.of<ImovelList>(context).items;
+            final imoveis = Provider.of<NewImovelList>(context).items;
 
             if (imoveis.isEmpty) {
               return Center(

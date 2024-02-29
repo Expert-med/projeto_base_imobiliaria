@@ -1,31 +1,26 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:projeto_imobiliaria/pages/auth/auth_page.dart';
-import 'package:projeto_imobiliaria/pages/corretores/lista_corretores_page.dart';
-import 'package:projeto_imobiliaria/pages/imobiliaria/cad_imob_page.dart';
-import 'package:projeto_imobiliaria/pages/imoveis/cad_imovel_page.dart';
+import 'package:projeto_imobiliaria/main.dart';
 import 'package:provider/provider.dart';
 import '../checkPage.dart';
+import '../core/models/UserProvider.dart';
 import '../core/models/User_firebase_service.dart';
 import '../core/services/firebase/auth/auth_service.dart';
+import '../pages/agendamentos/geral_agendamento.dart';
+import '../pages/auth/auth_page.dart';
 import '../pages/corretor_clientes/corretor_clientes.dart';
+import '../pages/corretores/lista_corretores_page.dart';
+import '../pages/imobiliaria/cad_imob_page.dart';
 import '../pages/imobiliaria/imobiliarias_page.dart';
+import '../pages/imoveis/cad_imovel_page.dart';
 import '../pages/imoveis/imoveis_Favoritos.dart';
 import '../pages/imoveis/imovel_grid_completa_page.dart';
 import '../pages/imoveis/imovel_page.dart';
 import '../pages/imoveis/virtual_imovel_tour/virtual_iframe.dart';
-import '../pages/map/map_flutter.dart';
 import '../pages/map/map_page.dart';
 import '../pages/propostas/proposta_add_page.dart';
 import '../pages/propostas/proposta_list_page.dart';
 import '../pages/teste.dart';
 import '../util/dark_color_util.dart';
-
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../core/models/UserProvider.dart';
-import '../core/models/User_firebase_service.dart';
-
 class CustomMenu extends StatefulWidget {
   final bool isDarkMode;
 
@@ -80,23 +75,27 @@ class _CustomMenuState extends State<CustomMenu> {
       isExpandedPropostas = expanded;
     });
   }
-
   @override
   Widget build(BuildContext context) {
     bool isSmallScreen = MediaQuery.of(context).size.width < 900;
 
-    return Container(
-      width: 300.0,
-      color: widget.isDarkMode
-          ? Colors.black54
-          : Color.fromARGB(255, 233, 233, 233),
-      child: Consumer<UserProvider>(
-        builder: (context, userProvider, _) {
-          final user = _user ?? userProvider.user;
-
-          return Column(
-            children: <Widget>[
-              Padding(
+    return Drawer(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: constraints.maxHeight,
+              ),
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height,
+                child: Container(
+                  color: widget.isDarkMode
+                      ? Colors.black54
+                      : Color.fromARGB(255, 233, 233, 233),
+                  child: Column(
+                    children: <Widget>[
+                     Padding(
                 padding: const EdgeInsets.only(top: 10, bottom: 60),
                 child: ListTile(
                   leading: Icon(
@@ -269,28 +268,31 @@ class _CustomMenuState extends State<CustomMenu> {
                   ),
                 ),
               if (isExpandedImoveis)
-                ListTile(
-                  leading: Icon(
-                    Icons.favorite,
-                    color: widget.isDarkMode
-                        ? darkenColor(Color(0xFF6e58e9), 0.5)
-                        : Color(0xFF6e58e9),
-                  ),
-                  title: Text(
-                    'Imóveis favoritos',
-                    style: TextStyle(
-                      color: widget.isDarkMode ? Colors.white : Colors.black54,
+                Padding(
+                   padding: const EdgeInsets.only(left: 8, right: 8),
+                  child: ListTile(
+                    leading: Icon(
+                      Icons.favorite,
+                      color: widget.isDarkMode
+                          ? darkenColor(Color(0xFF6e58e9), 0.5)
+                          : Color(0xFF6e58e9),
                     ),
-                  ),
-                  onTap: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            ImoveisFavoritos(isDarkMode: widget.isDarkMode),
+                    title: Text(
+                      'Imóveis favoritos',
+                      style: TextStyle(
+                        color: widget.isDarkMode ? Colors.white : Colors.black54,
                       ),
-                    );
-                  },
+                    ),
+                    onTap: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              ImoveisFavoritos(isDarkMode: widget.isDarkMode),
+                        ),
+                      );
+                    },
+                  ),
                 ),
               if (isExpandedImoveis)
                 ListTile(
@@ -334,6 +336,29 @@ class _CustomMenuState extends State<CustomMenu> {
                     MaterialPageRoute(
                       builder: (context) =>
                           CorretoresListPage(isDarkMode: widget.isDarkMode),
+                    ),
+                  );
+                },
+              ),
+               ListTile(
+                leading: Icon(
+                  Icons.people,
+                  color: widget.isDarkMode
+                      ? darkenColor(Color(0xFF6e58e9), 0.5)
+                      : Color(0xFF6e58e9),
+                ),
+                title: Text(
+                  'Geral agendamento',
+                  style: TextStyle(
+                    color: widget.isDarkMode ? Colors.white : Colors.black54,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          GeralAgendamento(isDarkMode: widget.isDarkMode),
                     ),
                   );
                 },
@@ -573,7 +598,11 @@ class _CustomMenuState extends State<CustomMenu> {
                   );
                 },
               ),
-            ],
+                    ],
+                  ),
+                ),
+              ),
+            ),
           );
         },
       ),

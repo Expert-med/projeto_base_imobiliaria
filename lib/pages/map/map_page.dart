@@ -1,12 +1,10 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:projeto_imobiliaria/models/imoveis/newImovel.dart';
+import 'package:projeto_imobiliaria/models/imoveis/newImovelList.dart';
 import 'package:provider/provider.dart';
 import 'package:projeto_imobiliaria/util/app_bar_model.dart';
-import 'package:projeto_imobiliaria/models/imoveis/imovel.dart';
 import '../../components/custom_menu.dart';
-import '../../models/imoveis/imovelList.dart';
 import '../../components/imovel/imovel_info_component.dart';
 
 class MapPage extends StatefulWidget {
@@ -17,7 +15,7 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
   bool isDarkMode = false;
   late GoogleMapController mapController;
-  late List<Imovel> loadedProducts = [];
+  late List<NewImovel> loadedProducts = [];
   List<Marker> filteredMarkers = [];
   bool showInfoScreen = false;
   String selectedMarkerTitle = '';
@@ -39,40 +37,39 @@ class _MapPageState extends State<MapPage> {
   void initState() {
     super.initState();
 
-    final provider = Provider.of<ImovelList>(context, listen: false);
+    final provider = Provider.of<NewImovelList>(context, listen: false);
     loadedProducts = provider.items;
 
     filteredMarkers = loadedProducts
         .take(50) // Pegue apenas os 50 primeiros itens
         .map((imovel) {
       // Criando um marcador para cada imóvel
-      double latitude = double.tryParse(imovel.infoList['latitude']) ?? 0.0;
-      double longitude = double.tryParse(imovel.infoList['longitude']) ?? 0.0;
+      double latitude = double.tryParse(imovel.localizacao['latitude']) ?? 0.0;
+      double longitude = double.tryParse(imovel.localizacao['longitude']) ?? 0.0;
 
       return Marker(
-        markerId: MarkerId(imovel.infoList['nome_imovel'] ?? ""),
+        markerId: MarkerId(imovel.detalhes['nome_imovel'] ?? ""),
         position: LatLng(latitude, longitude),
-        infoWindow: InfoWindow(title: imovel.infoList['nome_imovel'] ?? ""),
+        infoWindow: InfoWindow(title: imovel.detalhes['nome_imovel'] ?? ""),
         onTap: () {
           setState(() {
             urlsImage = [];
             showInfoScreen = true;
-            selectedMarkerTitle = imovel.infoList['nome_imovel'] ?? "";
-            selectedMarkerTerreno = imovel.infoList['terreno'] ?? "";
-            selectedMarkerLocation = imovel.infoList['localizacao'] ?? "";
-            selectedMarkerOrigalPrice = imovel.infoList['preco_original'] ?? "";
-            // Convertendo para Iterable<String> antes de adicionar à lista
-            urlsImage.addAll(imovel.infoList['image_urls'] ?? '');
+            selectedMarkerTitle = imovel.detalhes['nome_imovel'] ?? "";
+            selectedMarkerTerreno = imovel.detalhes['terreno'] ?? "";
+            selectedMarkerLocation =  imovel.localizacao['endereco']['logradouro'] + ', '+ imovel.localizacao['endereco']['logradouro'] + ' - '+ imovel.localizacao['endereco']['cidade']+'/'+imovel.localizacao['endereco']['uf'] ?? ""; 
+            selectedMarkerOrigalPrice = imovel.detalhes['preco_original'] ?? "";
 
-            selectedMarkerCodigo = imovel.codigo;
-            selectedMarkerAreaTotal = imovel.infoList['area_total'] ?? "";
-            selectedMarkerLink = imovel.link;
-            selectedVagasgaragem = imovel.infoList['vagas_garagem'] ?? "";
-            selectedTotaldormitorios = imovel.infoList['total_dormitorios'] ?? "";
-            selectedTotalsuites = imovel.infoList['area_total'] ?? "";
 
-            selectedMarkerLongitude = imovel.infoList['longitude'] ?? "";
-            selectedMarkerLatitude = imovel.infoList['latitude'] ?? "";
+            selectedMarkerCodigo = imovel.id;
+            selectedMarkerAreaTotal = imovel.detalhes['area_total'] ?? "";
+            selectedMarkerLink = imovel.link_imovel;
+            selectedVagasgaragem = imovel.detalhes['vagas_garagem'] ?? "";
+            selectedTotaldormitorios = imovel.detalhes['total_dormitorios'] ?? "";
+            selectedTotalsuites = imovel.detalhes['area_total'] ?? "";
+
+            selectedMarkerLongitude = imovel.localizacao['longitude'] ?? "";
+            selectedMarkerLatitude = imovel.localizacao['latitude'] ?? "";
           });
         },
       );
@@ -170,19 +167,18 @@ class _MapPageState extends State<MapPage> {
                               itemCount: filteredMarkers.length,
                               itemBuilder: (context, index) {
                                 final marker = loadedProducts[index];
-                                String title = marker.infoList['nome_imovel'].toString() ?? "";
-                                String terreno = marker.infoList
+                                String title = marker.detalhes['nome_imovel'].toString() ?? "";
+                                String terreno = marker.detalhes
                                         ['terreno']
                                     .toString();
-                                String localizacao = marker.infoList
-                                        ['localizacao']
-                                    .toString();
-                                String precoOriginal = marker.infoList
+                                String localizacao =  marker.localizacao['endereco']['logradouro'] + ', '+ marker.localizacao['endereco']['logradouro'] + ' - '+ marker.localizacao['endereco']['cidade']+'/'+marker.localizacao['endereco']['uf'] ?? "";
+                           
+                                String precoOriginal = marker.detalhes
                                         ['preco_original']
                                     .toString();
                                 List<String> imageUrls = [];
-                                imageUrls.addAll(marker.infoList
-                                        ['image_urls']
+                                imageUrls.addAll(marker.
+                                        imagens
                                     .cast<String>());
                                 return ListTile(
                                   title: Text(

@@ -73,7 +73,7 @@ class ClientesList with ChangeNotifier {
                 UID: resultado['uid'],
                 historico: List<String>.from(resultado['historico'] ?? []),
                 historicoBusca:
-                    List<String>.from(resultado['preferencias'] ?? []),
+                    List<String>.from(resultado['historico_busca'] ?? []),
                 imoveisFavoritos:
                     List<String>.from(resultado['imoveis_favoritos'] ?? []),
                 preferencias: resultado['preferencias'] ?? [],

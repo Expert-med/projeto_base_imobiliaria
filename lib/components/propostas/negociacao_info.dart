@@ -1,23 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:projeto_imobiliaria/components/custom_menu.dart';
 import 'package:projeto_imobiliaria/models/negociacao/negociacaoList.dart';
-import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
-
 import '../../models/clientes/Clientes.dart';
-import '../../models/imoveis/imovel.dart';
-import '../../models/imoveis/imovelList.dart';
 import '../../models/negociacao/negociacao.dart';
-import 'package:flutter/material.dart';
-
 import 'package:projeto_imobiliaria/util/app_bar_model.dart';
-
-import '../../components/imovel/imovel_grid.dart';
-import '../../components/imovel/imovel_list_view.dart';
-import '../../models/imoveis/imovelList.dart';
 import '../clientes/cliente_info_basicas.dart';
 import 'negociacao_etapa_card.dart';
 import 'negociacao_resultado_component.dart';

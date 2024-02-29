@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_imobiliaria/components/custom_menu.dart';
 import 'package:projeto_imobiliaria/components/imovel/imovel_carrousel.dart';
-import 'package:projeto_imobiliaria/models/imoveis/imovel.dart';
 import 'package:projeto_imobiliaria/util/app_bar_model.dart';
 import 'package:provider/provider.dart';
 import '../../components/imovel/imovel_grid.dart';
 import '../../components/imovel/imovel_list_view.dart';
 import '../../components/propostas/propostas_list_view.dart';
-import '../../models/imoveis/imovelList.dart';
+
 
 class PropostaListPage extends StatefulWidget {
   bool isDarkMode;

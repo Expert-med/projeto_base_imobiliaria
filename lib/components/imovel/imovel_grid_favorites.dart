@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_imobiliaria/models/imoveis/newImovel.dart';
+import 'package:projeto_imobiliaria/models/imoveis/newImovelList.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/imoveis/imovel.dart';
-import '../../models/imoveis/imovelList.dart';
 import 'imovel_item.dart';
 import 'imovel_item_sem_barra.dart';
 
@@ -22,7 +22,7 @@ class FavoriteImoveisGrid extends StatefulWidget {
 
 class _FavoriteImoveisGridState extends State<FavoriteImoveisGrid> {
   late ScrollController _scrollController;
-  late List<Imovel> _loadedProducts;
+  late List<NewImovel> _loadedProducts;
   int _numberOfItemsToShow = 50;
   TextEditingController _searchController = TextEditingController();
   String _searchText = '';
@@ -60,8 +60,8 @@ class _FavoriteImoveisGridState extends State<FavoriteImoveisGrid> {
   }
 
   void _loadMoreItems() {
-    final provider = Provider.of<ImovelList>(context, listen: false);
-    final List<Imovel> additionalProducts =
+    final provider = Provider.of<NewImovelList>(context, listen: false);
+    final List<NewImovel> additionalProducts =
         provider.items.skip(_loadedProducts.length).take(50).toList();
     setState(() {
       _loadedProducts.addAll(additionalProducts);
@@ -69,16 +69,16 @@ class _FavoriteImoveisGridState extends State<FavoriteImoveisGrid> {
     print("widget: ${widget.idsToShow}");
   }
 
-  List<Imovel> _filterProducts() {
+  List<NewImovel> _filterProducts() {
     if (_searchText.isEmpty) {
       return _loadedProducts
-          .where((imovel) => widget.idsToShow.contains(imovel.codigo))
+          .where((imovel) => widget.idsToShow.contains(imovel.id))
           .toList();
     } else {
       return _loadedProducts
           .where((imovel) =>
-              imovel.codigo.toLowerCase().contains(_searchText.toLowerCase()) &&
-              widget.idsToShow.contains(imovel.codigo))
+              imovel.id.toLowerCase().contains(_searchText.toLowerCase()) &&
+              widget.idsToShow.contains(imovel.id))
           .toList();
     }
   }

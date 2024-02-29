@@ -4,25 +4,38 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class NewImovel with ChangeNotifier {
   final String id;
-  final String tipo_imovel;
+  final Map<String, dynamic> atualizacoes;
   final Map<String, dynamic> detalhes;
+  final Map<String, dynamic> caracteristicas;
+  final Map<String, dynamic> localizacao;
+  final Map<String, dynamic> preco;
   final String link_imovel;
   final String link_virtual_tour;
-  final String imobiliaria;
-  final String status;
+  final String codigo_imobiliaria;
   final String data_cadastro;
-
+  final String data;
+  final List<String> imagens;
+  final String curtidas;
+  final String finalidade;
+  final String tipo;
   bool isFavorite;
 
   NewImovel({
     required this.id,
-    required this.tipo_imovel,
     required this.detalhes,
+    required this.caracteristicas,
+    required this.localizacao,
+    required this.preco,
     required this.link_imovel,
     required this.link_virtual_tour,
-    required this.imobiliaria,
-    required this.status,
+    required this.codigo_imobiliaria,
     required this.data_cadastro,
+    required this.data,
+    required this.imagens,
+    required this.curtidas,
+    required this.finalidade,
+    required this.tipo,
+    required this.atualizacoes,
     this.isFavorite = false,
   });
 

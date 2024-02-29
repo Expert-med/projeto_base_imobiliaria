@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projeto_imobiliaria/models/imobiliarias/imobiliaria.dart';
-import 'package:projeto_imobiliaria/models/imoveis/imovel.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:url_launcher/url_launcher.dart';

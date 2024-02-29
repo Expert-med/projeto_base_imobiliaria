@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_imobiliaria/models/imoveis/newImovelList.dart';
 import 'package:provider/provider.dart';
-
-import '../../models/imoveis/imovel.dart';
-import '../../models/imoveis/imovelList.dart';
+import '../../models/imoveis/newImovel.dart';
 import 'imovel_item.dart';
 
 class ImovelGrid extends StatefulWidget {
@@ -18,7 +17,7 @@ class ImovelGrid extends StatefulWidget {
 
 class _ImovelGridState extends State<ImovelGrid> {
   late ScrollController _scrollController;
-  late List<Imovel> _loadedProducts;
+  late List<NewImovel> _loadedProducts;
   int _numberOfItemsToShow = 50;
   TextEditingController _searchController = TextEditingController();
   String _searchText = '';
@@ -47,21 +46,21 @@ class _ImovelGridState extends State<ImovelGrid> {
   }
 
   void _loadMoreItems() {
-    final provider = Provider.of<ImovelList>(context, listen: false);
-    final List<Imovel> additionalProducts =
+    final provider = Provider.of<NewImovelList>(context, listen: false);
+    final List<NewImovel> additionalProducts =
         provider.items.skip(_loadedProducts.length).take(50).toList();
     setState(() {
       _loadedProducts.addAll(additionalProducts);
     });
   }
 
-  List<Imovel> _filterProducts() {
+  List<NewImovel> _filterProducts() {
     if (_searchText.isEmpty) {
       return _loadedProducts;
     } else {
       return _loadedProducts
           .where((imovel) =>
-              imovel.codigo.toLowerCase().contains(_searchText.toLowerCase()))
+              imovel.id.toLowerCase().contains(_searchText.toLowerCase()))
           .toList();
     }
   }

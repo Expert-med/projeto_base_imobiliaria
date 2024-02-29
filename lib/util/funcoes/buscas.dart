@@ -9,7 +9,7 @@ class Buscas {
   Future<List<Map<String, dynamic>>> buscarTodosImoveis() async {
     List<Map<String, dynamic>> filteredInstrumentais = [];
 
-    QuerySnapshot snapshot = await db.collection("imoveis").get();
+    QuerySnapshot snapshot = await db.collection("imoveis_final_teste").get();
 
     if (snapshot.docs.isNotEmpty) {
       filteredInstrumentais = snapshot.docs.map((doc) {

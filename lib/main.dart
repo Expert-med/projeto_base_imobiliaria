@@ -1,20 +1,17 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:projeto_imobiliaria/models/corretores/corretorList.dart';
 import 'package:projeto_imobiliaria/models/imobiliarias/imobiliariasList.dart';
-import 'package:projeto_imobiliaria/models/imoveis/imovelList.dart';
+import 'package:projeto_imobiliaria/models/imoveis/newImovelList.dart';
 import 'package:projeto_imobiliaria/pages/corretor_clientes/corretor_info_page.dart';
 import 'package:projeto_imobiliaria/pages/home_page.dart';
 import 'package:provider/provider.dart';
-
 import 'checkPage.dart';
 import 'core/models/User_firebase_service.dart';
 import 'core/services/firebase/firebase_options.dart';
+import 'models/agendamento/agendamentoList.dart';
 import 'models/clientes/clientesList.dart';
 import 'models/corretores/corretor.dart';
 import 'models/negociacao/negociacaoList.dart';
@@ -58,9 +55,6 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => ImovelList(),
-        ),
-        ChangeNotifierProvider(
           create: (_) => ImobiliariaList(),
         ),
         ChangeNotifierProvider(
@@ -74,6 +68,12 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => NegociacaoList(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => NewImovelList(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => AgendamentoList(),
         ),
       ],
       child: GetMaterialApp(
