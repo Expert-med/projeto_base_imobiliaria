@@ -2,12 +2,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:projeto_imobiliaria/models/agendamento/agendamento.dart';
+import 'package:projeto_imobiliaria/models/agendamento/agendamentoList.dart';
 import 'package:projeto_imobiliaria/pages/user_config_page.dart';
 import 'package:projeto_imobiliaria/util/app_bar_model.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:provider/provider.dart';
 
+import '../../components/agendamentos/agendamento_cad_form.dart';
+import '../../components/agendamentos/agendamento_item.dart';
 import '../../components/custom_menu.dart';
+import '../../core/data/user_repository.dart';
 import '../../core/models/UserProvider.dart';
+import '../../core/models/User_firebase_service.dart';
+import '../../models/agendamento/agendamento_form_data.dart';
 
 class GeralAgendamento extends StatefulWidget {
   final bool isDarkMode;
@@ -19,16 +27,32 @@ class GeralAgendamento extends StatefulWidget {
 }
 
 class _GeralAgendamentoState extends State<GeralAgendamento> {
-  late CurrentUser _user;
+  dynamic _user;
   late bool isDarkMode;
   late User? currentUser;
+  List<Agendamento> _agendamentos = [];
 
+  TextEditingController _searchController = TextEditingController();
+  @override
   @override
   void initState() {
     super.initState();
     isDarkMode = false;
     ;
     _initializeData();
+    Provider.of<UserProvider>(context, listen: false).initializeUser();
+    UserRepository().loadCurrentUser().then((currentUser) {
+      if (currentUser != null) {
+        setState(() {
+          _user = currentUser;
+          print('o usuario atual é ${_user!.name}, com id=${_user!.id}');
+        });
+      } else {
+        print('Nenhum usuário atual encontrado.');
+      }
+    }).catchError((error) {
+      print('Erro ao carregar o usuário atual: $error');
+    });
   }
 
   Future<void> _initializeData() async {
@@ -42,6 +66,7 @@ class _GeralAgendamentoState extends State<GeralAgendamento> {
   @override
   Widget build(BuildContext context) {
     bool isSmallScreen = MediaQuery.of(context).size.width < 900;
+    final agendamentoList = Provider.of<AgendamentoList>(context);
 
     return Scaffold(
       appBar: isSmallScreen
@@ -89,7 +114,17 @@ class _GeralAgendamentoState extends State<GeralAgendamento> {
                                         ? Colors.white
                                         : Colors.black,
                                   ),
-                                  onTap: () {},
+                                  onTap: () {
+                                    showModalBottomSheet(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return CadAgendamentoForm(
+                                          isDarkMode: widget.isDarkMode,
+                                          onSubmit: _handleSubmit,
+                                        );
+                                      },
+                                    );
+                                  },
                                 )
                               ],
                             ),
@@ -102,8 +137,79 @@ class _GeralAgendamentoState extends State<GeralAgendamento> {
                           children: [
                             Expanded(
                               child: Container(
-                                color: Colors.grey,
-                                child: Center(child: Text('Histórico')),
+                                color:
+                                    Colors.grey, // Set background color to grey
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        'Minhas visitas',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: FutureBuilder<List<Agendamento>>(
+                                        future: agendamentoList
+                                            .buscarAgendamentosDoCorretorAtual(
+                                                _user.id),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return Center(
+                                              child:
+                                                  CircularProgressIndicator(),
+                                            );
+                                          } else if (snapshot.hasError) {
+                                            return Center(
+                                              child: Text(
+                                                  'Erro ao carregar os corretores'),
+                                            );
+                                          } else {
+                                            _agendamentos = snapshot.data ?? [];
+                                            if (_agendamentos.isEmpty) {
+                                              return Center(
+                                                child: Text(
+                                                    'Nenhum corretor adicionado'),
+                                              );
+                                            } else {
+                                              List<Agendamento>
+                                                  corretoresFiltrados =
+                                                  _agendamentos
+                                                      .where((agendamento) {
+                                                String searchTerm =
+                                                    _searchController.text
+                                                        .toLowerCase();
+                                                return agendamento.id
+                                                    .toLowerCase()
+                                                    .contains(searchTerm);
+                                              }).toList();
+
+                                              return ListView.builder(
+                                                padding:
+                                                    const EdgeInsets.all(10),
+                                                itemCount:
+                                                    corretoresFiltrados.length,
+                                                itemBuilder: (ctx, i) {
+                                                  final corretor =
+                                                      corretoresFiltrados[i];
+                                                  return AgendamentoItem(
+                                                      isDarkMode, corretor);
+                                                },
+                                              );
+                                            }
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                             SizedBox(width: 10),
@@ -134,5 +240,39 @@ class _GeralAgendamentoState extends State<GeralAgendamento> {
         child: Icon(Icons.lightbulb),
       ),
     );
+  }
+
+  Future<void> _handleSubmit(AgendamentoFormData formData) async {
+    try {
+      // Login
+      await Provider.of<AgendamentoList>(context, listen: false)
+          .adicionarAgendamento(
+        formData.cliente,
+        formData.corretor,
+        formData.observacoes_gerais,
+        formData.imoveis,
+        formData.status,
+      );
+    } catch (error) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Erro'),
+            content: Text('Ocorreu um erro ao cadastrar: $error'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    } finally {
+      if (!mounted) return;
+    }
   }
 }

@@ -14,6 +14,7 @@ class Clientes with ChangeNotifier {
   final List<String> historico;
   final List<String> historicoBusca;
   final List<String> imoveisFavoritos;
+  final List<String> visitas;
   final String UID;
 
   Clientes({
@@ -28,6 +29,7 @@ class Clientes with ChangeNotifier {
   required this.historicoBusca,
   required this.imoveisFavoritos,
   required this.UID,
+  required this.visitas,
 });
 
 

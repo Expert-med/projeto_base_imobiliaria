@@ -9,7 +9,7 @@ import '../components/clientes/clientes_home_lista.dart';
 import '../components/custom_menu.dart';
 import '../components/custom_popup_menu.dart';
 import '../components/imovel/imovel_carrousel.dart';
-import '../components/negociacao/negociacao_coluna.dart';
+import '../components/propostas/negociacao_coluna.dart';
 import '../components/search_row.dart';
 import '../components/tarefas/tarefas_coluna.dart';
 import '../core/models/UserProvider.dart';

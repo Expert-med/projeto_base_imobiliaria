@@ -41,6 +41,7 @@ dependencies:
   maplibre_gl: ^0.16.0
   google_sign_in: ^5.2.1
   googleapis: ^5.0.0
+  flutter_rating_bar: ^4.0.1
   
 
 dev_dependencies:

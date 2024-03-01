@@ -77,6 +77,7 @@ class ClientesList with ChangeNotifier {
                 imoveisFavoritos:
                     List<String>.from(resultado['imoveis_favoritos'] ?? []),
                 preferencias: resultado['preferencias'] ?? [],
+                visitas: resultado['visitas'] ?? [],
               );
 
               clientes.add(imovel);
@@ -152,6 +153,7 @@ class ClientesList with ChangeNotifier {
       imoveisFavoritos:
           List<String>.from(clienteDoc['imoveis_favoritos'] ?? []),
       preferencias: preferencias,
+      visitas:  List<String>.from(clienteDoc['visitas'] ?? []),
     );
     clientesList.add(cliente);
   } else {
@@ -212,6 +214,7 @@ class ClientesList with ChangeNotifier {
       imoveisFavoritos:
           List<String>.from(clienteDoc['imoveis_favoritos'] ?? []),
       preferencias: preferencias,
+       visitas:  List<String>.from(clienteDoc['visitas'] ?? []),
         );
         return cliente;
       } else {
@@ -237,6 +240,29 @@ class ClientesList with ChangeNotifier {
       negociacoes.add(idNegociacao);
 
       await corretorRef.update({'negociacoes': negociacoes});
+
+      print('Negociação adicionada com sucesso ao corretor com ID: $idCliente');
+    } else {
+      print('Corretor com ID: $idCliente não encontrado');
+    }
+  } catch (e) {
+    print('Erro ao adicionar negociação ao corretor: $e');
+  }
+}
+
+
+  Future<void> adicionarVisitaAoCliente(String idCliente, String idVisita) async {
+  try {
+    DocumentReference corretorRef = FirebaseFirestore.instance.collection('clientes').doc(idCliente);
+
+    DocumentSnapshot corretorDoc = await corretorRef.get();
+
+    if (corretorDoc.exists) {
+      List<dynamic> visitas = corretorDoc['visitas'] ?? [];
+
+      visitas.add(idVisita);
+
+      await corretorRef.update({'visitas': visitas});
 
       print('Negociação adicionada com sucesso ao corretor com ID: $idCliente');
     } else {

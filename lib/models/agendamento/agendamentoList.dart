@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:projeto_imobiliaria/models/agendamento/agendamento.dart';
 
+import '../clientes/clientesList.dart';
+import '../corretores/corretorList.dart';
+
 class AgendamentoList with ChangeNotifier {
   late final List<Agendamento> _items;
 
@@ -54,8 +57,46 @@ class AgendamentoList with ChangeNotifier {
     }
   }
 
-  Future<List<Agendamento>> adicionarNegociacao(
-      String cliente, String corretor) async {
+  
+  Future<List<Agendamento>> buscarAgendamentosDoCorretorAtual(String idCorretor) async {
+  CollectionReference<Map<String, dynamic>> agendamentoRef =
+      FirebaseFirestore.instance.collection('agendamentos');
+
+  try {
+    QuerySnapshot<Map<String, dynamic>> querySnapshot =
+        await agendamentoRef.where('corretor', isEqualTo: idCorretor).get();
+
+    List<Agendamento> agendamentos = [];
+
+    querySnapshot.docs.forEach((doc) {
+      final resultado = doc.data();
+
+      final negociacao = Agendamento(
+        id: resultado['id'] ?? '',
+        data: resultado['data'] ?? '',
+        cliente: resultado['cliente'] ?? '',
+        corretor: resultado['corretor'] ?? '',
+        imoveis_visitados: resultado['imoveis_visitados'] ??
+            {}, // Usando um mapa vazio como valor padrão
+        hora_fim: resultado['hora_fim'],
+        hora_inicio: resultado['hora_inicio'], // Usando o mapa de resultados
+        status: resultado['status'] ?? '',
+        observacoes_gerais: resultado['observacoes_gerais'] ?? '',
+      );
+
+      agendamentos.add(negociacao);
+    });
+
+    return agendamentos;
+  } catch (e) {
+    print('Erro ao buscar os imóveis: $e');
+    return []; // Retorna uma lista vazia em caso de erro
+  }
+}
+
+
+  Future<List<Agendamento>> adicionarAgendamento(
+      String cliente, String corretor, String observacoes,  Map<String, dynamic> imoveis, String status,) async {
     CollectionReference<Map<String, dynamic>> agendamentoRef =
         FirebaseFirestore.instance.collection('agendamentos');
 
@@ -76,8 +117,8 @@ class AgendamentoList with ChangeNotifier {
         id: novoId.toString(),
         data: '',
         hora_fim: '',
-        hora_inicio: corretor,
-        imoveis_visitados: {},
+        hora_inicio: '',
+        imoveis_visitados: imoveis,
         observacoes_gerais: '',
         status: '',
         cliente: cliente,
@@ -97,8 +138,8 @@ class AgendamentoList with ChangeNotifier {
       });
 
       List<Agendamento> agendamentos = [agendamento];
-      // CorretorList().adicionarNegociacaoAoCorretor(corretor, negociacao.id);
-      // ClientesList().adicionarNegociacaoAoCliente(cliente, negociacao.id);
+      CorretorList().adicionarVisitaAoCorretor(corretor, agendamento.id);
+      ClientesList().adicionarVisitaAoCliente(cliente, agendamento.id);
       _items.add(agendamento);
       notifyListeners();
       return agendamentos;
@@ -108,7 +149,7 @@ class AgendamentoList with ChangeNotifier {
     }
   }
 
-  Future<void> atualizarNegociacao(Agendamento agendamento) async {
+  Future<void> atualizarAgendamento(Agendamento agendamento) async {
     CollectionReference<Map<String, dynamic>> agendamentoRef =
         FirebaseFirestore.instance.collection('agendamentos');
     DateTime now = DateTime.now();

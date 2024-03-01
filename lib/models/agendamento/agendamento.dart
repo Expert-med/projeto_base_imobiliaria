@@ -24,4 +24,31 @@ class Agendamento with ChangeNotifier {
     required this.status,
     required this.observacoes_gerais,
   });
+  
+
+  set status(String newStatus) {
+    this.status = newStatus; // Correção aqui
+    notifyListeners(); // Notifica os listeners sobre a mudança no status
+  }
+
+  set observacoes_gerais(String newObservacoes_gerais) {
+    this.observacoes_gerais = newObservacoes_gerais; // Correção aqui
+    notifyListeners(); // Notifica os listeners sobre a mudança nas observações gerais
+  }
+
+  set data(String newData) {
+    this.data = newData; // Correção aqui
+    notifyListeners(); // Notifica os listeners sobre a mudança na data
+  }
+
+  set hora_inicio(String newHoraInicio) {
+    this.hora_inicio = newHoraInicio; // Correção aqui
+    notifyListeners(); // Notifica os listeners sobre a mudança na hora de início
+  }
+
+  set hora_fim(String newHoraFim) {
+    this.hora_fim = newHoraFim; // Correção aqui
+    notifyListeners(); // Notifica os listeners sobre a mudança na hora de término
+  }
+  
 }

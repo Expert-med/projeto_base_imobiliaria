@@ -81,4 +81,27 @@ Future<void> adicionarNegociacaoAoCorretor(String idCorretor, String idNegociaca
     print('Erro ao adicionar negociação ao corretor: $e');
   }
 }
+
+
+Future<void> adicionarVisitaAoCorretor(String idCorretor, String idVisita) async {
+  try {
+    DocumentReference corretorRef = FirebaseFirestore.instance.collection('corretores').doc(idCorretor);
+
+    DocumentSnapshot corretorDoc = await corretorRef.get();
+
+    if (corretorDoc.exists) {
+      List<dynamic> negociacoes = corretorDoc['visitas'] ?? [];
+
+      negociacoes.add(idVisita);
+
+      await corretorRef.update({'visitas': negociacoes});
+
+      print('Negociação adicionada com sucesso ao corretor com ID: $idCorretor');
+    } else {
+      print('Corretor com ID: $idCorretor não encontrado');
+    }
+  } catch (e) {
+    print('Erro ao adicionar negociação ao corretor: $e');
+  }
+}
 }

@@ -73,7 +73,7 @@ class UserRepository {
          preferencias: clienteSnapshot['preferencias'] is List
     ? List<Map<String, dynamic>>.from(clienteSnapshot['preferencias'])
     : [clienteSnapshot['preferencias']],
-
+ visitas:  List<String>.from(clienteSnapshot['visitas'] ?? []),
         );
       }
     }

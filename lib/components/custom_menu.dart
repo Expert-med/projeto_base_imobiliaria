@@ -16,6 +16,7 @@ import '../pages/imoveis/imoveis_Favoritos.dart';
 import '../pages/imoveis/imovel_grid_completa_page.dart';
 import '../pages/imoveis/imovel_page.dart';
 import '../pages/imoveis/virtual_imovel_tour/virtual_iframe.dart';
+import '../pages/map/map_flutter.dart';
 import '../pages/map/map_page.dart';
 import '../pages/propostas/proposta_add_page.dart';
 import '../pages/propostas/proposta_list_page.dart';
@@ -312,7 +313,7 @@ class _CustomMenuState extends State<CustomMenu> {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => MapPage(),
+                        builder: (context) => MapPageFlutter(),
                       ),
                     );
                   },
