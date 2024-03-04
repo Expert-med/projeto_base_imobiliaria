@@ -272,4 +272,21 @@ class ClientesList with ChangeNotifier {
     print('Erro ao adicionar negociação ao corretor: $e');
   }
 }
+
+void filterClientes(String searchTerm) {
+    // Converter o termo de pesquisa para minúsculas para fazer uma comparação sem diferenciação de maiúsculas e minúsculas
+    final String searchTermLower = searchTerm.toLowerCase();
+
+    // Filtrar os clientes com base no termo de pesquisa
+    List<Clientes> clientesFiltrados = _items.where((cliente) =>
+        cliente.name.toLowerCase().contains(searchTermLower)).toList();
+
+    // Notificar os ouvintes sobre as alterações na lista de clientes filtrados
+    notifyListeners();
+  }
+
+void clear() {
+    _items.clear();
+    notifyListeners();
+  }
 }

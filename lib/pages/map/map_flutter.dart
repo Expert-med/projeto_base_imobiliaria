@@ -32,6 +32,7 @@ class _MapPageFlutterState extends State<MapPageFlutter> {
   String selectedTotalsuites = '';
   String selectedMarkerLongitude = '';
   String selectedMarkerLatitude = '';
+ Map<String, dynamic>  selectedCaracteristicas ={};
 
   late List<Marker> markers;
   final PopupController _popupController = PopupController();
@@ -89,6 +90,7 @@ class _MapPageFlutterState extends State<MapPageFlutter> {
 
                 selectedMarkerLongitude = imovel.localizacao['longitude'] ?? "";
                 selectedMarkerLatitude = imovel.localizacao['latitude'] ?? "";
+                selectedCaracteristicas = imovel.caracteristicas;
               });
             },
             child: Icon(
@@ -193,7 +195,8 @@ class _MapPageFlutterState extends State<MapPageFlutter> {
                                   selectedTotalsuites,
                                   selectedMarkerLatitude,
                                   selectedMarkerLongitude,
-                                  1),
+                                  1,
+                                  selectedCaracteristicas),
                             )
                           : GestureDetector(
                               onTap: () {
@@ -277,7 +280,8 @@ class _MapPageFlutterState extends State<MapPageFlutter> {
                                                     selectedTotalsuites,
                                                     selectedMarkerLatitude,
                                                     selectedMarkerLongitude,
-                                                    1),
+                                                    1,
+                                                    selectedCaracteristicas),
                                               ),
                                             );
                                           },

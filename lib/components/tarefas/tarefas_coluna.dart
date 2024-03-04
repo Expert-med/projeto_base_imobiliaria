@@ -5,7 +5,7 @@ class TarefasColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text('Tarefas:', style: TextStyle(fontSize: 25),),
+        Text('Tarefas:', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
         
       ],
     );

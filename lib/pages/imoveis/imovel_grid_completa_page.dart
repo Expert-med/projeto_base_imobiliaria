@@ -332,6 +332,7 @@ class _ImovelGridCompletaSemComponenteState
                                                           ['longitude'] ??
                                                       '',
                                                       tipo_pagina: 0,
+                                                      caracteristicas: filteredInstru[i]['caracteristicas'],
                                                 ),
                                               ),
                                             );

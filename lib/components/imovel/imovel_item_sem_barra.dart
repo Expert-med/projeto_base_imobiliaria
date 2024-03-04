@@ -198,6 +198,8 @@ class _ImovelItemSemBarraState extends State<ImovelItemSemBarra> {
           latitude: product.localizacao['latitude'] ?? '',
           longitude: product.localizacao['longitude'] ?? '',
           tipo_pagina: widget.tipo_pagina,
+          caracteristicas: product.caracteristicas,
+
         ),
       ),
     );

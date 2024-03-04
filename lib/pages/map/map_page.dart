@@ -32,6 +32,7 @@ class _MapPageState extends State<MapPage> {
   String selectedTotalsuites = '';
   String selectedMarkerLongitude = '';
   String selectedMarkerLatitude = '';
+  Map<String, dynamic>  selectedCaracteristicas ={};
 
   @override
   void initState() {
@@ -70,6 +71,7 @@ class _MapPageState extends State<MapPage> {
 
             selectedMarkerLongitude = imovel.localizacao['longitude'] ?? "";
             selectedMarkerLatitude = imovel.localizacao['latitude'] ?? "";
+            selectedCaracteristicas = imovel.caracteristicas ?? {};
           });
         },
       );
@@ -134,7 +136,8 @@ class _MapPageState extends State<MapPage> {
                           selectedTotaldormitorios,
                           selectedTotalsuites,
                           selectedMarkerLatitude,
-                          selectedMarkerLongitude,1),
+                          selectedMarkerLongitude,1,
+                          selectedCaracteristicas),
                     )
                   : GestureDetector(
                       onTap: () {
@@ -203,7 +206,8 @@ class _MapPageState extends State<MapPage> {
                                             selectedTotaldormitorios,
                                             selectedTotalsuites,
                                             selectedMarkerLatitude,
-                                            selectedMarkerLongitude,1),
+                                            selectedMarkerLongitude,1,
+                                            selectedCaracteristicas),
                                       ),
                                     );
                                   },

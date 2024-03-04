@@ -209,6 +209,7 @@ class _ImovelItemState extends State<ImovelItem> {
                                 ['longitude'] ??
                             '',
                         tipo_pagina: widget.tipo_pagina,
+                        caracteristicas: product.caracteristicas,
                       ),
                     ),
                   );

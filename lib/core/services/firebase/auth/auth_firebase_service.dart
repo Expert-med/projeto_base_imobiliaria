@@ -5,7 +5,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:intl/intl.dart';
+import 'package:projeto_imobiliaria/models/negociacao/negociacaoList.dart';
 import 'package:uuid/uuid.dart';
+import '../../../../models/clientes/clientesList.dart';
+import '../../../../models/negociacao/negociacao.dart';
 import '../../../models/UserProvider.dart';
 import 'auth_service.dart';
 import 'package:flutter/foundation.dart'; // Importe o pacote
@@ -109,9 +112,18 @@ class AuthFirebaseService implements AuthService {
     );
   }
 
+final NegociacaoList negociacoes = NegociacaoList();
+  final ClientesList clientesList = ClientesList();
+
+
   @override
   Future<void> logout() async {
     try {
+      // Limpar a lista de negociações
+      negociacoes.clear();
+      
+      // Limpar a lista de clientes
+      clientesList.clear();
       await FirebaseAuth.instance.signOut();
     } catch (e) {
       print('Erro ao sair da conta: $e');

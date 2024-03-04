@@ -194,6 +194,7 @@ class _ImovelItemListState extends State<ImovelItemList> {
                                 longitude:
                                     product.localizacao['longitude'] ?? '',
                                 tipo_pagina: 0,
+                                caracteristicas: product.caracteristicas,
                               ),
                             ),
                           );

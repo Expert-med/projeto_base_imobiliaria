@@ -114,7 +114,8 @@ class _MyHomePageState extends State<MyHomePage> {
         builder: (context, constraints) {
           return Row(
             children: [
-              if (!isSmallScreen) Container(child: CustomMenu(isDarkMode: isDarkMode)),
+              if (!isSmallScreen)
+                Container(child: CustomMenu(isDarkMode: isDarkMode)),
               Expanded(
                 child: Container(
                   color: isDarkMode ? Colors.black : Colors.white,
@@ -179,32 +180,42 @@ class _MyHomePageState extends State<MyHomePage> {
                         height: 10,
                       ),
                       ImovelCarousel(false, isDarkMode),
+                       if (_user.tipoUsuario == 0)
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
                           children: [
-                            Expanded(
-                              child: Container(
-                                color: Colors.grey,
-                                child: TarefasColumn(),
+                            if (_user.tipoUsuario == 0)
+                              Expanded(
+                                child: Container(
+                                  color: Colors.grey,
+                                  height:
+                                      200, // Altura fixa para a lista de clientes
+                                  child: TarefasColumn(),
+                                ),
                               ),
-                            ),
-                            SizedBox(
-                                width: 10), // Adiciona um espaço de 10 pixels
-                            Expanded(
-                              child: Container(
-                                color: Colors.grey,
-                                child: ClientesHomeLista(),
+                           
+                            SizedBox(width: 10),
+                            if (_user.tipoUsuario == 0)
+                              Expanded(
+                                child: Container(
+                                  color: Colors.grey,
+                                  height:
+                                      200, // Altura fixa para a lista de clientes
+                                  child: ClientesHomeLista(),
+                                ),
                               ),
-                            ),
-                            SizedBox(
-                                width: 10), // Adiciona um espaço de 10 pixels
-                            Expanded(
-                              child: Container(
-                                color: Colors.grey,
-                                child: NegociacaoColuna(),
+                            SizedBox(width: 10),
+                            SizedBox(width: 10),
+                            if (_user.tipoUsuario == 0)
+                              Expanded(
+                                child: Container(
+                                  color: Colors.grey,
+                                  height:
+                                      200, // Altura fixa para a lista de clientes
+                                  child: NegociacaoColuna(),
+                                ),
                               ),
-                            ),
                           ],
                         ),
                       )
