@@ -129,8 +129,9 @@ class _AgendamentoInfoComponentState extends State<AgendamentoInfoComponent> {
                                       return SingleChildScrollView(
                                         child: Container(
                                           color: widget.isDarkMode
-                              ? Colors.black
-                              : Color.fromARGB(255, 209, 209, 209),
+                                              ? Colors.black
+                                              : Color.fromARGB(
+                                                  255, 209, 209, 209),
                                           padding: EdgeInsets.all(20),
                                           child: Column(
                                             crossAxisAlignment:
@@ -421,7 +422,15 @@ class _AgendamentoInfoComponentState extends State<AgendamentoInfoComponent> {
                   SizedBox(
                     height: 10,
                   ),
-                  ClientBasicInfoComponent(
+                  Text(
+                    'Cliente:',
+                    style: TextStyle(
+                      color: widget.isDarkMode ? Colors.white : Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                  PessoaInfoBasica(
                     cliente: widget.cliente,
                     isDarkMode: widget.isDarkMode,
                   ),

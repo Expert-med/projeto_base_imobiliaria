@@ -22,28 +22,27 @@ class UserConfig extends StatefulWidget {
 class _UserConfigState extends State<UserConfig> {
   late TextEditingController _nameController;
   bool isDarkMode = true;
-dynamic _user;
+  dynamic _user;
 
-@override
-void initState() {
-  super.initState();
-  _nameController = TextEditingController();
-  Provider.of<UserProvider>(context, listen: false).initializeUser();
-  UserRepository().loadCurrentUser().then((currentUser) {
-    if (currentUser != null) {
-      setState(() {
-        _user = currentUser;
-        _nameController.text = _user!.name;
-        print('o usuario atual é ${_user!.name}, com id=${_user!.id}');
-      });
-    } else {
-      print('Nenhum usuário atual encontrado.');
-    }
-  }).catchError((error) {
-    print('Erro ao carregar o usuário atual: $error');
-  });
-}
-
+  @override
+  void initState() {
+    super.initState();
+    _nameController = TextEditingController();
+    Provider.of<UserProvider>(context, listen: false).initializeUser();
+    UserRepository().loadCurrentUser().then((currentUser) {
+      if (currentUser != null) {
+        setState(() {
+          _user = currentUser;
+          _nameController.text = _user!.name;
+          print('o usuario atual é ${_user!.name}, com id=${_user!.id}');
+        });
+      } else {
+        print('Nenhum usuário atual encontrado.');
+      }
+    }).catchError((error) {
+      print('Erro ao carregar o usuário atual: $error');
+    });
+  }
 
   @override
   void dispose() {
@@ -51,8 +50,7 @@ void initState() {
     super.dispose();
   }
 
-
-  Future<void> pickAndUploadImage(String idConta) async {
+  Future<void> pickAndUploadLogoImage(String idConta) async {
     FilePickerResult? result =
         await FilePicker.platform.pickFiles(type: FileType.image);
 
@@ -147,6 +145,8 @@ void initState() {
 
   @override
   Widget build(BuildContext context) {
+    String bannerUrl = _user!.info_banner['image_url'];
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Configurações do Usuário'),
@@ -172,7 +172,7 @@ void initState() {
                         ),
                         ElevatedButton(
                           onPressed: () {
-                            pickAndUploadImage(_user!.id);
+                            pickAndUploadLogoImage(_user!.id);
                           },
                           child: Text(
                             "Alterar Imagem",
@@ -193,158 +193,247 @@ void initState() {
                         ),
                         Row(
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                'Email: ${_user!.email}',
-                                style: TextStyle(
-                                  color: isDarkMode
-                                      ? Colors.black54
-                                      : Colors.white,
-                                ),
+                            Text(
+                              'Informações pessoais: ',
+                              style: TextStyle(
+                                color:
+                                    isDarkMode ? Colors.black54 : Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
                               ),
                             ),
                           ],
                         ),
-                        Row(
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                'Tipo de conta: ${_user!.tipoUsuario == 1 ? "Corretor" : "Cliente"}',
-                                style: TextStyle(
-                                  color: isDarkMode
-                                      ? Colors.black54
-                                      : Colors.white,
-                                ),
+                              padding: const EdgeInsets.only(left: 5, top: 5),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Nome: ${_user.name} ',
+                                          style: TextStyle(
+                                            color: !isDarkMode
+                                                ? Colors.white
+                                                : Colors.black54,
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                        Text(
+                                          'Informações de contato',
+                                          style: TextStyle(
+                                            color: !isDarkMode
+                                                ? Colors.white
+                                                : Colors.black54,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 5, top: 2),
+                                          child: Text(
+                                            'Telefone: ${_user.contato['celular'] != '' ? _user.contato['celular'] : 'Não informado'} ',
+                                            style: TextStyle(
+                                              color: !isDarkMode
+                                                  ? Colors.white
+                                                  : Colors.black54,
+                                              fontSize: 15,
+                                            ),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 5, top: 2),
+                                          child: Text(
+                                            'Email: ${_user.contato['email'] != '' ? _user.contato['email'] : 'Não informado'} ',
+                                            style: TextStyle(
+                                              color: !isDarkMode
+                                                  ? Colors.white
+                                                  : Colors.black54,
+                                              fontSize: 15,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                      width:
+                                          20), // Adicione um espaço entre as duas colunas
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Endereço do cliente',
+                                          style: TextStyle(
+                                            color: !isDarkMode
+                                                ? Colors.white
+                                                : Colors.black54,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                        if (_user.contato['endereco']['cep'] !=
+                                            '') ...[
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 2),
+                                            child: Row(
+                                              children: [
+                                                Text(
+                                                  'CEP: ${_user.contato['endereco']['cep']} ',
+                                                  style: TextStyle(
+                                                    color: !isDarkMode
+                                                        ? Colors.white
+                                                        : Colors.black54,
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                                Spacer(flex: 1),
+                                                Text(
+                                                  'Estado: ${_user.contato['endereco']['estado']} ',
+                                                  style: TextStyle(
+                                                    color: !isDarkMode
+                                                        ? Colors.white
+                                                        : Colors.black54,
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                                Spacer(flex: 1),
+                                              ],
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 2),
+                                            child: Text(
+                                              'Endereço: ${_user.contato['endereco']['logradouro']} ',
+                                              style: TextStyle(
+                                                color: !isDarkMode
+                                                    ? Colors.white
+                                                    : Colors.black54,
+                                                fontSize: 15,
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 2),
+                                            child: Text(
+                                              'Bairro: ${_user.contato['endereco']['bairro']} ',
+                                              style: TextStyle(
+                                                color: !isDarkMode
+                                                    ? Colors.white
+                                                    : Colors.black54,
+                                                fontSize: 15,
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 2),
+                                            child: Text(
+                                              'Cidade: ${_user.contato['endereco']['cidade']} ',
+                                              style: TextStyle(
+                                                color: !isDarkMode
+                                                    ? Colors.white
+                                                    : Colors.black54,
+                                                fontSize: 15,
+                                              ),
+                                            ),
+                                          ),
+                                        ] else ...[
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 2),
+                                            child: Text(
+                                              'Não informado ',
+                                              style: TextStyle(
+                                                color: !isDarkMode
+                                                    ? Colors.white
+                                                    : Colors.black54,
+                                                fontSize: 15,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
                         ),
-                        Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                'Endereço:\n',
+                        if (_user!.tipoUsuario == 1) ...[
+                          Row(
+                            children: [
+                              Text(
+                                'Informações públicas: ',
                                 style: TextStyle(
                                   color: isDarkMode
                                       ? Colors.black54
                                       : Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
                                 ),
                               ),
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Bairro: ${_user!.contato['endereco']['bairro']}',
-                                  style: TextStyle(
-                                    color: isDarkMode
-                                        ? Colors.black
-                                        : Colors.white,
-                                  ),
-                                ),
-                                Text(
-                                  'CEP: ${_user!.contato['endereco']['cep']}',
-                                  style: TextStyle(
-                                    color: isDarkMode
-                                        ? Colors.black
-                                        : Colors.white,
-                                  ),
-                                ),
-                                Text(
-                                  'Cidade: ${_user!.contato['endereco']['cidade']}',
-                                  style: TextStyle(
-                                    color: isDarkMode
-                                        ? Colors.black
-                                        : Colors.white,
-                                  ),
-                                ),
-                                Text(
-                                  'Complemento: ${_user!.contato['endereco']['complemento']}',
-                                  style: TextStyle(
-                                    color: isDarkMode
-                                        ? Colors.black
-                                        : Colors.white,
-                                  ),
-                                ),
-                                Text(
-                                  'Estado: ${_user!.contato['endereco']['estado']}',
-                                  style: TextStyle(
-                                    color: isDarkMode
-                                        ? Colors.black
-                                        : Colors.white,
-                                  ),
-                                ),
-                                Text(
-                                  'Logradouro: ${_user!.contato['endereco']['logradouro']}',
-                                  style: TextStyle(
-                                    color: isDarkMode
-                                        ? Colors.black
-                                        : Colors.white,
-                                  ),
-                                ),
-                                Text(
-                                  'Número: ${_user!.contato['endereco']['numero']}',
-                                  style: TextStyle(
-                                    color: isDarkMode
-                                        ? Colors.black
-                                        : Colors.white,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                       
-                        // Row(
-                        //   children: [
-                        //     Padding(
-                        //       padding: const EdgeInsets.all(8.0),
-                        //       child: Text(
-                        //         'Preferências: \nBairro: ${_user!.preferencias[0]['bairro']}\nCaracterísticas: ${_user!.preferencias[0]['caracteristicas']}\nFaixa de preço: ${_user!.preferencias[0]['faixa_preco']}\nTipo de imóvel: ${_user!.preferencias[0]['tipo_imovel']}',
-                        //         style: TextStyle(
-                        //           color: isDarkMode
-                        //               ? Colors.black54
-                        //               : Colors.white,
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   ],
-                        // ),
-                        Padding(
-                          padding: EdgeInsets.all(
-                              15), //apply padding to all four sides
-                          child: Text(
-                            "Nome",
-                            style: TextStyle(
-                              color: Color(0xFF6e58e9),
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
+                            ],
                           ),
-                        ),
-                        TextFormField(
-                          controller: _nameController,
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.black12,
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                          ),
-                          style: TextStyle(
-                              color: isDarkMode ? Colors.black : Colors.white),
-                          validator: (localEmail) {
-                            final email = localEmail ?? '';
-                            if (!email.contains('@')) {
-                              return 'E-mail nformado não é válido.';
-                            }
-                            return null;
-                          },
-                        ),
+                          Row(
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text('Banner',
+                                      style: TextStyle(
+                                        color: !isDarkMode
+                                            ? Colors.white
+                                            : Colors.black,
+                                      )),
+                                  Image.network(bannerUrl.isNotEmpty
+                                      ? bannerUrl
+                                      : 
+                                          'https://firebasestorage.googleapis.com/v0/b/imob-projeto-expmed.appspot.com/o/banners%2Fno_availablle.jpg?alt=media&token=6a2928bd-5eaa-45f2-919d-b7180bcd5e19'),
+                                ],
+                              ),
+                              Spacer(),
+                              Column(
+                                children: [
+                                  Text('data',
+                                      style: TextStyle(
+                                        color: !isDarkMode
+                                            ? Colors.white
+                                            : Colors.black,
+                                      ))
+                                ],
+                              ),
+                              Spacer(),
+                              Column(
+                                children: [
+                                  Text('data',
+                                      style: TextStyle(
+                                        color: !isDarkMode
+                                            ? Colors.white
+                                            : Colors.black,
+                                      ))
+                                ],
+                              ),
+                            ],
+                          )
+                        ],
                         SizedBox(height: 16),
                         ElevatedButton(
                           onPressed: () {

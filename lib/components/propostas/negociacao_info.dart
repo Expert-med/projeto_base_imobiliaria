@@ -62,7 +62,15 @@ class _NegociacaoInfoComponentState extends State<NegociacaoInfoComponent> {
                   SizedBox(
                     height: 10,
                   ),
-                  ClientBasicInfoComponent(
+                  Text(
+                    'Cliente:',
+                    style: TextStyle(
+                      color: widget.isDarkMode ? Colors.white : Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                  PessoaInfoBasica(
                     cliente: widget.cliente,
                     isDarkMode: widget.isDarkMode,
                   ),
@@ -186,7 +194,9 @@ class _NegociacaoInfoComponentState extends State<NegociacaoInfoComponent> {
                       fontSize: 20,
                     ),
                   ),
-                  NegociacaoResultadoComponent(isDarkMode: widget.isDarkMode, resultado: widget.negociacao.resultados),
+                  NegociacaoResultadoComponent(
+                      isDarkMode: widget.isDarkMode,
+                      resultado: widget.negociacao.resultados),
                   SizedBox(
                     height: 30,
                   ),

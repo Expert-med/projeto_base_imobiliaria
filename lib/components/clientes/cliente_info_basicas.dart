@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 
 import '../../models/clientes/Clientes.dart';
 
-class ClientBasicInfoComponent extends StatelessWidget {
+class PessoaInfoBasica extends StatelessWidget {
   final bool isDarkMode;
   final Clientes cliente;
 
-  ClientBasicInfoComponent({required this.isDarkMode, required this.cliente});
+
+  PessoaInfoBasica({required this.isDarkMode, required this.cliente});
 
   @override
   Widget build(BuildContext context) {
@@ -14,14 +15,7 @@ class ClientBasicInfoComponent extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Text(
-          'Cliente:',
-          style: TextStyle(
-            color: isDarkMode ? Colors.white : Colors.black,
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
-        ),
+       
         Padding(
           padding: const EdgeInsets.only(left: 5, top: 5),
           child: Row(
