@@ -16,9 +16,85 @@ class NewImovelList with ChangeNotifier {
   }
 
   Future<void> _carregarImoveis() async {
+   //updateImoveisWithDetalhes();
     final List<NewImovel> imoveis = await buscarImoveis();
     _items.addAll(imoveis);
     notifyListeners();
+  }
+
+  Future<void> updateImoveisWithDetalhes() async {
+    print('teste');
+    CollectionReference<Map<String, dynamic>> imoveisRef =
+        FirebaseFirestore.instance.collection('um_por_imob');
+
+    try {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await imoveisRef.get();
+
+      // Itera sobre os documentos na coleção
+      querySnapshot.docs.forEach((doc) async {
+        Map<String, dynamic> data = doc.data();
+
+        // Verifica se o campo detalhes está ausente ou nulo
+        if ( data['localizacao']['endereco'] == {} ) {
+          print('finalidade == 0');
+          // Atualiza o documento para adicionar um campo detalhes vazio
+          await FirebaseFirestore.instance.runTransaction((transaction) async {
+            DocumentSnapshot<Map<String, dynamic>> freshDoc =
+                await transaction.get(doc.reference);
+            Map<String, dynamic> newData = freshDoc.data() ?? {};
+            newData['detalhes'] = {
+              "descricao": 'N/A',
+              "area_total": 'N/A',
+              'area_privativa': 'N/A',
+              'dormitorios': 'N/A',
+              'banheiros': 'N/A',
+              'perfil': 'N/A',
+              'vagas_garagem': 'N/A',
+              'mobilia': 'N/A',
+              'niveis': 'N/A',
+              'uso_comercial': 'N/A',
+            };
+            newData['atualizacoes'] = {
+              'data': 'N/A',
+              'status': -1,
+              'valor': 'N/A',
+            };
+            newData['caracteristicas'] = {};
+            newData['curtidas'] = 'N/A';
+            newData['data_cadastro'] = 'N/A';
+            newData['finalidade'] = -1;
+            newData['id_imovel'] = 'N/A';
+            newData['imagens'] = [];
+            newData['link_virtual_tour'] = '';
+            newData['localizacao'] = {
+              "endereco": {
+                'logradouro': 'N/A',
+                'complemento': 'N/A',
+                'bairro': 'N/A',
+                'cidade': 'N/A',
+                'estado': 'N/A',
+                'cep': 'N/A',
+              },
+              "latitude": 'N/A',
+              "longitude": 'N/A',
+            };
+            newData['preco'] = {
+              'preco_promoocional': 'N/A',
+              'preco_original': 'N/A',
+            };
+            newData['tipo'] = -1;
+            transaction.update(doc.reference, newData);
+          });
+
+          print('Documento atualizado com detalhes vazio: ${doc.id}');
+        }
+      });
+
+      print('Atualização concluída.');
+    } catch (e) {
+      print('Erro ao atualizar os documentos: $e');
+    }
   }
 
   List<NewImovel> get favoriteItems =>
@@ -33,7 +109,6 @@ class NewImovelList with ChangeNotifier {
           await imoveisRef.get();
 
       List<NewImovel> imoveis = [];
-      
 
       querySnapshot.docs
           .forEach((QueryDocumentSnapshot<Map<String, dynamic>> doc) {
@@ -71,7 +146,7 @@ class NewImovelList with ChangeNotifier {
             curtidas: resultado['curtidas'] ?? '',
             data_cadastro: resultado['data_cadastro'] ?? '',
             finalidade: resultado['finalidade'] ?? 0,
-            imagens: List<String>.from(resultado['imagens'] ?? []) ,
+            imagens: List<String>.from(resultado['imagens'] ?? []),
             localizacao: resultado['localizacao'] ?? {},
             preco: resultado['preco'] ?? '',
             tipo: resultado['tipo'] ?? 0,

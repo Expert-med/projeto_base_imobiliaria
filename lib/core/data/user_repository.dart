@@ -39,7 +39,8 @@ class UserRepository {
                   corretorSnapshot['imoveis_cadastrados'] ?? []) ??
               [],
           visitas: List<String>.from(corretorSnapshot['visitas'] ?? []) ?? [],
-          negociacoes: List<String>.from(corretorSnapshot['negociacoes'] ?? []) ?? [],
+          negociacoes:
+              List<String>.from(corretorSnapshot['negociacoes'] ?? []) ?? [],
           contato: corretorSnapshot['contato'] ?? {},
           dadosProfissionais: corretorSnapshot['dados_profissionais'] ?? [],
           metas: corretorSnapshot['metas'] ?? [],
@@ -48,7 +49,6 @@ class UserRepository {
         );
       }
 
-      // Verificar na coleção 'clientes'
       QuerySnapshot clienteQuery = await FirebaseFirestore.instance
           .collection('clientes')
           .where('uid', isEqualTo: userId)
@@ -56,12 +56,12 @@ class UserRepository {
 
       if (clienteQuery.docs.isNotEmpty) {
         DocumentSnapshot clienteSnapshot = clienteQuery.docs.first;
-  
+
         return Clientes(
           id: clienteSnapshot['id'],
           name: clienteSnapshot['name'],
           email: clienteSnapshot['email'],
-          logoUrl: clienteSnapshot['imageUrl'],
+          logoUrl: clienteSnapshot['logoUrl'],
           tipoUsuario: clienteSnapshot['tipo_usuario'],
           contato: clienteSnapshot['contato'],
           UID: clienteSnapshot['uid'],
@@ -70,10 +70,10 @@ class UserRepository {
               List<String>.from(clienteSnapshot['historico_busca'] ?? []),
           imoveisFavoritos:
               List<String>.from(clienteSnapshot['imoveis_favoritos'] ?? []),
-         preferencias: clienteSnapshot['preferencias'] is List
-    ? List<Map<String, dynamic>>.from(clienteSnapshot['preferencias'])
-    : [clienteSnapshot['preferencias']],
- visitas:  List<String>.from(clienteSnapshot['visitas'] ?? []),
+          preferencias: clienteSnapshot['preferencias'] is List
+              ? List<Map<String, dynamic>>.from(clienteSnapshot['preferencias'])
+              : [clienteSnapshot['preferencias']],
+          visitas: List<String>.from(clienteSnapshot['visitas'] ?? []),
         );
       }
     }

@@ -47,7 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
             id: user.uid,
             name: user.displayName ?? '',
             email: user.email ?? '',
-            imageUrl: user.photoURL ?? '',
+            logoUrl: user.photoURL ?? '',
             tipoUsuario: 0,
             contato: {},
             preferencias: [],
@@ -68,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> loadLogo(String idConta) async {
     final url = await buscaLogo(idConta);
     setState(() {
-      _user.imageUrl = url;
+      _user.logoUrl = url;
     });
   }
 
@@ -150,7 +150,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                           Spacer(),
                           CircleAvatar(
-                            backgroundImage: NetworkImage(_user.imageUrl),
+                            backgroundImage: NetworkImage(_user.logoUrl),
                           ),
                           CustomPopupMenu(isDarkMode: isDarkMode),
                         ],

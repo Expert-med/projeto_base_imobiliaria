@@ -37,4 +37,6 @@ class Corretor with ChangeNotifier {
       required this.metas,
       required this.desempenhoAtualMetas,
       required this.infoBanner});
+
+      
 }

@@ -2,7 +2,7 @@ class CurrentUser {
   final String id;
   final String name;
   final String email;
-  String imageUrl;
+  String logoUrl;
 
   final int tipoUsuario;
   final Map<String, dynamic> contato;
@@ -17,7 +17,7 @@ class CurrentUser {
     required this.id,
     required this.name,
     required this.email,
-    required this.imageUrl,
+    required this.logoUrl,
     required this.tipoUsuario,
      required this.contato,
     required this.preferencias,

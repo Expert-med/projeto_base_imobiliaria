@@ -26,40 +26,35 @@ class UserProvider extends ChangeNotifier {
                 .where('uid', isEqualTo: user.uid)
                 .get();
 
-        QuerySnapshot<Map<String, dynamic>> querySnapshot;
+        Map<String, dynamic> data = {};
+
         if (clientesSnapshot.docs.isNotEmpty) {
-          querySnapshot = clientesSnapshot;
+          data = clientesSnapshot.docs.first.data();
         } else if (corretoresSnapshot.docs.isNotEmpty) {
-          querySnapshot = corretoresSnapshot;
+          data = corretoresSnapshot.docs.first.data();
         } else {
           print('Usuário não encontrado nas coleções clientes e corretores');
           return;
         }
 
-        Map<String, dynamic> data = querySnapshot.docs.first.data();
-        print(data);
-
-        dynamic preferenciasData = data['preferencias'];
+        dynamic preferenciasData = data['preferencias'] ?? [];
         List<Map<String, dynamic>> preferencias = [];
 
         if (preferenciasData != null) {
           if (preferenciasData is Map) {
-            // Convertendo o mapa dinâmico para um mapa de string
             Map<String, dynamic> preferenciasMap = {};
             preferenciasData.forEach((key, value) {
               preferenciasMap[key.toString()] = value;
             });
 
-            // Adicionando o mapa convertido à lista de preferencias
             preferencias.add(preferenciasMap);
           } else {
-            // Handle other data types or unexpected data format
             print('Erro: formato inesperado para preferencias');
           }
         }
 
         List<String> historico = [];
-        if (data['historico'] != null) {
+        if (data.containsKey('historico') && data['historico'] != null) {
           if (data['historico'] is List) {
             historico = List<String>.from(data['historico']);
           } else {
@@ -72,7 +67,6 @@ class UserProvider extends ChangeNotifier {
           if (data['imoveis_favoritos'] is List) {
             imoveisFavoritos = List<String>.from(data['imoveis_favoritos']);
           } else {
-            // Handle the case where 'imoveis_favoritos' is not a List
             print('Erro: imoveis_favoritos não é uma lista');
           }
         }
@@ -85,19 +79,20 @@ class UserProvider extends ChangeNotifier {
             print('Erro: historico_busca não é uma lista');
           }
         }
+
         _user = CurrentUser(
-          id: user.uid,
+          id: user.uid ?? '',
           name: data['name'] ?? '',
           email: data['email'] ?? '',
-          imageUrl: data['imageUrl'] ?? '',
+          logoUrl: data['logoUrl'] ?? '',
           tipoUsuario: data['tipo_usuario'] ?? 0,
           contato: data['contato'] ?? {},
-          preferencias: preferencias,
-          historico: historico,
-          historicoBusca: historicoBusca,
-          imoveisFavoritos: imoveisFavoritos,
+          preferencias: preferencias ?? [],
+          historico: historico ?? [],
+          historicoBusca: historicoBusca ?? [],
+          imoveisFavoritos: imoveisFavoritos ?? [],
           UID: data['UID'] ?? '',
-          num_identificacao:  data['dados_profissionais']['registro'] ?? '',
+          num_identificacao: '',
         );
         notifyListeners();
       }
