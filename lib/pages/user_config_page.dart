@@ -153,7 +153,7 @@ class _UserConfigState extends State<UserConfig> {
               .get();
           snapshot.docs.forEach((doc) async {
             await doc.reference.update({
-              "id": user.uid,
+             
               "name": newName,
               "email": user.email ?? '',
               "logoUrl": newImageUrl,

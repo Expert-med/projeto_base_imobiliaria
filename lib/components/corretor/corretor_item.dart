@@ -14,7 +14,7 @@ class CorretorItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isSmallScreen = MediaQuery.of(context).size.width < 900;
-
+  print('entrou em corretorItem');
     return Padding(
       padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
       child: Row(

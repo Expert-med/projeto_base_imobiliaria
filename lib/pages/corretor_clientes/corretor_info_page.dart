@@ -38,7 +38,7 @@ class _CorretorInfoPageState extends State<CorretorInfoPage> {
 
   @override
   Widget build(BuildContext context) {
-    String imageBannerUrl = widget.corretor.infoBanner['image_banner'].toString();
+    String imageBannerUrl = widget.corretor.infoBanner['image_url'].toString();
 
     if (imageBannerUrl.isEmpty) {
       imageBannerUrl = 'https://www.cbde.org.br/images/default.jpg';
