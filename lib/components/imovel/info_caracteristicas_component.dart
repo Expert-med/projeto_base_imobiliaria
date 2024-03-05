@@ -13,7 +13,7 @@ class ImovelCaracteristicasWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color textColor = isDarkMode ? Colors.white : Colors.black;
+    Color textColor = isDarkMode ? Colors.white : Color.fromARGB(255, 7, 0, 44);
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.all(8.0),

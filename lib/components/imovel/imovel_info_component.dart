@@ -156,6 +156,7 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    if(widget.tipo_pagina == 1)
                     CarouselSlider(
                       carouselController: _carouselController,
                       options: CarouselOptions(
@@ -226,9 +227,11 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
                         );
                       }).toList(),
                     ),
+                    if(widget.tipo_pagina == 1)
                     SizedBox(
                       height: 8,
                     ),
+                    if(widget.tipo_pagina == 1)
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -254,6 +257,142 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
                         ),
                       ],
                     ),
+ if (widget.tipo_pagina == 1)
+                      Row(
+                        children: [
+                          ImovelCaracteristicasWidget(
+                            caracteristicas: widget.caracteristicas,
+                            isDarkMode: widget.isDarkMode,
+                          ),
+                        ],
+                      ),
+                      Row(
+                  crossAxisAlignment:
+                      CrossAxisAlignment.start, // Alinhar os elementos no topo
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 14),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CarouselSlider(
+                              carouselController: _carouselController,
+                              options: CarouselOptions(
+                                height: widget.tipo_pagina == 0 ? 250 : 200,
+                                enlargeCenterPage: true,
+                                enableInfiniteScroll: true,
+                                onPageChanged: (index, reason) {
+                                  setState(() {
+                                    _currentIndex = index;
+                                  });
+                                },
+                              ),
+                              items: widget.urlsImage.map((url) {
+                                return Builder(
+                                  builder: (BuildContext context) {
+                                    return Container(
+                                      width: widget.tipo_pagina == 0 ? 450 : 250,
+                                      margin:
+                                          EdgeInsets.symmetric(horizontal: 5.0),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey,
+                                      ),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return Dialog(
+                                                child: Stack(
+                                                  children: [
+                                                    Container(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.8,
+                                                      height:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .height *
+                                                              0.8,
+                                                      child: Image.network(
+                                                        url,
+                                                        fit: BoxFit.contain,
+                                                      ),
+                                                    ),
+                                                    Positioned(
+                                                      top: 8,
+                                                      right: 8,
+                                                      child: IconButton(
+                                                        icon: Icon(Icons.close),
+                                                        onPressed: () {
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                          );
+                                        },
+                                        child: Image.network(
+                                          url,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+                              }).toList(),
+                            ),
+                            SizedBox(
+                              height: 8,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                IconButton(
+                                  icon: Icon(Icons.arrow_back, color: textColor),
+                                  onPressed: () {
+                                    if (_currentIndex > 0) {
+                                      _carouselController.previousPage();
+                                    }
+                                  },
+                                ),
+                                Text(
+                                  '${_currentIndex + 1} / ${widget.urlsImage.length}',
+                                  style: TextStyle(color: textColor),
+                                ),
+                                IconButton(
+                                  icon:
+                                      Icon(Icons.arrow_forward, color: textColor),
+                                  onPressed: () {
+                                    if (_currentIndex <
+                                        widget.urlsImage.length - 1) {
+                                      _carouselController.nextPage();
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    if (widget.tipo_pagina == 0)
+                      ImovelCaracteristicasWidget(
+                        caracteristicas: widget.caracteristicas,
+                        isDarkMode: widget.isDarkMode,
+                      ),
+                  ],
+                ),
+                
+                    
                     Row(
                       children: [
                         Icon(
@@ -325,7 +464,7 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
                             ),
                           ),
                         ),
-                      
+                        Spacer(), // Spacer para distribuir o espaço restante
                         Card(
                           color:
                               widget.isDarkMode ? Colors.black54 : Colors.white,
@@ -357,7 +496,7 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
                           ),
                         ),
 
-                        
+                        Spacer(),
                         Card(
                           color:
                               widget.isDarkMode ? Colors.black54 : Colors.white,
@@ -366,7 +505,7 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
                           ),
                           elevation: 4,
                           child: Padding(
-                            padding: const EdgeInsets.all(7.0),
+                            padding: const EdgeInsets.all(8.0),
                             child: Row(
                               children: [
                                 Icon(
