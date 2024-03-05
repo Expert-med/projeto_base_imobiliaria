@@ -17,6 +17,7 @@ class MapPageFlutter extends StatefulWidget {
 
 class _MapPageFlutterState extends State<MapPageFlutter> {
   late List<NewImovel> loadedProducts = [];
+  late List<NewImovel> filteredProducts = [];
   late List<Marker> filteredMarkers = [];
   bool showInfoScreen = false;
   String selectedMarkerTitle = '';
@@ -46,7 +47,11 @@ class _MapPageFlutterState extends State<MapPageFlutter> {
       final provider = Provider.of<NewImovelList>(context, listen: false);
       loadedProducts = provider.items;
 
-      filteredMarkers = loadedProducts.take(50).map((imovel) {
+      List<NewImovel> filteredProducts = loadedProducts
+          .where((imovel) => imovel.localizacao['latitude'] != "N/A" && imovel.localizacao['longitude'] != "N/A" )
+          .toList();
+
+      filteredMarkers = filteredProducts.take(50).map((imovel) {
         double latitude =
             double.tryParse(imovel.localizacao['latitude']) ?? 0.0;
         double longitude =
@@ -110,7 +115,7 @@ class _MapPageFlutterState extends State<MapPageFlutter> {
   @override
   Widget build(BuildContext context) {
     bool isSmallScreen = MediaQuery.of(context).size.width < 900;
-
+    
     return Scaffold(
       appBar: isSmallScreen
           ? CustomAppBar(
@@ -180,22 +185,22 @@ class _MapPageFlutterState extends State<MapPageFlutter> {
                                 });
                               },
                               child: ImovelInfoComponent(
-                                  selectedMarkerTitle,
-                                  selectedMarkerTerreno,
-                                  selectedMarkerLocation,
-                                  selectedMarkerOrigalPrice,
-                                  urlsImage,
-                                  isDarkMode,
-                                  selectedMarkerCodigo,
-                                  selectedMarkerAreaTotal,
-                                  selectedMarkerLink,
-                                  selectedVagasgaragem,
-                                  selectedTotaldormitorios,
-                                  selectedTotalsuites,
-                                  selectedMarkerLatitude,
-                                  selectedMarkerLongitude,
-                                  1,
-                                  selectedCaracteristicas),
+                                    selectedMarkerTitle, // Título do imóvel
+                                    selectedMarkerTerreno, // Terreno do imóvel
+                                    selectedMarkerLocation, // Localização do imóvel
+                                    selectedMarkerOrigalPrice, // Preço original do imóvel
+                                    urlsImage, // URLs das imagens do imóvel
+                                    isDarkMode,
+                                    selectedMarkerCodigo,
+                                    selectedMarkerAreaTotal,
+                                    selectedMarkerLink,
+                                    selectedVagasgaragem,
+                                    selectedTotaldormitorios,
+                                    selectedTotalsuites,
+                                    selectedMarkerLatitude,
+                                    selectedMarkerLongitude,
+                                    1,
+                                    selectedCaracteristicas),
                             )
                           : GestureDetector(
                               onTap: () {
@@ -227,11 +232,24 @@ class _MapPageFlutterState extends State<MapPageFlutter> {
                                     child: ListView.builder(
                                       itemCount: filteredMarkers.length,
                                       itemBuilder: (context, index) {
-                                        final marker = loadedProducts[index];
+
+                                       
+
+                                      List<NewImovel> filteredProducts = loadedProducts
+                                        .where((imovel) => imovel.localizacao['latitude'] != "N/A" && 
+                                        imovel.localizacao['longitude'] != "N/A")
+                                        .toList();
+                                      
+
+                                        
+                                        final marker = filteredProducts[index];
+                                        print(marker.detalhes['nome_imovel']);
                                         String title = marker
                                                 .detalhes['nome_imovel']
                                                 .toString() ??
                                             "";
+                                        String link = marker.link_imovel ?? "";
+                                        String id = marker.id ?? "";
                                         String terreno = marker
                                             .detalhes['terreno']
                                             .toString();
@@ -246,7 +264,7 @@ class _MapPageFlutterState extends State<MapPageFlutter> {
                                                     ['cidade'] +
                                                 '/' +
                                                 marker.localizacao['endereco']
-                                                    ['uf'] ??
+                                                    ['estado'] ??
                                             "";
                                         String precoOriginal = marker
                                             .preco['preco_original']
@@ -254,6 +272,7 @@ class _MapPageFlutterState extends State<MapPageFlutter> {
                                         List<String> imageUrls = [];
                                         imageUrls.addAll(
                                             marker.imagens.cast<String>());
+                                    
                                         return ListTile(
                                           title: Text(
                                             title,
@@ -265,22 +284,22 @@ class _MapPageFlutterState extends State<MapPageFlutter> {
                                               context,
                                               MaterialPageRoute(
                                                 builder: (context) => ImovelInfoComponent(
-                                                    title, // Título do imóvel
-                                                    terreno, // Terreno do imóvel
-                                                    localizacao, // Localização do imóvel
-                                                    precoOriginal, // Preço original do imóvel
-                                                    imageUrls, // URLs das imagens do imóvel
+                                                    title, 
+                                                    terreno, 
+                                                    localizacao, 
+                                                    precoOriginal, 
+                                                    imageUrls, 
                                                     isDarkMode,
-                                                    selectedMarkerCodigo,
-                                                    selectedMarkerAreaTotal,
-                                                    selectedMarkerLink,
-                                                    selectedVagasgaragem,
-                                                    selectedTotaldormitorios,
-                                                    selectedTotalsuites,
-                                                    selectedMarkerLatitude,
-                                                    selectedMarkerLongitude,
+                                                    marker.id ?? "",
+                                                    marker.detalhes['area_total'] ?? "",
+                                                    link,
+                                                    int.tryParse(marker.detalhes['vagas_garagem'] ?? "") ?? 0,
+                                                    marker.detalhes['total_dormitorios'] ?? "",
+                                                    marker.detalhes['area_total'] ?? "",
+                                                    marker.localizacao['latitude'] ?? "",
+                                                    marker.localizacao['longitude'] ?? "",
                                                     1,
-                                                    selectedCaracteristicas),
+                                                    marker.caracteristicas ?? {}),
                                               ),
                                             );
                                           },
