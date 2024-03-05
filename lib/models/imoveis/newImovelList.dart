@@ -26,20 +26,21 @@ class NewImovelList with ChangeNotifier {
 
   Future<List<NewImovel>> buscarImoveis() async {
     CollectionReference<Map<String, dynamic>> imoveisRef =
-        FirebaseFirestore.instance.collection('imoveis_final_teste');
+        FirebaseFirestore.instance.collection('um_por_imob');
 
     try {
       QuerySnapshot<Map<String, dynamic>> querySnapshot =
           await imoveisRef.get();
 
       List<NewImovel> imoveis = [];
+      
 
       querySnapshot.docs
           .forEach((QueryDocumentSnapshot<Map<String, dynamic>> doc) {
         final resultado = doc.data();
-        final infoList = resultado['info'] ?? <String, dynamic>{};
+        final infoList = resultado['detalhes'] ?? <String, dynamic>{};
 
-        if (resultado['id_imovel'] != null &&
+        if (resultado['codigo_imovel'] != null &&
             resultado['data'] != null &&
             resultado['link'] != null &&
             resultado['link_virtual_tour'] != null &&
@@ -56,28 +57,28 @@ class NewImovelList with ChangeNotifier {
           final localizacao = _convertToListMap(resultado['localizacao']);
 
           final imovel = NewImovel(
-            id: resultado['id_imovel'],
-            data: resultado['data'],
+            id: resultado['codigo_imovel'] ?? '',
+            data: resultado['data'] ?? '',
             detalhes: resultado['detalhes'] != null
                 ? Map<String, dynamic>.from(resultado['detalhes'])
                 : {},
             link_imovel: resultado['link'] ??
                 '', // Provide a default value if 'link' is null
-            link_virtual_tour: resultado['link_virtual_tour'],
-            caracteristicas: resultado['caracteristicas'] ?? {},
-            atualizacoes: resultado['atualizacoes'] ?? {},
-            codigo_imobiliaria: resultado['codigo_imobiliaria'],
-            curtidas: resultado['curtidas'],
-            data_cadastro: resultado['data_cadastro'],
-            finalidade: resultado['finalidade'],
-            imagens: List<String>.from(resultado['imagens'] ?? []),
+            link_virtual_tour: resultado['link_virtual_tour'] ?? '',
+            caracteristicas: resultado['caracteristicas'] ?? '',
+            atualizacoes: resultado['atualizacoes'] ?? '',
+            codigo_imobiliaria: resultado['codigo_imobiliaria'] ?? '',
+            curtidas: resultado['curtidas'] ?? '',
+            data_cadastro: resultado['data_cadastro'] ?? '',
+            finalidade: resultado['finalidade'] ?? 0,
+            imagens: List<String>.from(resultado['imagens'] ?? []) ,
             localizacao: resultado['localizacao'] ?? {},
-            preco: resultado['preco'] ?? {},
-            tipo: resultado['tipo'] ?? '',
+            preco: resultado['preco'] ?? '',
+            tipo: resultado['tipo'] ?? 0,
           );
 
           _items.add(imovel);
-          print(imovel.caracteristicas);
+          //print(imovel.caracteristicas);
           imoveis.add(imovel);
         }
       });

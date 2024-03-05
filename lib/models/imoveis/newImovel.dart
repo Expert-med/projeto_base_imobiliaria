@@ -16,8 +16,8 @@ class NewImovel with ChangeNotifier {
   final String data;
   final List<String> imagens;
   final String curtidas;
-  final String finalidade;
-  final String tipo;
+  final int finalidade;
+  final int tipo;
   bool isFavorite;
 
   NewImovel({

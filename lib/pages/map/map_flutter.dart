@@ -32,7 +32,7 @@ class _MapPageFlutterState extends State<MapPageFlutter> {
   String selectedTotalsuites = '';
   String selectedMarkerLongitude = '';
   String selectedMarkerLatitude = '';
- Map<String, dynamic>  selectedCaracteristicas ={};
+  Map<String, dynamic>  selectedCaracteristicas ={};
 
   late List<Marker> markers;
   final PopupController _popupController = PopupController();
@@ -51,7 +51,6 @@ class _MapPageFlutterState extends State<MapPageFlutter> {
             double.tryParse(imovel.localizacao['latitude']) ?? 0.0;
         double longitude =
             double.tryParse(imovel.localizacao['longitude']) ?? 0.0;
-
         return Marker(
           point: LatLng(latitude, longitude),
           width: 40,
@@ -70,15 +69,15 @@ class _MapPageFlutterState extends State<MapPageFlutter> {
                         ' - ' +
                         imovel.localizacao['endereco']['cidade'] +
                         '/' +
-                        imovel.localizacao['endereco']['uf'] ??
+                        imovel.localizacao['endereco']['estado'] ??
                     "";
                 selectedMarkerOrigalPrice =
-                    imovel.detalhes['preco_original'] ?? "";
+                    imovel.preco['preco_original'] ?? "";
                 urlsImage.addAll(imovel.imagens?.cast<String>() ?? []);
 
-                selectedMarkerCodigo = imovel.id;
+                selectedMarkerCodigo = imovel.id ?? "";
                 selectedMarkerAreaTotal = imovel.detalhes['area_total'] ?? "";
-                selectedMarkerLink = imovel.link_imovel;
+                selectedMarkerLink = imovel.link_imovel ?? "";
 
                 // Convertendo para int ou mantendo 0 se for nulo ou não puder ser convertido
                 selectedVagasgaragem =
@@ -90,7 +89,7 @@ class _MapPageFlutterState extends State<MapPageFlutter> {
 
                 selectedMarkerLongitude = imovel.localizacao['longitude'] ?? "";
                 selectedMarkerLatitude = imovel.localizacao['latitude'] ?? "";
-                selectedCaracteristicas = imovel.caracteristicas;
+                selectedCaracteristicas = imovel.caracteristicas ?? {};
               });
             },
             child: Icon(
@@ -250,7 +249,7 @@ class _MapPageFlutterState extends State<MapPageFlutter> {
                                                     ['uf'] ??
                                             "";
                                         String precoOriginal = marker
-                                            .detalhes['preco_original']
+                                            .preco['preco_original']
                                             .toString();
                                         List<String> imageUrls = [];
                                         imageUrls.addAll(
