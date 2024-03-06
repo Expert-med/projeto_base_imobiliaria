@@ -69,7 +69,7 @@ class _ImovelItemListState extends State<ImovelItemList> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '${(product.detalhes['total_dormitorios'] != 'N/A' && product.detalhes['total_suites'] != 'N/A') ? (int.parse(product.detalhes['total_dormitorios']) + int.parse(product.detalhes['total_suites'])) : '0 dormitórios informados'}',
+                        '${(product.detalhes['total_dormitorios'] != 'N/A' && product.detalhes['total_suites'] != 'N/A') ? product.detalhes['total_dormitorios'] : '0 dormitórios informados'}',
                         style: TextStyle(
                           color:
                               !widget.isDarkMode ? Colors.black : Colors.white,

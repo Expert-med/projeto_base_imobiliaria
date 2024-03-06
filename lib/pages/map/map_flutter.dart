@@ -139,61 +139,32 @@ class _MapPageFlutterState extends State<MapPageFlutter> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: Text(
-                          'Filtros',
-                          style: TextStyle(
-                            color: Color(0xFF6e58e9),
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
+                      Text(
+                        'Filtros',
+                        style: TextStyle(
+                          color: Color(0xFF6e58e9),
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Expanded(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Checkbox(
-                              value: true, // Defina o valor inicial do primeiro checkbox
-                              onChanged: (value) {
-                                // Implemente a lógica de mudança do estado do checkbox
-                              },
-                            ),
-                            Text('Checkbox 1'),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                      Row(
                         children: [
-                          Row(
-                            children: [
-                              Checkbox(
-                                value: false, // Defina o valor inicial do primeiro checkbox
-                                onChanged: (value) {
-                                  // Implemente a lógica de mudança do estado do checkbox
-                                },
-                              ),
-                              Text('Checkbox 1'),
-                            ],
+                          Checkbox(
+                            value: true, // Defina o valor inicial do primeiro checkbox
+                            onChanged: (value) {
+                              // Implemente a lógica de mudança do estado do checkbox
+                            },
                           ),
-                          Row(
-                            children: [
-                              Checkbox(
-                                value: false, // Defina o valor inicial do segundo checkbox
-                                onChanged: (value) {
-                                  // Implemente a lógica de mudança do estado do checkbox
-                                },
-                              ),
-                              Text('Checkbox 2'),
-                            ],
+                          Text('Checkbox 1'),
+                          SizedBox(width: 10), // Adicione espaçamento entre os checkboxes
+                          Checkbox(
+                            value: false, // Defina o valor inicial do segundo checkbox
+                            onChanged: (value) {
+                              // Implemente a lógica de mudança do estado do checkbox
+                            },
                           ),
+                          Text('Checkbox 2'),
                         ],
-                      ),
-                    ),
-                      Expanded(
-                        child: SizedBox(), // Coluna vazia para manter a distribuição igual
                       ),
                     ],
                   ),
@@ -340,114 +311,74 @@ class _MapPageFlutterState extends State<MapPageFlutter> {
                                             String precoOriginal =
                                                 marker.preco['preco_original']
                                                     .toString();
-                                            String total_dormitorios =
-                                                marker.detalhes['total_dormitorios']
-                                                    .toString();
                                             List<String> imageUrls = [];
                                             imageUrls.addAll(
                                                 marker.imagens.cast<String>());
 
                                             return ListTile(
-                                               title: Row(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [                                          
-                                                    Container(
-                                                      width: 100,
-                                                      height: 100,
-                                                      decoration: BoxDecoration(
-                                                        image: DecorationImage(
-                                                          image: NetworkImage(
-                                                              imageUrls.isNotEmpty ? imageUrls[0] : ''),
-                                                          fit: BoxFit.cover,
+                                              title: Row(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [                                          
+                                                  Container(
+                                                    width: 100,
+                                                    height: 100,
+                                                    decoration: BoxDecoration(
+                                                      image: DecorationImage(
+                                                        image: NetworkImage(
+                                                            imageUrls.isNotEmpty
+                                                                ? imageUrls[0]
+                                                                : ''),
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8.0),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                      width:
+                                                          4), // Add some spacing between image and text
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Text(
+                                                          title,
+                                                          style: TextStyle(
+                                                            color: Color(0xFF6e58e9),
+                                                            fontSize: 15,
+                                                            fontWeight: FontWeight.bold,
+                                                          ),
                                                         ),
-                                                        borderRadius: BorderRadius.circular(8.0),
-                                                      ),
-                                                    ),
-                                                    SizedBox(width: 4), // Add some spacing between image and text
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Column(
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                        children: [
-                                                          Text(
-                                                            title,
-                                                            style: TextStyle(
-                                                              color: Color(0xFF6e58e9),
-                                                              fontSize: 15,
-                                                              fontWeight: FontWeight.bold,
-                                                            ),
-                                                          ),
-                                                          SizedBox(width: 4),
+                                                         SizedBox(width: 4),
                                                           Row(
-                                                            children: [
-                                                              Icon(
-                                                                Icons.place,
-                                                                color: isDarkMode ? Colors.white : Colors.black54,
-                                                              ),
-                                                              SizedBox(width: 4),
-                                                              Expanded(
-                                                                flex: 1,
-                                                                child: Container(
-                                                                  width: double.infinity,
-                                                                  child: Text(
-                                                                    localizacao.split('-').join('\n'),
-                                                                    style: TextStyle(
-                                                                      color: Color(0xFF6e58e9),
-                                                                      fontSize: 12,
-                                                                    ),
-                                                                    overflow: TextOverflow.ellipsis, // Define o comportamento de overflow
-                                                                    maxLines: 2, // Define o número máximo de linhas
-                                                                  ),
-                                                                ),
-                                                              ),
-              
-                                                            ],
-                                                          ),
-                                                          SizedBox(width: 4),
-                                                            Align(
-                                                              alignment: Alignment.bottomRight,
-                                                              child: Row(
-                                                            children: [
-                                                              Icon(
-                                                                Icons.bed,
-                                                                color: isDarkMode
-                                                                    ? Colors.white
-                                                                    : Colors.black54,
-                                                              ),
-                                                              SizedBox(width: 4),
-                                                              Expanded(
-                                                                flex: 1,
-                                                                child: Container(
-                                                                  width: double.infinity,
-                                                                  child: Text(
-                                                                    total_dormitorios,
-                                                                    style: TextStyle(
-                                                                      color: Color(0xFF6e58e9),
-                                                                      fontSize: 12,
-                                                                    ),
-                                                                    overflow: TextOverflow.ellipsis, // Define o comportamento de overflow
-                                                                    maxLines: 2, // Define o número máximo de linhas
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),),
-                                                            SizedBox(width: 4),
-                                                            Align(
-                                                              alignment: Alignment.bottomRight,
-                                                              child: Text(
-                                                                precoOriginal != "N/A" ? precoOriginal : "Sem preço informado",
-                                                                style: TextStyle(
-                                                                  color: Color.fromARGB(207, 0, 0, 0),
-                                                                  fontSize: precoOriginal != "N/A" ? 20 : 15,
-                                                                  fontWeight: FontWeight.bold,
-                                                                ),
-                                                              ),)
-                                                        ],
+                                                children: [
+                                                  Icon(
+                                                    Icons.place,
+                                                    color: isDarkMode ? Colors.white : Colors.black54,
+                                                  ),
+                                                  SizedBox(width: 4),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      localizacao,
+                                                      style: TextStyle(
+                                                        color: Color(0xFF6e58e9),
+                                                        fontSize: 10,
+                                                        fontWeight: FontWeight.bold,
                                                       ),
+                                                      overflow: TextOverflow.ellipsis, // Define o comportamento de overflow
+                                                      maxLines: 2, // Define o número máximo de linhas
                                                     ),
-                                                  ],
-                                                ),
+                                                  ),
+                                                ],
+                                              ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                               onTap: () {
                                                 Navigator.push(
                                                   context,
