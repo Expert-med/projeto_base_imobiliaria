@@ -21,6 +21,7 @@ import '../pages/map/map_flutter.dart';
 import '../pages/map/map_page.dart';
 import '../pages/propostas/proposta_add_page.dart';
 import '../pages/propostas/proposta_list_page.dart';
+import '../pages/tarefas/minhas_tarefas_page.dart';
 import '../pages/teste.dart';
 import '../util/dark_color_util.dart';
 import 'cad_imovel_form.dart';
@@ -550,7 +551,28 @@ class _CustomMenuState extends State<CustomMenu> {
                 );
               },
             ),
-
+if (_user?.tipoUsuario == 1)
+            ListTile(
+              leading: FaIcon(
+                FontAwesomeIcons.calendar,
+                color: Color(0xFF6e58e9),
+              ),
+              title: Text(
+                'Minhas Tarefas',
+                style: TextStyle(
+                  color: widget.isDarkMode ? Colors.white : Colors.black54,
+                ),
+              ),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        MinhasTarefas(),
+                  ),
+                );
+              },
+            ),
           Divider(),
           Padding(
             padding: const EdgeInsets.only(top:180),

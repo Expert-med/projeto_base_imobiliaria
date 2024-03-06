@@ -17,12 +17,13 @@ class CorretorClientesPage extends StatefulWidget {
 class _CorretorClientesPageState extends State<CorretorClientesPage> {
   List<Clientes> _clientes = [];
   TextEditingController _searchController = TextEditingController();
- bool _isDarkMode = false;
- @override
+  bool _isDarkMode = false;
+  @override
   void initState() {
     _isDarkMode = widget.isDarkMode;
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     final clientesList = Provider.of<ClientesList>(context);
@@ -37,31 +38,34 @@ class _CorretorClientesPageState extends State<CorretorClientesPage> {
       body: Column(
         children: [
           Padding(
-  padding: const EdgeInsets.all(10.0),
-  child: TextField(
-    controller: _searchController,
-    decoration: InputDecoration(
-      labelText: 'Procurar',
-      labelStyle: TextStyle(color:!_isDarkMode ? Colors.black :Colors.white),
-      prefixIcon: Icon(
-        Icons.search,
-      ),
-      filled: true,
-      fillColor: !_isDarkMode ? Colors.grey[200]: Colors.black, // Defina a cor de fundo como cinza
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: BorderSide(color:!_isDarkMode ? Colors.grey: Colors.black),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-    ),
-    onChanged: (value) {
-      setState(() {}); // Para reconstruir a lista com base na busca
-    },
-  ),
-),
-
+            padding: const EdgeInsets.all(10.0),
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                labelText: 'Procurar',
+                labelStyle: TextStyle(
+                    color: !_isDarkMode ? Colors.black : Colors.white),
+                prefixIcon: Icon(
+                  Icons.search,
+                ),
+                filled: true,
+                fillColor: !_isDarkMode
+                    ? Colors.grey[200]
+                    : Colors.black, // Defina a cor de fundo como cinza
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(
+                      color: !_isDarkMode ? Colors.grey : Colors.black),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              onChanged: (value) {
+                setState(() {}); // Para reconstruir a lista com base na busca
+              },
+            ),
+          ),
           Expanded(
             child: FutureBuilder<List<Clientes>>(
               future: clientesList.buscarClientesDoCorretor(),
@@ -105,40 +109,39 @@ class _CorretorClientesPageState extends State<CorretorClientesPage> {
       ),
       drawer: CustomMenu(isDarkMode: _isDarkMode),
       floatingActionButton: Column(
-  mainAxisAlignment: MainAxisAlignment.end,
-  crossAxisAlignment: CrossAxisAlignment.end,
-  children: [
-    FloatingActionButton(
-      onPressed: () {
-        setState(() {
-          _isDarkMode = !_isDarkMode;
-        });
-      },
-      child: Icon(Icons.lightbulb),
-    ),
-    SizedBox(height: 16), // Espaçamento entre os botões
-    FloatingActionButton(
-      onPressed: () {
-        showModalBottomSheet(
-          context: context,
-          builder: (BuildContext context) {
-            return ClientesModal(
-              parametro_clientes_do_corretor: 0,
-              clientesList: clientesList,
-              onClienteAdicionado: (cliente) {
-                setState(() {
-                  _clientes.add(cliente);
-                });
-              },
-            );
-          },
-        );
-      },
-      child: Icon(Icons.add),
-    ),
-  ],
-),
-
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            onPressed: () {
+              setState(() {
+                _isDarkMode = !_isDarkMode;
+              });
+            },
+            child: Icon(Icons.lightbulb),
+          ),
+          SizedBox(height: 16), // Espaçamento entre os botões
+          FloatingActionButton(
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                builder: (BuildContext context) {
+                  return ClientesModal(
+                    parametro_clientes_do_corretor: 0,
+                    clientesList: clientesList,
+                    onClienteAdicionado: (cliente) {
+                      setState(() {
+                        _clientes.add(cliente);
+                      });
+                    },
+                  );
+                },
+              );
+            },
+            child: Icon(Icons.add),
+          ),
+        ],
+      ),
     );
   }
 }

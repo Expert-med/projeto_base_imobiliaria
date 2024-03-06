@@ -15,6 +15,7 @@ import 'models/agendamento/agendamentoList.dart';
 import 'models/clientes/clientesList.dart';
 import 'models/corretores/corretor.dart';
 import 'models/negociacao/negociacaoList.dart';
+import 'models/tarefas/tarefasList.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -74,6 +75,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => AgendamentoList(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => TarefasLista(),
         ),
       ],
       child: GetMaterialApp(

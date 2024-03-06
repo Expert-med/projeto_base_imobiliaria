@@ -43,88 +43,85 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
+          
           color: backgroundColor,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.all(8.0),
+  padding: const EdgeInsets.all(8.0),
+  child: Container(
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(10), // Adicionando bordas arredondadas
+      color: Color.fromARGB(255, 238, 238, 238),
+    ),
+    child: Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+          child: Row(
+            children: [
+              Expanded(
                 child: Container(
-                  color: Color.fromARGB(255, 238, 238, 238),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 5, vertical: 5),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Container(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 10, right: 10, top: 8, bottom: 8),
-                                  child: Text.rich(
-                                    TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text:
-                                              '${widget.imovel.detalhes['nome_imovel'].substring(0, widget.imovel.detalhes['nome_imovel'].indexOf('Cód'))}',
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                            color: textColor,
-                                          ),
-                                        ),
-                                        TextSpan(
-                                          text: 'Cód',
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            color: Colors.grey,
-                                          ),
-                                        ),
-                                        TextSpan(
-                                          text:
-                                              '${widget.imovel.detalhes['nome_imovel'].substring(widget.imovel.detalhes['nome_imovel'].indexOf('Cód') + 3)}',
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            color: Colors.grey,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 10, top: 8, bottom: 8),
+                    child: Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: '${widget.imovel.detalhes['nome_imovel'].substring(0, widget.imovel.detalhes['nome_imovel'].indexOf('Cód'))}',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: textColor,
                             ),
-                          ],
-                        ),
+                          ),
+                          TextSpan(
+                            text: 'Cód',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          TextSpan(
+                            text: '${widget.imovel.detalhes['nome_imovel'].substring(widget.imovel.detalhes['nome_imovel'].indexOf('Cód') + 3)}',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 10, right: 10, top: 8, bottom: 8),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.place,
-                              color: widget.isDarkMode
-                                  ? Colors.white
-                                  : Colors.black54,
-                            ),
-                            SizedBox(width: 4),
-                            Flexible(
-                              child: Text(
-                                '${widget.imovel.localizacao['endereco']['bairro']}',
-                                style:
-                                    TextStyle(fontSize: 15, color: textColor),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 10, right: 10, top: 8, bottom: 8),
+          child: Row(
+            children: [
+              Icon(
+                Icons.place,
+                color: widget.isDarkMode ? Colors.white : Colors.black54,
+              ),
+              SizedBox(width: 4),
+              Flexible(
+                child: Text(
+                  '${widget.imovel.localizacao['endereco']['bairro']}',
+                  style: TextStyle(fontSize: 15, color: textColor),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  ),
+),
+
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
