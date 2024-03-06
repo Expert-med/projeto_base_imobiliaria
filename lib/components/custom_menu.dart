@@ -22,6 +22,7 @@ import '../pages/propostas/proposta_add_page.dart';
 import '../pages/propostas/proposta_list_page.dart';
 import '../pages/teste.dart';
 import '../util/dark_color_util.dart';
+import 'cad_imovel_form.dart';
 
 class CustomMenu extends StatefulWidget {
   final bool isDarkMode;
@@ -277,27 +278,56 @@ class _CustomMenuState extends State<CustomMenu> {
               ),
             ),
           if (isExpandedImoveis)
-            ListTile(
-              leading: Icon(
-                Icons.map_outlined,
-                color: widget.isDarkMode
-                    ? darkenColor(Color(0xFF6e58e9), 0.5)
-                    : Color(0xFF6e58e9),
-              ),
-              title: Text(
-                'Mapa dos imóveis',
-                style: TextStyle(
-                  color: widget.isDarkMode ? Colors.white : Colors.black54,
+            Padding(
+              padding: const EdgeInsets.only(left: 8, right: 8),
+              child: ListTile(
+                leading: Icon(
+                  Icons.map_outlined,
+                  color: widget.isDarkMode
+                      ? darkenColor(Color(0xFF6e58e9), 0.5)
+                      : Color(0xFF6e58e9),
                 ),
-              ),
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MapPageFlutter(),
+                title: Text(
+                  'Mapa dos imóveis',
+                  style: TextStyle(
+                    color: widget.isDarkMode ? Colors.white : Colors.black54,
                   ),
-                );
-              },
+                ),
+                onTap: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MapPageFlutter(),
+                    ),
+                  );
+                },
+              ),
+            ),
+             if (isExpandedImoveis)
+            Padding(
+              padding: const EdgeInsets.only(left: 8, right: 8),
+              child: ListTile(
+                leading: Icon(
+                  Icons.map_outlined,
+                  color: widget.isDarkMode
+                      ? darkenColor(Color(0xFF6e58e9), 0.5)
+                      : Color(0xFF6e58e9),
+                ),
+                title: Text(
+                  'Cadastrar imóvel',
+                  style: TextStyle(
+                    color: widget.isDarkMode ? Colors.white : Colors.black54,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CadImovelForm(isDarkMode: widget.isDarkMode),
+                    ),
+                  );
+                },
+              ),
             ),
           ListTile(
             leading: Icon(
