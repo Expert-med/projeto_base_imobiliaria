@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:projeto_imobiliaria/main.dart';
 import 'package:provider/provider.dart';
 import '../checkPage.dart';
@@ -84,55 +85,59 @@ class _CustomMenuState extends State<CustomMenu> {
     bool isSmallScreen = MediaQuery.of(context).size.width < 900;
 
     return Drawer(
+      backgroundColor: widget.isDarkMode ? Colors.black54 : Colors.white,
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          ListTile(
-            leading: Icon(
-              Icons.home,
-              color: widget.isDarkMode
-                  ? darkenColor(Color(0xFF6e58e9), 0.5)
-                  : Color(0xFF6e58e9),
-              size: 40,
-            ),
-            title: Text(
-              'Home',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: widget.isDarkMode ? Colors.white : Colors.black54,
+          Padding(
+            padding: EdgeInsets.only(top: 25, bottom: 50),
+            child: ListTile(
+              leading: Icon(
+                Icons.home,
+                color: widget.isDarkMode
+                    ? darkenColor(Color(0xFF6e58e9), 0.5)
+                    : Color(0xFF6e58e9),
+                size: 40,
               ),
-            ),
-            onTap: () {
-              Navigator.pop(context); // Fecha o drawer
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => checkPage(),
+              title: Text(
+                'Home',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: widget.isDarkMode ? Colors.white : Colors.black54,
                 ),
-              );
-            },
-          ),
-          SizedBox(height: 10),
-          ListTile(
-            leading: Icon(
-              Icons.house,
-              color: Color(0xFF6e58e9),
-            ),
-            title: Text(
-              'Virtual Tour test',
-              style: TextStyle(
-                color: widget.isDarkMode ? Colors.white : Colors.black54,
               ),
+              onTap: () {
+                Navigator.pop(context); // Fecha o drawer
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => checkPage(),
+                  ),
+                );
+              },
             ),
-            onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => VirtualTourIFrame(),
-                ),
-              );
-            },
           ),
+
+          // ListTile(
+          //   leading: Icon(
+          //     Icons.house,
+          //     color: Color(0xFF6e58e9),
+          //   ),
+          //   title: Text(
+          //     'Virtual Tour test',
+          //     style: TextStyle(
+          //       color: widget.isDarkMode ? Colors.white : Colors.black54,
+          //     ),
+          //   ),
+          //   onTap: () {
+          //     Navigator.pushReplacement(
+          //       context,
+          //       MaterialPageRoute(
+          //         builder: (context) => VirtualTourIFrame(),
+          //       ),
+          //     );
+          //   },
+          // ),
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: AnimatedContainer(
@@ -161,7 +166,7 @@ class _CustomMenuState extends State<CustomMenu> {
               padding: const EdgeInsets.only(left: 8, right: 8),
               child: ListTile(
                 leading: Icon(
-                  Icons.house,
+                  Icons.library_books_outlined,
                   color: Color(0xFF6e58e9),
                 ),
                 title: Text(
@@ -188,7 +193,7 @@ class _CustomMenuState extends State<CustomMenu> {
               padding: const EdgeInsets.only(left: 8, right: 8),
               child: ListTile(
                 leading: Icon(
-                  Icons.house,
+                  Icons.other_houses_rounded,
                   color: Color(0xFF6e58e9),
                 ),
                 title: Text(
@@ -212,7 +217,7 @@ class _CustomMenuState extends State<CustomMenu> {
               padding: const EdgeInsets.only(left: 8, right: 8),
               child: ListTile(
                 leading: Icon(
-                  Icons.house,
+                  Icons.search,
                   color: Color(0xFF6e58e9),
                 ),
                 title: Text(
@@ -237,8 +242,8 @@ class _CustomMenuState extends State<CustomMenu> {
             Padding(
               padding: const EdgeInsets.only(left: 8, right: 8),
               child: ListTile(
-                leading: Icon(
-                  Icons.house,
+                leading: FaIcon(
+                  FontAwesomeIcons.cogs,
                   color: Color(0xFF6e58e9),
                 ),
                 title: Text(
@@ -281,11 +286,9 @@ class _CustomMenuState extends State<CustomMenu> {
             Padding(
               padding: const EdgeInsets.only(left: 8, right: 8),
               child: ListTile(
-                leading: Icon(
-                  Icons.map_outlined,
-                  color: widget.isDarkMode
-                      ? darkenColor(Color(0xFF6e58e9), 0.5)
-                      : Color(0xFF6e58e9),
+                leading: FaIcon(
+                  FontAwesomeIcons.mapLocation,
+                  color: Color(0xFF6e58e9),
                 ),
                 title: Text(
                   'Mapa dos imóveis',
@@ -303,53 +306,7 @@ class _CustomMenuState extends State<CustomMenu> {
                 },
               ),
             ),
-             
-          ListTile(
-            leading: Icon(
-              Icons.people,
-              color: widget.isDarkMode
-                  ? darkenColor(Color(0xFF6e58e9), 0.5)
-                  : Color(0xFF6e58e9),
-            ),
-            title: Text(
-              'Lista de corretores',
-              style: TextStyle(
-                color: widget.isDarkMode ? Colors.white : Colors.black54,
-              ),
-            ),
-            onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      CorretoresListPage(isDarkMode: widget.isDarkMode),
-                ),
-              );
-            },
-          ),
-          ListTile(
-            leading: Icon(
-              Icons.people,
-              color: widget.isDarkMode
-                  ? darkenColor(Color(0xFF6e58e9), 0.5)
-                  : Color(0xFF6e58e9),
-            ),
-            title: Text(
-              'Geral agendamento',
-              style: TextStyle(
-                color: widget.isDarkMode ? Colors.white : Colors.black54,
-              ),
-            ),
-            onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      GeralAgendamento(isDarkMode: widget.isDarkMode),
-                ),
-              );
-            },
-          ),
+
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: AnimatedContainer(
@@ -451,8 +408,8 @@ class _CustomMenuState extends State<CustomMenu> {
             Padding(
               padding: const EdgeInsets.only(left: 8, right: 8),
               child: ListTile(
-                leading: Icon(
-                  Icons.house,
+                leading: FaIcon(
+                  FontAwesomeIcons.users,
                   color: Color(0xFF6e58e9),
                 ),
                 title: Text(
@@ -502,8 +459,8 @@ class _CustomMenuState extends State<CustomMenu> {
             Padding(
               padding: const EdgeInsets.only(left: 8, right: 8),
               child: ListTile(
-                leading: Icon(
-                  Icons.house,
+                leading: FaIcon(
+                  FontAwesomeIcons.scroll,
                   color: Color(0xFF6e58e9),
                 ),
                 title: Text(
@@ -528,8 +485,8 @@ class _CustomMenuState extends State<CustomMenu> {
             Padding(
               padding: const EdgeInsets.only(left: 8, right: 8),
               child: ListTile(
-                leading: Icon(
-                  Icons.house,
+                leading: FaIcon(
+                  FontAwesomeIcons.fileSignature,
                   color: Color(0xFF6e58e9),
                 ),
                 title: Text(
@@ -550,28 +507,75 @@ class _CustomMenuState extends State<CustomMenu> {
                 },
               ),
             ),
-          Divider(),
           ListTile(
-            leading: Icon(
-              Icons.logout,
-              color: widget.isDarkMode
-                  ? darkenColor(Color(0xFF6e58e9), 0.5)
-                  : Color(0xFF6e58e9),
+            leading: FaIcon(
+              FontAwesomeIcons.users,
+              color: Color(0xFF6e58e9),
             ),
             title: Text(
-              'Log Out',
+              'Lista de corretores',
               style: TextStyle(
                 color: widget.isDarkMode ? Colors.white : Colors.black54,
               ),
             ),
             onTap: () {
-              AuthService().logout;
-              Navigator.pushAndRemoveUntil(
+              Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => AuthPage()),
-                (route) => false,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      CorretoresListPage(isDarkMode: widget.isDarkMode),
+                ),
               );
             },
+          ),
+          if (_user?.tipoUsuario == 1)
+            ListTile(
+              leading: FaIcon(
+                FontAwesomeIcons.calendar,
+                color: Color(0xFF6e58e9),
+              ),
+              title: Text(
+                'Agendamentos',
+                style: TextStyle(
+                  color: widget.isDarkMode ? Colors.white : Colors.black54,
+                ),
+              ),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        GeralAgendamento(isDarkMode: widget.isDarkMode),
+                  ),
+                );
+              },
+            ),
+
+          Divider(),
+          Padding(
+            padding: const EdgeInsets.only(top:180),
+            child: ListTile(
+              leading: Icon(
+                Icons.logout,
+                color: widget.isDarkMode
+                    ? darkenColor(Color(0xFF6e58e9), 0.5)
+                    : Color(0xFF6e58e9),
+              ),
+              title: Text(
+                'Log Out',
+                style: TextStyle(
+                  color: widget.isDarkMode ? Colors.white : Colors.black54,
+                ),
+              ),
+              onTap: () {
+                AuthService().logout;
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => AuthPage()),
+                  (route) => false,
+                );
+              },
+            ),
           ),
         ],
       ),
