@@ -1,5 +1,7 @@
 // No arquivo user_repository.dart
 
+import 'dart:math';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -80,4 +82,13 @@ class UserRepository {
 
     return null; // Retornar null se não houver dados de usuário válidos
   }
+
+  String generateUID() {
+  Random random = Random();
+  String uid = '';
+  for (int i = 0; i < 4; i++) {
+    uid += random.nextInt(10).toString();
+  }
+  return uid;
+}
 }

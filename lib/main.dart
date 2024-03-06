@@ -181,7 +181,7 @@ class MyApp extends StatelessWidget {
           dadosProfissionais: data['dados_profissionais'] ?? {},
           metas: data['metas'] ?? {},
           desempenhoAtualMetas: data['desempenho_atual_metas'] ?? {},
-          infoBanner: data['info_banner'] ?? {},
+          infoBanner: data['infoBanner'] ?? {},
           );
           return corretor;
         } else {

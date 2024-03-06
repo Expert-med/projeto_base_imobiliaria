@@ -39,13 +39,14 @@ class _CorretorInfoPageState extends State<CorretorInfoPage> {
   @override
   Widget build(BuildContext context) {
     String imageBannerUrl = widget.corretor.infoBanner['image_url'].toString();
+    print(widget.corretor.infoBanner['image_url'].toString());
 
     if (imageBannerUrl.isEmpty) {
       imageBannerUrl = 'https://www.cbde.org.br/images/default.jpg';
     }
 
     return Scaffold(
-      appBar:NewCustomAppBar(isDarkMode: widget.isDarkMode, title: ''),
+      appBar: NewCustomAppBar(isDarkMode: widget.isDarkMode, title: ''),
       backgroundColor: widget.isDarkMode ? Colors.black : Colors.white,
       body: SingleChildScrollView(
         child: Column(
@@ -131,7 +132,20 @@ class _CorretorInfoPageState extends State<CorretorInfoPage> {
             if (widget.corretor.infoBanner['about_text'].toString() != '')
               Padding(
                 padding:
-                    EdgeInsets.only(left: 10, right: 10, top: 20, bottom: 10),
+                    EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 5),
+                child: Text(
+                  'Sobre o Corretor:',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: !widget.isDarkMode ? Colors.black : Colors.white,
+                  ),
+                ),
+              ),
+            if (widget.corretor.infoBanner['about_text'].toString() != '')
+              Padding(
+                padding:
+                    EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 10),
                 child: Row(
                   children: [
                     Expanded(

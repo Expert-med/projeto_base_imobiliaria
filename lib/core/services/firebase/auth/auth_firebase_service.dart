@@ -268,7 +268,7 @@ final NegociacaoList negociacoes = NegociacaoList();
         },
         'visitas': [],
         "negociacoes": [],
-        "info_banner": {
+        "infoBanner": {
           "image_url": '',
           "about_text": '',
         }

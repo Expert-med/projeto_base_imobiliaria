@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:provider/provider.dart';
 
+import '../core/data/user_repository.dart';
+import '../core/models/User_firebase_service.dart';
 import '../core/models/imovel_form_data.dart';
 import '../models/cep/via_cep_model.dart';
 import '../repositories/via_cep_repository.dart';
@@ -24,12 +27,31 @@ class _CadImovelFormState extends State<CadImovelForm> {
   final TextEditingController bairroController = TextEditingController();
   final TextEditingController localidadeController = TextEditingController();
   final TextEditingController ufController = TextEditingController();
-
+  dynamic _user;
   bool loading = false;
   var viacepModel = ViaCepModel();
   var viaCepRepository = ViaCepRepository();
   final _formKey = GlobalKey<FormState>();
   final _formData = ImovelFormData();
+  String codigo_imovel = '';
+  void initState() {
+    super.initState();
+
+    Provider.of<UserProvider>(context, listen: false).initializeUser();
+    UserRepository().loadCurrentUser().then((currentUser) {
+      if (currentUser != null) {
+        String uid = UserRepository().generateUID();
+        setState(() {
+          _user = currentUser;
+          codigo_imovel = 'V' + _user.id + uid;
+        });
+      } else {
+        print('Nenhum usuário atual encontrado.');
+      }
+    }).catchError((error) {
+      print('Erro ao carregar o usuário atual: $error');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +72,6 @@ class _CadImovelFormState extends State<CadImovelForm> {
                   Row(
                     children: [
                       Flexible(
-                        // Adicionando Flexible para garantir que os Column se ajustem ao tamanho disponível
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -66,67 +87,28 @@ class _CadImovelFormState extends State<CadImovelForm> {
                                 ),
                               ),
                             ),
-                            TextFormField(
-                              style: TextStyle(
-                                  color: !widget.isDarkMode
-                                      ? Colors.black
-                                      : Colors.white),
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: Colors.black12,
-                                border: OutlineInputBorder(
-                                  borderSide: BorderSide.none,
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                              ),
-                              onSaved: (value) =>
-                                  _formData.codigo = value ?? '',
-                            ),
-                          ],
-                        ),
-                      ),
-                      Flexible(
-                        // Adicionando Flexible para garantir que os Column se ajustem ao tamanho disponível
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
                             Padding(
                               padding: EdgeInsets.all(
-                                  15), //apply padding to all four sides
+                                  5), // Reduzindo o padding para o campo "Código Imóvel"
                               child: Text(
-                                "Nome",
+                                "${codigo_imovel}",
                                 style: TextStyle(
                                   color: Color(0xFF6e58e9),
-                                  fontWeight: FontWeight.bold,
                                   fontSize: 16,
                                 ),
                               ),
                             ),
-                            TextFormField(
-                              style: TextStyle(
-                                  color: !widget.isDarkMode
-                                      ? Colors.black
-                                      : Colors.white),
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: Colors.black12,
-                                border: OutlineInputBorder(
-                                  borderSide: BorderSide.none,
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                              ),
-                              onSaved: (value) => _formData.name = value ?? '',
-                            ),
                           ],
                         ),
                       ),
+                      
                     ],
                   ),
                   Padding(
                     padding:
                         EdgeInsets.all(15), //apply padding to all four sides
                     child: Text(
-                      "Imobiliária",
+                      "Imobiliária/Corretor",
                       style: TextStyle(
                         color: Color(0xFF6e58e9),
                         fontWeight: FontWeight.bold,
@@ -134,20 +116,17 @@ class _CadImovelFormState extends State<CadImovelForm> {
                       ),
                     ),
                   ),
-                  TextFormField(
-                    style: TextStyle(
-                        color:
-                            !widget.isDarkMode ? Colors.black : Colors.white),
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.black12,
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                    onSaved: (value) => _formData.imobiliaria = value ?? '',
-                  ),
+                   Padding(
+                              padding: EdgeInsets.all(
+                                  5), // Reduzindo o padding para o campo "Código Imóvel"
+                              child: Text(
+                                "${_user.id}",
+                                style: TextStyle(
+                                  color: Color(0xFF6e58e9),
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
                   Padding(
                     padding:
                         EdgeInsets.all(15), //apply padding to all four sides
@@ -251,20 +230,22 @@ class _CadImovelFormState extends State<CadImovelForm> {
                               ),
                             ),
                             TextFormField(
-                    style: TextStyle(
-                        color:
-                            !widget.isDarkMode ? Colors.black : Colors.white),
-                    controller: logradouroController,
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.black12,
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                    onSaved: (value) => _formData.numero_residencia = value,
-                  ),
+                              style: TextStyle(
+                                  color: !widget.isDarkMode
+                                      ? Colors.black
+                                      : Colors.white),
+                              controller: logradouroController,
+                              decoration: InputDecoration(
+                                filled: true,
+                                fillColor: Colors.black12,
+                                border: OutlineInputBorder(
+                                  borderSide: BorderSide.none,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                              ),
+                              onSaved: (value) =>
+                                  _formData.numero_residencia = value,
+                            ),
                           ],
                         ),
                       ),
@@ -411,6 +392,18 @@ class _CadImovelFormState extends State<CadImovelForm> {
                       ),
                     ],
                   ),
+                   Padding(
+                    padding:
+                        EdgeInsets.all(15), //apply padding to all four sides
+                    child: Text(
+                      "Detalhes do imóvel",
+                      style: TextStyle(
+                        color: Color(0xFF6e58e9),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
                   Padding(
                     padding:
                         EdgeInsets.all(15), //apply padding to all four sides
@@ -489,7 +482,9 @@ class _CadImovelFormState extends State<CadImovelForm> {
                     ),
                     onSaved: (value) => _formData.areaTotal = value,
                   ),
-                  SizedBox(height: 10,),
+                  SizedBox(
+                    height: 10,
+                  ),
                   ElevatedButton(
                     onPressed: () {
                       _formKey.currentState?.save();
@@ -498,7 +493,7 @@ class _CadImovelFormState extends State<CadImovelForm> {
                       // Você pode obter os valores dos TextFormField usando _formData.codigo, _formData.name, etc.
                     },
                     child: Text('Salvar'),
-                     style: ElevatedButton.styleFrom(
+                    style: ElevatedButton.styleFrom(
                       elevation: 10.0,
                       backgroundColor: Color(0xFF6e58e9),
                       padding: EdgeInsets.symmetric(
