@@ -303,32 +303,7 @@ class _CustomMenuState extends State<CustomMenu> {
                 },
               ),
             ),
-             if (isExpandedImoveis)
-            Padding(
-              padding: const EdgeInsets.only(left: 8, right: 8),
-              child: ListTile(
-                leading: Icon(
-                  Icons.map_outlined,
-                  color: widget.isDarkMode
-                      ? darkenColor(Color(0xFF6e58e9), 0.5)
-                      : Color(0xFF6e58e9),
-                ),
-                title: Text(
-                  'Cadastrar imóvel',
-                  style: TextStyle(
-                    color: widget.isDarkMode ? Colors.white : Colors.black54,
-                  ),
-                ),
-                onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CadImovelForm(isDarkMode: widget.isDarkMode),
-                    ),
-                  );
-                },
-              ),
-            ),
+             
           ListTile(
             leading: Icon(
               Icons.people,

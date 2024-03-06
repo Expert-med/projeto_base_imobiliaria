@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import 'NotificationButton.dart';
+
 //import 'package:projeto_cme_novo/autenticacao/checkPage.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
@@ -97,10 +97,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
               //     height: 50,
               //     width: 50,
               //   ),
-              if (widget.showNotificacao == 1)
-                NotificationButton(
-                  displayedNotifications: 5,
-                ),
+              
               
             ],
           ),

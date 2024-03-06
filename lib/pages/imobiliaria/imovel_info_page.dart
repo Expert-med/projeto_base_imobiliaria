@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:projeto_imobiliaria/models/imoveis/newImovel.dart';
 import 'package:projeto_imobiliaria/util/app_bar_model.dart';
 
 import '../../components/custom_menu.dart';
@@ -15,6 +16,7 @@ class ImoveisInfoPage extends StatefulWidget {
   final List<String> urlsImage;
   final String codigo;
   final String area_total;
+  final String area_privativa;
   final String link;
   final int Vagasgaragem;
   final String Totaldormitorios;
@@ -23,6 +25,8 @@ class ImoveisInfoPage extends StatefulWidget {
   final String latitude;
   Map<String, dynamic> caracteristicas;
   final int tipo_pagina;
+  NewImovel imovel;
+
   ImoveisInfoPage({
     Key? key,
     required this.nome_imovel,
@@ -40,6 +44,8 @@ class ImoveisInfoPage extends StatefulWidget {
     required this.latitude,
     required this.tipo_pagina,
     required this.caracteristicas,
+    required this.imovel,
+    required this.area_privativa,
   }) : super(key: key);
 
   @override
@@ -48,30 +54,35 @@ class ImoveisInfoPage extends StatefulWidget {
 
 class _ImoveisInfoPageState extends State<ImoveisInfoPage> {
   bool isDarkMode = false;
+
   @override
   Widget build(BuildContext context) {
+    bool isSmallScreen = MediaQuery.of(context).size.width < 900;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('${widget.nome_imovel}'),
       ),
-      body: Container(
-        child: ImovelInfoComponent(
-            widget.nome_imovel,
-            widget.terreno,
-            widget.location,
-            widget.originalPrice,
-            widget.urlsImage,
-            isDarkMode,
-            widget.codigo,
-            widget.area_total,
-            widget.link,
-            widget.Vagasgaragem,
-            widget.Totaldormitorios,
-            widget.Totalsuites,
-            widget.latitude,
-            widget.longitude,
-            widget.tipo_pagina,
-            widget.caracteristicas),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return Row(
+            children: [
+              if (!isSmallScreen)
+                SizedBox(
+                  width: 250, // Largura mínima do CustomMenu
+                  child: CustomMenu(isDarkMode: isDarkMode),
+                ),
+              Expanded(
+                child: Container(
+                  color: isDarkMode ? Colors.black : Colors.white,
+                  padding: const EdgeInsets.all(20.0),
+                  child: ImovelInfoComponent(isDarkMode, widget.tipo_pagina,
+                      widget.caracteristicas, widget.imovel),
+                ),
+              ),
+            ],
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

@@ -5,7 +5,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:projeto_imobiliaria/models/imoveis/newImovel.dart';
+
+import '../../core/models/imovel_form_data.dart';
 
 class NewImovelList with ChangeNotifier {
   late final List<NewImovel> _items;
@@ -16,7 +19,7 @@ class NewImovelList with ChangeNotifier {
   }
 
   Future<void> _carregarImoveis() async {
-   //updateImoveisWithDetalhes();
+    //updateImoveisWithDetalhes();
     final List<NewImovel> imoveis = await buscarImoveis();
     _items.addAll(imoveis);
     notifyListeners();
@@ -36,7 +39,7 @@ class NewImovelList with ChangeNotifier {
         Map<String, dynamic> data = doc.data();
 
         // Verifica se o campo detalhes está ausente ou nulo
-        if ( data['localizacao']['endereco'] == {} ) {
+        if (data['localizacao']['endereco'] == {}) {
           print('finalidade == 0');
           // Atualiza o documento para adicionar um campo detalhes vazio
           await FirebaseFirestore.instance.runTransaction((transaction) async {
@@ -174,76 +177,7 @@ class NewImovelList with ChangeNotifier {
   }
 
   Future<void> copiarDocumentos() async {
-    final documentosCopiar = [
-      'V1011-1073',
-      'V1012-1073',
-      'V1019-1073',
-      'V1029-1073',
-      'V1033-030c',
-      'V1033-1073',
-      'V1035-0b6f',
-      'V1036-1073',
-      'V1037-030c',
-      'V1037-1073',
-      'V1038-030c',
-      'V1038-1073',
-      'V1039-030c',
-      'V1043-030c',
-      'V1045-030c',
-      'V1046-030c',
-      'V1046-1073',
-      'V1055-0b6f',
-      'V1060-0b6f',
-      'V1069-1073',
-      'V1070-0b6f',
-      'V1070-1073',
-      'V1071-0b6f',
-      'V1072-1073',
-      'V1074-0b6f',
-      'V1075-0b6f',
-      'V1076-030c',
-      'V1076-0b6f',
-      'V1077-1073',
-      'V1078-1073',
-      'V1095-1073',
-      'V1105-030c',
-      'V1108-1073',
-      'V1111-030c',
-      'V1112-1073',
-      'V1113-1073',
-      'V1121-1073',
-      'V1122-1073',
-      'V1124-1073',
-      'V1125-1073',
-      'V1131-1073',
-      'V1132-1073',
-      'V1133-0b6f',
-      'V1135-1073',
-      'V1136-0b6f',
-      'V1139-030c',
-      'V1141-030c',
-      'V1141-1073',
-      'V1143-1073',
-      'V1147-0b6f',
-      'V115-0b6f',
-      'V1152-1073',
-      'V1153-1073',
-      'V1156-1073',
-      'V1157-1073',
-      'V1168-1073',
-      'V1170-1073',
-      'V1171-0b6f',
-      'V1172-1073',
-      'V1174-1073',
-      'V1177-030c',
-      'V1181-030c',
-      'V1181-1073',
-      'V1187-1073',
-      'V1188-0b6f',
-      'V1188-1073',
-      'V1189-030c',
-      'V1190-1073',
-    ];
+    final documentosCopiar = [];
 
     try {
       final CollectionReference<Map<String, dynamic>> imoveisRef =
@@ -312,6 +246,74 @@ class NewImovelList with ChangeNotifier {
         }
       }
       imoveis[i].isFavorite = encontrado;
+    }
+  }
+
+  void cadastrarImovel(
+      dynamic user, ImovelFormData _formData, String codigo_imovel) async {
+    try {
+      String data_atual_formatada =
+          DateFormat('yyyy-MM-dd').format(DateTime.now());
+      final store = FirebaseFirestore.instance;
+
+      // Criar o documento com o ID do código do imóvel
+      DocumentReference docRef =
+          store.collection('um_por_imob').doc(codigo_imovel);
+
+      // Dados a serem salvos no Firestore
+      Map<String, dynamic> data = {
+        'atualizacoes': {
+          'data': data_atual_formatada,
+          'status': 1,
+          'valor': _formData.precoOriginal ??
+              0, 
+        },
+        'caracteristicas': {},
+        'codigo_imobiliaria': user.id,
+        'codigo_imovel': codigo_imovel,
+        'curtidas': 'N\A',
+        'data': data_atual_formatada ?? '',
+        'data_cadastro': data_atual_formatada ?? '',
+        'detalhes': {
+          'area_privativa': _formData.areaPrivativa ?? '',
+          'area_privativa_casa': _formData.areaPrivativaCasa ?? '',
+          'area_total': _formData.areaTotal ?? '',
+          'mobilia': _formData.mobilia ?? '',
+          'nome_imovel': _formData.nomeImovel ?? '',
+          'terreno': _formData.terreno ?? '',
+          'total_dormitorios': _formData.totalDormitorios ?? '',
+          'total_suites': _formData.totalSuites ?? '',
+          'vagas_garagem': _formData.totalGaragem ?? 0,
+        },
+        'finalidade': 0,
+        'id_imovel': codigo_imovel,
+        'imagens': [],
+        'link': '',
+        'localizacao': {
+          'latitude': user.email ?? '',
+          'longitude': user.contato['telefone_fixo'] ?? '',
+          'endereco': {
+            'logradouro': user.contato['endereco']['logradouro'] ?? '',
+            'complemento': user.contato['endereco']['complemento'] ?? '',
+            'bairro': user.contato['endereco']['bairro'] ?? '',
+            'cidade': user.contato['endereco']['cidade'] ?? '',
+            'estado': user.contato['endereco']['estado'] ?? '',
+            'cep': user.contato['endereco']['cep'] ?? '',
+          },
+        },
+        'preco': {
+          'preco_original': _formData.precoOriginal,
+          'preco_promocional': '',
+        },
+        'tipo': 0,
+      };
+
+      // Salvar os dados no Firestore
+      await docRef.set(data);
+      print('Imóvel cadastrado com sucesso!');
+    } catch (error) {
+      // Capturar e imprimir qualquer erro ocorrido durante o processo
+      print('Erro ao cadastrar o imóvel: $error');
     }
   }
 

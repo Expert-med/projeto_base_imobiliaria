@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:projeto_imobiliaria/models/imoveis/newImovelList.dart';
 import 'package:provider/provider.dart';
 
 import '../core/data/user_repository.dart';
@@ -101,12 +102,11 @@ class _CadImovelFormState extends State<CadImovelForm> {
                           ],
                         ),
                       ),
-                      
                     ],
                   ),
-                  Padding(
+                  const Padding(
                     padding:
-                        EdgeInsets.all(15), //apply padding to all four sides
+                        EdgeInsets.all(5), //apply padding to all four sides
                     child: Text(
                       "Imobiliária/Corretor",
                       style: TextStyle(
@@ -116,18 +116,18 @@ class _CadImovelFormState extends State<CadImovelForm> {
                       ),
                     ),
                   ),
-                   Padding(
-                              padding: EdgeInsets.all(
-                                  5), // Reduzindo o padding para o campo "Código Imóvel"
-                              child: Text(
-                                "${_user.id}",
-                                style: TextStyle(
-                                  color: Color(0xFF6e58e9),
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ),
                   Padding(
+                    padding: EdgeInsets.all(
+                        5), // Reduzindo o padding para o campo "Código Imóvel"
+                    child: Text(
+                      "${_user.name} - Cód. ${_user.id}",
+                      style: TextStyle(
+                        color: Color(0xFF6e58e9),
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                  const Padding(
                     padding:
                         EdgeInsets.all(15), //apply padding to all four sides
                     child: Text(
@@ -153,12 +153,38 @@ class _CadImovelFormState extends State<CadImovelForm> {
                     ),
                     onSaved: (value) => _formData.link = value ?? '',
                   ),
+                  const Padding(
+                    padding:
+                        EdgeInsets.all(15), //apply padding to all four sides
+                    child: Text(
+                      "Valor do imóvel",
+                      style: TextStyle(
+                        color: Color(0xFF6e58e9),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                  TextFormField(
+                    style: TextStyle(
+                        color:
+                            !widget.isDarkMode ? Colors.black : Colors.white),
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.black12,
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                    onSaved: (value) => _formData.precoOriginal = value ?? '',
+                  ),
                   Row(
                     children: [
                       Flexible(
                         child: Column(
                           children: [
-                            Padding(
+                            const Padding(
                               padding: EdgeInsets.all(
                                   5), // Reduzindo o padding para o campo "Código Imóvel"
                               child: Text(
@@ -214,47 +240,12 @@ class _CadImovelFormState extends State<CadImovelForm> {
                           ],
                         ),
                       ),
-                      Flexible(
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.all(
-                                  5), // Reduzindo o padding para o campo "Código Imóvel"
-                              child: Text(
-                                "Número",
-                                style: TextStyle(
-                                  color: Color(0xFF6e58e9),
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ),
-                            TextFormField(
-                              style: TextStyle(
-                                  color: !widget.isDarkMode
-                                      ? Colors.black
-                                      : Colors.white),
-                              controller: logradouroController,
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: Colors.black12,
-                                border: OutlineInputBorder(
-                                  borderSide: BorderSide.none,
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                              ),
-                              onSaved: (value) =>
-                                  _formData.numero_residencia = value,
-                            ),
-                          ],
-                        ),
-                      ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
-                  Padding(
+                  const Padding(
                     padding:
                         EdgeInsets.all(15), //apply padding to all four sides
                     child: Text(
@@ -392,7 +383,7 @@ class _CadImovelFormState extends State<CadImovelForm> {
                       ),
                     ],
                   ),
-                   Padding(
+                  Padding(
                     padding:
                         EdgeInsets.all(15), //apply padding to all four sides
                     child: Text(
@@ -482,15 +473,170 @@ class _CadImovelFormState extends State<CadImovelForm> {
                     ),
                     onSaved: (value) => _formData.areaTotal = value,
                   ),
+                  Padding(
+                    padding:
+                        EdgeInsets.all(15), //apply padding to all four sides
+                    child: Text(
+                      "Mobilia",
+                      style: TextStyle(
+                        color: Color(0xFF6e58e9),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                  TextFormField(
+                    style: TextStyle(
+                        color:
+                            !widget.isDarkMode ? Colors.black : Colors.white),
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.black12,
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                    onSaved: (value) => _formData.mobilia = value,
+                  ),
+                  Padding(
+                    padding:
+                        EdgeInsets.all(15), //apply padding to all four sides
+                    child: Text(
+                      "Nome do imóvel ",
+                      style: TextStyle(
+                        color: Color(0xFF6e58e9),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                  TextFormField(
+                    style: TextStyle(
+                        color:
+                            !widget.isDarkMode ? Colors.black : Colors.white),
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.black12,
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                    onSaved: (value) => _formData.nomeImovel = value,
+                  ),
+                  Padding(
+                    padding:
+                        EdgeInsets.all(15), //apply padding to all four sides
+                    child: Text(
+                      "Perfil",
+                      style: TextStyle(
+                        color: Color(0xFF6e58e9),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                  TextFormField(
+                    style: TextStyle(
+                        color:
+                            !widget.isDarkMode ? Colors.black : Colors.white),
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.black12,
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                    onSaved: (value) => _formData.perfil = value,
+                  ),
+                  Padding(
+                    padding:
+                        EdgeInsets.all(15), //apply padding to all four sides
+                    child: Text(
+                      "Terreno",
+                      style: TextStyle(
+                        color: Color(0xFF6e58e9),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                  TextFormField(
+                    style: TextStyle(
+                        color:
+                            !widget.isDarkMode ? Colors.black : Colors.white),
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.black12,
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                    onSaved: (value) => _formData.terreno = value,
+                  ),
+                  Padding(
+                    padding:
+                        EdgeInsets.all(15), //apply padding to all four sides
+                    child: Text(
+                      "Total de dormitórios",
+                      style: TextStyle(
+                        color: Color(0xFF6e58e9),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                  TextFormField(
+                    style: TextStyle(
+                        color:
+                            !widget.isDarkMode ? Colors.black : Colors.white),
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.black12,
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                    onSaved: (value) => _formData.mobilia = value,
+                  ),
+                  Padding(
+                    padding:
+                        EdgeInsets.all(15), //apply padding to all four sides
+                    child: Text(
+                      "Vagas garagem",
+                      style: TextStyle(
+                        color: Color(0xFF6e58e9),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                  TextFormField(
+                    style: TextStyle(
+                        color:
+                            !widget.isDarkMode ? Colors.black : Colors.white),
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.black12,
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                    onSaved: (value) => _formData.totalGaragem = value,
+                  ),
                   SizedBox(
                     height: 10,
                   ),
                   ElevatedButton(
                     onPressed: () {
                       _formKey.currentState?.save();
-                      // Aqui você pode chamar o método addInfo e passar os valores inseridos nos TextFormField
-                      // _formData.addInfo(areaPrivativa: 'valor', areaTotal: 'valor', ...)
-                      // Você pode obter os valores dos TextFormField usando _formData.codigo, _formData.name, etc.
+                      NewImovelList()
+                          .cadastrarImovel(_user, _formData, codigo_imovel);
                     },
                     child: Text('Salvar'),
                     style: ElevatedButton.styleFrom(

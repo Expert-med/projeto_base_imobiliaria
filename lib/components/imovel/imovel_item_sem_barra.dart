@@ -199,6 +199,8 @@ class _ImovelItemSemBarraState extends State<ImovelItemSemBarra> {
           longitude: product.localizacao['longitude'] ?? '',
           tipo_pagina: widget.tipo_pagina,
           caracteristicas: product.caracteristicas,
+          area_privativa: product.detalhes['total_dormitorios'] ?? '',
+          imovel: product,
 
         ),
       ),

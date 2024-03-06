@@ -195,6 +195,8 @@ class _ImovelItemListState extends State<ImovelItemList> {
                                     product.localizacao['longitude'] ?? '',
                                 tipo_pagina: 0,
                                 caracteristicas: product.caracteristicas,
+                                area_privativa: product.detalhes['area_privativa'] ?? '',
+                                imovel: product,
                               ),
                             ),
                           );

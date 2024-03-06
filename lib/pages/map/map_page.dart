@@ -33,7 +33,22 @@ class _MapPageState extends State<MapPage> {
   String selectedMarkerLongitude = '';
   String selectedMarkerLatitude = '';
   Map<String, dynamic>  selectedCaracteristicas ={};
-
+ NewImovel imovelAtual = NewImovel(
+      id: '',
+      detalhes: {},
+      caracteristicas: {},
+      localizacao: {},
+      preco: {},
+      link_imovel: '',
+      link_virtual_tour: '',
+      codigo_imobiliaria: '',
+      data_cadastro: '',
+      data: '',
+      imagens: [],
+      curtidas: '',
+      finalidade: -1,
+      tipo: -1,
+      atualizacoes: {});
   @override
   void initState() {
     super.initState();
@@ -56,6 +71,23 @@ class _MapPageState extends State<MapPage> {
           setState(() {
             urlsImage = [];
             showInfoScreen = true;
+            imovelAtual = NewImovel(
+                    id: imovel.id,
+                    detalhes: imovel.detalhes,
+                    caracteristicas: imovel.caracteristicas,
+                    localizacao: imovel.localizacao,
+                    preco: imovel.preco,
+                    link_imovel: imovel.link_imovel,
+                    link_virtual_tour: imovel.link_imovel,
+                    codigo_imobiliaria: imovel.codigo_imobiliaria,
+                    data_cadastro: imovel.data_cadastro,
+                    data: imovel.data,
+                    imagens: imovel.imagens,
+                    curtidas: imovel.curtidas,
+                    finalidade: imovel.finalidade,
+                    tipo: imovel.tipo,
+                    atualizacoes: imovel.atualizacoes);
+
             selectedMarkerTitle = imovel.detalhes['nome_imovel'] ?? "";
             selectedMarkerTerreno = imovel.detalhes['terreno'] ?? "";
             selectedMarkerLocation =  imovel.localizacao['endereco']['logradouro'] + ', '+ imovel.localizacao['endereco']['logradouro'] + ' - '+ imovel.localizacao['endereco']['cidade']+'/'+imovel.localizacao['endereco']['uf'] ?? ""; 
@@ -123,21 +155,11 @@ class _MapPageState extends State<MapPage> {
                         });
                       },
                       child: ImovelInfoComponent(
-                          selectedMarkerTitle,
-                          selectedMarkerTerreno,
-                          selectedMarkerLocation,
-                          selectedMarkerOrigalPrice,
-                          urlsImage,
-                          isDarkMode,
-                          selectedMarkerCodigo,
-                          selectedMarkerAreaTotal,
-                          selectedMarkerLink,
-                          selectedVagasgaragem,
-                          selectedTotaldormitorios,
-                          selectedTotalsuites,
-                          selectedMarkerLatitude,
-                          selectedMarkerLongitude,1,
-                          selectedCaracteristicas),
+                                                       isDarkMode,
+                                                        1,
+                                                        selectedCaracteristicas,
+                                                        imovelAtual,
+                                                      ),
                     )
                   : GestureDetector(
                       onTap: () {
@@ -192,22 +214,12 @@ class _MapPageState extends State<MapPage> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => ImovelInfoComponent(
-                                            title, // Título do imóvel
-                                            terreno, // Terreno do imóvel
-                                            localizacao, // Localização do imóvel
-                                            precoOriginal, // Preço original do imóvel
-                                            imageUrls, // URLs das imagens do imóvel
-                                            isDarkMode,
-                                            selectedMarkerCodigo,
-                                            selectedMarkerAreaTotal,
-                                            selectedMarkerLink,
-                                            selectedVagasgaragem,
-                                            selectedTotaldormitorios,
-                                            selectedTotalsuites,
-                                            selectedMarkerLatitude,
-                                            selectedMarkerLongitude,1,
-                                            selectedCaracteristicas),
+                                        builder: (context) =>  ImovelInfoComponent(
+                                                       isDarkMode,
+                                                        1,
+                                                        selectedCaracteristicas,
+                                                        imovelAtual,
+                                                      ),
                                       ),
                                     );
                                   },

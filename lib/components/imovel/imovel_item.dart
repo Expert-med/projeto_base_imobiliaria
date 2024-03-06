@@ -210,6 +210,8 @@ class _ImovelItemState extends State<ImovelItem> {
                             '',
                         tipo_pagina: widget.tipo_pagina,
                         caracteristicas: product.caracteristicas,
+                        area_privativa: product.detalhes['total_dormitorios'] ?? '',
+                        imovel: product,
                       ),
                     ),
                   );

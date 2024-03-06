@@ -1,47 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:projeto_imobiliaria/models/imoveis/newImovel.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'info_caracteristicas_component.dart';
 
 class ImovelInfoComponent extends StatefulWidget {
-  final String nome_imovel;
-  final String terreno;
-  final String location;
-  final String originalPrice;
-  final List<String> urlsImage;
-  final String codigo;
-  final String area_total;
-  final String link;
   bool isDarkMode;
-  final String latitude;
-  final String longitude;
-
-  final int vagas_garagem;
-  final String total_dormitorios;
-  final String total_suites;
   Map<String, dynamic> caracteristicas;
-
+  final NewImovel imovel;
   final int tipo_pagina;
+
   ImovelInfoComponent(
-      this.nome_imovel,
-      this.terreno,
-      this.location,
-      this.originalPrice,
-      this.urlsImage,
-      this.isDarkMode,
-      this.codigo,
-      this.area_total,
-      this.link,
-      this.vagas_garagem,
-      this.total_dormitorios,
-      this.total_suites,
-      this.latitude,
-      this.longitude,
-      this.tipo_pagina,
-      this.caracteristicas);
+      this.isDarkMode, this.tipo_pagina, this.caracteristicas, this.imovel);
 
   @override
   _ImovelInfoComponentState createState() => _ImovelInfoComponentState();
@@ -62,8 +35,6 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
     }
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
     Color backgroundColor = widget.isDarkMode ? Colors.black45 : Colors.white;
@@ -83,20 +54,21 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
                   child: Column(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 5, vertical:5),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 5, vertical: 5),
                         child: Row(
                           children: [
                             Expanded(
                               child: Container(
-                               
                                 child: Padding(
-                                  padding: const EdgeInsets.only(left:10,right:10,top:8, bottom: 8),
+                                  padding: const EdgeInsets.only(
+                                      left: 10, right: 10, top: 8, bottom: 8),
                                   child: Text.rich(
                                     TextSpan(
                                       children: [
                                         TextSpan(
                                           text:
-                                              '${widget.nome_imovel.substring(0, widget.nome_imovel.indexOf('Cód'))}',
+                                              '${widget.imovel.detalhes['nome_imovel'].substring(0, widget.imovel.detalhes['nome_imovel'].indexOf('Cód'))}',
                                           style: TextStyle(
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold,
@@ -112,7 +84,7 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
                                         ),
                                         TextSpan(
                                           text:
-                                              '${widget.nome_imovel.substring(widget.nome_imovel.indexOf('Cód') + 3)}',
+                                              '${widget.imovel.detalhes['nome_imovel'].substring(widget.imovel.detalhes['nome_imovel'].indexOf('Cód') + 3)}',
                                           style: TextStyle(
                                             fontSize: 18,
                                             color: Colors.grey,
@@ -127,25 +99,28 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
                           ],
                         ),
                       ),
-                       Padding(
-                         padding: const EdgeInsets.only(left:10,right:10,top:8, bottom: 8),
-                         child: Row(
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 10, right: 10, top: 8, bottom: 8),
+                        child: Row(
                           children: [
-                             Icon(
+                            Icon(
                               Icons.place,
-                              color:
-                                  widget.isDarkMode ? Colors.white : Colors.black54,
+                              color: widget.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black54,
                             ),
                             SizedBox(width: 4),
                             Flexible(
                               child: Text(
-                                '${widget.location}',
-                                style: TextStyle(fontSize: 15, color: textColor),
+                                '${widget.imovel.localizacao['endereco']['bairro']}',
+                                style:
+                                    TextStyle(fontSize: 15, color: textColor),
                               ),
                             ),
                           ],
-                                             ),
-                       ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -156,307 +131,123 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if(widget.tipo_pagina == 1)
-                    CarouselSlider(
-                      carouselController: _carouselController,
-                      options: CarouselOptions(
-                        height: 200.0,
-                        enlargeCenterPage: true,
-                        enableInfiniteScroll:
-                            true, // Habilitando rolagem infinita
-                        onPageChanged: (index, reason) {
-                          setState(() {
-                            _currentIndex = index;
-                          });
-                        },
-                      ),
-                      items: widget.urlsImage.map((url) {
-                        return Builder(
-                          builder: (BuildContext context) {
-                            return Container(
-                              width: 250,
-                              margin: EdgeInsets.symmetric(horizontal: 5.0),
-                              decoration: BoxDecoration(
-                                color: Colors.grey,
-                              ),
-                              child: GestureDetector(
-                                onTap: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return Dialog(
-                                        child: Stack(
-                                          children: [
-                                            Container(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.8,
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  0.8,
-                                              child: Image.network(
-                                                url,
-                                                fit: BoxFit.contain,
-                                              ),
-                                            ),
-                                            Positioned(
-                                              top: 8,
-                                              right: 8,
-                                              child: IconButton(
-                                                icon: Icon(Icons.close),
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    },
-                                  );
-                                },
-                                child: Image.network(
-                                  url,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      }).toList(),
-                    ),
-                    if(widget.tipo_pagina == 1)
-                    SizedBox(
-                      height: 8,
-                    ),
-                    if(widget.tipo_pagina == 1)
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment
+                          .start, // Alinhar os elementos no topo
                       children: [
-                        IconButton(
-                          icon: Icon(Icons.arrow_back, color: textColor),
-                          onPressed: () {
-                            if (_currentIndex > 0) {
-                              _carouselController.previousPage();
-                            }
-                          },
-                        ),
-                        Text(
-                          '${_currentIndex + 1} / ${widget.urlsImage.length}',
-                          style: TextStyle(color: textColor),
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.arrow_forward, color: textColor),
-                          onPressed: () {
-                            if (_currentIndex < widget.urlsImage.length - 1) {
-                              _carouselController.nextPage();
-                            }
-                          },
-                        ),
-                      ],
-                    ),
- if (widget.tipo_pagina == 1)
-                      Row(
-                        children: [
-                          ImovelCaracteristicasWidget(
-                            caracteristicas: widget.caracteristicas,
-                            isDarkMode: widget.isDarkMode,
-                          ),
-                        ],
-                      ),
-                      Row(
-                  crossAxisAlignment:
-                      CrossAxisAlignment.start, // Alinhar os elementos no topo
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 14),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CarouselSlider(
-                              carouselController: _carouselController,
-                              options: CarouselOptions(
-                                height: widget.tipo_pagina == 0 ? 250 : 200,
-                                enlargeCenterPage: true,
-                                enableInfiniteScroll: true,
-                                onPageChanged: (index, reason) {
-                                  setState(() {
-                                    _currentIndex = index;
-                                  });
-                                },
-                              ),
-                              items: widget.urlsImage.map((url) {
-                                return Builder(
-                                  builder: (BuildContext context) {
-                                    return Container(
-                                      width: widget.tipo_pagina == 0 ? 450 : 250,
-                                      margin:
-                                          EdgeInsets.symmetric(horizontal: 5.0),
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey,
-                                      ),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return Dialog(
-                                                child: Stack(
-                                                  children: [
-                                                    Container(
-                                                      width:
-                                                          MediaQuery.of(context)
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 14),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                CarouselSlider(
+                                  carouselController: _carouselController,
+                                  options: CarouselOptions(
+                                    height: widget.tipo_pagina == 0 ? 250 : 200,
+                                    enlargeCenterPage: true,
+                                    enableInfiniteScroll: true,
+                                    onPageChanged: (index, reason) {
+                                      setState(() {
+                                        _currentIndex = index;
+                                      });
+                                    },
+                                  ),
+                                  items: widget.imovel.imagens.map((url) {
+                                    return Builder(
+                                      builder: (BuildContext context) {
+                                        return Container(
+                                          width: widget.tipo_pagina == 0
+                                              ? 450
+                                              : 250,
+                                          margin: EdgeInsets.symmetric(
+                                              horizontal: 5.0),
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey,
+                                          ),
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return Dialog(
+                                                    child: Stack(
+                                                      children: [
+                                                        Container(
+                                                          width: MediaQuery.of(
+                                                                      context)
                                                                   .size
                                                                   .width *
                                                               0.8,
-                                                      height:
-                                                          MediaQuery.of(context)
+                                                          height: MediaQuery.of(
+                                                                      context)
                                                                   .size
                                                                   .height *
                                                               0.8,
-                                                      child: Image.network(
-                                                        url,
-                                                        fit: BoxFit.contain,
-                                                      ),
+                                                          child: Image.network(
+                                                            url,
+                                                            fit: BoxFit.contain,
+                                                          ),
+                                                        ),
+                                                        Positioned(
+                                                          top: 8,
+                                                          right: 8,
+                                                          child: IconButton(
+                                                            icon: Icon(
+                                                                Icons.close),
+                                                            onPressed: () {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                            },
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
-                                                    Positioned(
-                                                      top: 8,
-                                                      right: 8,
-                                                      child: IconButton(
-                                                        icon: Icon(Icons.close),
-                                                        onPressed: () {
-                                                          Navigator.of(context)
-                                                              .pop();
-                                                        },
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
+                                                  );
+                                                },
                                               );
                                             },
-                                          );
-                                        },
-                                        child: Image.network(
-                                          url,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
+                                            child: Image.network(
+                                              url,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        );
+                                      },
                                     );
-                                  },
-                                );
-                              }).toList(),
-                            ),
-                            SizedBox(
-                              height: 8,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                IconButton(
-                                  icon: Icon(Icons.arrow_back, color: textColor),
-                                  onPressed: () {
-                                    if (_currentIndex > 0) {
-                                      _carouselController.previousPage();
-                                    }
-                                  },
+                                  }).toList(),
                                 ),
-                                Text(
-                                  '${_currentIndex + 1} / ${widget.urlsImage.length}',
-                                  style: TextStyle(color: textColor),
+                                SizedBox(
+                                  height: 8,
                                 ),
-                                IconButton(
-                                  icon:
-                                      Icon(Icons.arrow_forward, color: textColor),
-                                  onPressed: () {
-                                    if (_currentIndex <
-                                        widget.urlsImage.length - 1) {
-                                      _carouselController.nextPage();
-                                    }
-                                  },
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    if (widget.tipo_pagina == 0)
-                      ImovelCaracteristicasWidget(
-                        caracteristicas: widget.caracteristicas,
-                        isDarkMode: widget.isDarkMode,
-                      ),
-                  ],
-                ),
-                
-                    
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.place,
-                          color:
-                              widget.isDarkMode ? Colors.white : Colors.black54,
-                        ),
-                        SizedBox(width: 4),
-                        Flexible(
-                          child: Text(
-                            '${widget.location}',
-                            style: TextStyle(fontSize: 15, color: textColor),
-                          ),
-                        ),
-                        Spacer(),
-                        Text(
-                          '${widget.originalPrice}',
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: textColor,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    Row(
-                      children: [
-                        Card(
-                          color:
-                              widget.isDarkMode ? Colors.black54 : Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          elevation: 4,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              children: [
-                                Icon(
-                                  Icons.bed,
-                                  color: widget.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black54,
-                                ),
-                                SizedBox(width: 4),
-                                Column(
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    SelectableText(
-                                      '${widget.total_dormitorios}',
-                                      style: TextStyle(
-                                        color: widget.isDarkMode
-                                            ? Colors.white
-                                            : Colors.black54,
-                                      ),
+                                    IconButton(
+                                      icon: Icon(Icons.arrow_back,
+                                          color: textColor),
+                                      onPressed: () {
+                                        if (_currentIndex > 0) {
+                                          _carouselController.previousPage();
+                                        }
+                                      },
                                     ),
-                                    SelectableText(
-                                      'Suítes: ${widget.total_suites}',
-                                      style: TextStyle(
-                                        color: widget.isDarkMode
-                                            ? Colors.white
-                                            : Colors.black54,
-                                      ),
+                                    Text(
+                                      '${_currentIndex + 1} / ${widget.imovel.imagens.length}',
+                                      style: TextStyle(color: textColor),
+                                    ),
+                                    IconButton(
+                                      icon: Icon(Icons.arrow_forward,
+                                          color: textColor),
+                                      onPressed: () {
+                                        if (_currentIndex <
+                                            widget.imovel.imagens.length - 1) {
+                                          _carouselController.nextPage();
+                                        }
+                                      },
                                     ),
                                   ],
                                 ),
@@ -464,68 +255,242 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
                             ),
                           ),
                         ),
-                        Spacer(), // Spacer para distribuir o espaço restante
-                        Card(
-                          color:
-                              widget.isDarkMode ? Colors.black54 : Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          elevation: 4,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.garage,
-                                  color: widget.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black54,
-                                ),
-                                SizedBox(width: 4),
-                                SelectableText(
-                                  '${widget.vagas_garagem}',
-                                  style: TextStyle(
-                                    color: widget.isDarkMode
-                                        ? Colors.white
-                                        : Colors.black54,
+                        if (widget.tipo_pagina == 0)
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.all(2),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            children: [
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  SelectableText(
+                                                    'A partir de ',
+                                                    style: TextStyle(
+                                                      color: widget.isDarkMode
+                                                          ? Colors.white
+                                                          : Colors.black54,
+                                                    ),
+                                                  ),
+                                                  SelectableText(
+                                                    '${widget.imovel.preco['preco_original']}',
+                                                    style: const TextStyle(
+                                                      color: Colors.purple,
+                                                      fontSize: 20,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                              ],
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Card(
+                                          color: widget.isDarkMode
+                                              ? Colors.black54
+                                              : Colors.white,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                          ),
+                                          elevation: 4,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(16.0),
+                                            child: Column(
+                                              children: [
+                                                Icon(
+                                                  Icons.bed,
+                                                  size: 32,
+                                                  color: widget.isDarkMode
+                                                      ? Colors.white
+                                                      : Colors.black54,
+                                                ),
+                                                SizedBox(height: 8),
+                                                SelectableText(
+                                                  '${widget.imovel.detalhes['total_dormitorios']}',
+                                                  style: TextStyle(
+                                                    fontSize: 18,
+                                                    color: widget.isDarkMode
+                                                        ? Colors.white
+                                                        : Colors.black54,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                          width:
+                                              16), // Adicione um espaço entre os dois Cards
+                                      Expanded(
+                                        child: Card(
+                                          color: widget.isDarkMode
+                                              ? Colors.black54
+                                              : Colors.white,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                          ),
+                                          elevation: 4,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(16.0),
+                                            child: Column(
+                                              children: [
+                                                Icon(
+                                                  Icons.garage,
+                                                  size: 32,
+                                                  color: widget.isDarkMode
+                                                      ? Colors.white
+                                                      : Colors.black54,
+                                                ),
+                                                SizedBox(height: 8),
+                                                SelectableText(
+                                                  '${widget.imovel.detalhes['vagas_garagem']}',
+                                                  style: TextStyle(
+                                                    fontSize: 18,
+                                                    color: widget.isDarkMode
+                                                        ? Colors.white
+                                                        : Colors.black54,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Card(
+                                          color: widget.isDarkMode
+                                              ? Colors.black54
+                                              : Colors.white,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                          ),
+                                          elevation: 4,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(16.0),
+                                            child: Column(
+                                              children: [
+                                                Icon(
+                                                  Icons.aspect_ratio,
+                                                  size: 32,
+                                                  color: widget.isDarkMode
+                                                      ? Colors.white
+                                                      : Colors.black54,
+                                                ),
+                                                SizedBox(height: 8),
+                                                SelectableText(
+                                                  ' ${widget.imovel.detalhes['area_total']}',
+                                                  style: TextStyle(
+                                                    fontSize: 18,
+                                                    color: widget.isDarkMode
+                                                        ? Colors.white
+                                                        : Colors.black54,
+                                                  ),
+                                                ),
+                                                SizedBox(height: 2),
+                                                SelectableText(
+                                                  'Área total',
+                                                  style: TextStyle(
+                                                    fontSize: 18,
+                                                    color: widget.isDarkMode
+                                                        ? Colors.white
+                                                        : Colors.black54,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                          width:
+                                              16), // Adicione um espaço entre os dois Cards
+                                      Expanded(
+                                        child: Card(
+                                          color: widget.isDarkMode
+                                              ? Colors.black54
+                                              : Colors.white,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                          ),
+                                          elevation: 4,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(16.0),
+                                            child: Column(
+                                              children: [
+                                                Icon(
+                                                  Icons.aspect_ratio,
+                                                  size: 32,
+                                                  color: widget.isDarkMode
+                                                      ? Colors.white
+                                                      : Colors.black54,
+                                                ),
+                                                SizedBox(height: 8),
+                                                SelectableText(
+                                                  '${widget.imovel.detalhes['area_privativa']}',
+                                                  style: TextStyle(
+                                                    fontSize: 18,
+                                                    color: widget.isDarkMode
+                                                        ? Colors.white
+                                                        : Colors.black54,
+                                                  ),
+                                                ),
+                                                SizedBox(height: 2),
+                                                SelectableText(
+                                                  'Área privativa',
+                                                  style: TextStyle(
+                                                    fontSize: 18,
+                                                    color: widget.isDarkMode
+                                                        ? Colors.white
+                                                        : Colors.black54,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-
-                        Spacer(),
-                        Card(
-                          color:
-                              widget.isDarkMode ? Colors.black54 : Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          elevation: 4,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.aspect_ratio,
-                                  color: widget.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black54,
-                                ),
-                                SizedBox(width: 4),
-                                SelectableText(
-                                  '${widget.area_total}',
-                                  style: TextStyle(
-                                    color: widget.isDarkMode
-                                        ? Colors.white
-                                        : Colors.black54,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        ImovelCaracteristicasWidget(
+                          caracteristicas: widget.caracteristicas,
+                          isDarkMode: widget.isDarkMode,
                         ),
                       ],
                     ),
@@ -539,80 +504,93 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
                         style: TextStyle(
                           color:
                               widget.isDarkMode ? Colors.white : Colors.black54,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                     Container(
                       height: 300,
                       decoration: BoxDecoration(
-                        border: Border.all(
-                            color: widget.isDarkMode
-                                ? Colors.black
-                                : Colors.white),
                         borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: GoogleMap(
-                        initialCameraPosition: CameraPosition(
-                          target: LatLng(double.parse(widget.latitude),
-                              double.parse(widget.longitude)),
-                          zoom: 15,
+                        border: Border.all(
+                          color:
+                              widget.isDarkMode ? Colors.black : Colors.white,
                         ),
-                        onMapCreated: (controller) =>
-                            mapController = controller,
-                        onTap: (LatLng latLng) {
-                          // Lógica para lidar com o toque no mapa (opcional)
-                        },
-                        markers: Set<Marker>.of(
-                          // Usando Set para garantir que os marcadores sejam únicos
-                          [
-                            Marker(
-                              markerId: MarkerId(widget.nome_imovel),
-                              position: LatLng(double.parse(widget.latitude),
-                                  double.parse(widget.longitude)),
-                              infoWindow: InfoWindow(title: widget.nome_imovel),
-                              onTap: () {
-                                setState(() {});
-                              },
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                        child: GoogleMap(
+                          initialCameraPosition: CameraPosition(
+                            target: LatLng(
+                              double.parse(
+                                  widget.imovel.localizacao['latitude']),
+                              double.parse(
+                                  widget.imovel.localizacao['longitude']),
                             ),
-                          ],
+                            zoom: 15,
+                          ),
+                          onMapCreated: (controller) =>
+                              mapController = controller,
+                          onTap: (LatLng latLng) {},
+                          markers: Set<Marker>.of(
+                            [
+                              Marker(
+                                markerId: MarkerId(
+                                    widget.imovel.detalhes['nome_imovel']),
+                                position: LatLng(
+                                  double.parse(
+                                      widget.imovel.localizacao['latitude']),
+                                  double.parse(
+                                      widget.imovel.localizacao['longitude']),
+                                ),
+                                infoWindow: InfoWindow(
+                                    title:
+                                        widget.imovel.detalhes['nome_imovel']),
+                                onTap: () {
+                                  setState(() {});
+                                },
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                     SizedBox(
                       height: 10,
                     ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.purple,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      padding: EdgeInsets.all(10),
-                      child: Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 20),
-                            child: Text(
-                              'Acesse o imóvel',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Spacer(),
-                          InkWell(
-                            onTap: () {
-                              _launchURL(widget.link);
-                            },
-                            child: Container(
-                              padding: EdgeInsets.all(5),
-                              child: Icon(
-                                Icons.open_in_new,
-                                color: Colors.white,
-                                size: 30,
+                    if (widget.imovel.link_imovel != '')
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.purple,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        padding: EdgeInsets.all(10),
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 20),
+                              child: Text(
+                                'Acesse o imóvel',
+                                style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                             ),
-                          ),
-                        ],
+                            Spacer(),
+                            InkWell(
+                              onTap: () {
+                                _launchURL(widget.imovel.link_imovel);
+                              },
+                              child: Container(
+                                padding: EdgeInsets.all(5),
+                                child: Icon(
+                                  Icons.open_in_new,
+                                  color: Colors.white,
+                                  size: 30,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
                   ],
                 ),
               ),
@@ -626,4 +604,3 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
     );
   }
 }
-

@@ -33,8 +33,23 @@ class _MapPageFlutterState extends State<MapPageFlutter> {
   String selectedTotalsuites = '';
   String selectedMarkerLongitude = '';
   String selectedMarkerLatitude = '';
-  Map<String, dynamic>  selectedCaracteristicas ={};
-
+  Map<String, dynamic> selectedCaracteristicas = {};
+  NewImovel imovelAtual = NewImovel(
+      id: '',
+      detalhes: {},
+      caracteristicas: {},
+      localizacao: {},
+      preco: {},
+      link_imovel: '',
+      link_virtual_tour: '',
+      codigo_imobiliaria: '',
+      data_cadastro: '',
+      data: '',
+      imagens: [],
+      curtidas: '',
+      finalidade: -1,
+      tipo: -1,
+      atualizacoes: {});
   late List<Marker> markers;
   final PopupController _popupController = PopupController();
 
@@ -48,7 +63,9 @@ class _MapPageFlutterState extends State<MapPageFlutter> {
       loadedProducts = provider.items;
 
       List<NewImovel> filteredProducts = loadedProducts
-          .where((imovel) => imovel.localizacao['latitude'] != "N/A" && imovel.localizacao['longitude'] != "N/A" )
+          .where((imovel) =>
+              imovel.localizacao['latitude'] != "N/A" &&
+              imovel.localizacao['longitude'] != "N/A")
           .toList();
 
       filteredMarkers = filteredProducts.take(50).map((imovel) {
@@ -65,6 +82,22 @@ class _MapPageFlutterState extends State<MapPageFlutter> {
               setState(() {
                 urlsImage = [];
                 showInfoScreen = true;
+                imovelAtual = NewImovel(
+                    id: imovel.id,
+                    detalhes: imovel.detalhes,
+                    caracteristicas: imovel.caracteristicas,
+                    localizacao: imovel.localizacao,
+                    preco: imovel.preco,
+                    link_imovel: imovel.link_imovel,
+                    link_virtual_tour: imovel.link_imovel,
+                    codigo_imobiliaria: imovel.codigo_imobiliaria,
+                    data_cadastro: imovel.data_cadastro,
+                    data: imovel.data,
+                    imagens: imovel.imagens,
+                    curtidas: imovel.curtidas,
+                    finalidade: imovel.finalidade,
+                    tipo: imovel.tipo,
+                    atualizacoes: imovel.atualizacoes);
                 selectedMarkerTitle = imovel.detalhes['nome_imovel'] ?? "";
                 selectedMarkerTerreno = imovel.detalhes['terreno'] ?? "";
                 selectedMarkerLocation = imovel.localizacao['endereco']
@@ -115,7 +148,7 @@ class _MapPageFlutterState extends State<MapPageFlutter> {
   @override
   Widget build(BuildContext context) {
     bool isSmallScreen = MediaQuery.of(context).size.width < 900;
-    
+
     return Scaffold(
       appBar: isSmallScreen
           ? CustomAppBar(
@@ -125,316 +158,313 @@ class _MapPageFlutterState extends State<MapPageFlutter> {
             )
           : null,
       body: LayoutBuilder(builder: (context, constraints) {
-      return Row(
-        children: [
-          if (!isSmallScreen) CustomMenu(isDarkMode: isDarkMode),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Container(
-                  height: 150,
-                  color: Colors.white,
-                  alignment: Alignment.center,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Filtros',
-                        style: TextStyle(
-                          color: Color(0xFF6e58e9),
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
+        return Row(
+          children: [
+            if (!isSmallScreen) CustomMenu(isDarkMode: isDarkMode),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                    height: 150,
+                    color: Colors.white,
+                    alignment: Alignment.center,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Filtros',
+                          style: TextStyle(
+                            color: Color(0xFF6e58e9),
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      Row(
-                        children: [
-                          Checkbox(
-                            value: true, // Defina o valor inicial do primeiro checkbox
-                            onChanged: (value) {
-                              // Implemente a lógica de mudança do estado do checkbox
-                            },
-                          ),
-                          Text('Checkbox 1'),
-                          SizedBox(width: 10), // Adicione espaçamento entre os checkboxes
-                          Checkbox(
-                            value: false, // Defina o valor inicial do segundo checkbox
-                            onChanged: (value) {
-                              // Implemente a lógica de mudança do estado do checkbox
-                            },
-                          ),
-                          Text('Checkbox 2'),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Stack(
-                    children: [
-                      FlutterMap(
-                        options: MapOptions(
-                          center: LatLng(-28.25977676240336, -52.45321612830699),
-                          zoom: 13.0,
-                        ),
-                        children: <Widget>[
-                          TileLayer(
-                            urlTemplate:
-                                'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                            subdomains: ['a', 'b', 'c'],
-                          ),
-                          MarkerClusterLayerWidget(
-                            options: MarkerClusterLayerOptions(
-                              maxClusterRadius: 120,
-                              size: Size(40, 40),
-                              markers: markers ?? [],
-                              polygonOptions: PolygonOptions(
-                                borderColor: Color.fromARGB(255, 255, 1, 1),
-                                color: Colors.black12,
-                                borderStrokeWidth: 3,
-                              ),
-                              builder: (context, markers) {
-                                return Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: Color.fromARGB(255, 255, 0, 0),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      markers.length.toString(),
-                                      style: const TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                );
+                        Row(
+                          children: [
+                            Checkbox(
+                              value:
+                                  true, // Defina o valor inicial do primeiro checkbox
+                              onChanged: (value) {
+                                // Implemente a lógica de mudança do estado do checkbox
                               },
                             ),
+                            Text('Checkbox 1'),
+                            SizedBox(
+                                width:
+                                    10), // Adicione espaçamento entre os checkboxes
+                            Checkbox(
+                              value:
+                                  false, // Defina o valor inicial do segundo checkbox
+                              onChanged: (value) {
+                                // Implemente a lógica de mudança do estado do checkbox
+                              },
+                            ),
+                            Text('Checkbox 2'),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        FlutterMap(
+                          options: MapOptions(
+                            center:
+                                LatLng(-28.25977676240336, -52.45321612830699),
+                            zoom: 13.0,
                           ),
-                        ],
-                      ),
-                      Positioned(
-                        top: 0,
-                        bottom: 0,
-                        left: 0,
-                        child: Container(
-                          width: MediaQuery.of(context).size.width * 0.4,
-                          color: Colors.white,
-                          child: showInfoScreen
-                              ? GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      showInfoScreen = false;
-                                    });
-                                  },
-                                  child: ImovelInfoComponent(
-                                    selectedMarkerTitle, // Título do imóvel
-                                    selectedMarkerTerreno, // Terreno do imóvel
-                                    selectedMarkerLocation, // Localização do imóvel
-                                    selectedMarkerOrigalPrice, // Preço original do imóvel
-                                    urlsImage, // URLs das imagens do imóvel
-                                    isDarkMode,
-                                    selectedMarkerCodigo,
-                                    selectedMarkerAreaTotal,
-                                    selectedMarkerLink,
-                                    selectedVagasgaragem,
-                                    selectedTotaldormitorios,
-                                    selectedTotalsuites,
-                                    selectedMarkerLatitude,
-                                    selectedMarkerLongitude,
-                                    1,
-                                    selectedCaracteristicas,
-                                  ),
-                                )
-                              : GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      showInfoScreen = false;
-                                    });
-                                  },
-                                  child: Column(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: TextField(
-                                          onChanged: (value) {
-                                            setState(() {});
-                                          },
-                                          decoration: InputDecoration(
-                                            labelText: 'Pesquisar',
-                                            labelStyle: TextStyle(
-                                              color: Color(0xFF6e58e9),
-                                            ),
-                                            prefixIcon: Icon(
-                                              Icons.search,
-                                              color: Color(0xFF6e58e9),
+                          children: <Widget>[
+                            TileLayer(
+                              urlTemplate:
+                                  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                              subdomains: ['a', 'b', 'c'],
+                            ),
+                            MarkerClusterLayerWidget(
+                              options: MarkerClusterLayerOptions(
+                                maxClusterRadius: 120,
+                                size: Size(40, 40),
+                                markers: markers ?? [],
+                                polygonOptions: PolygonOptions(
+                                  borderColor: Color.fromARGB(255, 255, 1, 1),
+                                  color: Colors.black12,
+                                  borderStrokeWidth: 3,
+                                ),
+                                builder: (context, markers) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: Color.fromARGB(255, 255, 0, 0),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        markers.length.toString(),
+                                        style: const TextStyle(
+                                            color: Colors.white),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        Positioned(
+                          top: 0,
+                          bottom: 0,
+                          left: 0,
+                          child: Container(
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            color: Colors.white,
+                            child: showInfoScreen
+                                ? GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        showInfoScreen = false;
+                                      });
+                                    },
+                                    child: ImovelInfoComponent(
+                                      isDarkMode,
+                                      1,
+                                      selectedCaracteristicas,
+                                      imovelAtual,
+                                    ),
+                                  )
+                                : GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        showInfoScreen = false;
+                                      });
+                                    },
+                                    child: Column(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: TextField(
+                                            onChanged: (value) {
+                                              setState(() {});
+                                            },
+                                            decoration: InputDecoration(
+                                              labelText: 'Pesquisar',
+                                              labelStyle: TextStyle(
+                                                color: Color(0xFF6e58e9),
+                                              ),
+                                              prefixIcon: Icon(
+                                                Icons.search,
+                                                color: Color(0xFF6e58e9),
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                      Expanded(
-                                        child: ListView.builder(
-                                          itemCount: filteredMarkers.length,
-                                          itemBuilder: (context, index) {
-                                            List<NewImovel> filteredProducts =
-                                                loadedProducts
-                                                    .where((imovel) =>
-                                                        imovel.localizacao[
-                                                                'latitude'] !=
-                                                            "N/A" &&
-                                                        imovel.localizacao[
-                                                                'longitude'] !=
-                                                            "N/A")
-                                                    .toList();
-                                            final marker =
-                                                filteredProducts[index];
-                                            String title =
-                                                marker.detalhes['nome_imovel']
-                                                        .toString() ??
-                                                    "";
-                                            String link = marker.link_imovel ?? "";
-                                            String id = marker.id ?? "";
-                                            String terreno = marker
-                                                .detalhes['terreno']
-                                                .toString();
-                                            String localizacao =
-                                                marker.localizacao['endereco']
-                                                            ['logradouro'] +
-                                                        ', ' +
-                                                        marker.localizacao[
-                                                            'endereco']['logradouro'] +
-                                                        ' - ' +
-                                                        marker.localizacao[
-                                                            'endereco']['cidade'] +
-                                                        '/' +
-                                                        marker.localizacao[
-                                                            'endereco']['estado'] ??
-                                                    "";
-                                            String precoOriginal =
-                                                marker.preco['preco_original']
-                                                    .toString();
-                                            List<String> imageUrls = [];
-                                            imageUrls.addAll(
-                                                marker.imagens.cast<String>());
+                                        Expanded(
+                                          child: ListView.builder(
+                                            itemCount: filteredMarkers.length,
+                                            itemBuilder: (context, index) {
+                                              List<NewImovel> filteredProducts =
+                                                  loadedProducts
+                                                      .where((imovel) =>
+                                                          imovel.localizacao[
+                                                                  'latitude'] !=
+                                                              "N/A" &&
+                                                          imovel.localizacao[
+                                                                  'longitude'] !=
+                                                              "N/A")
+                                                      .toList();
+                                              final marker =
+                                                  filteredProducts[index];
+                                              String title = marker
+                                                      .detalhes['nome_imovel']
+                                                      .toString() ??
+                                                  "";
+                                              String link =
+                                                  marker.link_imovel ?? "";
+                                              String id = marker.id ?? "";
+                                              String terreno = marker
+                                                  .detalhes['terreno']
+                                                  .toString();
+                                              String localizacao =
+                                                  marker.localizacao['endereco']
+                                                              ['logradouro'] +
+                                                          ', ' +
+                                                          marker.localizacao[
+                                                                  'endereco']
+                                                              ['logradouro'] +
+                                                          ' - ' +
+                                                          marker.localizacao[
+                                                                  'endereco']
+                                                              ['cidade'] +
+                                                          '/' +
+                                                          marker.localizacao[
+                                                                  'endereco']
+                                                              ['estado'] ??
+                                                      "";
+                                              String precoOriginal = marker
+                                                  .preco['preco_original']
+                                                  .toString();
+                                              List<String> imageUrls = [];
+                                              imageUrls.addAll(marker.imagens
+                                                  .cast<String>());
 
-                                            return ListTile(
-                                              title: Row(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [                                          
-                                                  Container(
-                                                    width: 100,
-                                                    height: 100,
-                                                    decoration: BoxDecoration(
-                                                      image: DecorationImage(
-                                                        image: NetworkImage(
-                                                            imageUrls.isNotEmpty
-                                                                ? imageUrls[0]
-                                                                : ''),
-                                                        fit: BoxFit.cover,
-                                                      ),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8.0),
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                      width:
-                                                          4), // Add some spacing between image and text
-                                                  Expanded(
-                                                    flex: 1,
-                                                    child: Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                      children: [
-                                                        Text(
-                                                          title,
-                                                          style: TextStyle(
-                                                            color: Color(0xFF6e58e9),
-                                                            fontSize: 15,
-                                                            fontWeight: FontWeight.bold,
-                                                          ),
+                                              return ListTile(
+                                                title: Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Container(
+                                                      width: 100,
+                                                      height: 100,
+                                                      decoration: BoxDecoration(
+                                                        image: DecorationImage(
+                                                          image: NetworkImage(
+                                                              imageUrls
+                                                                      .isNotEmpty
+                                                                  ? imageUrls[0]
+                                                                  : ''),
+                                                          fit: BoxFit.cover,
                                                         ),
-                                                         SizedBox(width: 4),
-                                                          Row(
-                                                children: [
-                                                  Icon(
-                                                    Icons.place,
-                                                    color: isDarkMode ? Colors.white : Colors.black54,
-                                                  ),
-                                                  SizedBox(width: 4),
-                                                  Expanded(
-                                                    flex: 1,
-                                                    child: Text(
-                                                      localizacao,
-                                                      style: TextStyle(
-                                                        color: Color(0xFF6e58e9),
-                                                        fontSize: 10,
-                                                        fontWeight: FontWeight.bold,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8.0),
                                                       ),
-                                                      overflow: TextOverflow.ellipsis, // Define o comportamento de overflow
-                                                      maxLines: 2, // Define o número máximo de linhas
                                                     ),
-                                                  ),
-                                                ],
-                                              ),
-                                                      ],
+                                                    SizedBox(
+                                                        width:
+                                                            4), // Add some spacing between image and text
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                            title,
+                                                            style: TextStyle(
+                                                              color: Color(
+                                                                  0xFF6e58e9),
+                                                              fontSize: 15,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
+                                                          SizedBox(width: 4),
+                                                          Row(
+                                                            children: [
+                                                              Icon(
+                                                                Icons.place,
+                                                                color: isDarkMode
+                                                                    ? Colors
+                                                                        .white
+                                                                    : Colors
+                                                                        .black54,
+                                                              ),
+                                                              SizedBox(
+                                                                  width: 4),
+                                                              Expanded(
+                                                                flex: 1,
+                                                                child: Text(
+                                                                  localizacao,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Color(
+                                                                        0xFF6e58e9),
+                                                                    fontSize:
+                                                                        10,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                  ),
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis, // Define o comportamento de overflow
+                                                                  maxLines:
+                                                                      2, // Define o número máximo de linhas
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
-                                                  ),
-                                                ],
-                                              ),
-                                              onTap: () {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        ImovelInfoComponent(
-                                                      title,
-                                                      terreno,
-                                                      localizacao,
-                                                      precoOriginal,
-                                                      imageUrls,
-                                                      isDarkMode,
-                                                      marker.id ?? "",
-                                                      marker.detalhes['area_total'] ??
-                                                          "",
-                                                      link,
-                                                      int.tryParse(marker
-                                                              .detalhes[
-                                                                  'vagas_garagem'] ??
-                                                          "") ??
-                                                          0,
-                                                      marker.detalhes[
-                                                              'total_dormitorios'] ??
-                                                          "",
-                                                      marker.detalhes['area_total'] ??
-                                                          "",
-                                                      marker.localizacao['latitude'] ??
-                                                          "",
-                                                      marker.localizacao['longitude'] ??
-                                                          "",
-                                                      1,
-                                                      marker.caracteristicas ?? {},
+                                                  ],
+                                                ),
+                                                onTap: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ImovelInfoComponent(
+                                                        isDarkMode,
+                                                        1,
+                                                        selectedCaracteristicas,
+                                                        imovelAtual,
+                                                      ),
                                                     ),
-                                                  ),
-                                                );
-                                              },
-                                              tileColor: Colors.grey,
-                                              selectedTileColor: Color(0xFF6e58e9),
-                                            );
-                                          },
+                                                  );
+                                                },
+                                                tileColor: Colors.grey,
+                                                selectedTileColor:
+                                                    Color(0xFF6e58e9),
+                                              );
+                                            },
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
-      );
-    }),
+          ],
+        );
+      }),
       drawer: CustomMenu(isDarkMode: false),
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(right: 40.0),

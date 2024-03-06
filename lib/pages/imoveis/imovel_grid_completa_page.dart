@@ -333,6 +333,10 @@ class _ImovelGridCompletaSemComponenteState
                                                       '',
                                                       tipo_pagina: 0,
                                                       caracteristicas: filteredInstru[i]['caracteristicas'],
+                                                      area_privativa: infoList[i][
+                                                          'area_privativa'] ??
+                                                      '',
+                                                      imovel: instrumental[i],
                                                 ),
                                               ),
                                             );
