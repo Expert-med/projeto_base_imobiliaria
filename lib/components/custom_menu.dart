@@ -22,6 +22,7 @@ import '../pages/propostas/proposta_add_page.dart';
 import '../pages/propostas/proposta_list_page.dart';
 import '../pages/teste.dart';
 import '../util/dark_color_util.dart';
+
 class CustomMenu extends StatefulWidget {
   final bool isDarkMode;
 
@@ -71,541 +72,503 @@ class _CustomMenuState extends State<CustomMenu> {
     });
   }
 
-   void handleExpandedPropostasChanged(bool expanded) {
+  void handleExpandedPropostasChanged(bool expanded) {
     setState(() {
       isExpandedPropostas = expanded;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     bool isSmallScreen = MediaQuery.of(context).size.width < 900;
 
     return Drawer(
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          return SingleChildScrollView(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minHeight: constraints.maxHeight,
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          ListTile(
+            leading: Icon(
+              Icons.home,
+              color: widget.isDarkMode
+                  ? darkenColor(Color(0xFF6e58e9), 0.5)
+                  : Color(0xFF6e58e9),
+              size: 40,
+            ),
+            title: Text(
+              'Home',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: widget.isDarkMode ? Colors.white : Colors.black54,
               ),
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height,
-                child: Container(
+            ),
+            onTap: () {
+              Navigator.pop(context); // Fecha o drawer
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => checkPage(),
+                ),
+              );
+            },
+          ),
+          SizedBox(height: 10),
+          ListTile(
+            leading: Icon(
+              Icons.house,
+              color: Color(0xFF6e58e9),
+            ),
+            title: Text(
+              'Virtual Tour test',
+              style: TextStyle(
+                color: widget.isDarkMode ? Colors.white : Colors.black54,
+              ),
+            ),
+            onTap: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => VirtualTourIFrame(),
+                ),
+              );
+            },
+          ),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: AnimatedContainer(
+              duration: Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+              color: isExpandedImoveis ? Color(0xFF6e58e9) : null,
+              child: ListTile(
+                leading: Icon(
+                  Icons.add,
+                  color: isExpandedImoveis ? Colors.white : Color(0xFF6e58e9),
+                ),
+                title: Text(
+                  'Imóveis',
+                  style: TextStyle(
+                    color: widget.isDarkMode ? Colors.white : Colors.black54,
+                  ),
+                ),
+                onTap: () {
+                  handleExpansionImoveisChanged(!isExpandedImoveis);
+                },
+              ),
+            ),
+          ),
+          if (isExpandedImoveis)
+            Padding(
+              padding: const EdgeInsets.only(left: 8, right: 8),
+              child: ListTile(
+                leading: Icon(
+                  Icons.house,
+                  color: Color(0xFF6e58e9),
+                ),
+                title: Text(
+                  'Listar Todos',
+                  style: TextStyle(
+                    color: widget.isDarkMode ? Colors.white : Colors.black54,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ImovelPage(widget.isDarkMode),
+                      fullscreenDialog:
+                          true, // Isso impede que o usuário retorne com gestos de deslize
+                    ),
+                  );
+                },
+              ),
+            ),
+          if (isExpandedImoveis &&
+              _user?.tipoUsuario == 1) // Verifica se o usuário é um cliente
+            Padding(
+              padding: const EdgeInsets.only(left: 8, right: 8),
+              child: ListTile(
+                leading: Icon(
+                  Icons.house,
+                  color: Color(0xFF6e58e9),
+                ),
+                title: Text(
+                  'Adicionar Novo Imóvel',
+                  style: TextStyle(
+                    color: widget.isDarkMode ? Colors.white : Colors.black54,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CadastroImovel(),
+                    ),
+                  );
+                },
+              ),
+            ),
+          if (isExpandedImoveis)
+            Padding(
+              padding: const EdgeInsets.only(left: 8, right: 8),
+              child: ListTile(
+                leading: Icon(
+                  Icons.house,
+                  color: Color(0xFF6e58e9),
+                ),
+                title: Text(
+                  'Pesquisar Imóveis',
+                  style: TextStyle(
+                    color: widget.isDarkMode ? Colors.white : Colors.black54,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ImovelPage(widget.isDarkMode),
+                      fullscreenDialog:
+                          true, // Isso impede que o usuário retorne com gestos de deslize
+                    ),
+                  );
+                },
+              ),
+            ),
+          if (isExpandedImoveis)
+            Padding(
+              padding: const EdgeInsets.only(left: 8, right: 8),
+              child: ListTile(
+                leading: Icon(
+                  Icons.house,
+                  color: Color(0xFF6e58e9),
+                ),
+                title: Text(
+                  'Gerenciar Categorias',
+                  style: TextStyle(
+                    color: widget.isDarkMode ? Colors.white : Colors.black54,
+                  ),
+                ),
+                onTap: () {},
+              ),
+            ),
+          if (isExpandedImoveis)
+            Padding(
+              padding: const EdgeInsets.only(left: 8, right: 8),
+              child: ListTile(
+                leading: Icon(
+                  Icons.favorite,
                   color: widget.isDarkMode
-                      ? Colors.black54
-                      : Color.fromARGB(255, 233, 233, 233),
-                  child: Column(
-                    children: <Widget>[
-                     Padding(
-                padding: const EdgeInsets.only(top: 10, bottom: 60),
+                      ? darkenColor(Color(0xFF6e58e9), 0.5)
+                      : Color(0xFF6e58e9),
+                ),
+                title: Text(
+                  'Imóveis favoritos',
+                  style: TextStyle(
+                    color: widget.isDarkMode ? Colors.white : Colors.black54,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          ImoveisFavoritos(isDarkMode: widget.isDarkMode),
+                    ),
+                  );
+                },
+              ),
+            ),
+          if (isExpandedImoveis)
+            ListTile(
+              leading: Icon(
+                Icons.map_outlined,
+                color: widget.isDarkMode
+                    ? darkenColor(Color(0xFF6e58e9), 0.5)
+                    : Color(0xFF6e58e9),
+              ),
+              title: Text(
+                'Mapa dos imóveis',
+                style: TextStyle(
+                  color: widget.isDarkMode ? Colors.white : Colors.black54,
+                ),
+              ),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MapPageFlutter(),
+                  ),
+                );
+              },
+            ),
+          ListTile(
+            leading: Icon(
+              Icons.people,
+              color: widget.isDarkMode
+                  ? darkenColor(Color(0xFF6e58e9), 0.5)
+                  : Color(0xFF6e58e9),
+            ),
+            title: Text(
+              'Lista de corretores',
+              style: TextStyle(
+                color: widget.isDarkMode ? Colors.white : Colors.black54,
+              ),
+            ),
+            onTap: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      CorretoresListPage(isDarkMode: widget.isDarkMode),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            leading: Icon(
+              Icons.people,
+              color: widget.isDarkMode
+                  ? darkenColor(Color(0xFF6e58e9), 0.5)
+                  : Color(0xFF6e58e9),
+            ),
+            title: Text(
+              'Geral agendamento',
+              style: TextStyle(
+                color: widget.isDarkMode ? Colors.white : Colors.black54,
+              ),
+            ),
+            onTap: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      GeralAgendamento(isDarkMode: widget.isDarkMode),
+                ),
+              );
+            },
+          ),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: AnimatedContainer(
+              duration: Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+              color: isExpandedImobiliarias ? Color(0xFF6e58e9) : null,
+              child: ListTile(
+                leading: Icon(
+                  Icons.add,
+                  color:
+                      isExpandedImobiliarias ? Colors.white : Color(0xFF6e58e9),
+                ),
+                title: Text(
+                  'Imobiliarias',
+                  style: TextStyle(
+                    color: widget.isDarkMode ? Colors.white : Colors.black54,
+                  ),
+                ),
+                onTap: () {
+                  handleExpansionImobiliariasChanged(!isExpandedImobiliarias);
+                },
+              ),
+            ),
+          ),
+          if (isExpandedImobiliarias)
+            Padding(
+              padding: const EdgeInsets.only(left: 8, right: 8),
+              child: ListTile(
+                leading: Icon(
+                  Icons.home_work,
+                  color: Color(0xFF6e58e9),
+                ),
+                title: Text(
+                  'Cadastrar Imobiliaria',
+                  style: TextStyle(
+                    color: widget.isDarkMode ? Colors.white : Colors.black54,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CadastroImobiliaria(),
+                    ),
+                  );
+                },
+              ),
+            ),
+          if (isExpandedImobiliarias)
+            Padding(
+              padding: const EdgeInsets.only(left: 8, right: 8),
+              child: ListTile(
+                leading: Icon(
+                  Icons.home_work,
+                  color: Color(0xFF6e58e9),
+                ),
+                title: Text(
+                  'Imobiliarias',
+                  style: TextStyle(
+                    color: widget.isDarkMode ? Colors.white : Colors.black54,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          ImobiliariasPage(isDarkMode: widget.isDarkMode),
+                    ),
+                  );
+                },
+              ),
+            ),
+          if (_user?.tipoUsuario == 1)
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: AnimatedContainer(
+                duration: Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+                color: isExpandedCorretor ? Color(0xFF6e58e9) : null,
                 child: ListTile(
                   leading: Icon(
-                    Icons.home,
-                    color: widget.isDarkMode
-                        ? darkenColor(Color(0xFF6e58e9), 0.5)
-                        : Color(0xFF6e58e9),
-                    size: 40,
+                    Icons.add,
+                    color: isExpandedImoveis ? Colors.white : Color(0xFF6e58e9),
                   ),
                   title: Text(
-                    'Home',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: widget.isDarkMode ? Colors.white : Colors.black54,
-                    ),
-                  ),
-                  onTap: () {
-                    if (isSmallScreen) Navigator.pop(context);
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => checkPage(),
-                      ),
-                    );
-                  },
-                ),
-              ),
-              ListTile(
-                    leading: Icon(
-                      Icons.house,
-                      color: Color(0xFF6e58e9),
-                    ),
-                    title: Text(
-                      'Virtual Tour test',
-                      style: TextStyle(
-                        color:
-                            widget.isDarkMode ? Colors.white : Colors.black54,
-                      ),
-                    ),
-                    onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => VirtualTourIFrame(),
-                        ),
-                      );
-                    },
-                  ),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: AnimatedContainer(
-                  duration: Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                  color: isExpandedImoveis ? Color(0xFF6e58e9) : null,
-                  child: ListTile(
-                    leading: Icon(
-                      Icons.add,
-                      color:
-                          isExpandedImoveis ? Colors.white : Color(0xFF6e58e9),
-                    ),
-                    title: Text(
-                      'Imóveis',
-                      style: TextStyle(
-                        color:
-                            widget.isDarkMode ? Colors.white : Colors.black54,
-                      ),
-                    ),
-                    onTap: () {
-                      handleExpansionImoveisChanged(!isExpandedImoveis);
-                    },
-                  ),
-                ),
-              ),
-              if (isExpandedImoveis)
-                Padding(
-                  padding: const EdgeInsets.only(left: 8, right: 8),
-                  child: ListTile(
-                    leading: Icon(
-                      Icons.house,
-                      color: Color(0xFF6e58e9),
-                    ),
-                    title: Text(
-                      'Listar Todos',
-                      style: TextStyle(
-                        color:
-                            widget.isDarkMode ? Colors.white : Colors.black54,
-                      ),
-                    ),
-                    onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ImovelPage(widget.isDarkMode),
-                          fullscreenDialog:
-                              true, // Isso impede que o usuário retorne com gestos de deslize
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              if (isExpandedImoveis &&
-                  _user?.tipoUsuario == 1) // Verifica se o usuário é um cliente
-                Padding(
-                  padding: const EdgeInsets.only(left: 8, right: 8),
-                  child: ListTile(
-                    leading: Icon(
-                      Icons.house,
-                      color: Color(0xFF6e58e9),
-                    ),
-                    title: Text(
-                      'Adicionar Novo Imóvel',
-                      style: TextStyle(
-                        color:
-                            widget.isDarkMode ? Colors.white : Colors.black54,
-                      ),
-                    ),
-                    onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CadastroImovel(),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              if (isExpandedImoveis)
-                Padding(
-                  padding: const EdgeInsets.only(left: 8, right: 8),
-                  child: ListTile(
-                    leading: Icon(
-                      Icons.house,
-                      color: Color(0xFF6e58e9),
-                    ),
-                    title: Text(
-                      'Pesquisar Imóveis',
-                      style: TextStyle(
-                        color:
-                            widget.isDarkMode ? Colors.white : Colors.black54,
-                      ),
-                    ),
-                    onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ImovelPage(widget.isDarkMode),
-                          fullscreenDialog:
-                              true, // Isso impede que o usuário retorne com gestos de deslize
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              if (isExpandedImoveis)
-                Padding(
-                  padding: const EdgeInsets.only(left: 8, right: 8),
-                  child: ListTile(
-                    leading: Icon(
-                      Icons.house,
-                      color: Color(0xFF6e58e9),
-                    ),
-                    title: Text(
-                      'Gerenciar Categorias',
-                      style: TextStyle(
-                        color:
-                            widget.isDarkMode ? Colors.white : Colors.black54,
-                      ),
-                    ),
-                    onTap: () {},
-                  ),
-                ),
-              if (isExpandedImoveis)
-                Padding(
-                   padding: const EdgeInsets.only(left: 8, right: 8),
-                  child: ListTile(
-                    leading: Icon(
-                      Icons.favorite,
-                      color: widget.isDarkMode
-                          ? darkenColor(Color(0xFF6e58e9), 0.5)
-                          : Color(0xFF6e58e9),
-                    ),
-                    title: Text(
-                      'Imóveis favoritos',
-                      style: TextStyle(
-                        color: widget.isDarkMode ? Colors.white : Colors.black54,
-                      ),
-                    ),
-                    onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              ImoveisFavoritos(isDarkMode: widget.isDarkMode),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              if (isExpandedImoveis)
-                ListTile(
-                  leading: Icon(
-                    Icons.map_outlined,
-                    color: widget.isDarkMode
-                        ? darkenColor(Color(0xFF6e58e9), 0.5)
-                        : Color(0xFF6e58e9),
-                  ),
-                  title: Text(
-                    'Mapa dos imóveis',
+                    'Clientes',
                     style: TextStyle(
                       color: widget.isDarkMode ? Colors.white : Colors.black54,
                     ),
                   ),
                   onTap: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => MapPageFlutter(),
-                      ),
-                    );
+                    handleExpandedCorretorChanged(!isExpandedCorretor);
                   },
-                ),
-              ListTile(
-                leading: Icon(
-                  Icons.people,
-                  color: widget.isDarkMode
-                      ? darkenColor(Color(0xFF6e58e9), 0.5)
-                      : Color(0xFF6e58e9),
-                ),
-                title: Text(
-                  'Lista de corretores',
-                  style: TextStyle(
-                    color: widget.isDarkMode ? Colors.white : Colors.black54,
-                  ),
-                ),
-                onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          CorretoresListPage(isDarkMode: widget.isDarkMode),
-                    ),
-                  );
-                },
-              ),
-               ListTile(
-                leading: Icon(
-                  Icons.people,
-                  color: widget.isDarkMode
-                      ? darkenColor(Color(0xFF6e58e9), 0.5)
-                      : Color(0xFF6e58e9),
-                ),
-                title: Text(
-                  'Geral agendamento',
-                  style: TextStyle(
-                    color: widget.isDarkMode ? Colors.white : Colors.black54,
-                  ),
-                ),
-                onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          GeralAgendamento(isDarkMode: widget.isDarkMode),
-                    ),
-                  );
-                },
-              ),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: AnimatedContainer(
-                  duration: Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                  color: isExpandedImobiliarias ? Color(0xFF6e58e9) : null,
-                  child: ListTile(
-                    leading: Icon(
-                      Icons.add,
-                      color: isExpandedImobiliarias
-                          ? Colors.white
-                          : Color(0xFF6e58e9),
-                    ),
-                    title: Text(
-                      'Imobiliarias',
-                      style: TextStyle(
-                        color:
-                            widget.isDarkMode ? Colors.white : Colors.black54,
-                      ),
-                    ),
-                    onTap: () {
-                      handleExpansionImobiliariasChanged(
-                          !isExpandedImobiliarias);
-                    },
-                  ),
-                ),
-              ),
-              if (isExpandedImobiliarias)
-                Padding(
-                  padding: const EdgeInsets.only(left: 8, right: 8),
-                  child: ListTile(
-                    leading: Icon(
-                      Icons.home_work,
-                      color: Color(0xFF6e58e9),
-                    ),
-                    title: Text(
-                      'Cadastrar Imobiliaria',
-                      style: TextStyle(
-                        color:
-                            widget.isDarkMode ? Colors.white : Colors.black54,
-                      ),
-                    ),
-                    onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CadastroImobiliaria(),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              if (isExpandedImobiliarias)
-                Padding(
-                  padding: const EdgeInsets.only(left: 8, right: 8),
-                  child: ListTile(
-                    leading: Icon(
-                      Icons.home_work,
-                      color: Color(0xFF6e58e9),
-                    ),
-                    title: Text(
-                      'Imobiliarias',
-                      style: TextStyle(
-                        color:
-                            widget.isDarkMode ? Colors.white : Colors.black54,
-                      ),
-                    ),
-                    onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              ImobiliariasPage(isDarkMode: widget.isDarkMode),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              if (_user?.tipoUsuario == 1)
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: AnimatedContainer(
-                    duration: Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                    color: isExpandedCorretor ? Color(0xFF6e58e9) : null,
-                    child: ListTile(
-                      leading: Icon(
-                        Icons.add,
-                        color: isExpandedImoveis
-                            ? Colors.white
-                            : Color(0xFF6e58e9),
-                      ),
-                      title: Text(
-                        'Clientes',
-                        style: TextStyle(
-                          color:
-                              widget.isDarkMode ? Colors.white : Colors.black54,
-                        ),
-                      ),
-                      onTap: () {
-                        handleExpandedCorretorChanged(!isExpandedCorretor);
-                      },
-                    ),
-                  ),
-                ),
-              if (isExpandedCorretor)
-                Padding(
-                  padding: const EdgeInsets.only(left: 8, right: 8),
-                  child: ListTile(
-                    leading: Icon(
-                      Icons.house,
-                      color: Color(0xFF6e58e9),
-                    ),
-                    title: Text(
-                      'Listar Meus Clientes',
-                      style: TextStyle(
-                        color:
-                            widget.isDarkMode ? Colors.white : Colors.black54,
-                      ),
-                    ),
-                    onTap: () {
-                      print(widget.isDarkMode);
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CorretorClientesPage(
-                              isDarkMode: widget.isDarkMode),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                if (_user?.tipoUsuario == 1)
-                ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: AnimatedContainer(
-                  duration: Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                  color: isExpandedPropostas ? Color(0xFF6e58e9) : null,
-                  child: ListTile(
-                    leading: Icon(
-                      Icons.add,
-                      color:
-                          isExpandedPropostas ? Colors.white : Color(0xFF6e58e9),
-                    ),
-                    title: Text(
-                      'Propostas',
-                      style: TextStyle(
-                        color:
-                            widget.isDarkMode ? Colors.white : Colors.black54,
-                      ),
-                    ),
-                    onTap: () {
-                      handleExpandedPropostasChanged(!isExpandedPropostas);
-                    },
-                  ),
-                ),
-              ),
-              if (isExpandedPropostas)
-                Padding(
-                  padding: const EdgeInsets.only(left: 8, right: 8),
-                  child: ListTile(
-                    leading: Icon(
-                      Icons.house,
-                      color: Color(0xFF6e58e9),
-                    ),
-                    title: Text(
-                      'Listar Todas',
-                      style: TextStyle(
-                        color:
-                            widget.isDarkMode ? Colors.white : Colors.black54,
-                      ),
-                    ),
-                    onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PropostaListPage(widget.isDarkMode),
-                          fullscreenDialog:
-                              true, // Isso impede que o usuário retorne com gestos de deslize
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                 if (isExpandedPropostas)
-                Padding(
-                  padding: const EdgeInsets.only(left: 8, right: 8),
-                  child: ListTile(
-                    leading: Icon(
-                      Icons.house,
-                      color: Color(0xFF6e58e9),
-                    ),
-                    title: Text(
-                      'Criar nova proposta',
-                      style: TextStyle(
-                        color:
-                            widget.isDarkMode ? Colors.white : Colors.black54,
-                      ),
-                    ),
-                    onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CadastroProposta(),
-                          fullscreenDialog:
-                              true, // Isso impede que o usuário retorne com gestos de deslize
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              Divider(),
-              ListTile(
-                leading: Icon(
-                  Icons.logout,
-                  color: widget.isDarkMode
-                      ? darkenColor(Color(0xFF6e58e9), 0.5)
-                      : Color(0xFF6e58e9),
-                ),
-                title: Text(
-                  'Log Out',
-                  style: TextStyle(
-                    color: widget.isDarkMode ? Colors.white : Colors.black54,
-                  ),
-                ),
-                onTap: () {
-                  AuthService().logout;
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => AuthPage()),
-                    (route) => false,
-                  );
-                },
-              ),
-                    ],
-                  ),
                 ),
               ),
             ),
-          );
-        },
+          if (isExpandedCorretor)
+            Padding(
+              padding: const EdgeInsets.only(left: 8, right: 8),
+              child: ListTile(
+                leading: Icon(
+                  Icons.house,
+                  color: Color(0xFF6e58e9),
+                ),
+                title: Text(
+                  'Listar Meus Clientes',
+                  style: TextStyle(
+                    color: widget.isDarkMode ? Colors.white : Colors.black54,
+                  ),
+                ),
+                onTap: () {
+                  print(widget.isDarkMode);
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          CorretorClientesPage(isDarkMode: widget.isDarkMode),
+                    ),
+                  );
+                },
+              ),
+            ),
+          if (_user?.tipoUsuario == 1)
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: AnimatedContainer(
+                duration: Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+                color: isExpandedPropostas ? Color(0xFF6e58e9) : null,
+                child: ListTile(
+                  leading: Icon(
+                    Icons.add,
+                    color:
+                        isExpandedPropostas ? Colors.white : Color(0xFF6e58e9),
+                  ),
+                  title: Text(
+                    'Propostas',
+                    style: TextStyle(
+                      color: widget.isDarkMode ? Colors.white : Colors.black54,
+                    ),
+                  ),
+                  onTap: () {
+                    handleExpandedPropostasChanged(!isExpandedPropostas);
+                  },
+                ),
+              ),
+            ),
+          if (isExpandedPropostas)
+            Padding(
+              padding: const EdgeInsets.only(left: 8, right: 8),
+              child: ListTile(
+                leading: Icon(
+                  Icons.house,
+                  color: Color(0xFF6e58e9),
+                ),
+                title: Text(
+                  'Listar Todas',
+                  style: TextStyle(
+                    color: widget.isDarkMode ? Colors.white : Colors.black54,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PropostaListPage(widget.isDarkMode),
+                      fullscreenDialog:
+                          true, // Isso impede que o usuário retorne com gestos de deslize
+                    ),
+                  );
+                },
+              ),
+            ),
+          if (isExpandedPropostas)
+            Padding(
+              padding: const EdgeInsets.only(left: 8, right: 8),
+              child: ListTile(
+                leading: Icon(
+                  Icons.house,
+                  color: Color(0xFF6e58e9),
+                ),
+                title: Text(
+                  'Criar nova proposta',
+                  style: TextStyle(
+                    color: widget.isDarkMode ? Colors.white : Colors.black54,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CadastroProposta(),
+                      fullscreenDialog:
+                          true, // Isso impede que o usuário retorne com gestos de deslize
+                    ),
+                  );
+                },
+              ),
+            ),
+          Divider(),
+          ListTile(
+            leading: Icon(
+              Icons.logout,
+              color: widget.isDarkMode
+                  ? darkenColor(Color(0xFF6e58e9), 0.5)
+                  : Color(0xFF6e58e9),
+            ),
+            title: Text(
+              'Log Out',
+              style: TextStyle(
+                color: widget.isDarkMode ? Colors.white : Colors.black54,
+              ),
+            ),
+            onTap: () {
+              AuthService().logout;
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => AuthPage()),
+                (route) => false,
+              );
+            },
+          ),
+        ],
       ),
     );
   }
