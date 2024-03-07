@@ -25,6 +25,7 @@ class _ImovelItemState extends State<ImovelItem> {
   @override
   Widget build(BuildContext context) {
     final product = Provider.of<NewImovel>(context, listen: false);
+    
 
     return AspectRatio(
       aspectRatio: 25 / 13,
@@ -58,36 +59,80 @@ class _ImovelItemState extends State<ImovelItem> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  '${product.preco['preco_original'] == [] ? 'Preço não informado' : product.preco['preco_original']}',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    color: widget.isDarkMode ? Colors.white : Colors.black54,
-                  ),
+                  Row(
+                    children: [
+                      Text(
+                        '${product.preco['preco_original'] == [] ? 'Preço não informado' : product.preco['preco_original']}',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: widget.isDarkMode ? Colors.white : Colors.black54,
+                        ),
+                      ),
+                      IconButton(
+                  onPressed: () {
+                    List<String> imageUrls = [];
+                    List<dynamic> rawImageUrls = product.imagens;
+                    imageUrls.addAll(rawImageUrls.map((url) => url.toString()));
+
+                      imageUrls.addAll(rawImageUrls.map((url) => url.toString()));
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ImoveisInfoPage(
+                          nome_imovel: product.detalhes['nome_imovel'],
+                          terreno: product.detalhes['terreno'],
+                          originalPrice: '0',
+                          location: product.localizacao['endereco']
+                              ['bairro'],
+                          urlsImage: imageUrls,
+                          codigo: product.id,
+                          area_total: product.detalhes['area_total'],
+                          link: product.link_imovel,
+                          Vagasgaragem: product.detalhes['total_garagem'] ?? 0,
+                          Totaldormitorios:
+                              product.detalhes['total_dormitorios'] ?? '',
+                          Totalsuites: product.detalhes['total_suites'] ?? '',
+                          latitude:
+                              product.localizacao['latitude'] ?? '',
+                          longitude: product.localizacao
+                                  ['longitude'] ??
+                              '',
+                          tipo_pagina: widget.tipo_pagina,
+                          caracteristicas: product.caracteristicas,
+                          area_privativa: product.detalhes['total_dormitorios'] ?? '',
+                          imovel: product,
+                        ),
+                      ),
+                    );
+                  },
+                  icon: Icon(Icons.info),
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                StatefulBuilder(
+                  builder: (BuildContext context, StateSetter setState) {
+                    return Consumer<NewImovel>(
+                      builder: (ctx, product, _) => IconButton(
+                        onPressed: () {
+                          setState(() {
+                            product.toggleFavorite();
+                          });
+                          _onFavoriteClicked(product.id);
+                        },
+                        icon: Icon(product.isFavorite
+                            ? Icons.favorite
+                            : Icons.favorite_border),
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                    );
+                  },
+                ),
+                  ],
+                  
                 ),
                 Row(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Icon(
-                          Icons.bed,
-                          color:
-                              widget.isDarkMode ? Colors.white : Colors.black54,
-                        ),
-                        SizedBox(width: 4), // Espaço entre o ícone e o texto
-                        SelectableText(
-                          '${product.detalhes['total_dormitorios'] ?? 0} suítes: ${product.detalhes['total_suites'] ?? 0}',
-                          style: TextStyle(
-                            color: widget.isDarkMode
-                                ? Colors.white
-                                : Colors.black54,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Spacer(), // Spacer para distribuir o espaço restante
                     Row(
                       children: [
                         Icon(
@@ -95,7 +140,7 @@ class _ImovelItemState extends State<ImovelItem> {
                           color:
                               widget.isDarkMode ? Colors.white : Colors.black54,
                         ),
-                        SizedBox(width: 4), // Espaço entre o ícone e o texto
+                        SizedBox(width: 3), // Espaço entre o ícone e o texto
                         SelectableText(
                           '${product.detalhes['vagas_garagem']}',
                           style: TextStyle(
@@ -104,9 +149,10 @@ class _ImovelItemState extends State<ImovelItem> {
                                 : Colors.black54,
                           ),
                         ),
+
                       ],
                     ),
-                    Spacer(), // Spacer para distribuir o espaço restante
+                    
                     Row(
                       children: [
                         Icon(
@@ -115,7 +161,7 @@ class _ImovelItemState extends State<ImovelItem> {
                               widget.isDarkMode ? Colors.white : Colors.black54,
                         ),
                         SizedBox(
-                            width: 4), // Espaço entre o texto "m²" e o valor
+                            width: 3), // Espaço entre o texto "m²" e o valor
                         SelectableText(
                           '${product.detalhes['area_total']}',
                           style: TextStyle(
@@ -128,7 +174,35 @@ class _ImovelItemState extends State<ImovelItem> {
                     ),
                   ],
                 ),
-               
+                Container(
+                  width: double.infinity,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Icon(
+                            Icons.bed,
+                            color: widget.isDarkMode ? Colors.white : Colors.black54,
+                          ),
+                          SizedBox(width: 4), // Add spacing between icon and text
+                          Flexible(
+                            child: SelectableText(
+                              '${product.detalhes['total_dormitorios'] ?? "N/A"}',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: widget.isDarkMode ? Colors.white : Colors.black54,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      
+                    ],
+                  ),
+                ),
+                                    
                 Container(
                   width: double.infinity,
                   child: Row(
@@ -155,72 +229,7 @@ class _ImovelItemState extends State<ImovelItem> {
               ],
             ),
           ),
-          Column(
-            children: [
-              StatefulBuilder(
-                builder: (BuildContext context, StateSetter setState) {
-                  return Consumer<NewImovel>(
-                    builder: (ctx, product, _) => IconButton(
-                      onPressed: () {
-                        setState(() {
-                          product.toggleFavorite();
-                        });
-                        _onFavoriteClicked(product.id);
-                      },
-                      icon: Icon(product.isFavorite
-                          ? Icons.favorite
-                          : Icons.favorite_border),
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                  );
-                },
-              ),
-              SizedBox(
-                height: 3,
-              ),
-              IconButton(
-                onPressed: () {
-                  List<String> imageUrls = [];
-                  List<dynamic> rawImageUrls = product.imagens;
-                  imageUrls.addAll(rawImageUrls.map((url) => url.toString()));
-
-                    imageUrls.addAll(rawImageUrls.map((url) => url.toString()));
-
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ImoveisInfoPage(
-                        nome_imovel: product.detalhes['nome_imovel'],
-                        terreno: product.detalhes['terreno'],
-                        originalPrice: '0',
-                        location: product.localizacao['endereco']
-                            ['bairro'],
-                        urlsImage: imageUrls,
-                        codigo: product.id,
-                        area_total: product.detalhes['area_total'],
-                        link: product.link_imovel,
-                        Vagasgaragem: product.detalhes['total_garagem'] ?? 0,
-                        Totaldormitorios:
-                            product.detalhes['total_dormitorios'] ?? '',
-                        Totalsuites: product.detalhes['total_suites'] ?? '',
-                        latitude:
-                            product.localizacao['latitude'] ?? '',
-                        longitude: product.localizacao
-                                ['longitude'] ??
-                            '',
-                        tipo_pagina: widget.tipo_pagina,
-                        caracteristicas: product.caracteristicas,
-                        area_privativa: product.detalhes['total_dormitorios'] ?? '',
-                        imovel: product,
-                      ),
-                    ),
-                  );
-                },
-                icon: Icon(Icons.info),
-                color: Theme.of(context).colorScheme.secondary,
-              ),
-            ],
-          ),
+         
         ],
       ),
     );
@@ -244,9 +253,7 @@ class _ImovelItemState extends State<ImovelItem> {
           ', ' +
           product.localizacao['endereco']['bairro'] +
           ' - ' +
-          product.localizacao['endereco']['cidade'] +
-          ' / ' +
-          product.localizacao['endereco']['estado'];
+          product.localizacao['endereco']['cidade'];
     } else {
       return 'Localização não disponível';
     }

@@ -176,11 +176,9 @@ class _MyHomePageState extends State<MyHomePage> {
                         height: 10,
                       ),
                       //SearchRow(isDarkMode: isDarkMode),
-                      SizedBox(
-                        height: 10,
-                      ),
+            
                       ImovelCarousel(false, isDarkMode),
-                       if (_user.tipoUsuario == 0)
+                      if (_user.tipoUsuario == 0)
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Row(

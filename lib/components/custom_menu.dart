@@ -109,7 +109,7 @@ class _CustomMenuState extends State<CustomMenu> {
               ),
               onTap: () {
                 Navigator.pop(context); // Fecha o drawer
-                Navigator.pushReplacement(
+                Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => checkPage(),

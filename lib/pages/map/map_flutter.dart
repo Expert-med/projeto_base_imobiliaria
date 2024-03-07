@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:projeto_imobiliaria/components/imovel/imovel_list_map.dart';
 import 'package:projeto_imobiliaria/models/imoveis/newImovel.dart';
 import 'package:projeto_imobiliaria/models/imoveis/newImovelList.dart';
 import 'package:provider/provider.dart';
@@ -313,40 +314,28 @@ class _MapPageFlutterState extends State<MapPageFlutter> {
                                                       .toList();
                                               final marker =
                                                   filteredProducts[index];
-                                              String title = marker
-                                                      .detalhes['nome_imovel']
-                                                      .toString() ??
-                                                  "";
-                                              String link =
-                                                  marker.link_imovel ?? "";
-                                              String id = marker.id ?? "";
-                                              String terreno = marker
-                                                  .detalhes['terreno']
-                                                  .toString();
-                                              String localizacao =
-                                                  marker.localizacao['endereco']
-                                                              ['logradouro'] +
-                                                          ', ' +
-                                                          marker.localizacao[
-                                                                  'endereco']
-                                                              ['logradouro'] +
-                                                          ' - ' +
-                                                          marker.localizacao[
-                                                                  'endereco']
-                                                              ['cidade'] +
-                                                          '/' +
-                                                          marker.localizacao[
-                                                                  'endereco']
-                                                              ['estado'] ??
-                                                      "";
-                                              String precoOriginal = marker
-                                                  .preco['preco_original']
-                                                  .toString();
-                                              List<String> imageUrls = [];
-                                              imageUrls.addAll(marker.imagens
-                                                  .cast<String>());
+                                              
+                                              imovelAtual = NewImovel(
+                                                id: marker.id,
+                                                detalhes: marker.detalhes,
+                                                caracteristicas: marker.caracteristicas,
+                                                localizacao: marker.localizacao,
+                                                preco:marker.preco,
+                                                link_imovel: marker.link_imovel,
+                                                link_virtual_tour: marker.link_imovel,
+                                                codigo_imobiliaria: marker.codigo_imobiliaria,
+                                                data_cadastro: marker.data_cadastro,
+                                                data: marker.data,
+                                                imagens: marker.imagens,
+                                                curtidas: marker.curtidas,
+                                                finalidade: marker.finalidade,
+                                                tipo: marker.tipo,
+                                                atualizacoes: marker.atualizacoes);
 
-                                              return ListTile(
+                                              return ImovelListMap(imovel: imovelAtual, isDarkMode: isDarkMode);
+                                              
+                                              /*
+                                              ListTile(
                                                 title: Row(
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
@@ -447,7 +436,7 @@ class _MapPageFlutterState extends State<MapPageFlutter> {
                                                 tileColor: Colors.grey,
                                                 selectedTileColor:
                                                     Color(0xFF6e58e9),
-                                              );
+                                              );*/
                                             },
                                           ),
                                         ),

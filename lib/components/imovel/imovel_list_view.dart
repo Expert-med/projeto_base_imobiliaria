@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_imobiliaria/components/imovel/imovel_list_map.dart';
 import 'package:projeto_imobiliaria/models/imoveis/newImovel.dart';
 import 'package:projeto_imobiliaria/models/imoveis/newImovelList.dart';
 import 'package:provider/provider.dart';
@@ -9,7 +10,7 @@ class ImovelListView extends StatefulWidget {
   final bool isDarkMode;
   final bool showFavoriteOnly;
 
-  const ImovelListView(this.showFavoriteOnly, this.isDarkMode, {Key? key})
+  const  ImovelListView(this.showFavoriteOnly, this.isDarkMode, {Key? key})
       : super(key: key);
 
   @override
@@ -119,8 +120,7 @@ class _ImovelListViewState extends State<ImovelListView> {
                 } else {
                   return ChangeNotifierProvider.value(
                     value: _filterProducts()[i],
-                    child: ImovelItemList(
-                        widget.isDarkMode, i, _filterProducts().length),
+                    child: ImovelListMap(imovel: _filterProducts()[i], isDarkMode: widget.isDarkMode),
                   );
                 }
               },
