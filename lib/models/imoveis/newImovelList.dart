@@ -25,10 +25,10 @@ class NewImovelList with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateImoveisWithDetalhes() async {
-    print('teste');
+   Future<void> updateImoveisWithDetalhes() async {
+    print('updateImoveisWithDetalhes');
     CollectionReference<Map<String, dynamic>> imoveisRef =
-        FirebaseFirestore.instance.collection('um_por_imob');
+        FirebaseFirestore.instance.collection('imoveis');
 
     try {
       QuerySnapshot<Map<String, dynamic>> querySnapshot =
@@ -37,9 +37,9 @@ class NewImovelList with ChangeNotifier {
       // Itera sobre os documentos na coleção
       querySnapshot.docs.forEach((doc) async {
         Map<String, dynamic> data = doc.data();
-
+print('entrou no try');
         // Verifica se o campo detalhes está ausente ou nulo
-        if (data['localizacao']['endereco'] == {}) {
+        if (data['endereco'] == null || !data.containsKey('detalhes')){
           print('finalidade == 0');
           // Atualiza o documento para adicionar um campo detalhes vazio
           await FirebaseFirestore.instance.runTransaction((transaction) async {
@@ -100,12 +100,13 @@ class NewImovelList with ChangeNotifier {
     }
   }
 
+
   List<NewImovel> get favoriteItems =>
       _items.where((prod) => prod.isFavorite).toList();
 
   Future<List<NewImovel>> buscarImoveis() async {
     CollectionReference<Map<String, dynamic>> imoveisRef =
-        FirebaseFirestore.instance.collection('um_por_imob');
+        FirebaseFirestore.instance.collection('imoveis');
 
     try {
       QuerySnapshot<Map<String, dynamic>> querySnapshot =
@@ -258,7 +259,7 @@ class NewImovelList with ChangeNotifier {
 
       // Criar o documento com o ID do código do imóvel
       DocumentReference docRef =
-          store.collection('um_por_imob').doc(codigo_imovel);
+          store.collection('imoveis').doc(codigo_imovel);
 
       // Dados a serem salvos no Firestore
       Map<String, dynamic> data = {

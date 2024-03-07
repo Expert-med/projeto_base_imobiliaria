@@ -69,7 +69,7 @@ class _MapPageFlutterState extends State<MapPageFlutter> {
               imovel.localizacao['longitude'] != "N/A")
           .toList();
 
-      filteredMarkers = filteredProducts.take(50).map((imovel) {
+      filteredMarkers = filteredProducts.map((imovel) {
         double latitude =
             double.tryParse(imovel.localizacao['latitude']) ?? 0.0;
         double longitude =
