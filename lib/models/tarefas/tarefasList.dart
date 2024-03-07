@@ -107,25 +107,28 @@ Future<void> atualizarTarefaFirestore(TarefasCorretor tarefa) async {
 
     try {
       final firestore = FirebaseFirestore.instance;
+
       final corretoresRef = firestore.collection('corretores');
 
-      final querySnapshot = await corretoresRef
-          .where('uid', isEqualTo: corretorId)
-          .get();
+      final querySnapshot =
+          await corretoresRef.where('uid', isEqualTo: corretorId).get();
 
-      final collection =
-          corretoresRef.doc(tarefa.id).collection('minhas_tarefas');
+      if (querySnapshot.docs.isNotEmpty) {
+        final docId = querySnapshot.docs[0].id;
 
-      // Atualiza os valores da tarefa no Firestore usando o método update
-      await collection.doc(tarefa.id).update({
-        'titulo': tarefa.titulo,
-        'descricao': tarefa.descricao,
-        'feita': tarefa.feita,
-      });
+        final collection = corretoresRef.doc(docId).collection('minhas_tarefas');
 
-      print('Tarefa atualizada com sucesso no Firestore');
+        await collection.doc(tarefa.id.toString()).set({'id': tarefa.id,
+          'titulo': tarefa.titulo,
+          'descricao': tarefa.descricao,
+          'feita': tarefa.feita!,});
+
+        
+      } else {
+        throw Exception('Corretor não encontrado com o ID fornecido');
+      }
     } catch (error) {
-      print('Erro ao atualizar a tarefa no Firestore: $error');
+      print('Erro ao adicionar cliente: $error');
       throw error;
     }
   }
