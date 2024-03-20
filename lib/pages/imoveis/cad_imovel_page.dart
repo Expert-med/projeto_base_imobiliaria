@@ -26,16 +26,16 @@ class _CadastroImovelState extends State<CadastroImovel> {
         builder: (context, constraints) {
           return Row(
             children: [
-              if (!isSmallScreen)
-                SizedBox(
-                  width: 250, // Largura mínima do CustomMenu
-                  child: CustomMenu(isDarkMode: isDarkMode),
-                ),
+              // if (!isSmallScreen)
+              //   SizedBox(
+              //     width: 250, // Largura mínima do CustomMenu
+              //     child: CustomMenu(isDarkMode: isDarkMode),
+              //   ),
               Expanded(
                 child: Container(
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage('assets/images/fundo_claro_login.jpg'), // Coloque o caminho da sua imagem aqui
+                      image: AssetImage('assets/images/fundo_add_imovel.png'), // Coloque o caminho da sua imagem aqui
                       fit: BoxFit.cover,
                     ),
                     
@@ -55,14 +55,7 @@ class _CadastroImovelState extends State<CadastroImovel> {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            isDarkMode = !isDarkMode;
-          });
-        },
-        child: Icon(Icons.lightbulb),
-      ),
+     
       drawer: isSmallScreen ? CustomMenu(isDarkMode: isDarkMode) : null,
     );
   }

@@ -43,6 +43,8 @@ dependencies:
   googleapis: ^5.0.0
   flutter_rating_bar: ^4.0.1
   font_awesome_flutter: ^10.4.0
+  curved_navigation_bar: ^1.0.3
+  google_nav_bar: ^5.0.6
   
 
 dev_dependencies:
@@ -64,6 +66,7 @@ flutter:
   - assets/images/no_availablle.jpg
   - assets/images/fundo_claro_login.jpg
   - assets/images/favicon.png
+  - assets/images/fundo_add_imovel.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -16,6 +16,7 @@ import '../pages/imoveis/cad_imovel_page.dart';
 import '../pages/imoveis/imoveis_Favoritos.dart';
 import '../pages/imoveis/imovel_grid_completa_page.dart';
 import '../pages/imoveis/imovel_page.dart';
+import '../pages/imoveis/teste_imove_with_bottom.dart';
 import '../pages/imoveis/virtual_imovel_tour/virtual_iframe.dart';
 import '../pages/map/map_flutter.dart';
 import '../pages/map/map_page.dart';
@@ -86,7 +87,7 @@ class _CustomMenuState extends State<CustomMenu> {
     bool isSmallScreen = MediaQuery.of(context).size.width < 900;
 
     return Drawer(
-      backgroundColor: widget.isDarkMode ? Colors.black54 : Colors.white,
+      backgroundColor: widget.isDarkMode ? Colors.white70 : Color(0xFF602234),
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
@@ -96,15 +97,15 @@ class _CustomMenuState extends State<CustomMenu> {
               leading: Icon(
                 Icons.home,
                 color: widget.isDarkMode
-                    ? darkenColor(Color(0xFF6e58e9), 0.5)
-                    : Color(0xFF6e58e9),
+                    ? darkenColor(Colors.white, 0.5)
+                    : Colors.white,
                 size: 40,
               ),
               title: Text(
                 'Home',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: widget.isDarkMode ? Colors.white : Colors.black54,
+                  color: widget.isDarkMode ? Colors.white : Colors.white70,
                 ),
               ),
               onTap: () {
@@ -122,12 +123,12 @@ class _CustomMenuState extends State<CustomMenu> {
           // ListTile(
           //   leading: Icon(
           //     Icons.house,
-          //     color: Color(0xFF6e58e9),
+          //     color: Colors.white,
           //   ),
           //   title: Text(
           //     'Virtual Tour test',
           //     style: TextStyle(
-          //       color: widget.isDarkMode ? Colors.white : Colors.black54,
+          //       color: widget.isDarkMode ? Colors.white : Colors.white70,
           //     ),
           //   ),
           //   onTap: () {
@@ -142,114 +143,114 @@ class _CustomMenuState extends State<CustomMenu> {
          ListTile(
                 leading: Icon(
                   Icons.house,
-                  color: Color(0xFF6e58e9),
+                  color: Colors.white,
                 ),
                 title: Text(
                   'Imoveis',
                   style: TextStyle(
-                    color: widget.isDarkMode ? Colors.white : Colors.black54,
+                    color: widget.isDarkMode ? Colors.white : Colors.white70,
                   ),
                 ),
                 onTap: () {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ImovelPage(widget.isDarkMode),
+                      builder: (context) => TesteImovelPage(widget.isDarkMode),
                       fullscreenDialog:
                           true, // Isso impede que o usuário retorne com gestos de deslize
                     ),
                   );
                 },
               ),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: AnimatedContainer(
-              duration: Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-              color: isExpandedImobiliarias ? Color(0xFF6e58e9) : null,
-              child: ListTile(
-                leading: Icon(
-                  Icons.add,
-                  color:
-                      isExpandedImobiliarias ? Colors.white : Color(0xFF6e58e9),
-                ),
-                title: Text(
-                  'Imobiliarias',
-                  style: TextStyle(
-                    color: widget.isDarkMode ? Colors.white : Colors.black54,
-                  ),
-                ),
-                onTap: () {
-                  handleExpansionImobiliariasChanged(!isExpandedImobiliarias);
-                },
-              ),
-            ),
-          ),
-          if (isExpandedImobiliarias)
-            Padding(
-              padding: const EdgeInsets.only(left: 8, right: 8),
-              child: ListTile(
-                leading: Icon(
-                  Icons.home_work,
-                  color: Color(0xFF6e58e9),
-                ),
-                title: Text(
-                  'Cadastrar Imobiliaria',
-                  style: TextStyle(
-                    color: widget.isDarkMode ? Colors.white : Colors.black54,
-                  ),
-                ),
-                onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CadastroImobiliaria(),
-                    ),
-                  );
-                },
-              ),
-            ),
-          if (isExpandedImobiliarias)
-            Padding(
-              padding: const EdgeInsets.only(left: 8, right: 8),
-              child: ListTile(
-                leading: Icon(
-                  Icons.home_work,
-                  color: Color(0xFF6e58e9),
-                ),
-                title: Text(
-                  'Imobiliarias',
-                  style: TextStyle(
-                    color: widget.isDarkMode ? Colors.white : Colors.black54,
-                  ),
-                ),
-                onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          ImobiliariasPage(isDarkMode: widget.isDarkMode),
-                    ),
-                  );
-                },
-              ),
-            ),
+          // ClipRRect(
+          //   borderRadius: BorderRadius.circular(10),
+          //   child: AnimatedContainer(
+          //     duration: Duration(milliseconds: 300),
+          //     curve: Curves.easeInOut,
+          //     color: isExpandedImobiliarias ? Colors.white : null,
+          //     child: ListTile(
+          //       leading: Icon(
+          //         Icons.add,
+          //         color:
+          //             isExpandedImobiliarias ? Colors.white : Colors.white,
+          //       ),
+          //       title: Text(
+          //         'Imobiliarias',
+          //         style: TextStyle(
+          //           color: widget.isDarkMode ? Colors.white : Colors.white70,
+          //         ),
+          //       ),
+          //       onTap: () {
+          //         handleExpansionImobiliariasChanged(!isExpandedImobiliarias);
+          //       },
+          //     ),
+          //   ),
+          // ),
+          // if (isExpandedImobiliarias)
+          //   Padding(
+          //     padding: const EdgeInsets.only(left: 8, right: 8),
+          //     child: ListTile(
+          //       leading: Icon(
+          //         Icons.home_work,
+          //         color: Colors.white,
+          //       ),
+          //       title: Text(
+          //         'Cadastrar Imobiliaria',
+          //         style: TextStyle(
+          //           color: widget.isDarkMode ? Colors.white : Colors.white70,
+          //         ),
+          //       ),
+          //       onTap: () {
+          //         Navigator.pushReplacement(
+          //           context,
+          //           MaterialPageRoute(
+          //             builder: (context) => CadastroImobiliaria(),
+          //           ),
+          //         );
+          //       },
+          //     ),
+          //   ),
+          // if (isExpandedImobiliarias)
+          //   Padding(
+          //     padding: const EdgeInsets.only(left: 8, right: 8),
+          //     child: ListTile(
+          //       leading: Icon(
+          //         Icons.home_work,
+          //         color: Colors.white,
+          //       ),
+          //       title: Text(
+          //         'Imobiliarias',
+          //         style: TextStyle(
+          //           color: widget.isDarkMode ? Colors.white : Colors.white70,
+          //         ),
+          //       ),
+          //       onTap: () {
+          //         Navigator.pushReplacement(
+          //           context,
+          //           MaterialPageRoute(
+          //             builder: (context) =>
+          //                 ImobiliariasPage(isDarkMode: widget.isDarkMode),
+          //           ),
+          //         );
+          //       },
+          //     ),
+          //   ),
           if (_user?.tipoUsuario == 1)
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: AnimatedContainer(
                 duration: Duration(milliseconds: 300),
                 curve: Curves.easeInOut,
-                color: isExpandedCorretor ? Color(0xFF6e58e9) : null,
+                color: isExpandedCorretor ? Colors.white : null,
                 child: ListTile(
                   leading: Icon(
                     Icons.add,
-                    color: isExpandedImoveis ? Colors.white : Color(0xFF6e58e9),
+                    color: isExpandedImoveis ? Colors.white : Colors.white,
                   ),
                   title: Text(
                     'Clientes',
                     style: TextStyle(
-                      color: widget.isDarkMode ? Colors.white : Colors.black54,
+                      color: widget.isDarkMode ? Colors.white : Colors.white70,
                     ),
                   ),
                   onTap: () {
@@ -264,12 +265,12 @@ class _CustomMenuState extends State<CustomMenu> {
               child: ListTile(
                 leading: FaIcon(
                   FontAwesomeIcons.users,
-                  color: Color(0xFF6e58e9),
+                  color: Colors.white,
                 ),
                 title: Text(
                   'Listar Meus Clientes',
                   style: TextStyle(
-                    color: widget.isDarkMode ? Colors.white : Colors.black54,
+                    color: widget.isDarkMode ? Colors.white : Colors.white70,
                   ),
                 ),
                 onTap: () {
@@ -290,17 +291,17 @@ class _CustomMenuState extends State<CustomMenu> {
               child: AnimatedContainer(
                 duration: Duration(milliseconds: 300),
                 curve: Curves.easeInOut,
-                color: isExpandedPropostas ? Color(0xFF6e58e9) : null,
+                color: isExpandedPropostas ? Colors.white : null,
                 child: ListTile(
                   leading: Icon(
                     Icons.add,
                     color:
-                        isExpandedPropostas ? Colors.white : Color(0xFF6e58e9),
+                        isExpandedPropostas ? Colors.white : Colors.white,
                   ),
                   title: Text(
                     'Propostas',
                     style: TextStyle(
-                      color: widget.isDarkMode ? Colors.white : Colors.black54,
+                      color: widget.isDarkMode ? Colors.white : Colors.white70,
                     ),
                   ),
                   onTap: () {
@@ -315,12 +316,12 @@ class _CustomMenuState extends State<CustomMenu> {
               child: ListTile(
                 leading: FaIcon(
                   FontAwesomeIcons.scroll,
-                  color: Color(0xFF6e58e9),
+                  color: Colors.white,
                 ),
                 title: Text(
                   'Listar Todas',
                   style: TextStyle(
-                    color: widget.isDarkMode ? Colors.white : Colors.black54,
+                    color: widget.isDarkMode ? Colors.white : Colors.white70,
                   ),
                 ),
                 onTap: () {
@@ -341,12 +342,12 @@ class _CustomMenuState extends State<CustomMenu> {
               child: ListTile(
                 leading: FaIcon(
                   FontAwesomeIcons.fileSignature,
-                  color: Color(0xFF6e58e9),
+                  color: Colors.white,
                 ),
                 title: Text(
                   'Criar nova proposta',
                   style: TextStyle(
-                    color: widget.isDarkMode ? Colors.white : Colors.black54,
+                    color: widget.isDarkMode ? Colors.white : Colors.white70,
                   ),
                 ),
                 onTap: () {
@@ -364,12 +365,12 @@ class _CustomMenuState extends State<CustomMenu> {
           ListTile(
             leading: FaIcon(
               FontAwesomeIcons.users,
-              color: Color(0xFF6e58e9),
+              color: Colors.white,
             ),
             title: Text(
               'Lista de corretores',
               style: TextStyle(
-                color: widget.isDarkMode ? Colors.white : Colors.black54,
+                color: widget.isDarkMode ? Colors.white : Colors.white70,
               ),
             ),
             onTap: () {
@@ -386,12 +387,12 @@ class _CustomMenuState extends State<CustomMenu> {
             ListTile(
               leading: FaIcon(
                 FontAwesomeIcons.calendar,
-                color: Color(0xFF6e58e9),
+                color: Colors.white,
               ),
               title: Text(
                 'Agendamentos',
                 style: TextStyle(
-                  color: widget.isDarkMode ? Colors.white : Colors.black54,
+                  color: widget.isDarkMode ? Colors.white : Colors.white70,
                 ),
               ),
               onTap: () {
@@ -408,12 +409,12 @@ if (_user?.tipoUsuario == 1)
             ListTile(
               leading: FaIcon(
                 FontAwesomeIcons.calendar,
-                color: Color(0xFF6e58e9),
+                color: Colors.white,
               ),
               title: Text(
                 'Minhas Tarefas',
                 style: TextStyle(
-                  color: widget.isDarkMode ? Colors.white : Colors.black54,
+                  color: widget.isDarkMode ? Colors.white : Colors.white70,
                 ),
               ),
               onTap: () {
@@ -433,13 +434,13 @@ if (_user?.tipoUsuario == 1)
               leading: Icon(
                 Icons.logout,
                 color: widget.isDarkMode
-                    ? darkenColor(Color(0xFF6e58e9), 0.5)
-                    : Color(0xFF6e58e9),
+                    ? darkenColor(Colors.white, 0.5)
+                    : Colors.white,
               ),
               title: Text(
                 'Log Out',
                 style: TextStyle(
-                  color: widget.isDarkMode ? Colors.white : Colors.black54,
+                  color: widget.isDarkMode ? Colors.white : Colors.white70,
                 ),
               ),
               onTap: () {

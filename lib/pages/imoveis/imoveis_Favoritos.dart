@@ -75,7 +75,7 @@ class _ImoveisFavoritosState extends State<ImoveisFavoritos> {
             color: widget.isDarkMode ? Colors.black : Colors.white,
             child: Row(
               children: [
-                if (!isSmallScreen) CustomMenu(isDarkMode: widget.isDarkMode),
+                //if (!isSmallScreen) CustomMenu(isDarkMode: widget.isDarkMode),
                 
                 Expanded(
                   child: Padding(
