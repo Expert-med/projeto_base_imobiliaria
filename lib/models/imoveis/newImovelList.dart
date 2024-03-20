@@ -350,7 +350,7 @@ class NewImovelList with ChangeNotifier {
       atualizacoes: data['atualizacoes'],
     );
 
-    addProduct(newImovel);
+    _items.add(newImovel);
     notifyListeners();
     print('Imóvel cadastrado com sucesso!');
   } catch (error) {
