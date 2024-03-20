@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Solucao extends StatelessWidget {
-  final Map<String, Map<String, String>> variaveis;
+  final Map<String, dynamic> variaveis;
 
   const Solucao({
     Key? key,

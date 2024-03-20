@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_imobiliaria/models/imoveis/newImovelList.dart';
 import 'package:projeto_imobiliaria/util/app_bar_model.dart';
+import 'package:provider/provider.dart';
 
 import '../../components/cad_imovel_form.dart';
 import '../../components/custom_menu.dart';
-
+import '../../core/models/imovel_form_data.dart';
 class CadastroImovel extends StatefulWidget {
   const CadastroImovel({Key? key});
 
@@ -31,9 +33,15 @@ class _CadastroImovelState extends State<CadastroImovel> {
                 ),
               Expanded(
                 child: Container(
-                  color: isDarkMode ? Colors.black : Colors.white,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/fundo_claro_login.jpg'), // Coloque o caminho da sua imagem aqui
+                      fit: BoxFit.cover,
+                    ),
+                    
+                  ),
                   padding: const EdgeInsets.all(20.0),
-                  child: SingleChildScrollView( // Adicionando SingleChildScrollView aqui
+                  child: SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
