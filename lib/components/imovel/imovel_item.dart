@@ -62,7 +62,7 @@ class _ImovelItemState extends State<ImovelItem> {
                   Row(
                     children: [
                       Text(
-                        '${product.preco['preco_original'] == [] ? 'Preço não informado' : product.preco['preco_original']}',
+                        '${product.preco['preco_original'] == "" ? 'Preço não informado' : product.preco['preco_original']}',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,

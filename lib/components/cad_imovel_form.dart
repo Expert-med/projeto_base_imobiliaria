@@ -1,3 +1,9 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -8,6 +14,7 @@ import '../core/data/user_repository.dart';
 import '../core/models/User_firebase_service.dart';
 import '../core/models/imovel_form_data.dart';
 import '../models/cep/via_cep_model.dart';
+import '../pages/home_page.dart';
 import '../repositories/via_cep_repository.dart';
 
 class CadImovelForm extends StatefulWidget {
@@ -29,6 +36,8 @@ class _CadImovelFormState extends State<CadImovelForm> {
   final TextEditingController localidadeController = TextEditingController();
   final TextEditingController ufController = TextEditingController();
   dynamic _user;
+  int currentImageIndex = 0;
+  List<String> _imagePaths = [];
   bool loading = false;
   var viacepModel = ViaCepModel();
   var viaCepRepository = ViaCepRepository();
@@ -53,6 +62,66 @@ class _CadImovelFormState extends State<CadImovelForm> {
       print('Erro ao carregar o usuário atual: $error');
     });
   }
+
+    Future<void> pickAndUploadImage(String instrumentalId) async {
+      print('instid $instrumentalId');
+      FilePickerResult? result =
+          await FilePicker.platform.pickFiles(type: FileType.image);
+
+      if (result != null && result.files.isNotEmpty) {
+        for (PlatformFile file in result.files) {
+          Uint8List? fileBytes;
+          String fileName;
+
+          if (kIsWeb) {
+            fileBytes = file.bytes!;
+            fileName = 'img-$instrumentalId-${currentImageIndex + 1}.jpeg';
+          } else {
+            fileBytes = file.bytes;
+            fileName = 'img-$instrumentalId-${currentImageIndex + 1}.jpeg';
+          }
+
+          bool isDuplicate = _imagePaths.any((existingImagePath) {
+            String existingBase64 = existingImagePath.split(',').last;
+            try {
+              Uint8List existingBytes = base64Decode(existingBase64);
+              return listEquals(existingBytes, fileBytes!);
+            } catch (e) {
+              print('Error decoding existing base64: $e');
+              return false;
+            }
+          });
+
+          print(isDuplicate);
+
+          if (!isDuplicate) {
+            try {
+              Reference ref = FirebaseStorage.instance
+                  .ref('imoveis/$instrumentalId')
+                  .child(fileName);
+              UploadTask uploadTask = ref.putData(fileBytes!);
+
+              TaskSnapshot snapshot = await uploadTask;
+              String imagePath = await snapshot.ref.getDownloadURL();
+
+              setState(() {
+                _imagePaths.add(imagePath);
+                _formData.imageUrls = _imagePaths;
+              });
+
+              print('Image added: $imagePath');
+              print('Updated _imagePaths: $_imagePaths');
+
+              currentImageIndex++;
+              print(currentImageIndex);
+            } catch (e) {
+              print('Erro ao buscar imagem: $e');
+            }
+          }
+        }
+      }
+    }
+
 
   @override
   Widget build(BuildContext context) {
@@ -179,6 +248,29 @@ class _CadImovelFormState extends State<CadImovelForm> {
                     ),
                     onSaved: (value) => _formData.precoOriginal = value ?? '',
                   ),
+                   SizedBox(height: 30,),
+                  ElevatedButton(
+                    onPressed: () {
+                      pickAndUploadImage(codigo_imovel);
+                    },
+                    child: Text(
+                      'Adicionar foto',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      elevation: 10.0,
+                      backgroundColor: Color(0xFF6e58e9),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 20.0, vertical: 20.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 30,),
                   Row(
                     children: [
                       Flexible(
@@ -219,8 +311,7 @@ class _CadImovelFormState extends State<CadImovelForm> {
                                   setState(() {
                                     loading = true;
                                   });
-                                  viacepModel =
-                                      await viaCepRepository.consultarCep(cep);
+                                  viacepModel = await viaCepRepository.consultarCep(cep);
                                   setState(() {
                                     loading = false;
                                     logradouroController.text =
@@ -231,8 +322,9 @@ class _CadImovelFormState extends State<CadImovelForm> {
                                     localidadeController.text =
                                         viacepModel.localidade ?? '';
                                     ufController.text = viacepModel.uf ?? '';
-                                    _formData.localizacao =
-                                        "${viacepModel.logradouro}, ${viacepModel.bairro} - ${viacepModel.localidade} / ${viacepModel.uf}";
+                                    _formData.localizacao = "${viacepModel.logradouro}, ${viacepModel.bairro} - ${viacepModel.localidade} / ${viacepModel.uf} + ${cep}";
+                                    _formData.latitude = viacepModel.lat;
+                                    _formData.longitude = viacepModel.lng;
                                   });
                                 }
                               },
@@ -270,7 +362,7 @@ class _CadImovelFormState extends State<CadImovelForm> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                     ),
-                    onSaved: (value) => _formData.areaPrivativa = value,
+                    onSaved: (value) => _formData.areaPrivativa = value?.isEmpty ?? true ? "N/A" : value!,
                   ),
                   Row(
                     children: [
@@ -419,7 +511,7 @@ class _CadImovelFormState extends State<CadImovelForm> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                     ),
-                    onSaved: (value) => _formData.areaPrivativa = value,
+                    onSaved: (value) => _formData.areaPrivativa = value?.isEmpty ?? true ? "N/A" : value!,
                   ),
                   Padding(
                     padding:
@@ -445,7 +537,7 @@ class _CadImovelFormState extends State<CadImovelForm> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                     ),
-                    onSaved: (value) => _formData.areaPrivativaCasa = value,
+                    onSaved: (value) => _formData.areaPrivativaCasa = value?.isEmpty ?? true ? "N/A" : value!,
                   ),
                   Padding(
                     padding:
@@ -471,7 +563,7 @@ class _CadImovelFormState extends State<CadImovelForm> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                     ),
-                    onSaved: (value) => _formData.areaTotal = value,
+                    onSaved: (value) => _formData.areaTotal = value?.isEmpty ?? true ? "N/A" : value!,
                   ),
                   Padding(
                     padding:
@@ -497,7 +589,7 @@ class _CadImovelFormState extends State<CadImovelForm> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                     ),
-                    onSaved: (value) => _formData.mobilia = value,
+                    onSaved: (value) => _formData.mobilia = value?.isEmpty ?? true ? "N/A" : value!,
                   ),
                   Padding(
                     padding:
@@ -523,7 +615,7 @@ class _CadImovelFormState extends State<CadImovelForm> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                     ),
-                    onSaved: (value) => _formData.nomeImovel = value,
+                    onSaved: (value) => _formData.nomeImovel = value?.isEmpty ?? true ? "N/A" : value!,
                   ),
                   Padding(
                     padding:
@@ -575,7 +667,7 @@ class _CadImovelFormState extends State<CadImovelForm> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                     ),
-                    onSaved: (value) => _formData.terreno = value,
+                    onSaved: (value) => _formData.terreno = value?.isEmpty ?? true ? "N/A" : value!,
                   ),
                   Padding(
                     padding:
@@ -601,7 +693,7 @@ class _CadImovelFormState extends State<CadImovelForm> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                     ),
-                    onSaved: (value) => _formData.mobilia = value,
+                    onSaved: (value) => _formData.mobilia = value?.isEmpty ?? true ? "N/A" : value!,
                   ),
                   Padding(
                     padding:
@@ -627,7 +719,7 @@ class _CadImovelFormState extends State<CadImovelForm> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                     ),
-                    onSaved: (value) => _formData.totalGaragem = value,
+                    onSaved: (value) => _formData.totalGaragem = value?.isEmpty ?? true ? "N/A" : value!,
                   ),
                   SizedBox(
                     height: 10,
@@ -635,8 +727,8 @@ class _CadImovelFormState extends State<CadImovelForm> {
                   ElevatedButton(
                     onPressed: () {
                       _formKey.currentState?.save();
-                      NewImovelList()
-                          .cadastrarImovel(_user, _formData, codigo_imovel);
+                      NewImovelList().cadastrarImovel(_user, _formData, codigo_imovel);
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyHomePage()));
                     },
                     child: Text('Salvar'),
                     style: ElevatedButton.styleFrom(

@@ -48,8 +48,8 @@ class _MapPageFlutterState extends State<MapPageFlutter> {
       data: '',
       imagens: [],
       curtidas: '',
-      finalidade: -1,
-      tipo: -1,
+      finalidade: 0,
+      tipo: 0,
       atualizacoes: {});
   late List<Marker> markers;
   final PopupController _popupController = PopupController();
@@ -119,8 +119,7 @@ class _MapPageFlutterState extends State<MapPageFlutter> {
                 selectedMarkerLink = imovel.link_imovel ?? "";
 
                 // Convertendo para int ou mantendo 0 se for nulo ou não puder ser convertido
-                selectedVagasgaragem =
-                    int.tryParse(imovel.detalhes['vagas_garagem'] ?? "") ?? 0;
+                selectedVagasgaragem = int.tryParse(imovel.detalhes['vagas_garagem'] ?? "") ?? 0;
 
                 selectedTotaldormitorios =
                     imovel.detalhes['total_dormitorios'] ?? "";
@@ -151,17 +150,10 @@ class _MapPageFlutterState extends State<MapPageFlutter> {
     bool isSmallScreen = MediaQuery.of(context).size.width < 900;
 
     return Scaffold(
-      appBar: isSmallScreen
-          ? CustomAppBar(
-              subtitle: "",
-              title: "Localização dos imóveis",
-              isDarkMode: isDarkMode,
-            )
-          : null,
+      appBar: null,
       body: LayoutBuilder(builder: (context, constraints) {
         return Row(
           children: [
-            if (!isSmallScreen) CustomMenu(isDarkMode: isDarkMode),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -455,17 +447,6 @@ class _MapPageFlutterState extends State<MapPageFlutter> {
         );
       }),
       drawer: CustomMenu(isDarkMode: false),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(right: 40.0),
-        child: FloatingActionButton(
-          onPressed: () {
-            setState(() {
-              isDarkMode = !isDarkMode; // Alterna o valor de isDarkMode
-            });
-          },
-          child: Icon(Icons.lightbulb),
-        ),
-      ),
     );
   }
 }

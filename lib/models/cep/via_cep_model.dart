@@ -8,8 +8,8 @@ class ViaCepModel {
   String? uf;
   String? ibge;
   String? gia;
-  String? ddd;
-  String? siafi;
+  String? lng;
+  String? lat;
 
   ViaCepModel(
       {this.cep,
@@ -20,20 +20,20 @@ class ViaCepModel {
       this.uf,
       this.ibge,
       this.gia,
-      this.ddd,
-      this.siafi});
+      this.lat,
+      this.lng});
 
   ViaCepModel.fromJson(Map<String, dynamic> json) {
     cep = json['cep'];
-    logradouro = json['logradouro'];
+    logradouro = json['address'];
     complemento = json['complemento'];
-    bairro = json['bairro'];
-    localidade = json['localidade'];
-    uf = json['uf'];
-    ibge = json['ibge'];
-    gia = json['gia'];
-    ddd = json['ddd'];
-    siafi = json['siafi'];
+    bairro = json['district'];
+    localidade = json['city'];
+    uf = json['state'];
+    ibge = json['city_ibge'];
+    gia = json['ddd'];
+    lat = json['lat'];
+    lng = json['lng'];
   }
 
   Map<String, dynamic> toJson() {
@@ -46,8 +46,8 @@ class ViaCepModel {
     data['uf'] = this.uf;
     data['ibge'] = this.ibge;
     data['gia'] = this.gia;
-    data['ddd'] = this.ddd;
-    data['siafi'] = this.siafi;
+    data['lat'] = this.lat;
+    data['lng'] = this.lng;
     return data;
   }
 }

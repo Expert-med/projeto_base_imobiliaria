@@ -98,4 +98,6 @@ class NewImovel with ChangeNotifier {
       }
     }
   }
+
+  Object? toJson() {}
 }

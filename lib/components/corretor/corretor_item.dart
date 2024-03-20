@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projeto_imobiliaria/pages/corretores/landingCorretor.dart';
 import '../../models/corretores/corretor.dart';
 
 
@@ -58,6 +59,24 @@ class CorretorItem extends StatelessWidget {
           Spacer(),
           InkWell(
             onTap: () {
+              _showOptionsDialog(context);
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.circular(10),
+                color: !isDarkMode ? Colors.black :Colors.white,
+              ),
+              padding: EdgeInsets.all(5),
+              child: Icon(
+                Icons.info,
+                color: Colors.grey,
+                size: 30,
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () {
               Get.toNamed('/corretor/${corretor.id}');
 
             },
@@ -77,6 +96,31 @@ class CorretorItem extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+  void _showOptionsDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Escolha uma opção"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                // Add your action for the first button here
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text("Ir para landing page"),
+            ),
+            TextButton(
+              onPressed: () {
+                
+              },
+              child: Text("Editar landing page"),
+            ),
+          ],
+        );
+      },
     );
   }
 }

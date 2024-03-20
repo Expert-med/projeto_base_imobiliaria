@@ -111,7 +111,7 @@ class _ImovelListViewState extends State<ImovelListView> {
           Expanded(
             child: ListView.builder(
               controller: _scrollController,
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(8),
               itemCount: _filterProducts().length +
                   1, // Add 1 for the load more button
               itemBuilder: (ctx, i) {
@@ -121,6 +121,7 @@ class _ImovelListViewState extends State<ImovelListView> {
                   return ChangeNotifierProvider.value(
                     value: _filterProducts()[i],
                     child: ImovelListMap(imovel: _filterProducts()[i], isDarkMode: widget.isDarkMode),
+                    
                   );
                 }
               },

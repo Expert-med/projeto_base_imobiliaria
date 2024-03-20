@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:projeto_imobiliaria/models/imoveis/newImovel.dart';
 
@@ -25,7 +26,7 @@ class NewImovelList with ChangeNotifier {
     notifyListeners();
   }
 
-   Future<void> updateImoveisWithDetalhes() async {
+   Future<void> updateImoveisWithDetalhes() async { 
     print('updateImoveisWithDetalhes');
     CollectionReference<Map<String, dynamic>> imoveisRef =
         FirebaseFirestore.instance.collection('imoveis');
@@ -37,7 +38,7 @@ class NewImovelList with ChangeNotifier {
       // Itera sobre os documentos na coleção
       querySnapshot.docs.forEach((doc) async {
         Map<String, dynamic> data = doc.data();
-print('entrou no try');
+        print('entrou no try');
         // Verifica se o campo detalhes está ausente ou nulo
         if (data['endereco'] == null || !data.containsKey('detalhes')){
           print('finalidade == 0');
@@ -105,8 +106,21 @@ print('entrou no try');
       _items.where((prod) => prod.isFavorite).toList();
 
   Future<List<NewImovel>> buscarImoveis() async {
-    CollectionReference<Map<String, dynamic>> imoveisRef =
-        FirebaseFirestore.instance.collection('imoveis');
+      final store = FirebaseFirestore.instance;
+      final User = FirebaseAuth.instance.currentUser;
+      final corretorId = User?.uid ?? '';
+      final querySnapshot = await store
+          .collection('corretores')
+          .where('uid', isEqualTo: corretorId)
+          .get();
+
+      final docId = querySnapshot.docs[0].id;
+ 
+      DocumentReference userRef = store.collection('corretores').doc(docId);
+
+      CollectionReference<Map<String, dynamic>> imoveisRef = userRef.collection('imoveis');
+
+
 
     try {
       QuerySnapshot<Map<String, dynamic>> querySnapshot =
@@ -114,6 +128,7 @@ print('entrou no try');
 
       List<NewImovel> imoveis = [];
 
+       
       querySnapshot.docs
           .forEach((QueryDocumentSnapshot<Map<String, dynamic>> doc) {
         final resultado = doc.data();
@@ -122,7 +137,6 @@ print('entrou no try');
         if (resultado['codigo_imovel'] != null &&
             resultado['data'] != null &&
             resultado['link'] != null &&
-            resultado['link_virtual_tour'] != null &&
             resultado['codigo_imobiliaria'] != null &&
             resultado['curtidas'] != null &&
             resultado['data_cadastro'] != null &&
@@ -155,13 +169,12 @@ print('entrou no try');
             preco: resultado['preco'] ?? '',
             tipo: resultado['tipo'] ?? 0,
           );
-
+          
           _items.add(imovel);
-          //print(imovel.caracteristicas);
-          imoveis.add(imovel);
+          notifyListeners();
         }
       });
-
+     
       return imoveis;
     } catch (e) {
       print('Erro ao buscar os imóveis: $e');
@@ -209,8 +222,7 @@ print('entrou no try');
 
     if (email != null) {
       final clientesRef = FirebaseFirestore.instance.collection('clientes');
-      final querySnapshot =
-          await clientesRef.where('email', isEqualTo: email).get();
+      final querySnapshot = await clientesRef.where('email', isEqualTo: email).get();
 
       if (querySnapshot.docs.isNotEmpty) {
         final userData =
@@ -250,78 +262,107 @@ print('entrou no try');
     }
   }
 
-  void cadastrarImovel(
-      dynamic user, ImovelFormData _formData, String codigo_imovel) async {
-    try {
-      String data_atual_formatada =
-          DateFormat('yyyy-MM-dd').format(DateTime.now());
-      final store = FirebaseFirestore.instance;
+ void cadastrarImovel(dynamic user, ImovelFormData _formData, String codigo_imovel) async {
+  try {
+    String data_atual_formatada = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    final store = FirebaseFirestore.instance;
+    final User = FirebaseAuth.instance.currentUser;
+    final corretorId = user?.uid ?? '';
+    final querySnapshot = await store
+        .collection('corretores')
+        .where('uid', isEqualTo: corretorId)
+        .get();
 
-      // Criar o documento com o ID do código do imóvel
-      DocumentReference docRef =
-          store.collection('imoveis').doc(codigo_imovel);
+    final docId = querySnapshot.docs[0].id;
 
-      // Dados a serem salvos no Firestore
-      Map<String, dynamic> data = {
-        'atualizacoes': {
-          'data': data_atual_formatada,
-          'status': 1,
-          'valor': _formData.precoOriginal ??
-              0, 
-        },
-        'caracteristicas': {},
-        'codigo_imobiliaria': user.id,
-        'codigo_imovel': codigo_imovel,
-        'curtidas': 'N\A',
-        'data': data_atual_formatada ?? '',
-        'data_cadastro': data_atual_formatada ?? '',
-        'detalhes': {
-          'area_privativa': _formData.areaPrivativa ?? '',
-          'area_privativa_casa': _formData.areaPrivativaCasa ?? '',
-          'area_total': _formData.areaTotal ?? '',
-          'mobilia': _formData.mobilia ?? '',
-          'nome_imovel': _formData.nomeImovel ?? '',
-          'terreno': _formData.terreno ?? '',
-          'total_dormitorios': _formData.totalDormitorios ?? '',
-          'total_suites': _formData.totalSuites ?? '',
-          'vagas_garagem': _formData.totalGaragem ?? 0,
-        },
-        'finalidade': 0,
-        'id_imovel': codigo_imovel,
-        'imagens': [],
-        'link': '',
-        'localizacao': {
-          'latitude': user.email ?? '',
-          'longitude': user.contato['telefone_fixo'] ?? '',
-          'endereco': {
-            'logradouro': user.contato['endereco']['logradouro'] ?? '',
-            'complemento': user.contato['endereco']['complemento'] ?? '',
-            'bairro': user.contato['endereco']['bairro'] ?? '',
-            'cidade': user.contato['endereco']['cidade'] ?? '',
-            'estado': user.contato['endereco']['estado'] ?? '',
-            'cep': user.contato['endereco']['cep'] ?? '',
-          },
-        },
-        'preco': {
-          'preco_original': _formData.precoOriginal,
-          'preco_promocional': '',
-        },
-        'tipo': 0,
-      };
+    DocumentReference userRef = store.collection('corretores').doc(docId);
 
-      // Salvar os dados no Firestore
-      await docRef.set(data);
-      print('Imóvel cadastrado com sucesso!');
-    } catch (error) {
-      // Capturar e imprimir qualquer erro ocorrido durante o processo
-      print('Erro ao cadastrar o imóvel: $error');
-    }
+    DocumentReference docRef = userRef.collection('imoveis').doc(codigo_imovel);
+
+    Map<String, dynamic> data = {
+      'atualizacoes': {
+        'data': data_atual_formatada,
+        'status': 1,
+        'valor': _formData.precoOriginal ?? 0, 
+      },
+      'caracteristicas': {},
+      'codigo_imobiliaria': user.id,
+      'codigo_imovel': codigo_imovel,
+      'curtidas': 'N/A',
+      'data': data_atual_formatada ?? '',
+      'data_cadastro': data_atual_formatada ?? '',
+      'detalhes': {
+        'area_privativa': _formData.areaPrivativa ?? '',
+        'area_privativa_casa': _formData.areaPrivativaCasa ?? '',
+        'area_total': _formData.areaTotal ?? '',
+        'mobilia': _formData.mobilia ?? '',
+        'nome_imovel': _formData.nomeImovel ?? '',
+        'terreno': _formData.terreno ?? '',
+        'total_dormitorios': _formData.totalDormitorios ?? '',
+        'total_suites': _formData.totalSuites ?? '',
+        'vagas_garagem': _formData.totalGaragem ?? 0,
+      },
+      'finalidade': 0,
+      'id_imovel': codigo_imovel,
+      'imagens': _formData.imageUrls ?? [],
+      'link': '',
+      'localizacao': {
+        'latitude': _formData.latitude ?? '',
+        'longitude': _formData.longitude ?? '',
+        'endereco': {
+          'logradouro': _formData.localizacao!.split(',')[0] ?? '',
+          'complemento': 'N/A',
+          'bairro': _formData.localizacao!.split(',')[1].split('-')[0] ?? '',
+          'cidade': _formData.localizacao!.split('-')[1].split("/")[0] ?? '',
+          'estado': _formData.localizacao!.split('/')[1].split("+")[0] ?? '',
+          'cep': _formData.localizacao!.split('+')[1] ?? '',
+        },
+      },
+      'preco': {
+        'preco_original': _formData.precoOriginal,
+        'preco_promocional': '',
+      },
+      'tipo': 0,
+    };
+
+    await docRef.set(data);
+    Map<String, dynamic> localizacao = Map<String, dynamic>.from(data['localizacao']);
+    Map<String, dynamic> caracteristicas = Map<String, dynamic>.from(data['caracteristicas']);
+    Map<String, dynamic> detalhes = Map<String, dynamic>.from(data['detalhes']);
+    Map<String, dynamic> preco = Map<String, dynamic>.from(data['preco']);
+    List<String> imagens = List<String>.from(data['imagens']);
+
+    NewImovel newImovel = NewImovel(
+      id: codigo_imovel,
+      detalhes: detalhes,
+      caracteristicas: caracteristicas,
+      localizacao: localizacao,
+      preco: preco,
+      link_imovel: data['link'],
+      link_virtual_tour: '',
+      codigo_imobiliaria: user.id,
+      data_cadastro: data_atual_formatada,
+      data: data_atual_formatada,
+      imagens: imagens,
+      curtidas: 'N/A',
+      finalidade: data['finalidade'],
+      tipo: data['tipo'],
+      atualizacoes: data['atualizacoes'],
+    );
+
+    addProduct(newImovel);
+    notifyListeners();
+    print('Imóvel cadastrado com sucesso!');
+  } catch (error) {
+    print('Erro ao cadastrar o imóvel: $error');
   }
-
-  List<NewImovel> get items => [..._items];
+}
 
   void addProduct(NewImovel product) {
     _items.add(product);
     notifyListeners();
+    _carregarImoveis();
   }
+
+  List<NewImovel> get items => [..._items];
 }

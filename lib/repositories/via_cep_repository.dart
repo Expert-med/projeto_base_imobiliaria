@@ -5,7 +5,7 @@ import '../models/cep/via_cep_model.dart';
 
 class ViaCepRepository {
   Future<ViaCepModel> consultarCep(String cep) async {
-    final response = await http.get(Uri.parse("https://viacep.com.br/ws/$cep/json/"));
+    final response = await http.get(Uri.parse("https://cep.awesomeapi.com.br/json/$cep"));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> json = jsonDecode(response.body);

@@ -208,7 +208,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             if (_user.tipoUsuario == 0)
                               Expanded(
                                 child: Container(
-                                  color: Colors.grey,
+                                  color: Colors.grey, 
                                   height:
                                       200, // Altura fixa para a lista de clientes
                                   child: NegociacaoColuna(),

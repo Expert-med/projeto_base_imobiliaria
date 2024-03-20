@@ -47,8 +47,7 @@ class _ImovelGridState extends State<ImovelGrid> {
 
   void _loadMoreItems() {
     final provider = Provider.of<NewImovelList>(context, listen: false);
-    final List<NewImovel> additionalProducts =
-        provider.items.skip(_loadedProducts.length).take(50).toList();
+    final List<NewImovel> additionalProducts = provider.items.skip(_loadedProducts.length).take(50).toList();
     setState(() {
       _loadedProducts.addAll(additionalProducts);
     });
@@ -56,6 +55,7 @@ class _ImovelGridState extends State<ImovelGrid> {
 
   List<NewImovel> _filterProducts() {
     if (_searchText.isEmpty) {
+      print(_loadedProducts);
       return _loadedProducts;
     } else {
       return _loadedProducts
