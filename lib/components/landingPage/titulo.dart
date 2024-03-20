@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Titulo extends StatelessWidget {
-  final Map<String, Map<String, String>> variaveis;
+  final Map<String, dynamic> variaveis;
 
   const Titulo({
     Key? key,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final Map<String, Map<String, String>> variaveis;
+  final Map<String, dynamic> variaveis;
   const CustomAppBar({Key? key,  required this.variaveis,}) : super(key: key);
 
   @override

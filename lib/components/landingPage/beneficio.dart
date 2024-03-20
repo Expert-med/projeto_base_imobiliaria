@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class Beneficio extends StatelessWidget {
   final int tipoPagina;
-  final Map<String, Map<String, String>> variaveis;
+  final Map<String, dynamic> variaveis;
 
   const Beneficio({
     Key? key,
