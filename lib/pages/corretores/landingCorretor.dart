@@ -27,6 +27,12 @@ class _LandingPageState extends State<LandingPage> {
     buscaLanding();
   }
 
+  @override
+  void dispose() {
+    Navigator.popUntil(context, ModalRoute.withName('/'));
+    super.dispose();
+  }
+
   
   void buscaLanding() async {
   try {

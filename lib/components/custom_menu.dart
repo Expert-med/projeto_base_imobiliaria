@@ -1,5 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:projeto_imobiliaria/main.dart';
 import 'package:provider/provider.dart';
 import '../checkPage.dart';
@@ -9,7 +13,8 @@ import '../core/services/firebase/auth/auth_service.dart';
 import '../pages/agendamentos/geral_agendamento.dart';
 import '../pages/auth/auth_page.dart';
 import '../pages/corretor_clientes/corretor_clientes.dart';
-import '../pages/corretores/lista_corretores_page.dart';
+import '../pages/corretores/editarLanding.dart';
+import '../pages/corretores/landingCorretor.dart';
 import '../pages/imobiliaria/cad_imob_page.dart';
 import '../pages/imobiliaria/imobiliarias_page.dart';
 import '../pages/imoveis/cad_imovel_page.dart';
@@ -38,10 +43,12 @@ class CustomMenu extends StatefulWidget {
 
 class _CustomMenuState extends State<CustomMenu> {
   bool isExpandedImoveis = false;
+  bool isExpandedSite = false;
   bool isExpandedImobiliarias = false;
   bool isExpandedCorretor = false;
   bool isExpandedPropostas = false;
   CurrentUser? _user;
+  String corretorNome = '';
 
   @override
   void initState() {
@@ -53,10 +60,28 @@ class _CustomMenuState extends State<CustomMenu> {
   Future<void> _loadUser() async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     await userProvider.initializeUser();
+    final store = FirebaseFirestore.instance;
+    final User = FirebaseAuth.instance.currentUser;
+    final corretorId = User?.uid ?? '';
+    
+    final querySnapshot = await store
+        .collection('corretores')
+        .where('uid', isEqualTo: corretorId)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      setState(() {
+        final corretorData = querySnapshot.docs.first.data();
+        corretorNome = corretorData['name'];
+      });
+      
+    }
     setState(() {
       _user = userProvider.user;
     });
   }
+
+
 
   void handleExpansionImoveisChanged(bool expanded) {
     setState(() {
@@ -73,6 +98,12 @@ class _CustomMenuState extends State<CustomMenu> {
   void handleExpandedCorretorChanged(bool expanded) {
     setState(() {
       isExpandedCorretor = expanded;
+    });
+  }
+
+   void handleExpandedSiteChanged(bool expanded) {
+    setState(() {
+      isExpandedSite = expanded;
     });
   }
 
@@ -285,6 +316,70 @@ class _CustomMenuState extends State<CustomMenu> {
                 },
               ),
             ),
+          ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: AnimatedContainer(
+                duration: Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+                color: isExpandedSite ? Colors.white : null,
+                child: ListTile(
+                  leading: Icon(
+                    Icons.add,
+                    color:
+                        isExpandedSite ? Color(0xFF6e58e9) : Colors.white,
+                  ),
+                  title: Text(
+                    'Meu Site',
+                    style: TextStyle(
+                    color: isExpandedSite ? Color(0xFF6e58e9) : Colors.white70,
+                    ),
+                  ),
+                  onTap: () {
+                    handleExpandedSiteChanged(!isExpandedSite);
+                  },
+                ),
+              ),
+            ),
+            if (isExpandedSite)
+            Padding(
+              padding: const EdgeInsets.only(left: 8, right: 8),
+              child: ListTile(
+                leading: FaIcon(
+                  FontAwesomeIcons.scroll,
+                  color: Colors.white,
+                ),
+                title: Text(
+                  'Ver minha página',
+                  style: TextStyle(
+                    color: widget.isDarkMode ? Colors.white : Colors.white70,
+                  ),
+                ),
+                onTap: () {
+                  print("object");
+                  print(corretorNome);
+                  Get.toNamed('/$corretorNome');
+                },
+              ),
+            ),
+            if (isExpandedSite)
+            Padding(
+              padding: const EdgeInsets.only(left: 8, right: 8),
+              child: ListTile(
+                leading: FaIcon(
+                  FontAwesomeIcons.scroll,
+                  color: Colors.white,
+                ),
+                title: Text(
+                  'Editar pagina',
+                  style: TextStyle(
+                    color: widget.isDarkMode ? Colors.white : Colors.white70,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => EditarLandingPage()));
+                },
+              ),
+            ),
           if (_user?.tipoUsuario == 1)
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
@@ -362,27 +457,6 @@ class _CustomMenuState extends State<CustomMenu> {
                 },
               ),
             ),
-          ListTile(
-            leading: FaIcon(
-              FontAwesomeIcons.users,
-              color: Colors.white,
-            ),
-            title: Text(
-              'Lista de corretores',
-              style: TextStyle(
-                color: widget.isDarkMode ? Colors.white : Colors.white70,
-              ),
-            ),
-            onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      CorretoresListPage(isDarkMode: widget.isDarkMode),
-                ),
-              );
-            },
-          ),
           if (_user?.tipoUsuario == 1)
             ListTile(
               leading: FaIcon(
