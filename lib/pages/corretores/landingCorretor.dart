@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_imobiliaria/components/custom_menu.dart';
+import 'package:projeto_imobiliaria/pages/corretores/editarLanding.dart';
 
 import '../../components/landingPage/beneficio.dart';
 import '../../components/landingPage/footer.dart';
@@ -88,7 +89,6 @@ class _LandingPageState extends State<LandingPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        
                         Titulo(variaveis: variaveis),
                         Solucao(variaveis: variaveis),
                         Beneficio(tipoPagina: 0, variaveis: variaveis),
@@ -101,6 +101,7 @@ class _LandingPageState extends State<LandingPage> {
                     ),
                   ),
                 ),
+
               ],
             ),
           );

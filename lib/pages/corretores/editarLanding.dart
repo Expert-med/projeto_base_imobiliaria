@@ -4,6 +4,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_imobiliaria/components/corretor/corretor_item.dart';
 
+import '../../components/landingPage/beneficio.dart';
+import '../../components/landingPage/footer.dart';
+import '../../components/landingPage/landingAppBar.dart';
+import '../../components/landingPage/navegacao.dart';
+import '../../components/landingPage/perguntas.dart';
+import '../../components/landingPage/porque.dart';
+import '../../components/landingPage/solucao.dart';
+import '../../components/landingPage/titulo.dart';
+
 class EditarLandingPage extends StatefulWidget {
   @override
   _EditarLandingPageState createState() => _EditarLandingPageState();
@@ -92,12 +101,14 @@ class _EditarLandingPageState extends State<EditarLandingPage> {
           if (data != null) {
             setState(() {
               variaveis = data;
-              cor = variaveis['cores']['corPrincipal'];
             });
-          } else {
-            cadastrarFirebase();
+          } else{
             print('Documento da landing page está vazio.');
           }
+        }else{
+          cadastrarFirebase();
+          Navigator.pop(context);
+          print("cadastrei");
         }
       } else {
         print('Nenhum corretor encontrado com o ID atual.');
@@ -134,52 +145,52 @@ class _EditarLandingPageState extends State<EditarLandingPage> {
         },
         "appBar":{
           "logo": "https://images.tcdn.com.br/img/img_prod/1244492/1693228776_logo_expert_med.png",
-          "link1": "home",
-          "link2": "CONTATO",
-          "link3": "SOBRE",
-          "link4": "SERVIÇOS",
-          "botao1": "LOGIN",
-          "botao2": "CADASTRO",
+          "link1": "link1",
+          "link2": "link2",
+          "link3": "link3",
+          "link4": "link4",
+          "botao1": "botao 1",
+          "botao2": "botao 2",
         },
         'titulo': {
-          "titulo_1": 'Título focado no problema que você resolve',
-            "subtitulo_1": 'Descreva de forma breve e direta o que é o seu produto, pra quem ele é e o que torna ele tão especial.',
-            "texto_botao_1": 'botao1',
-            "texto_1": "Texto teste ao lado do botao",
+          "titulo_1": 'Título 1',
+            "subtitulo_1": 'Subtitulo 1',
+            "texto_botao_1": 'Texto botao 1',
+            "texto_1": "Texto 1",
             "link_imagem": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAACoCAMAAABt9SM9AAAAMFBMVEXMzMz////Jycn19fXQ0ND8/Pzl5eXf39/t7e34+PjU1NTy8vLOzs7q6urn5+fb29sVjvDeAAACFUlEQVR4nO3c246qMABAUSzITZT//9tR8QKIYo+J5qRrvQ1gYnaYUoohywAAAAAAAAAAAAAAAAAAAIDfCJ/49Zf/slDnHyh+/fW/Kuw2n9j++vt/Vdh+FGuT1KklVgSxIgyx6jLeIdVY1T/MGrp0Y8V/shDrfWJFEOu05c1wYoWiL8uqeKdX8rFCPcyedt36J5OP1URMNhOPFfL7zHz9DjnxWP34PuawNm6lHWu6WrNdiBXa0cbEY01vkdvHY8vxHEOsV7FCNdkq1otY4TykbW+TisRj5eNW8zErXIb//Lo98VjVONZ+Giu01x31ZUfasbLQjGLN5vDtfU851Eo8Vtbd15hnI1YxXn3uz0enHivLLlOtfH4rPV2pPxcSK7Tlfl+28wlpM2k1DP5iDU/z58fkm5nTJVGsxUMWHlofr5ViLR1RP7Y6fUKshQP2S62Ol0uPwh73H5ZbbbatWPPd1ZNWx1pizfY+b3WReqzxY7FGrJHHWF3Z3f/qxRqZxzqvLtS3KfzqqZVyrOvFL++HefzqoJVurNDdb2yaMiwsn4p1W8+ajVD7IpweUoh1NV4pfZyr747/ja9/R5lmrFAsjuVN//rUSjLW85HcmXVzjbW4tPCGBGMdVmfqYmV+Bx9FrAhiRRArglgRxIogVgSxIogVQawIYkUQK4JXFcTwEowYXq8CAAAAAAAAAAAAAAAAAAAA/6U/XQUVFutJ5WsAAAAASUVORK5CYII=",
         },
         'beneficio_0': {
           "tag": "tag",
-          "titulo_beneficio_0": 'Título focado no problema que você resolve',
-          "subtitulo_beneficio_0": 'Descreva de forma breve e direta o que é o seu produto, pra quem ele é e o que torna ele tão especial.',
-          "lista_beneficio_0_1": '+5,000 pessoas como tu já compraram este produto.',
-          "lista_beneficio_0_2": '+5,000 pessoas como tu já compraram este produto.',
-          "lista_beneficio_0_3": '+5,000 pessoas como tu já compraram este produto.',
+          "titulo_beneficio_0": 'Título beneficio 1',
+          "subtitulo_beneficio_0": 'Subtitulo beneficio 1',
+          "lista_beneficio_0_1": 'Lista beneficio 1',
+          "lista_beneficio_0_2": 'Lista beneficio 2',
+          "lista_beneficio_0_3": 'Lista beneficio 3',
           "texto_botao": 'Botão',
           "link_imagem": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAACoCAMAAABt9SM9AAAAMFBMVEXMzMz////Jycn19fXQ0ND8/Pzl5eXf39/t7e34+PjU1NTy8vLOzs7q6urn5+fb29sVjvDeAAACFUlEQVR4nO3c246qMABAUSzITZT//9tR8QKIYo+J5qRrvQ1gYnaYUoohywAAAAAAAAAAAAAAAAAAAIDfCJ/49Zf/slDnHyh+/fW/Kuw2n9j++vt/Vdh+FGuT1KklVgSxIgyx6jLeIdVY1T/MGrp0Y8V/shDrfWJFEOu05c1wYoWiL8uqeKdX8rFCPcyedt36J5OP1URMNhOPFfL7zHz9DjnxWP34PuawNm6lHWu6WrNdiBXa0cbEY01vkdvHY8vxHEOsV7FCNdkq1otY4TykbW+TisRj5eNW8zErXIb//Lo98VjVONZ+Giu01x31ZUfasbLQjGLN5vDtfU851Eo8Vtbd15hnI1YxXn3uz0enHivLLlOtfH4rPV2pPxcSK7Tlfl+28wlpM2k1DP5iDU/z58fkm5nTJVGsxUMWHlofr5ViLR1RP7Y6fUKshQP2S62Ol0uPwh73H5ZbbbatWPPd1ZNWx1pizfY+b3WReqzxY7FGrJHHWF3Z3f/qxRqZxzqvLtS3KfzqqZVyrOvFL++HefzqoJVurNDdb2yaMiwsn4p1W8+ajVD7IpweUoh1NV4pfZyr747/ja9/R5lmrFAsjuVN//rUSjLW85HcmXVzjbW4tPCGBGMdVmfqYmV+Bx9FrAhiRRArglgRxIogVgSxIogVQawIYkUQK4JXFcTwEowYXq8CAAAAAAAAAAAAAAAAAAAA/6U/XQUVFutJ5WsAAAAASUVORK5CYII=",
         },
         'beneficio_1': {
           "tag": "tag",
-          "titulo_beneficio_1": 'Título focado no problema que você resolve',
-          "subtitulo_beneficio_1": 'Descreva de forma breve e direta o que é o seu produto, pra quem ele é e o que torna ele tão especial.',
-          "lista_beneficio_0_1": '+5,000 pessoas como tu já compraram este produto.',
-          "lista_beneficio_0_2": '+5,000 pessoas como tu já compraram este produto.',
-          "lista_beneficio_0_3": '+5,000 pessoas como tu já compraram este produto.',
+          "titulo_beneficio_1": 'Título beneficio 2',
+          "subtitulo_beneficio_1": 'Subtitulo beneficio 2',
+          "lista_beneficio_0_1": 'Lista beneficio 1',
+          "lista_beneficio_0_2": 'Lista beneficio 2',
+          "lista_beneficio_0_3": 'Lista beneficio 3',
           "texto_botao": 'Botão',
           "link_imagem": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAACoCAMAAABt9SM9AAAAMFBMVEXMzMz////Jycn19fXQ0ND8/Pzl5eXf39/t7e34+PjU1NTy8vLOzs7q6urn5+fb29sVjvDeAAACFUlEQVR4nO3c246qMABAUSzITZT//9tR8QKIYo+J5qRrvQ1gYnaYUoohywAAAAAAAAAAAAAAAAAAAIDfCJ/49Zf/slDnHyh+/fW/Kuw2n9j++vt/Vdh+FGuT1KklVgSxIgyx6jLeIdVY1T/MGrp0Y8V/shDrfWJFEOu05c1wYoWiL8uqeKdX8rFCPcyedt36J5OP1URMNhOPFfL7zHz9DjnxWP34PuawNm6lHWu6WrNdiBXa0cbEY01vkdvHY8vxHEOsV7FCNdkq1otY4TykbW+TisRj5eNW8zErXIb//Lo98VjVONZ+Giu01x31ZUfasbLQjGLN5vDtfU851Eo8Vtbd15hnI1YxXn3uz0enHivLLlOtfH4rPV2pPxcSK7Tlfl+28wlpM2k1DP5iDU/z58fkm5nTJVGsxUMWHlofr5ViLR1RP7Y6fUKshQP2S62Ol0uPwh73H5ZbbbatWPPd1ZNWx1pizfY+b3WReqzxY7FGrJHHWF3Z3f/qxRqZxzqvLtS3KfzqqZVyrOvFL++HefzqoJVurNDdb2yaMiwsn4p1W8+ajVD7IpweUoh1NV4pfZyr747/ja9/R5lmrFAsjuVN//rUSjLW85HcmXVzjbW4tPCGBGMdVmfqYmV+Bx9FrAhiRRArglgRxIogVgSxIogVQawIYkUQK4JXFcTwEowYXq8CAAAAAAAAAAAAAAAAAAAA/6U/XQUVFutJ5WsAAAAASUVORK5CYII=",
         },
         "solucao": {
-          "titulo_1": 'Título focado no problema que você resolve',
-          "subtitulo_1": 'Descreva de forma breve e direta o que é o seu produto, pra quem ele é e o que torna ele tão especial.',
+          "titulo_1": 'Título Solução',
+          "subtitulo_1": 'Subtitulo solução',
           "texto_icone_1": 'solucao 1',
-          "subtitulo_2": 'Descreva de forma breve e direta o que é o seu produto, pra quem ele é e o que torna ele tão especial.',
+          "subtitulo_2": 'Subtitulo da solucao',
           "texto_icone_2": 'solucao 2',
-          "subtitulo_3": 'Descreva de forma breve e direta o que é o seu produto, pra quem ele é e o que torna ele tão especial.',
-          "texto_icone_3": 'solucao 1',
+          "subtitulo_3": 'Subtitulo da solucao',
+          "texto_icone_3": 'solucao 3',
         },
         "perguntas": {
-          "titulo_1": 'Título focado no problema que você resolve',
-          "subtitulo_1": 'Descreva de forma breve e direta o que é o seu produto, pra quem ele é e o que torna ele tão especial.',
+          "titulo_1": 'Título perguntas',
+          "subtitulo_1": 'Subtitulo perguntas',
           "pergunta1": 'pergunta 1',
           "resposta1": "resposta da pergunta 1",
           "pergunta2": 'pergunta 2',
@@ -189,8 +200,8 @@ class _EditarLandingPageState extends State<EditarLandingPage> {
         },
         "porque":{
           "titulo_1": 'Título focado no problema que você resolve',
-          "subtitulo_1": 'Descreva de forma breve e direta o que é o seu produto, pra quem ele é e o que torna ele tão especial.',
-          "texto_botao_1": 'botao1',
+          "subtitulo_1": 'Subtitulo do problema',
+          "texto_botao_1": 'botao',
         },
         "links":{
           "logo": "https://images.tcdn.com.br/img/img_prod/1244492/1693228776_logo_expert_med.png",
@@ -242,17 +253,17 @@ class _EditarLandingPageState extends State<EditarLandingPage> {
           "lista_beneficio_0_1": lista_beneficio_0_1,
           "lista_beneficio_0_2": lista_beneficio_0_2,
           "lista_beneficio_0_3": lista_beneficio_0_3,
-          "texto_botao_2": texto_botao_2,
+          "texto_botao": texto_botao_2,
           "link_imagem": link_imagem_2
         },
         'beneficio_1': {
-          "tag_2": tag_2,
+          "tag": tag_2,
           "titulo_beneficio_1": titulo_beneficio_1,
           "subtitulo_beneficio_1": subtitulo_beneficio_1,
-          "lista_beneficio_1_1": lista_beneficio_1_1,
-          "lista_beneficio_1_2": lista_beneficio_1_2,
-          "lista_beneficio_1_3": lista_beneficio_1_3,
-          "texto_botao_3": texto_botao_3,
+          "lista_beneficio_0_1": lista_beneficio_1_1,
+          "lista_beneficio_0_2": lista_beneficio_1_2,
+          "lista_beneficio_0_3": lista_beneficio_1_3,
+          "texto_botao": texto_botao_3,
           "link_imagem": link_imagem_3
         },
         "solucao": {
@@ -275,9 +286,9 @@ class _EditarLandingPageState extends State<EditarLandingPage> {
           "resposta3": resposta_3,
         },
         "porque":{
-          "titulo_porque": titulo_porque,
-          "subtitulo_porque": subtitulo_porque,
-          "texto_botao_porque": botao_porque,
+          "titulo_1": titulo_porque,
+          "subtitulo_1": subtitulo_porque,
+          "texto_botao_1": botao_porque,
         },
         "links":{
           "logo": logo,
@@ -291,510 +302,570 @@ class _EditarLandingPageState extends State<EditarLandingPage> {
     };
   }
 
+  void saveJSONToFirebase(Map<String, dynamic> jsonString) async {
+    try {
+      final store = FirebaseFirestore.instance;
+      final User = FirebaseAuth.instance.currentUser;
+
+      if (User != null) {
+        final corretorId = User?.uid ?? '';
+        final querySnapshot = await store
+            .collection('corretores')
+            .where('uid', isEqualTo: corretorId)
+            .get();
+
+      
+        final docId = querySnapshot.docs[0].id;
+
+        DocumentReference userRef = store.collection('corretores').doc(docId);
+
+        DocumentReference docRef = userRef.collection('landing').doc(docId);
+
+        await docRef.set(jsonString);
+        print('JSON salvo no Firebase com sucesso.');
+      } else {
+        print('Usuário não autenticado.');
+      }
+    } catch (error) {
+      print('Erro ao salvar o JSON no Firebase: $error');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Formulário'),
+        title: Text('Editar landing page (Preencher todos os campos)'),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              ExpansionTile(
-                    title: Text(
-                      "Cores",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                    children: [
-                       TextField(
+      body: Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                     
+                      ExpansionTile(
+                            title: Text(
+                              "Cores",
+                              style: TextStyle(color: Color.fromARGB(255, 255, 254, 254)),
+                            ),
+                            children: [
+                              TextField(
+                                onChanged: (value) {
+                                  setState(() {
+                                    cor = value;
+                                  });
+                                },
+                                decoration: InputDecoration(labelText: "Cor principal"),
+                              ),
+                            ]),
+                      ExpansionTile(
+                            title: Text(
+                              "Menu",
+                              style: TextStyle(color: Color.fromARGB(255, 255, 254, 254)),
+                            ),
+                            children: [
+                              TextField(
+                                onChanged: (value) {
+                                  setState(() {
+                                    logo = value;
+                                  });
+                                },
+                                decoration: InputDecoration(labelText: 'Logo'),
+                              ),
+                              TextField(
+                                onChanged: (value) {
+                                  setState(() {
+                                    link1 = value;
+                                  });
+                                },
+                                decoration: InputDecoration(labelText: 'Link 1'),
+                              ),
+                              TextField(
+                                onChanged: (value) {
+                                  setState(() {
+                                    link2 = value;
+                                  });
+                                },
+                                decoration: InputDecoration(labelText: 'Link 2'),
+                              ),
+                              TextField(
+                                onChanged: (value) {
+                                  setState(() {
+                                    link3 = value;
+                                  });
+                                },
+                                decoration: InputDecoration(labelText: 'Link 3'),
+                              ),
+                              TextField(
+                                onChanged: (value) {
+                                  setState(() {
+                                    link4 = value;
+                                  });
+                                },
+                                decoration: InputDecoration(labelText: 'Link 4'),
+                              ),
+                              TextField(
+                                onChanged: (value) {
+                                  setState(() {
+                                    botao1 = value;
+                                  });
+                                },
+                                decoration: InputDecoration(labelText: 'Botão 1'),
+                              ),
+                              TextField(
+                                onChanged: (value) {
+                                  setState(() {
+                                    botao2 = value;
+                                  });
+                                },
+                                decoration: InputDecoration(labelText: 'Botão 2'),
+                              ),
+                            ]),
+                      ExpansionTile(
+                            title: Text(
+                              "Título",
+                              style: TextStyle(color: Color.fromARGB(255, 255, 254, 254)),
+                            ),
+                            children: [
+                              TextField(
                         onChanged: (value) {
                           setState(() {
-                            cor = value;
+                            titulo_1 = value;
                           });
                         },
-                        decoration: InputDecoration(labelText: cor),
-                      ),
-                    ]),
-              ExpansionTile(
-                    title: Text(
-                      "Menu",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                    children: [
-                      TextField(
-                        onChanged: (value) {
-                          setState(() {
-                            logo = value;
-                          });
-                        },
-                        decoration: InputDecoration(labelText: 'Logo'),
+                        decoration: InputDecoration(labelText: 'Titulo 1'),
                       ),
                       TextField(
                         onChanged: (value) {
                           setState(() {
-                            link1 = value;
+                            subtitulo_1 = value;
                           });
                         },
-                        decoration: InputDecoration(labelText: 'Link 1'),
+                        decoration: InputDecoration(labelText: 'Subtitulo 1'),
                       ),
                       TextField(
                         onChanged: (value) {
                           setState(() {
-                            link2 = value;
+                            texto_botao_1 = value;
                           });
                         },
-                        decoration: InputDecoration(labelText: 'Link 2'),
+                        decoration: InputDecoration(labelText: 'Texto botao 1'),
                       ),
                       TextField(
                         onChanged: (value) {
                           setState(() {
-                            link3 = value;
+                            texto_1 = value;
                           });
                         },
-                        decoration: InputDecoration(labelText: 'Link 3'),
+                        decoration: InputDecoration(labelText: 'Texto 1'),
                       ),
                       TextField(
                         onChanged: (value) {
                           setState(() {
-                            link4 = value;
+                            link_imagem = value;
                           });
                         },
-                        decoration: InputDecoration(labelText: 'Link 4'),
+                        decoration: InputDecoration(labelText: 'Link da imagem'),
+                      ),
+                            ]),
+                      ExpansionTile(
+                            title: Text(
+                              "Beneficios 1",
+                              style: TextStyle(color: Color.fromARGB(255, 255, 254, 254)),
+                            ),
+                            children: [
+                              TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            tag = value;
+                          });
+                        },
+                        decoration: InputDecoration(labelText: 'Tag 1'),
                       ),
                       TextField(
                         onChanged: (value) {
                           setState(() {
-                            botao1 = value;
+                            titulo_beneficio_0 = value;
                           });
                         },
-                        decoration: InputDecoration(labelText: 'Botão 1'),
+                        decoration: InputDecoration(labelText: 'Titulo beneficio'),
                       ),
                       TextField(
                         onChanged: (value) {
                           setState(() {
-                            botao2 = value;
+                            subtitulo_beneficio_0 = value;
                           });
                         },
-                        decoration: InputDecoration(labelText: 'Botão 2'),
+                        decoration: InputDecoration(labelText: 'Subtitulo beneficio 1'),
                       ),
-                    ]),
-              ExpansionTile(
-                    title: Text(
-                      "Título",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                    children: [
                       TextField(
-                onChanged: (value) {
-                  setState(() {
-                    titulo_1 = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Titulo 1'),
-              ),
-              TextField(
-                onChanged: (value) {
-                  setState(() {
-                    subtitulo_1 = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Subtitulo 1'),
-              ),
-              TextField(
-                onChanged: (value) {
-                  setState(() {
-                    texto_botao_1 = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Texto botao 1'),
-              ),
-              TextField(
-                onChanged: (value) {
-                  setState(() {
-                    texto_1 = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Texto 1'),
-              ),
-              TextField(
-                onChanged: (value) {
-                  setState(() {
-                    link_imagem = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Link da imagem'),
-              ),
-                    ]),
-              ExpansionTile(
-                    title: Text(
-                      "Beneficios 1",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                    children: [
+                        onChanged: (value) {
+                          setState(() {
+                            lista_beneficio_0_1 = value;
+                          });
+                        },
+                        decoration: InputDecoration(labelText: 'Lista beneficio 1'),
+                      ),
                       TextField(
-                onChanged: (value) {
-                  setState(() {
-                    tag = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Tag 1'),
-              ),
-              TextField(
-                onChanged: (value) {
-                  setState(() {
-                    titulo_beneficio_0 = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Titulo beneficio'),
-              ),
-               TextField(
-                onChanged: (value) {
-                  setState(() {
-                    subtitulo_beneficio_0 = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Subtitulo beneficio 1'),
-              ),
-              TextField(
-                onChanged: (value) {
-                  setState(() {
-                    lista_beneficio_0_1 = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Lista beneficio 1'),
-              ),
-              TextField(
-                onChanged: (value) {
-                  setState(() {
-                    lista_beneficio_0_2 = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Lista beneficio 1'),
-              ),
-              TextField(
-                onChanged: (value) {
-                  setState(() {
-                    lista_beneficio_0_3 = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Lista beneficio 1'),
-              ),
-              TextField(
-                onChanged: (value) {
-                  setState(() {
-                    texto_botao_2 = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Texto botão'),
-              ),
-               TextField(
-                onChanged: (value) {
-                  setState(() {
-                    link_imagem_2 = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Link da imagem'),
-              ),
-                    ]),
-              ExpansionTile(
-                    title: Text(
-                      "Beneficios 2",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                    children: [
+                        onChanged: (value) {
+                          setState(() {
+                            lista_beneficio_0_2 = value;
+                          });
+                        },
+                        decoration: InputDecoration(labelText: 'Lista beneficio 1'),
+                      ),
                       TextField(
-                onChanged: (value) {
-                  setState(() {
-                    tag_2 = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Tag 2'),
-              ),
-              TextField(
-                onChanged: (value) {
-                  setState(() {
-                    titulo_beneficio_1 = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Titulo beneficio 2'),
-              ),
-               TextField(
-                onChanged: (value) {
-                  setState(() {
-                    subtitulo_beneficio_1 = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Subtitulo beneficio 2'),
-              ),
-              TextField(
-                onChanged: (value) {
-                  setState(() {
-                    lista_beneficio_1_1 = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Lista beneficio 2'),
-              ),
-              TextField(
-                onChanged: (value) {
-                  setState(() {
-                    lista_beneficio_1_2 = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Lista beneficio 2'),
-              ),
-              TextField(
-                onChanged: (value) {
-                  setState(() {
-                    lista_beneficio_1_3 = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Lista beneficio 2'),
-              ),
-              TextField(
-                onChanged: (value) {
-                  setState(() {
-                    texto_botao_3 = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Texto botão'),
-              ),
-               TextField(
-                onChanged: (value) {
-                  setState(() {
-                    link_imagem_3 = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Link da imagem'),
-              ),
-                    ]),
-              ExpansionTile(
-                    title: Text(
-                      "Solução",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                    children: [
+                        onChanged: (value) {
+                          setState(() {
+                            lista_beneficio_0_3 = value;
+                          });
+                        },
+                        decoration: InputDecoration(labelText: 'Lista beneficio 1'),
+                      ),
                       TextField(
-                onChanged: (value) {
-                  setState(() {
-                    titulo_solucao1 = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Titulo'),
-              ),
-              
-              TextField(
-                onChanged: (value) {
-                  setState(() {
-                    sub_solucao1 = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Subtitulo'),
-              ),
-              TextField(
-                onChanged: (value) {
-                  setState(() {
-                    texto_solucao1 = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Titulo icone 1'),
-              ),
-              TextField(
-                onChanged: (value) {
-                  setState(() {
-                    sub_solucao2 = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Subtitulo 2'),
-              ),
-              TextField(
-                onChanged: (value) {
-                  setState(() {
-                    texto_solucao2 = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Titulo icone 2'),
-              ),
-              TextField(
-                onChanged: (value) {
-                  setState(() {
-                    sub_solucao3 = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Subtitulo 3'),
-              ),
-              TextField(
-                onChanged: (value) {
-                  setState(() {
-                    texto_solucao3 = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Titulo icone 3'),
-              ),
-                    ]),
-              ExpansionTile(
-                    title: Text(
-                      "Pergunta",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                    children: [
-                        TextField(
-                onChanged: (value) {
-                  setState(() {
-                    titulo_pergunta1 = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Titulo'),
-              ),
-              
-              TextField(
-                onChanged: (value) {
-                  setState(() {
-                    sub_pergunta1 = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Subtitulo'),
-              ),
-              TextField(
-                onChanged: (value) {
-                  setState(() {
-                    pergunta_1 = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Pergunta 1'),
-              ),
-              TextField(
-                onChanged: (value) {
-                  setState(() {
-                    resposta_1 = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Resposta 1'),
-              ),
-              TextField(
-                onChanged: (value) {
-                  setState(() {
-                    pergunta_2 = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Pergunta 2'),
-              ),
-              TextField(
-                onChanged: (value) {
-                  setState(() {
-                    resposta_2 = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Resposta 2'),
-              ),
-              TextField(
-                onChanged: (value) {
-                  setState(() {
-                    pergunta_3 = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Pergunta 3'),
-              ),
-              TextField(
-                onChanged: (value) {
-                  setState(() {
-                    resposta_3 = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Resposta 3'),
-              ),
-                    ]),
-              ExpansionTile(
-                    title: Text(
-                      "Porque",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                    children: [
-                       TextField(
-                onChanged: (value) {
-                  setState(() {
-                    titulo_porque = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Titulo'),
-              ),
-              TextField(
-                onChanged: (value) {
-                  setState(() {
-                    subtitulo_porque = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Subtitulo'),
-              ),
-              TextField(
-                onChanged: (value) {
-                  setState(() {
-                    botao_porque = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Botão'),
-              ),
-                    ]),
-              ExpansionTile(
-                    title: Text(
-                      "Link",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                    children: [
+                        onChanged: (value) {
+                          setState(() {
+                            texto_botao_2 = value;
+                          });
+                        },
+                        decoration: InputDecoration(labelText: 'Texto botão'),
+                      ),
                       TextField(
-                onChanged: (value) {
-                  setState(() {
-                    link = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Lista de link'),
-              ),
-                    ]),
-              ExpansionTile(
-                    title: Text(
-                      "Rodapé",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                    children: [
+                        onChanged: (value) {
+                          setState(() {
+                            link_imagem_2 = value;
+                          });
+                        },
+                        decoration: InputDecoration(labelText: 'Link da imagem'),
+                      ),
+                            ]),
+                      ExpansionTile(
+                            title: Text(
+                              "Beneficios 2",
+                              style: TextStyle(color: Color.fromARGB(255, 255, 254, 254)),
+                            ),
+                            children: [
+                              TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            tag_2 = value;
+                          });
+                        },
+                        decoration: InputDecoration(labelText: 'Tag 2'),
+                      ),
                       TextField(
-                onChanged: (value) {
-                  setState(() {
-                    politica = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Politica'),
+                        onChanged: (value) {
+                          setState(() {
+                            titulo_beneficio_1 = value;
+                          });
+                        },
+                        decoration: InputDecoration(labelText: 'Titulo beneficio 2'),
+                      ),
+                      TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            subtitulo_beneficio_1 = value;
+                          });
+                        },
+                        decoration: InputDecoration(labelText: 'Subtitulo beneficio 2'),
+                      ),
+                      TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            lista_beneficio_1_1 = value;
+                          });
+                        },
+                        decoration: InputDecoration(labelText: 'Lista beneficio 2'),
+                      ),
+                      TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            lista_beneficio_1_2 = value;
+                          });
+                        },
+                        decoration: InputDecoration(labelText: 'Lista beneficio 2'),
+                      ),
+                      TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            lista_beneficio_1_3 = value;
+                          });
+                        },
+                        decoration: InputDecoration(labelText: 'Lista beneficio 2'),
+                      ),
+                      TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            texto_botao_3 = value;
+                          });
+                        },
+                        decoration: InputDecoration(labelText: 'Texto botão'),
+                      ),
+                      TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            link_imagem_3 = value;
+                          });
+                        },
+                        decoration: InputDecoration(labelText: 'Link da imagem'),
+                      ),
+                            ]),
+                      ExpansionTile(
+                            title: Text(
+                              "Solução",
+                              style: TextStyle(color: Color.fromARGB(255, 255, 254, 254)),
+                            ),
+                            children: [
+                              TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            titulo_solucao1 = value;
+                          });
+                        },
+                        decoration: InputDecoration(labelText: 'Titulo'),
+                      ),
+                      
+                      TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            sub_solucao1 = value;
+                          });
+                        },
+                        decoration: InputDecoration(labelText: 'Subtitulo'),
+                      ),
+                      TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            texto_solucao1 = value;
+                          });
+                        },
+                        decoration: InputDecoration(labelText: 'Titulo icone 1'),
+                      ),
+                      TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            sub_solucao2 = value;
+                          });
+                        },
+                        decoration: InputDecoration(labelText: 'Subtitulo 2'),
+                      ),
+                      TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            texto_solucao2 = value;
+                          });
+                        },
+                        decoration: InputDecoration(labelText: 'Titulo icone 2'),
+                      ),
+                      TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            sub_solucao3 = value;
+                          });
+                        },
+                        decoration: InputDecoration(labelText: 'Subtitulo 3'),
+                      ),
+                      TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            texto_solucao3 = value;
+                          });
+                        },
+                        decoration: InputDecoration(labelText: 'Titulo icone 3'),
+                      ),
+                            ]),
+                      ExpansionTile(
+                            title: Text(
+                              "Pergunta",
+                              style: TextStyle(color: Color.fromARGB(255, 255, 254, 254)),
+                            ),
+                            children: [
+                                TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            titulo_pergunta1 = value;
+                          });
+                        },
+                        decoration: InputDecoration(labelText: 'Titulo'),
+                      ),
+                      
+                      TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            sub_pergunta1 = value;
+                          });
+                        },
+                        decoration: InputDecoration(labelText: 'Subtitulo'),
+                      ),
+                      TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            pergunta_1 = value;
+                          });
+                        },
+                        decoration: InputDecoration(labelText: 'Pergunta 1'),
+                      ),
+                      TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            resposta_1 = value;
+                          });
+                        },
+                        decoration: InputDecoration(labelText: 'Resposta 1'),
+                      ),
+                      TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            pergunta_2 = value;
+                          });
+                        },
+                        decoration: InputDecoration(labelText: 'Pergunta 2'),
+                      ),
+                      TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            resposta_2 = value;
+                          });
+                        },
+                        decoration: InputDecoration(labelText: 'Resposta 2'),
+                      ),
+                      TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            pergunta_3 = value;
+                          });
+                        },
+                        decoration: InputDecoration(labelText: 'Pergunta 3'),
+                      ),
+                      TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            resposta_3 = value;
+                          });
+                        },
+                        decoration: InputDecoration(labelText: 'Resposta 3'),
+                      ),
+                            ]),
+                      ExpansionTile(
+                            title: Text(
+                              "Porque",
+                              style: TextStyle(color: Color.fromARGB(255, 255, 254, 254)),
+                            ),
+                            children: [
+                              TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            titulo_porque = value;
+                          });
+                        },
+                        decoration: InputDecoration(labelText: 'Titulo'),
+                      ),
+                      TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            subtitulo_porque = value;
+                          });
+                        },
+                        decoration: InputDecoration(labelText: 'Subtitulo'),
+                      ),
+                      TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            botao_porque = value;
+                          });
+                        },
+                        decoration: InputDecoration(labelText: 'Botão'),
+                      ),
+                            ]),
+                      ExpansionTile(
+                            title: Text(
+                              "Link",
+                              style: TextStyle(color: Color.fromARGB(255, 255, 254, 254)),
+                            ),
+                            children: [
+                              TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            link = value;
+                          });
+                        },
+                        decoration: InputDecoration(labelText: 'Lista de link'),
+                      ),
+                            ]),
+                      ExpansionTile(
+                            title: Text(
+                              "Rodapé",
+                              style: TextStyle(color: Color.fromARGB(255, 255, 254, 254)),
+                            ),
+                            children: [
+                              TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            politica = value;
+                          });
+                        },
+                        decoration: InputDecoration(labelText: 'Politica'),
+                      ),
+                      TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            cookies = value;
+                          });
+                        },
+                        decoration: InputDecoration(labelText: 'cookies'),
+                      ),
+                      TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            termos = value;
+                          });
+                        },
+                        decoration: InputDecoration(labelText: 'Termos'),
+                      ),
+                            ]),
+                      ElevatedButton(
+                        onPressed: () {
+                          Map<String, dynamic> jsonData = generateJSON();
+                          String jsonString = json.encode(jsonData);
+                          saveJSONToFirebase(jsonData);
+                          print(jsonData);
+                        },
+                        child: Text('Gerar nova landing page'),
+                      ),
+
+                  ],
+                ),
               ),
-              TextField(
-                onChanged: (value) {
-                  setState(() {
-                    cookies = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'cookies'),
-              ),
-              TextField(
-                onChanged: (value) {
-                  setState(() {
-                    termos = value;
-                  });
-                },
-                decoration: InputDecoration(labelText: 'Termos'),
-              ),
-                    ]),
-              ElevatedButton(
-                onPressed: () {
-                  // Converte o mapa gerado para JSON e imprime
-                  Map<String, dynamic> jsonData = generateJSON();
-                  String jsonString = json.encode(jsonData);
-                  print(jsonString);
-                },
-                child: Text('Gerar JSON'),
-              ),
-            ],
+            ),
           ),
-        ),
+          Expanded(
+            flex: 2,
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    CustomAppBar(variaveis: variaveis),
+                    Titulo(variaveis: variaveis),
+                    Solucao(variaveis: variaveis),
+                    Beneficio(tipoPagina: 0, variaveis: variaveis),
+                    Beneficio(tipoPagina: 1, variaveis: variaveis),
+                    Perguntas(variaveis: variaveis),
+                    Porque(variaveis: variaveis),
+                    Navegacao(variaveis: variaveis),
+                    Footer(variaveis: variaveis),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
