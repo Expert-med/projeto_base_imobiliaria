@@ -30,7 +30,7 @@ class ClientesHomeLista extends StatelessWidget {
                   itemCount: clientesList.items.length,
                   itemBuilder: (context, index) {
                     final cliente = clientesList.items[index];
-                    return ClienteItem( isDarkMode,  cliente);
+                    return ClienteItem(  cliente);
                   },
                 );
               },

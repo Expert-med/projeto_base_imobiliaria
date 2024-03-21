@@ -7,12 +7,12 @@ import 'imovel_item.dart';
 import 'imovel_item_sem_barra.dart';
 
 class FavoriteImoveisGrid extends StatefulWidget {
-  final bool isDarkMode;
+  
   final bool showFavoriteOnly;
   final List<String> idsToShow; // Lista de IDs para exibir
 
   const FavoriteImoveisGrid(
-      this.showFavoriteOnly, this.isDarkMode, this.idsToShow,
+      this.showFavoriteOnly,this.idsToShow,
       {Key? key})
       : super(key: key);
 
@@ -99,7 +99,7 @@ class _FavoriteImoveisGridState extends State<FavoriteImoveisGrid> {
               return ChangeNotifierProvider.value(
                 value: _filterProducts()[i],
                 child: ImovelItemSemBarra(
-                  widget.isDarkMode,
+                 false,
                   i,
                   _filterProducts().length,
                   0,

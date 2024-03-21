@@ -81,7 +81,7 @@ class _ImoveisFavoritosState extends State<ImoveisFavoritos> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: FavoriteImoveisGrid(
-                        false, widget.isDarkMode, imoveisFavoritos),
+                        false, imoveisFavoritos),
                   ),
                 ),
               ],

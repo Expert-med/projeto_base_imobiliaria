@@ -7,10 +7,8 @@ import 'cliente_preferences.dart';
 
 class ClienteInfoCorretor extends StatefulWidget {
   final Clientes cliente;
-  final bool isDarkMode;
 
-  const ClienteInfoCorretor(
-      {required this.cliente, required this.isDarkMode, Key? key})
+  const ClienteInfoCorretor({required this.cliente, Key? key})
       : super(key: key);
 
   @override
@@ -72,54 +70,152 @@ class _ClienteInfoCorretorState extends State<ClienteInfoCorretor> {
           'Cliente ${widget.cliente.name} (${widget.cliente.id})',
         ),
       ),
-      backgroundColor: widget.isDarkMode ? Colors.black : Colors.white,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              'Cliente: ${widget.cliente.name}',
-              style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: !widget.isDarkMode ? Colors.black : Colors.white),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              'Email: ${widget.cliente.email}',
-              style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: !widget.isDarkMode ? Colors.black : Colors.white),
+          Container(
+            width: double.infinity,
+            child: Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Informações do Cliente',
+                        style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Cliente: ${widget.cliente.name}',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Email: ${widget.cliente.email}',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              Text(
+                                'Endereço:',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 2, left:8, right: 8, bottom: 8),
+                          child: Row(
+                            children: [
+                              Text(
+                                'CEP: ${widget.cliente.contato['endereco']['cep']} ',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                ),
+                              ),
+                              Spacer(flex: 1),
+                              Text(
+                                'Estado: ${widget.cliente.contato['endereco']['estado']} ',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                ),
+                              ),
+                              Spacer(flex: 1),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 2, left:8, right: 8, bottom: 8),
+                          child: Text(
+                            'Endereço: ${widget.cliente.contato['endereco']['logradouro']} ',
+                            style: TextStyle(
+                              fontSize: 15,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 2, left:8, right: 8, bottom: 8),
+                          child: Text(
+                            'Bairro: ${widget.cliente.contato['endereco']['bairro']} ',
+                            style: TextStyle(
+                              fontSize: 15,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 2, left:8, right: 8, bottom: 8),
+                          child: Text(
+                            'Cidade: ${widget.cliente.contato['endereco']['cidade']} ',
+                            style: TextStyle(
+                              fontSize: 15,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 2, left:8, right: 8, bottom: 8),
+                          child: Text(
+                            'Número: ${widget.cliente.contato['endereco']['numero']} ',
+                            style: TextStyle(
+                              fontSize: 15,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
           UserPreferences(
             preferences: userPreferences,
             onAddPreference: _addUserPreference,
             cliente: widget.cliente,
-            isDarkMode: widget.isDarkMode,
           ),
-          SizedBox(
-              height:
-                  8), 
-               Padding(
+          SizedBox(height: 8),
+          Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
               'Imoveis favoritos do cliente',
               style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: !widget.isDarkMode ? Colors.black : Colors.white),
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),   
+          ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: FavoriteImoveisGrid(
-                  false, widget.isDarkMode, imoveisFavoritos),
+              child: FavoriteImoveisGrid(false, imoveisFavoritos),
             ),
           ),
         ],

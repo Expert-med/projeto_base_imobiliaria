@@ -124,7 +124,7 @@ class _CorretorInfoPageState extends State<CorretorInfoPage> {
                     0.5, // Defina a altura desejada aqui
                 child: FavoriteImoveisGrid(
                   false,
-                  widget.isDarkMode,
+                 
                   widget.corretor.imoveisCadastrados,
                 ),
               ),

@@ -9,7 +9,8 @@ class ListaClientes extends StatelessWidget {
   final bool isDarkMode;
   final List<Clientes> clientes;
 
-  const ListaClientes(this.clientes, this.isDarkMode, {Key? key}) : super(key: key);
+  const ListaClientes(this.clientes, this.isDarkMode, {Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +19,7 @@ class ListaClientes extends StatelessWidget {
       itemCount: clientes.length,
       itemBuilder: (ctx, i) {
         final cliente = clientes[i];
-        return ClienteItem(isDarkMode, cliente);
+        return ClienteItem(cliente);
       },
     );
   }
