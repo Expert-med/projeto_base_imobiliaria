@@ -17,6 +17,7 @@ class MapPageFlutter extends StatefulWidget {
 }
 
 class _MapPageFlutterState extends State<MapPageFlutter> {
+  late ScrollController _scrollController;
   late List<NewImovel> loadedProducts = [];
   late List<NewImovel> filteredProducts = [];
   late List<Marker> filteredMarkers = [];
@@ -34,7 +35,10 @@ class _MapPageFlutterState extends State<MapPageFlutter> {
   String selectedTotalsuites = '';
   String selectedMarkerLongitude = '';
   String selectedMarkerLatitude = '';
+  String _searchText = '';
   Map<String, dynamic> selectedCaracteristicas = {};
+   late List<NewImovel> imoveisFiltrados;
+  bool showFiltradas = false;
   NewImovel imovelAtual = NewImovel(
       id: '',
       detalhes: {},
@@ -55,10 +59,12 @@ class _MapPageFlutterState extends State<MapPageFlutter> {
   final PopupController _popupController = PopupController();
 
   bool isDarkMode = false;
+  
 
   @override
   void initState() {
     super.initState();
+    _scrollController = ScrollController();
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       final provider = Provider.of<NewImovelList>(context, listen: false);
       loadedProducts = provider.items;
@@ -145,6 +151,62 @@ class _MapPageFlutterState extends State<MapPageFlutter> {
     });
   }
 
+  void filtrarAluguel() {
+    setState(() {
+      imoveisFiltrados = [];
+      imoveisFiltrados = loadedProducts.where((imovel) {
+        final int finalidade = imovel.finalidade ?? 0;
+        return finalidade == 1; 
+      }).toList();
+    });
+  }
+
+  void filtrarCompra() {
+    setState(() {
+      imoveisFiltrados = [];
+      imoveisFiltrados = loadedProducts.where((imovel) {
+        final int finalidade = imovel.finalidade ?? 0;
+        return finalidade == 0; 
+      }).toList();
+    });
+  }
+
+  void filtrarTipo(int n) {
+    print('object');
+    setState(() {
+      imoveisFiltrados = [];
+      imoveisFiltrados = loadedProducts.where((imovel) {
+        final int tipo = imovel.tipo ?? 0;
+        return tipo == n; 
+      }).toList();
+    });
+    print(imoveisFiltrados);
+  }
+
+  void mostrarTodasEmbalagens() {
+    setState(() {
+      imoveisFiltrados = [];
+      imoveisFiltrados = loadedProducts.where((imovel) {
+        final int finalidade = imovel.finalidade ?? 0;
+        return finalidade != null; 
+      }).toList();
+    });
+  }
+   
+
+  List<NewImovel> _filterProducts() {
+    List<NewImovel> filteredProducts;
+    if (_searchText.isNotEmpty) {
+      filteredProducts = loadedProducts.where((imovel) =>
+        imovel.id.toLowerCase().contains(loadedProducts as Pattern)
+      ).toList();
+    } else {
+      filteredProducts = showFiltradas ? imoveisFiltrados : loadedProducts;
+    }
+    print(filteredProducts);
+    return filteredProducts;
+  }
+
   @override
   Widget build(BuildContext context) {
     bool isSmallScreen = MediaQuery.of(context).size.width < 900;
@@ -175,25 +237,168 @@ class _MapPageFlutterState extends State<MapPageFlutter> {
                         ),
                         Row(
                           children: [
-                            Checkbox(
-                              value:
-                                  true, // Defina o valor inicial do primeiro checkbox
-                              onChanged: (value) {
-                                // Implemente a lógica de mudança do estado do checkbox
-                              },
-                            ),
-                            Text('Checkbox 1'),
-                            SizedBox(
-                                width:
-                                    10), // Adicione espaçamento entre os checkboxes
-                            Checkbox(
-                              value:
-                                  false, // Defina o valor inicial do segundo checkbox
-                              onChanged: (value) {
-                                // Implemente a lógica de mudança do estado do checkbox
-                              },
-                            ),
-                            Text('Checkbox 2'),
+                            ElevatedButton(
+                    onPressed: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return SingleChildScrollView(
+                            child: Container(
+                              child: Column(
+                                children: [
+                                  SizedBox(height: 10),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                     mostrarTodasEmbalagens();
+                                      Navigator.pop(context); 
+                                    },
+                                    child: Text('Mostrar todos os imoveis'),
+                                    style: ElevatedButton.styleFrom(
+                                      elevation: 10.0,
+                                      backgroundColor: Color(0xFF6e58e9),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 20.0, vertical: 20.0),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                    ), 
+                                  ),    
+                                  SizedBox(height: 10),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      filtrarCompra();
+                                      setState(() {
+                                        showFiltradas = true;
+                                      });
+                                      Navigator.pop(context); 
+                                    },
+                                    child: Text('Mostrar imoveis a venda'),
+                                    style: ElevatedButton.styleFrom(
+                                      elevation: 10.0,
+                                      backgroundColor: Color(0xFF6e58e9),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 20.0, vertical: 20.0),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(height: 10),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      filtrarAluguel();
+                                      setState(() {
+                                        showFiltradas = true;
+                                      });
+                                      Navigator.pop(context); 
+                                    },
+                                    child: Text('Mostrar imoveis para alugar'),
+                                    style: ElevatedButton.styleFrom(
+                                      elevation: 10.0,
+                                      backgroundColor: Color(0xFF6e58e9),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 20.0, vertical: 20.0),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                    ), 
+                                  ),   
+                                  SizedBox(height: 10),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                     filtrarTipo(0);
+                                     setState(() {
+                                        showFiltradas = true;
+                                      });
+                                      Navigator.pop(context); 
+                                    },
+                                    child: Text('Mostrar apartamentos'),
+                                    style: ElevatedButton.styleFrom(
+                                      elevation: 10.0,
+                                      backgroundColor: Color(0xFF6e58e9),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 20.0, vertical: 20.0),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                    ), 
+                                  ),
+                                  SizedBox(height: 10),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                     filtrarTipo(1);
+                                     setState(() {
+                                        showFiltradas = true;
+                                      });
+                                      Navigator.pop(context); 
+                                    },
+                                    child: Text('Mostrar casas'),
+                                    style: ElevatedButton.styleFrom(
+                                      elevation: 10.0,
+                                      backgroundColor: Color(0xFF6e58e9),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 20.0, vertical: 20.0),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                    ), 
+                                  ),
+                                  SizedBox(height: 10),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                    
+                                     filtrarTipo(2);
+                                     setState(() {
+                                        showFiltradas = true;
+                                      });
+                                      Navigator.pop(context); 
+                                    },
+                                    child: Text('Mostrar terrenos'),
+                                    style: ElevatedButton.styleFrom(
+                                      elevation: 10.0,
+                                      backgroundColor: Color(0xFF6e58e9),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 20.0, vertical: 20.0),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                    ), 
+                                  ),    
+                                  SizedBox(height: 10),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      filtrarTipo(3);
+                                      setState(() {
+                                        showFiltradas = true;
+                                      });
+                                      Navigator.pop(context); 
+                                    },
+                                    child: Text('Mostrar imoveis comerciais'),
+                                    style: ElevatedButton.styleFrom(
+                                      elevation: 10.0,
+                                      backgroundColor: Color(0xFF6e58e9),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 20.0, vertical: 20.0),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                    ), 
+                                  ),                
+                        ]
+                      )
+                    )
+                  );
+                }
+              );
+            }, child: Text("Filtros"),
+             style: ElevatedButton.styleFrom(
+              elevation: 10.0,
+              backgroundColor: Color(0xFF6e58e9),
+              shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                ),
+             )
+          ),
                           ],
                         ),
                       ],
@@ -277,7 +482,9 @@ class _MapPageFlutterState extends State<MapPageFlutter> {
                                           padding: const EdgeInsets.all(8.0),
                                           child: TextField(
                                             onChanged: (value) {
-                                              setState(() {});
+                                              setState(() {
+                                                _searchText = value;
+                                              });
                                             },
                                             decoration: InputDecoration(
                                               labelText: 'Pesquisar',
@@ -293,145 +500,19 @@ class _MapPageFlutterState extends State<MapPageFlutter> {
                                         ),
                                         Expanded(
                                           child: ListView.builder(
-                                            itemCount: filteredMarkers.length,
-                                            itemBuilder: (context, index) {
-                                              List<NewImovel> filteredProducts =
-                                                  loadedProducts
-                                                      .where((imovel) =>
-                                                          imovel.localizacao[
-                                                                  'latitude'] !=
-                                                              "N/A" &&
-                                                          imovel.localizacao[
-                                                                  'longitude'] !=
-                                                              "N/A")
-                                                      .toList();
-                                              final marker =
-                                                  filteredProducts[index];
-                                              
-                                              imovelAtual = NewImovel(
-                                                id: marker.id,
-                                                detalhes: marker.detalhes,
-                                                caracteristicas: marker.caracteristicas,
-                                                localizacao: marker.localizacao,
-                                                preco:marker.preco,
-                                                link_imovel: marker.link_imovel,
-                                                link_virtual_tour: marker.link_imovel,
-                                                codigo_imobiliaria: marker.codigo_imobiliaria,
-                                                data_cadastro: marker.data_cadastro,
-                                                data: marker.data,
-                                                imagens: marker.imagens,
-                                                curtidas: marker.curtidas,
-                                                finalidade: marker.finalidade,
-                                                tipo: marker.tipo,
-                                                atualizacoes: marker.atualizacoes);
-
-                                              return ImovelListMap(imovel: imovelAtual, isDarkMode: isDarkMode);
-                                              
-                                              /*
-                                              ListTile(
-                                                title: Row(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Container(
-                                                      width: 100,
-                                                      height: 100,
-                                                      decoration: BoxDecoration(
-                                                        image: DecorationImage(
-                                                          image: NetworkImage(
-                                                              imageUrls
-                                                                      .isNotEmpty
-                                                                  ? imageUrls[0]
-                                                                  : ''),
-                                                          fit: BoxFit.cover,
-                                                        ),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(8.0),
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                        width:
-                                                            4), // Add some spacing between image and text
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Text(
-                                                            title,
-                                                            style: TextStyle(
-                                                              color: Color(
-                                                                  0xFF6e58e9),
-                                                              fontSize: 15,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            ),
-                                                          ),
-                                                          SizedBox(width: 4),
-                                                          Row(
-                                                            children: [
-                                                              Icon(
-                                                                Icons.place,
-                                                                color: isDarkMode
-                                                                    ? Colors
-                                                                        .white
-                                                                    : Colors
-                                                                        .black54,
-                                                              ),
-                                                              SizedBox(
-                                                                  width: 4),
-                                                              Expanded(
-                                                                flex: 1,
-                                                                child: Text(
-                                                                  localizacao,
-                                                                  style:
-                                                                      TextStyle(
-                                                                    color: Color(
-                                                                        0xFF6e58e9),
-                                                                    fontSize:
-                                                                        10,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                  ),
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis, // Define o comportamento de overflow
-                                                                  maxLines:
-                                                                      2, // Define o número máximo de linhas
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                onTap: () {
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          ImovelInfoComponent(
-                                                        isDarkMode,
-                                                        1,
-                                                        selectedCaracteristicas,
-                                                        imovelAtual,
-                                                      ),
-                                                    ),
-                                                  );
-                                                },
-                                                tileColor: Colors.grey,
-                                                selectedTileColor:
-                                                    Color(0xFF6e58e9),
-                                              );*/
-                                            },
-                                          ),
+              controller: _scrollController,
+              padding: const EdgeInsets.all(8),
+              itemCount: _filterProducts().length,
+              itemBuilder: (ctx, i) {
+                
+                  return ChangeNotifierProvider.value(
+                    value: _filterProducts()[i],
+                    child: ImovelListMap(imovel: _filterProducts()[i], isDarkMode: false),
+                    
+                  );
+                
+              },
+            ),
                                         ),
                                       ],
                                     ),

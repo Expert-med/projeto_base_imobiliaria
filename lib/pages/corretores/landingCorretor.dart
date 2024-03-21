@@ -2,8 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_imobiliaria/components/custom_menu.dart';
+import 'package:projeto_imobiliaria/components/imovel/image_stagred_compontent.dart';
+import 'package:projeto_imobiliaria/components/imovel/imovel_list_view.dart';
 import 'package:projeto_imobiliaria/pages/corretores/editarLanding.dart';
+import 'package:projeto_imobiliaria/pages/map/map_flutter.dart';
 
+import '../../components/imovel/imovel_grid.dart';
 import '../../components/landingPage/beneficio.dart';
 import '../../components/landingPage/footer.dart';
 import '../../components/landingPage/landingAppBar.dart';
@@ -95,19 +99,19 @@ class _LandingPageState extends State<LandingPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
+                        
                         Titulo(variaveis: variaveis),
-                        Solucao(variaveis: variaveis),
-                        Beneficio(tipoPagina: 0, variaveis: variaveis),
-                        Beneficio(tipoPagina: 1, variaveis: variaveis),
-                        Perguntas(variaveis: variaveis),
-                        Porque(variaveis: variaveis),
-                        Navegacao(variaveis: variaveis),
-                        Footer(variaveis: variaveis),
+                        //Solucao(variaveis: variaveis),
+                        //Beneficio(tipoPagina: 0, variaveis: variaveis),
+                        //Beneficio(tipoPagina: 1, variaveis: variaveis),
+                        //Perguntas(variaveis: variaveis),
+                        //Porque(variaveis: variaveis),
+                        //Navegacao(variaveis: variaveis),
+                        //Footer(variaveis: variaveis),
                       ],
                     ),
                   ),
                 ),
-
               ],
             ),
           );
@@ -116,5 +120,4 @@ class _LandingPageState extends State<LandingPage> {
       drawer: CustomMenu(isDarkMode: true),
     );
   }
-    
 }
