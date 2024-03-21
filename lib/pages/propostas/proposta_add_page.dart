@@ -5,6 +5,7 @@ import '../../components/custom_menu.dart';
 import '../../components/propostas/proposta_cad_form.dart';
 import '../../main.dart';
 import '../../models/negociacao/negociacao_form_data.dart';
+import '../home_page.dart';
 
 class CadastroProposta extends StatefulWidget {
   const CadastroProposta({Key? key});
@@ -28,7 +29,7 @@ class _CadastroPropostaState extends State<CadastroProposta> {
         context,
         MaterialPageRoute(
           builder: (context) =>
-              HomePage(), 
+              MyHomePage(), 
         ),
       );
     } catch (error) {

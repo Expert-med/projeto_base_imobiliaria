@@ -7,6 +7,7 @@ import '../../components/cad_imovel_form.dart';
 import '../../components/custom_menu.dart';
 import '../../components/imobiliaria/cad_imobiliaria_form.dart';
 import '../../main.dart';
+import '../home_page.dart';
 
 class CadastroImobiliaria extends StatefulWidget {
   const CadastroImobiliaria({Key? key});
@@ -35,7 +36,7 @@ Future<void> _handleSubmit(ImobiliariaFormData formData) async {
           context,
           MaterialPageRoute(
             builder: (context) =>
-                HomePage(), 
+                MyHomePage(), 
           ),
         );
       

@@ -2,19 +2,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:provider/provider.dart';
 import '../../components/custom_popup_menu.dart';
 import '../../components/imovel/imovel_grid.dart';
 import '../../components/imovel/imovel_list_view.dart';
 import '../../core/models/UserProvider.dart';
+import '../../theme/appthemestate.dart';
 import '../map/map_flutter.dart';
 import 'cad_imovel_page.dart';
 import 'imoveis_Favoritos.dart';
 
 
 class ImovelWithBottomNav extends StatefulWidget {
-  bool isDarkMode;
-  
-  ImovelWithBottomNav(this.isDarkMode, {Key? key}) : super(key: key);
+
+  ImovelWithBottomNav( {Key? key}) : super(key: key);
 
   @override
   _ImovelWithBottomNavState createState() => _ImovelWithBottomNavState();
@@ -30,12 +31,12 @@ class _ImovelWithBottomNavState extends State<ImovelWithBottomNav> {
     super.initState();
     _initializeData();
     // Atualize o valor de isDarkMode aqui
-    widget.isDarkMode = widget.isDarkMode; // Isso dispara uma notificação de mudança
+    
     _widgetOptions = [
-      ImovelGrid(widget.isDarkMode, widget.isDarkMode), // Página 1
-      ImovelListView(widget.isDarkMode, widget.isDarkMode), // Página 2
+      ImovelGrid(false, false), // Página 1
+      ImovelListView(false,false), // Página 2
       MapPageFlutter(),
-      ImoveisFavoritos(isDarkMode: widget.isDarkMode),
+      ImoveisFavoritos(isDarkMode: false),
       CadastroImovel(),
     ];
   }
@@ -83,17 +84,22 @@ class _ImovelWithBottomNavState extends State<ImovelWithBottomNav> {
     return url;
   }
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+void _onItemTapped(int index) {
+  setState(() {
+    _selectedIndex = index;
+  });
+ 
+}
+
+
+
 
   @override
   Widget build(BuildContext context) {
+      final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: !widget.isDarkMode ? Color(0xFF602234) : Colors.black,
+        
         elevation: 0,
         toolbarHeight: 50,
         actions: [
@@ -102,16 +108,16 @@ class _ImovelWithBottomNavState extends State<ImovelWithBottomNav> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                CustomPopupMenu(isDarkMode: widget.isDarkMode),
+                CustomPopupMenu(),
                 SizedBox(width: 10),
                 IconButton(
                   onPressed: () {
-                    setState(() {
-                      widget.isDarkMode = !widget.isDarkMode;
-                    });
+                   setState(() {
+            themeNotifier.enableDarkMode(!themeNotifier.isDarkModeEnabled);
+          });
                   },
                   icon: Icon(
-                    widget.isDarkMode ? Icons.light_mode : Icons.dark_mode,
+                    themeNotifier.isDarkModeEnabled ? Icons.light_mode : Icons.dark_mode,
                     color: Colors.black,
                   ),
                 ),
@@ -126,9 +132,7 @@ class _ImovelWithBottomNavState extends State<ImovelWithBottomNav> {
       ),
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: !widget.isDarkMode ? Color(0xFF602234) : Colors.black,
-        ),
+        
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
           child: GNav(

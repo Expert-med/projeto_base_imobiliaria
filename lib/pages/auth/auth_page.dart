@@ -7,6 +7,7 @@ import '../../components/auth_form.dart';
 import '../../core/models/auth_form_data.dart';
 import '../../core/services/firebase/auth/auth_service.dart';
 import '../../main.dart';
+import '../home_page.dart';
 
 class AuthPage extends StatefulWidget {
   const AuthPage({Key? key});
@@ -36,7 +37,7 @@ class _AuthPageState extends State<AuthPage> {
           context,
           MaterialPageRoute(
             builder: (context) =>
-                HomePage(), // Substitua HomePage() pela sua HomePage real
+                MyHomePage(), // Substitua HomePage() pela sua HomePage real
           ),
         );
       } else {
@@ -61,7 +62,7 @@ class _AuthPageState extends State<AuthPage> {
           context,
           MaterialPageRoute(
             builder: (context) =>
-                HomePage(), // Substitua HomePage() pela sua HomePage real
+                MyHomePage(), // Substitua HomePage() pela sua HomePage real
           ),
         );
       }

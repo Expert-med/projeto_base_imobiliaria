@@ -25,23 +25,33 @@ class _ImovelItemState extends State<ImovelItem> {
   @override
   Widget build(BuildContext context) {
     final product = Provider.of<NewImovel>(context, listen: false);
-    
 
     return AspectRatio(
       aspectRatio: 25 / 13,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10),
         child: GridTile(
-          child: CachedNetworkImage(
-            imageUrl:
-                product.imagens.isNotEmpty ? product.imagens[0].toString() : '',
-            fit: BoxFit.cover,
-            placeholder: (context, url) => CircularProgressIndicator(),
-            errorWidget: (context, url, error) => Icon(Icons.error),
-          ),
+          child: product.imagens.isNotEmpty && product.imagens[0] != null
+              ? CachedNetworkImage(
+                  imageUrl: product.imagens[0].toString(),
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => CircularProgressIndicator(),
+                  errorWidget: (context, url, error) => _buildNoImageWidget(),
+                )
+              : _buildNoImageWidget(),
           footer: _buildFooter(product),
         ),
       ),
+    );
+  }
+
+  Widget _buildNoImageWidget() {
+    return Image.asset(
+      'assets/images/no_availablle.jpg',
+      fit: BoxFit.cover,
+      // Ajuste a largura e a altura conforme necessário
+      width: 100,
+      height: 100,
     );
   }
 
@@ -59,77 +69,79 @@ class _ImovelItemState extends State<ImovelItem> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                  Row(
-                    children: [
-                      Text(
-                        '${product.preco['preco_original'] == "" ? 'Preço não informado' : product.preco['preco_original']}',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: widget.isDarkMode ? Colors.white : Colors.black54,
-                        ),
+                Row(
+                  children: [
+                    Text(
+                      '${product.preco['preco_original'] == "" ? 'Preço não informado' : product.preco['preco_original']}',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color:
+                            widget.isDarkMode ? Colors.white : Colors.black54,
                       ),
-                      IconButton(
-                  onPressed: () {
-                    List<String> imageUrls = [];
-                    List<dynamic> rawImageUrls = product.imagens;
-                    imageUrls.addAll(rawImageUrls.map((url) => url.toString()));
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        List<String> imageUrls = [];
+                        List<dynamic> rawImageUrls = product.imagens;
+                        imageUrls
+                            .addAll(rawImageUrls.map((url) => url.toString()));
 
-                      imageUrls.addAll(rawImageUrls.map((url) => url.toString()));
+                        imageUrls
+                            .addAll(rawImageUrls.map((url) => url.toString()));
 
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ImoveisInfoPage(
-                          nome_imovel: product.detalhes['nome_imovel'],
-                          terreno: product.detalhes['terreno'],
-                          originalPrice: '0',
-                          location: product.localizacao['endereco']
-                              ['bairro'],
-                          urlsImage: imageUrls,
-                          codigo: product.id,
-                          area_total: product.detalhes['area_total'],
-                          link: product.link_imovel,
-                          Vagasgaragem: product.detalhes['total_garagem'] ?? 0,
-                          Totaldormitorios:
-                              product.detalhes['total_dormitorios'] ?? '',
-                          Totalsuites: product.detalhes['total_suites'] ?? '',
-                          latitude:
-                              product.localizacao['latitude'] ?? '',
-                          longitude: product.localizacao
-                                  ['longitude'] ??
-                              '',
-                          tipo_pagina: widget.tipo_pagina,
-                          caracteristicas: product.caracteristicas,
-                          area_privativa: product.detalhes['total_dormitorios'] ?? '',
-                          imovel: product,
-                        ),
-                      ),
-                    );
-                  },
-                  icon: Icon(Icons.info),
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-                StatefulBuilder(
-                  builder: (BuildContext context, StateSetter setState) {
-                    return Consumer<NewImovel>(
-                      builder: (ctx, product, _) => IconButton(
-                        onPressed: () {
-                          setState(() {
-                            product.toggleFavorite();
-                          });
-                          _onFavoriteClicked(product.id);
-                        },
-                        icon: Icon(product.isFavorite
-                            ? Icons.favorite
-                            : Icons.favorite_border),
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                    );
-                  },
-                ),
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ImoveisInfoPage(
+                              nome_imovel: product.detalhes['nome_imovel'],
+                              terreno: product.detalhes['terreno'],
+                              originalPrice: '0',
+                              location: product.localizacao['endereco']
+                                  ['bairro'],
+                              urlsImage: imageUrls,
+                              codigo: product.id,
+                              area_total: product.detalhes['area_total'],
+                              link: product.link_imovel,
+                              Vagasgaragem:
+                                  product.detalhes['total_garagem'] ?? 0,
+                              Totaldormitorios:
+                                  product.detalhes['total_dormitorios'] ?? '',
+                              Totalsuites:
+                                  product.detalhes['total_suites'] ?? '',
+                              latitude: product.localizacao['latitude'] ?? '',
+                              longitude: product.localizacao['longitude'] ?? '',
+                              tipo_pagina: widget.tipo_pagina,
+                              caracteristicas: product.caracteristicas,
+                              area_privativa:
+                                  product.detalhes['total_dormitorios'] ?? '',
+                              imovel: product,
+                            ),
+                          ),
+                        );
+                      },
+                      icon: Icon(Icons.info),
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                    StatefulBuilder(
+                      builder: (BuildContext context, StateSetter setState) {
+                        return Consumer<NewImovel>(
+                          builder: (ctx, product, _) => IconButton(
+                            onPressed: () {
+                              setState(() {
+                                product.toggleFavorite();
+                              });
+                              _onFavoriteClicked(product.id);
+                            },
+                            icon: Icon(product.isFavorite
+                                ? Icons.favorite
+                                : Icons.favorite_border),
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                        );
+                      },
+                    ),
                   ],
-                  
                 ),
                 Row(
                   children: [
@@ -149,10 +161,8 @@ class _ImovelItemState extends State<ImovelItem> {
                                 : Colors.black54,
                           ),
                         ),
-
                       ],
                     ),
-                    
                     Row(
                       children: [
                         Icon(
@@ -184,25 +194,28 @@ class _ImovelItemState extends State<ImovelItem> {
                         children: [
                           Icon(
                             Icons.bed,
-                            color: widget.isDarkMode ? Colors.white : Colors.black54,
+                            color: widget.isDarkMode
+                                ? Colors.white
+                                : Colors.black54,
                           ),
-                          SizedBox(width: 4), // Add spacing between icon and text
+                          SizedBox(
+                              width: 4), // Add spacing between icon and text
                           Flexible(
                             child: SelectableText(
                               '${product.detalhes['total_dormitorios'] ?? "N/A"}',
                               style: TextStyle(
                                 fontSize: 15,
-                                color: widget.isDarkMode ? Colors.white : Colors.black54,
+                                color: widget.isDarkMode
+                                    ? Colors.white
+                                    : Colors.black54,
                               ),
                             ),
                           ),
                         ],
                       ),
-                      
                     ],
                   ),
                 ),
-                                    
                 Container(
                   width: double.infinity,
                   child: Row(
@@ -229,7 +242,6 @@ class _ImovelItemState extends State<ImovelItem> {
               ],
             ),
           ),
-         
         ],
       ),
     );

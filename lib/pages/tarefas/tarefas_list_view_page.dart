@@ -84,7 +84,7 @@ class _TarefasListViewState extends State<TarefasListView> {
                                   itemBuilder: (ctx, i) {
                                     final cliente = clientesFiltrados[i];
                                     return TarefaItem(
-                                      isDarkMode: widget.isDarkMode,
+                                     
                                       tarefa: cliente,
                                       isChecked: cliente
                                           .feita, // Passa o estado da tarefa para o isChecked

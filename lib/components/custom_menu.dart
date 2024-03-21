@@ -87,7 +87,7 @@ class _CustomMenuState extends State<CustomMenu> {
     bool isSmallScreen = MediaQuery.of(context).size.width < 900;
 
     return Drawer(
-      backgroundColor: widget.isDarkMode ? Colors.white70 : Color(0xFF602234),
+      backgroundColor: widget.isDarkMode ? Colors.white70 : Color(0xFF0230547),
       child: ListView(
         padding: EdgeInsets.zero,
         children: [

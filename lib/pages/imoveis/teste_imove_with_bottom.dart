@@ -19,14 +19,6 @@ class TesteImovelPage extends StatefulWidget {
 }
 
 class _TesteImovelPageState extends State<TesteImovelPage> {
-  bool _showFavoriteOnly = false;
-  bool _showGrid = true;
-  bool _showList = false;
-  bool _showMap = false;
-  bool _isHoveredG = false;
-  bool _isHoveredL = false;
-  bool _isHoveredM = false;
-  bool _isHoveredF = false;
 
   @override
   void initState() {
@@ -51,7 +43,7 @@ class _TesteImovelPageState extends State<TesteImovelPage> {
           children: [
             if (!isSmallScreen) CustomMenu(isDarkMode: widget.isDarkMode),
             Expanded(
-              child: ImovelWithBottomNav(widget.isDarkMode),
+              child: ImovelWithBottomNav(),
             ),
           ],
         );

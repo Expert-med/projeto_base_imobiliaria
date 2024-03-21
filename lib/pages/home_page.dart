@@ -5,6 +5,7 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:projeto_imobiliaria/pages/user_config_page.dart';
 import 'package:projeto_imobiliaria/util/app_bar_model.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:provider/provider.dart';
 import '../components/clientes/clientes_home_lista.dart';
 import '../components/custom_menu.dart';
 import '../components/custom_popup_menu.dart';
@@ -14,6 +15,7 @@ import '../components/search_row.dart';
 import '../components/tarefas/tarefas_coluna.dart';
 import '../core/models/UserProvider.dart';
 import '../core/services/firebase/auth/auth_service.dart';
+import '../theme/appthemestate.dart';
 import 'auth/auth_page.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -89,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     bool isSmallScreen = MediaQuery.of(context).size.width < 900;
-
+    final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
     String getGreeting() {
       var hour = DateTime.now().hour;
 
@@ -117,107 +119,151 @@ class _MyHomePageState extends State<MyHomePage> {
               if (!isSmallScreen)
                 Container(child: CustomMenu(isDarkMode: isDarkMode)),
               Expanded(
-                child: Container(
-                  color: isDarkMode ? Colors.black : Colors.white,
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            'LarHub',
-                            style: TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold,
-                              color: isDarkMode ? Colors.white : Colors.black87,
-                            ),
-                          ),
-                          Icon(Icons.home_outlined,
-                              color: isDarkMode ? Colors.white : Colors.black87,
-                              size: 40)
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            getGreeting(),
-                            style: TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold,
-                              color: isDarkMode ? Colors.white : Colors.black54,
-                            ),
-                          ),
-                          Spacer(),
-                          CircleAvatar(
-                            backgroundImage: NetworkImage(_user.logoUrl),
-                          ),
-                          CustomPopupMenu(isDarkMode: isDarkMode),
-                        ],
-                      ),
-                      Text(
-                        'Descubra sua residência ideal e a acompanhe!',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: isDarkMode ? Colors.white : Colors.black54,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        'Encontre sua melhor residência!',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: isDarkMode ? Colors.white : Colors.black54,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      //SearchRow(isDarkMode: isDarkMode),
-            
-                      ImovelCarousel(false, isDarkMode),
-                      if (_user.tipoUsuario == 0)
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
+                child: SingleChildScrollView(
+                  child: Container(
+                 
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
                           children: [
-                            if (_user.tipoUsuario == 0)
-                              Expanded(
-                                child: Container(
-                                  color: Colors.grey,
-                                  height:
-                                      200, // Altura fixa para a lista de clientes
-                                  child: TarefasColumn(),
-                                ),
+                            Text(
+                              'LarHub',
+                              style: TextStyle(
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
+                               
                               ),
-                           
-                            SizedBox(width: 10),
-                            if (_user.tipoUsuario == 0)
-                              Expanded(
-                                child: Container(
-                                  color: Colors.grey,
-                                  height:
-                                      200, // Altura fixa para a lista de clientes
-                                  child: ClientesHomeLista(),
-                                ),
-                              ),
-                            SizedBox(width: 10),
-                            SizedBox(width: 10),
-                            if (_user.tipoUsuario == 0)
-                              Expanded(
-                                child: Container(
-                                  color: Colors.grey, 
-                                  height:
-                                      200, // Altura fixa para a lista de clientes
-                                  child: NegociacaoColuna(),
-                                ),
-                              ),
+                            ),
+                            Icon(
+  Icons.home_outlined,
+  color: themeNotifier.isDarkModeEnabled ? Colors.white : Colors.black,
+  size: 40,
+)
+
                           ],
                         ),
-                      )
-                    ],
+                        Row(
+                          children: [
+                            Text(
+                              getGreeting(),
+                              style: TextStyle(
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
+                                
+                              ),
+                            ),
+                            Spacer(),
+                            CircleAvatar(
+                              backgroundImage: NetworkImage(_user.logoUrl),
+                            ),
+                            CustomPopupMenu(),
+                          ],
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Column(
+                              children: [
+                                Text(
+                                  'Descubra sua residência ideal e a acompanhe!',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  'Encontre sua melhor residência!',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Spacer(),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset('assets/images/casa.png'),
+                              ],
+                            ),
+                          ],
+                        ),
+
+                        SizedBox(
+                          height: 10,
+                        ),
+                        //SearchRow(isDarkMode: isDarkMode),
+
+                        ImovelCarousel(false, isDarkMode),
+                        if (_user.tipoUsuario == 0)
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                if (_user.tipoUsuario == 0)
+                                  Expanded(
+                                    child: Container(
+                                      height: 300,
+                                      child: Card(
+                                        elevation: 4,
+                                        
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        child: TarefasColumn(
+                                         ),
+                                      ),
+                                    ),
+                                  ),
+                                SizedBox(width: 10),
+                                if (_user.tipoUsuario == 0)
+                                  Expanded(
+                                    child: Container(
+                                      height:
+                                          300, // Altura fixa para a lista de clientes
+                                      child: Card(
+                                        elevation: 4,
+                                       
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        child: ClientesHomeLista(
+                                          isDarkMode: isDarkMode,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                SizedBox(width: 10),
+                                if (_user.tipoUsuario == 0)
+                                  Expanded(
+                                    child: Container(
+                                      height: 300,
+                                      child: Card(
+                                        elevation: 4,
+                                        
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        child: NegociacaoColuna(
+                                            isDarkMode: isDarkMode),
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          )
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -229,7 +275,7 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
-            isDarkMode = !isDarkMode;
+            themeNotifier.enableDarkMode(!themeNotifier.isDarkModeEnabled);
           });
         },
         child: Icon(Icons.lightbulb),
