@@ -20,6 +20,7 @@ class ImovelListView extends StatefulWidget {
 class _ImovelListViewState extends State<ImovelListView> {
   late ScrollController _scrollController;
   late List<NewImovel> _loadedProducts;
+  late List<NewImovel> _imoveisFiltrados;
   int _numberOfItemsToShow = 50;
   TextEditingController _searchController = TextEditingController();
   String _searchText = '';
@@ -66,6 +67,8 @@ class _ImovelListViewState extends State<ImovelListView> {
           .toList();
     }
   }
+
+  
 
   @override
   Widget build(BuildContext context) {

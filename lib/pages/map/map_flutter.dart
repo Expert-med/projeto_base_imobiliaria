@@ -207,6 +207,7 @@ class _MapPageFlutterState extends State<MapPageFlutter> {
                             center:
                                 LatLng(-28.25977676240336, -52.45321612830699),
                             zoom: 13.0,
+                            maxZoom: 18.0
                           ),
                           children: <Widget>[
                             TileLayer(
