@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:projeto_imobiliaria/models/corretores/corretorList.dart';
 import 'package:projeto_imobiliaria/models/imobiliarias/imobiliariasList.dart';
 import 'package:projeto_imobiliaria/models/imoveis/newImovelList.dart';
-import 'package:projeto_imobiliaria/pages/corretor_clientes/corretor_info_page.dart';
+import 'package:projeto_imobiliaria/pages/corretores/landingCorretor.dart';
 import 'package:projeto_imobiliaria/pages/home_page.dart';
 import 'package:projeto_imobiliaria/theme/appthemestate.dart';
 import 'package:provider/provider.dart';
@@ -81,36 +81,12 @@ class MyApp extends StatelessWidget {
                 page: () => checkPage(),
               ),
               GetPage(
-                name: '/corretor/:id',
+                name: '/:nome',
                 page: () {
                   // Essa função é chamada sempre que a rota '/corretor/:id' for acessada
                   return FutureBuilder(
-                    // Aqui você pode buscar os dados do corretor no Firestore
-                    future: _fetchCorretorData(),
                     builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        // Se os dados estiverem sendo carregados, você pode exibir um indicador de progresso
-                        return CircularProgressIndicator();
-                      } else if (snapshot.hasError) {
-                        // Se ocorrer um erro durante o carregamento dos dados, você pode exibir uma mensagem de erro
-                        print(
-                            'Erro ao carregar os dados do corretor: ${snapshot.error}');
-                        return Scaffold(
-                          body: Center(
-                            child: Text(
-                              'Erro ao carregar os dados do corretor: ${snapshot.error}',
-                            ),
-                          ),
-                        );
-                      } else {
-                        // Se os dados foram carregados com sucesso, você pode criar a página CorretorInfoPage com os dados do corretor populados
-                        final corretor = snapshot.data as Corretor;
-                        print(corretor);
-                        return CorretorInfoPage(
-                          corretor: corretor,
-                          isDarkMode: false,
-                        );
-                      }
+                        return LandingPage();
                     },
                   );
                 },

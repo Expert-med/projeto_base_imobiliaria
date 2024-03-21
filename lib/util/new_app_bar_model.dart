@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
-import '../pages/corretores/lista_corretores_page.dart';
 import '../pages/imoveis/imoveis_Favoritos.dart';
 import '../pages/map/map_page.dart';
 import 'dark_color_util.dart';
@@ -105,33 +103,7 @@ class NewCustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       );
                     },
                   ),
-                  GestureDetector(
-                    child: Row(
-                      children: [
-                        IconButton(
-                          icon: Icon( color: isDarkMode
-                      ? darkenColor(Color(0xFF6e58e9), 0.5)
-                      : Color(0xFF6e58e9),Icons.map),
-                          onPressed: () {},
-                        ),
-                        Text(
-                          'Lista de Corretores',
-                          style: TextStyle(
-                            color: isDarkMode ? Colors.white : Colors.black54,
-                          ),
-                        ),
-                      ],
-                    ),
-                    onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              CorretoresListPage(isDarkMode: isDarkMode),
-                        ),
-                      );
-                    },
-                  ),
+                  
                 ],
               ),
             ],
