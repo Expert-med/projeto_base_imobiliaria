@@ -4,13 +4,14 @@ import 'package:projeto_imobiliaria/models/imoveis/newImovel.dart';
 import 'package:projeto_imobiliaria/models/imoveis/newImovelList.dart';
 import 'package:provider/provider.dart';
 
+import '../../theme/appthemestate.dart';
 import 'imovel_item_list.dart';
 
 class ImovelListView extends StatefulWidget {
-  final bool isDarkMode;
+  
   final bool showFavoriteOnly;
 
-  const  ImovelListView(this.showFavoriteOnly, this.isDarkMode, {Key? key})
+  const  ImovelListView(this.showFavoriteOnly,  {Key? key})
       : super(key: key);
 
   @override
@@ -114,8 +115,10 @@ class _ImovelListViewState extends State<ImovelListView> {
 
   @override
   Widget build(BuildContext context) {
+
+     final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
     return Container(
-      color: widget.isDarkMode ? Colors.black : Colors.white,
+      color:  themeNotifier.isDarkModeEnabled ? Colors.black : Colors.white,
       child: Column(
         children: [
           Padding(
@@ -141,7 +144,7 @@ class _ImovelListViewState extends State<ImovelListView> {
                     color: Color(0xFF6e58e9), // Cor do contorno ao clicar
                   ),
                 ),
-                fillColor: widget.isDarkMode
+                fillColor:  themeNotifier.isDarkModeEnabled
                     ? Colors.grey[800]
                     : Colors.grey[200], // Cor do fundo
                 filled: true,
@@ -326,7 +329,7 @@ class _ImovelListViewState extends State<ImovelListView> {
                 } else {
                   return ChangeNotifierProvider.value(
                     value: _filterProducts()[i],
-                    child: ImovelListMap(imovel: _filterProducts()[i], isDarkMode: widget.isDarkMode),
+                    child: ImovelListMap(imovel: _filterProducts()[i],),
                     
                   );
                 }

@@ -13,15 +13,13 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:projeto_imobiliaria/util/app_bar_model.dart';
 
 import '../../models/imoveis/newImovelList.dart';
+import '../../theme/appthemestate.dart';
 
 class AgendamentoInfoComponent extends StatefulWidget {
   final Agendamento agendamento;
-  bool isDarkMode;
+
   Clientes cliente;
-  AgendamentoInfoComponent(
-      {required this.agendamento,
-      required this.isDarkMode,
-      required this.cliente});
+  AgendamentoInfoComponent({required this.agendamento, required this.cliente});
 
   @override
   _AgendamentoInfoComponentState createState() =>
@@ -36,11 +34,11 @@ class _AgendamentoInfoComponentState extends State<AgendamentoInfoComponent> {
   Widget build(BuildContext context) {
     bool isSmallScreen = MediaQuery.of(context).size.width < 900;
     final imoveisList = Provider.of<NewImovelList>(context);
-
+    final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
     return Scaffold(
       appBar: isSmallScreen
           ? CustomAppBar(
-              isDarkMode: widget.isDarkMode,
+              isDarkMode: false,
               subtitle: '',
               title: 'Informações da visita',
             )
@@ -48,28 +46,35 @@ class _AgendamentoInfoComponentState extends State<AgendamentoInfoComponent> {
       body: LayoutBuilder(builder: (context, constraints) {
         return Row(
           children: [
-            if (!isSmallScreen) CustomMenu(isDarkMode: widget.isDarkMode),
+            if (!isSmallScreen) CustomMenu(),
             Expanded(
                 child: Container(
-              color: widget.isDarkMode ? Colors.black : Colors.white,
               padding: EdgeInsets.all(10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text(
-                    'Visita n° ${widget.agendamento.id}',
-                    style: TextStyle(
-                      color: widget.isDarkMode ? Colors.white : Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
+                  Card(
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text(
+                      'Visita n° ${widget.agendamento.id}',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
                     ),
                   ),
                   SizedBox(
                     height: 10,
                   ),
-                  Container(
-                    color: Color.fromARGB(255, 209, 209, 209),
+                  Card(
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
@@ -79,11 +84,15 @@ class _AgendamentoInfoComponentState extends State<AgendamentoInfoComponent> {
                           Row(
                             children: [
                               Text(
+                            'Informações Gerais',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                          ),
+                              Text(
                                 'Status da visita: ',
                                 style: TextStyle(
-                                  color: widget.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15,
                                 ),
@@ -91,9 +100,6 @@ class _AgendamentoInfoComponentState extends State<AgendamentoInfoComponent> {
                               Text(
                                 '${widget.agendamento.status}',
                                 style: TextStyle(
-                                  color: widget.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black,
                                   fontSize: 15,
                                 ),
                               ),
@@ -101,9 +107,6 @@ class _AgendamentoInfoComponentState extends State<AgendamentoInfoComponent> {
                               InkWell(
                                 child: Icon(
                                   Icons.edit_square,
-                                  color: widget.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black,
                                 ),
                                 onTap: () {
                                   TextEditingController statusController =
@@ -128,7 +131,7 @@ class _AgendamentoInfoComponentState extends State<AgendamentoInfoComponent> {
                                     builder: (BuildContext context) {
                                       return SingleChildScrollView(
                                         child: Container(
-                                          color: widget.isDarkMode
+                                          color: themeNotifier.isDarkModeEnabled
                                               ? Colors.black
                                               : Color.fromARGB(
                                                   255, 209, 209, 209),
@@ -328,9 +331,6 @@ class _AgendamentoInfoComponentState extends State<AgendamentoInfoComponent> {
                               Text(
                                 'Observações gerais: ',
                                 style: TextStyle(
-                                  color: widget.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15,
                                 ),
@@ -338,9 +338,6 @@ class _AgendamentoInfoComponentState extends State<AgendamentoInfoComponent> {
                               Text(
                                 '${widget.agendamento.observacoes_gerais}',
                                 style: TextStyle(
-                                  color: widget.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black,
                                   fontSize: 15,
                                 ),
                               ),
@@ -351,9 +348,6 @@ class _AgendamentoInfoComponentState extends State<AgendamentoInfoComponent> {
                               Text(
                                 'Data da visita: ',
                                 style: TextStyle(
-                                  color: widget.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15,
                                 ),
@@ -361,9 +355,6 @@ class _AgendamentoInfoComponentState extends State<AgendamentoInfoComponent> {
                               Text(
                                 '${widget.agendamento.data}',
                                 style: TextStyle(
-                                  color: widget.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black,
                                   fontSize: 15,
                                 ),
                               ),
@@ -374,9 +365,6 @@ class _AgendamentoInfoComponentState extends State<AgendamentoInfoComponent> {
                               Text(
                                 'Hora de início da visita: ',
                                 style: TextStyle(
-                                  color: widget.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15,
                                 ),
@@ -384,9 +372,6 @@ class _AgendamentoInfoComponentState extends State<AgendamentoInfoComponent> {
                               Text(
                                 '${widget.agendamento.hora_inicio}',
                                 style: TextStyle(
-                                  color: widget.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black,
                                   fontSize: 15,
                                 ),
                               ),
@@ -397,9 +382,6 @@ class _AgendamentoInfoComponentState extends State<AgendamentoInfoComponent> {
                               Text(
                                 'Hora de fim da visita: ',
                                 style: TextStyle(
-                                  color: widget.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15,
                                 ),
@@ -407,9 +389,6 @@ class _AgendamentoInfoComponentState extends State<AgendamentoInfoComponent> {
                               Text(
                                 '${widget.agendamento.hora_fim}',
                                 style: TextStyle(
-                                  color: widget.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black,
                                   fontSize: 15,
                                 ),
                               ),
@@ -422,139 +401,181 @@ class _AgendamentoInfoComponentState extends State<AgendamentoInfoComponent> {
                   SizedBox(
                     height: 10,
                   ),
-                  Text(
-                    'Cliente:',
-                    style: TextStyle(
-                      color: widget.isDarkMode ? Colors.white : Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
+                  Card(
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                  ),
-                  PessoaInfoBasica(
-                    cliente: widget.cliente,
-                    isDarkMode: widget.isDarkMode,
-                  ),
-
-                  Text(
-                    'Imóveis a serem visitados:',
-                    style: TextStyle(
-                      color: widget.isDarkMode ? Colors.white : Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  CarouselSlider(
-                    options: CarouselOptions(
-                      height: 210,
-                      aspectRatio: 16 / 9,
-                      viewportFraction: !isSmallScreen ? 1 / 3 : 1,
-                      initialPage: 0,
-                      enableInfiniteScroll: false,
-                      reverse: false,
-                      autoPlay: true,
-                      autoPlayInterval: Duration(seconds: 5),
-                      autoPlayAnimationDuration: Duration(milliseconds: 800),
-                      autoPlayCurve: Curves.fastOutSlowIn,
-                      enlargeCenterPage: true,
-                      scrollDirection: Axis.horizontal,
-                    ),
-                    items: widget.agendamento.imoveis_visitados.entries
-                        .map((entry) {
-                      return Builder(
-                        builder: (BuildContext context) {
-                          return Center(
-                            child: ImovelAgendamentoCard(
-                              isDarkMode: widget.isDarkMode,
-                              imovel: entry.value,
-                              onSubmitEtapa: (etapa_visita) {
-                                setState(() {});
-                                AgendamentoList()
-                                    .atualizarAgendamento(widget.agendamento);
-                              },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Cliente',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
                             ),
-                          );
-                        },
-                      );
-                    }).toList(),
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        'Adicionar Imóvel',
-                        style: TextStyle(
-                          color:
-                              widget.isDarkMode ? Colors.white : Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 13,
-                        ),
+                          ),
+                          PessoaInfoBasica(
+                            cliente: widget.cliente,
+                          ),
+                        ],
                       ),
-                      InkWell(
-                        child: Icon(
-                          Icons.add_box_outlined,
-                          color:
-                              widget.isDarkMode ? Colors.white : Colors.black,
-                        ),
-                        onTap: () {
-                          showModalBottomSheet(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return ImoveisModal(
-                                imoveisList: imoveisList,
-                                onImovelAdicionado: (imovel) {
-                                  setState(() {
-                                    final imovel_item = {
-                                      "id_imovel": imovel.id,
-                                      "feedback": '',
-                                      "satisfacao": '',
-                                      "comentarios": '',
-                                    };
-                                    widget.agendamento
-                                            .imoveis_visitados[imovel.id] =
-                                        imovel_item;
+                    ),
+                  ),
 
-                                    AgendamentoList().atualizarAgendamento(
-                                        widget.agendamento);
-                                  });
+                  Card(
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Imóveis a serem visitados:',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          CarouselSlider(
+                            options: CarouselOptions(
+                              height: 210,
+                              aspectRatio: 16 / 9,
+                              viewportFraction: !isSmallScreen ? 1 / 3 : 1,
+                              initialPage: 0,
+                              enableInfiniteScroll: false,
+                              reverse: false,
+                              autoPlay: true,
+                              autoPlayInterval: Duration(seconds: 5),
+                              autoPlayAnimationDuration:
+                                  Duration(milliseconds: 800),
+                              autoPlayCurve: Curves.fastOutSlowIn,
+                              enlargeCenterPage: true,
+                              scrollDirection: Axis.horizontal,
+                            ),
+                            items: widget.agendamento.imoveis_visitados.entries
+                                .map((entry) {
+                              return Builder(
+                                builder: (BuildContext context) {
+                                  return Center(
+                                    child: ImovelAgendamentoCard(
+                                      imovel: entry.value,
+                                      onSubmitEtapa: (etapa_visita) {
+                                        setState(() {});
+                                        AgendamentoList().atualizarAgendamento(
+                                            widget.agendamento);
+                                      },
+                                    ),
+                                  );
                                 },
                               );
-                            },
-                          );
-                        },
+                            }).toList(),
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text(
+                                'Adicionar Imóvel',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
+                                ),
+                              ),
+                              InkWell(
+                                child: Icon(
+                                  Icons.add_box_outlined,
+                                  color: themeNotifier.isDarkModeEnabled
+                                      ? Colors.white
+                                      : Colors.black,
+                                ),
+                                onTap: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return ImoveisModal(
+                                        imoveisList: imoveisList,
+                                        onImovelAdicionado: (imovel) {
+                                          setState(() {
+                                            final imovel_item = {
+                                              "id_imovel": imovel.id,
+                                              "feedback": '',
+                                              "satisfacao": '',
+                                              "comentarios": '',
+                                            };
+                                            widget.agendamento
+                                                    .imoveis_visitados[
+                                                imovel.id] = imovel_item;
+
+                                            AgendamentoList()
+                                                .atualizarAgendamento(
+                                                    widget.agendamento);
+                                          });
+                                        },
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                  Text(
-                    'Marcadores dos imóveis a serem visitados:',
-                    style: TextStyle(
-                      color: widget.isDarkMode ? Colors.white : Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
+
+                  Card(
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          Text(
+                            'Marcadores dos imóveis a serem visitados:',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   SizedBox(
                     height: 30,
                   ),
-                  // Text(
-                  //   'Visita iniciada em ${widget.agendamento.data}.',
-                  //   style: TextStyle(
-                  //     color:
-                  //         widget.isDarkMode ? Colors.white70 : Colors.black54,
-                  //     fontWeight: FontWeight.bold,
-                  //     fontSize: 20,
-                  //   ),
-                  // ),
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Visita iniciada em ${widget.agendamento.data}.',
+                        style: TextStyle(
+                          
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             )),
           ],
         );
       }),
-      drawer: isSmallScreen ? CustomMenu(isDarkMode: false) : null,
+      drawer: isSmallScreen ? CustomMenu() : null,
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -563,7 +584,7 @@ class _AgendamentoInfoComponentState extends State<AgendamentoInfoComponent> {
           FloatingActionButton(
             onPressed: () {
               setState(() {
-                widget.isDarkMode = !widget.isDarkMode;
+                themeNotifier.enableDarkMode(!themeNotifier.isDarkModeEnabled);
               });
             },
             child: Icon(Icons.lightbulb),

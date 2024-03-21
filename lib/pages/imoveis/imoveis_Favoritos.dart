@@ -89,7 +89,7 @@ class _ImoveisFavoritosState extends State<ImoveisFavoritos> {
           );
         },
       ),
-      drawer: isSmallScreen ? CustomMenu(isDarkMode: widget.isDarkMode) : null,
+      drawer: isSmallScreen ? CustomMenu() : null,
     );
   }
 }

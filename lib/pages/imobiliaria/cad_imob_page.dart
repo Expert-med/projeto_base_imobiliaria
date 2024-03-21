@@ -73,7 +73,7 @@ Future<void> _handleSubmit(ImobiliariaFormData formData) async {
               if (!isSmallScreen)
                 SizedBox(
                   width: 250, // Largura mínima do CustomMenu
-                  child: CustomMenu(isDarkMode: isDarkMode),
+                  child: CustomMenu(),
                 ),
               Expanded(
                 child: Container(
@@ -101,7 +101,7 @@ Future<void> _handleSubmit(ImobiliariaFormData formData) async {
         },
         child: Icon(Icons.lightbulb),
       ),
-      drawer: isSmallScreen ? CustomMenu(isDarkMode: isDarkMode) : null,
+      drawer: isSmallScreen ? CustomMenu() : null,
     );
   }
 }

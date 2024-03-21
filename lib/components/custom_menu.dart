@@ -29,13 +29,14 @@ import '../pages/propostas/proposta_add_page.dart';
 import '../pages/propostas/proposta_list_page.dart';
 import '../pages/tarefas/minhas_tarefas_page.dart';
 import '../pages/teste.dart';
+import '../theme/appthemestate.dart';
 import '../util/dark_color_util.dart';
 import 'cad_imovel_form.dart';
 
 class CustomMenu extends StatefulWidget {
-  final bool isDarkMode;
+  
 
-  CustomMenu({required this.isDarkMode});
+  CustomMenu();
 
   @override
   _CustomMenuState createState() => _CustomMenuState();
@@ -63,7 +64,7 @@ class _CustomMenuState extends State<CustomMenu> {
     final store = FirebaseFirestore.instance;
     final User = FirebaseAuth.instance.currentUser;
     final corretorId = User?.uid ?? '';
-    
+
     final querySnapshot = await store
         .collection('corretores')
         .where('uid', isEqualTo: corretorId)
@@ -74,14 +75,11 @@ class _CustomMenuState extends State<CustomMenu> {
         final corretorData = querySnapshot.docs.first.data();
         corretorNome = corretorData['name'];
       });
-      
     }
     setState(() {
       _user = userProvider.user;
     });
   }
-
-
 
   void handleExpansionImoveisChanged(bool expanded) {
     setState(() {
@@ -101,7 +99,7 @@ class _CustomMenuState extends State<CustomMenu> {
     });
   }
 
-   void handleExpandedSiteChanged(bool expanded) {
+  void handleExpandedSiteChanged(bool expanded) {
     setState(() {
       isExpandedSite = expanded;
     });
@@ -116,9 +114,10 @@ class _CustomMenuState extends State<CustomMenu> {
   @override
   Widget build(BuildContext context) {
     bool isSmallScreen = MediaQuery.of(context).size.width < 900;
-
+final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
     return Drawer(
-      backgroundColor: widget.isDarkMode ? Colors.white70 : Color(0xFF0230547),
+      backgroundColor: themeNotifier.isDarkModeEnabled
+ ? Color.fromARGB(179, 24, 24, 24) : Color(0xFF0230547),
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
@@ -127,7 +126,8 @@ class _CustomMenuState extends State<CustomMenu> {
             child: ListTile(
               leading: Icon(
                 Icons.home,
-                color: widget.isDarkMode
+                color: themeNotifier.isDarkModeEnabled
+
                     ? darkenColor(Colors.white, 0.5)
                     : Colors.white,
                 size: 40,
@@ -136,7 +136,8 @@ class _CustomMenuState extends State<CustomMenu> {
                 'Home',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: widget.isDarkMode ? Colors.white : Colors.white70,
+                  color: themeNotifier.isDarkModeEnabled
+ ? Colors.white : Colors.white70,
                 ),
               ),
               onTap: () {
@@ -159,7 +160,7 @@ class _CustomMenuState extends State<CustomMenu> {
           //   title: Text(
           //     'Virtual Tour test',
           //     style: TextStyle(
-          //       color: widget.isDarkMode ? Colors.white : Colors.white70,
+          //       color: themeNotifier.isDarkModeEnabled ? Colors.white : Colors.white70,
           //     ),
           //   ),
           //   onTap: () {
@@ -171,28 +172,29 @@ class _CustomMenuState extends State<CustomMenu> {
           //     );
           //   },
           // ),
-         ListTile(
-                leading: Icon(
-                  Icons.house,
-                  color: Colors.white,
-                ),
-                title: Text(
-                  'Imoveis',
-                  style: TextStyle(
-                    color: widget.isDarkMode ? Colors.white : Colors.white70,
-                  ),
-                ),
-                onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => TesteImovelPage(widget.isDarkMode),
-                      fullscreenDialog:
-                          true, // Isso impede que o usuário retorne com gestos de deslize
-                    ),
-                  );
-                },
+          ListTile(
+            leading: Icon(
+              Icons.house,
+              color: Colors.white,
+            ),
+            title: Text(
+              'Imoveis',
+              style: TextStyle(
+                color: themeNotifier.isDarkModeEnabled
+ ? Colors.white : Colors.white70,
               ),
+            ),
+            onTap: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TesteImovelPage(false),
+                  fullscreenDialog:
+                      true, // Isso impede que o usuário retorne com gestos de deslize
+                ),
+              );
+            },
+          ),
           // ClipRRect(
           //   borderRadius: BorderRadius.circular(10),
           //   child: AnimatedContainer(
@@ -208,7 +210,7 @@ class _CustomMenuState extends State<CustomMenu> {
           //       title: Text(
           //         'Imobiliarias',
           //         style: TextStyle(
-          //           color: widget.isDarkMode ? Colors.white : Colors.white70,
+          //           color: themeNotifier.isDarkModeEnabled ? Colors.white : Colors.white70,
           //         ),
           //       ),
           //       onTap: () {
@@ -228,7 +230,7 @@ class _CustomMenuState extends State<CustomMenu> {
           //       title: Text(
           //         'Cadastrar Imobiliaria',
           //         style: TextStyle(
-          //           color: widget.isDarkMode ? Colors.white : Colors.white70,
+          //           color: themeNotifier.isDarkModeEnabled ? Colors.white : Colors.white70,
           //         ),
           //       ),
           //       onTap: () {
@@ -252,7 +254,7 @@ class _CustomMenuState extends State<CustomMenu> {
           //       title: Text(
           //         'Imobiliarias',
           //         style: TextStyle(
-          //           color: widget.isDarkMode ? Colors.white : Colors.white70,
+          //           color: themeNotifier.isDarkModeEnabled ? Colors.white : Colors.white70,
           //         ),
           //       ),
           //       onTap: () {
@@ -267,80 +269,54 @@ class _CustomMenuState extends State<CustomMenu> {
           //     ),
           //   ),
           if (_user?.tipoUsuario == 1)
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: AnimatedContainer(
-                duration: Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
-                color: isExpandedCorretor ? Colors.white : null,
-                child: ListTile(
-                  leading: Icon(
-                    Icons.add,
-                    color: isExpandedImoveis ? Colors.white : Colors.white,
-                  ),
-                  title: Text(
-                    'Clientes',
-                    style: TextStyle(
-                      color: widget.isDarkMode ? Colors.white : Colors.white70,
-                    ),
-                  ),
-                  onTap: () {
-                    handleExpandedCorretorChanged(!isExpandedCorretor);
-                  },
+            ListTile(
+              leading: FaIcon(
+                FontAwesomeIcons.users,
+                color: Colors.white,
+                size: 20,
+              ),
+              title: Text(
+                'Meus Clientes',
+                style: TextStyle(
+                  color: themeNotifier.isDarkModeEnabled
+ ? Colors.white : Colors.white70,
                 ),
               ),
+              onTap: () {
+                
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        CorretorClientesPage(),
+                  ),
+                );
+              },
             ),
-          if (isExpandedCorretor)
-            Padding(
-              padding: const EdgeInsets.only(left: 8, right: 8),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: AnimatedContainer(
+              duration: Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+              color: isExpandedSite ? Colors.white : null,
               child: ListTile(
-                leading: FaIcon(
-                  FontAwesomeIcons.users,
-                  color: Colors.white,
+                leading: Icon(
+                  Icons.add,
+                  color: isExpandedSite ? Color(0xFF6e58e9) : Colors.white,
                 ),
                 title: Text(
-                  'Listar Meus Clientes',
+                  'Meu Site',
                   style: TextStyle(
-                    color: widget.isDarkMode ? Colors.white : Colors.white70,
+                    color: isExpandedSite ? Color(0xFF6e58e9) : Colors.white70,
                   ),
                 ),
                 onTap: () {
-                  print(widget.isDarkMode);
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          CorretorClientesPage(isDarkMode: widget.isDarkMode),
-                    ),
-                  );
+                  handleExpandedSiteChanged(!isExpandedSite);
                 },
               ),
             ),
-          ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: AnimatedContainer(
-                duration: Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
-                color: isExpandedSite ? Colors.white : null,
-                child: ListTile(
-                  leading: Icon(
-                    Icons.add,
-                    color:
-                        isExpandedSite ? Color(0xFF6e58e9) : Colors.white,
-                  ),
-                  title: Text(
-                    'Meu Site',
-                    style: TextStyle(
-                    color: isExpandedSite ? Color(0xFF6e58e9) : Colors.white70,
-                    ),
-                  ),
-                  onTap: () {
-                    handleExpandedSiteChanged(!isExpandedSite);
-                  },
-                ),
-              ),
-            ),
-            if (isExpandedSite)
+          ),
+          if (isExpandedSite)
             Padding(
               padding: const EdgeInsets.only(left: 8, right: 8),
               child: ListTile(
@@ -351,7 +327,8 @@ class _CustomMenuState extends State<CustomMenu> {
                 title: Text(
                   'Ver minha página',
                   style: TextStyle(
-                    color: widget.isDarkMode ? Colors.white : Colors.white70,
+                    color: themeNotifier.isDarkModeEnabled
+ ? Colors.white : Colors.white70,
                   ),
                 ),
                 onTap: () {
@@ -361,7 +338,7 @@ class _CustomMenuState extends State<CustomMenu> {
                 },
               ),
             ),
-            if (isExpandedSite)
+          if (isExpandedSite)
             Padding(
               padding: const EdgeInsets.only(left: 8, right: 8),
               child: ListTile(
@@ -372,91 +349,45 @@ class _CustomMenuState extends State<CustomMenu> {
                 title: Text(
                   'Editar pagina',
                   style: TextStyle(
-                    color: widget.isDarkMode ? Colors.white : Colors.white70,
+                    color: themeNotifier.isDarkModeEnabled
+ ? Colors.white : Colors.white70,
                   ),
                 ),
                 onTap: () {
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => EditarLandingPage()));
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => EditarLandingPage()));
                 },
               ),
             ),
           if (_user?.tipoUsuario == 1)
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: AnimatedContainer(
-                duration: Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
-                color: isExpandedPropostas ? Colors.white : null,
-                child: ListTile(
-                  leading: Icon(
-                    Icons.add,
-                    color:
-                        isExpandedPropostas ? Colors.white : Colors.white,
-                  ),
-                  title: Text(
-                    'Propostas',
-                    style: TextStyle(
-                      color: widget.isDarkMode ? Colors.white : Colors.white70,
-                    ),
-                  ),
-                  onTap: () {
-                    handleExpandedPropostasChanged(!isExpandedPropostas);
-                  },
+           
+          
+            ListTile(
+              leading: FaIcon(
+                FontAwesomeIcons.scroll,
+                color: Colors.white,
+              ),
+              title: Text(
+                'Propostas',
+                style: TextStyle(
+                  color: themeNotifier.isDarkModeEnabled
+ ? Colors.white : Colors.white70,
                 ),
               ),
-            ),
-          if (isExpandedPropostas)
-            Padding(
-              padding: const EdgeInsets.only(left: 8, right: 8),
-              child: ListTile(
-                leading: FaIcon(
-                  FontAwesomeIcons.scroll,
-                  color: Colors.white,
-                ),
-                title: Text(
-                  'Listar Todas',
-                  style: TextStyle(
-                    color: widget.isDarkMode ? Colors.white : Colors.white70,
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PropostaListPage(),
+                    fullscreenDialog:
+                        true, // Isso impede que o usuário retorne com gestos de deslize
                   ),
-                ),
-                onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => PropostaListPage(widget.isDarkMode),
-                      fullscreenDialog:
-                          true, // Isso impede que o usuário retorne com gestos de deslize
-                    ),
-                  );
-                },
-              ),
+                );
+              },
             ),
-          if (isExpandedPropostas)
-            Padding(
-              padding: const EdgeInsets.only(left: 8, right: 8),
-              child: ListTile(
-                leading: FaIcon(
-                  FontAwesomeIcons.fileSignature,
-                  color: Colors.white,
-                ),
-                title: Text(
-                  'Criar nova proposta',
-                  style: TextStyle(
-                    color: widget.isDarkMode ? Colors.white : Colors.white70,
-                  ),
-                ),
-                onTap: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CadastroProposta(),
-                      fullscreenDialog:
-                          true, // Isso impede que o usuário retorne com gestos de deslize
-                    ),
-                  );
-                },
-              ),
-            ),
+        
           if (_user?.tipoUsuario == 1)
             ListTile(
               leading: FaIcon(
@@ -466,7 +397,8 @@ class _CustomMenuState extends State<CustomMenu> {
               title: Text(
                 'Agendamentos',
                 style: TextStyle(
-                  color: widget.isDarkMode ? Colors.white : Colors.white70,
+                  color: themeNotifier.isDarkModeEnabled
+ ? Colors.white : Colors.white70,
                 ),
               ),
               onTap: () {
@@ -474,12 +406,12 @@ class _CustomMenuState extends State<CustomMenu> {
                   context,
                   MaterialPageRoute(
                     builder: (context) =>
-                        GeralAgendamento(isDarkMode: widget.isDarkMode),
+                        GeralAgendamento(),
                   ),
                 );
               },
             ),
-if (_user?.tipoUsuario == 1)
+          if (_user?.tipoUsuario == 1)
             ListTile(
               leading: FaIcon(
                 FontAwesomeIcons.calendar,
@@ -488,33 +420,34 @@ if (_user?.tipoUsuario == 1)
               title: Text(
                 'Minhas Tarefas',
                 style: TextStyle(
-                  color: widget.isDarkMode ? Colors.white : Colors.white70,
+                  color: themeNotifier.isDarkModeEnabled
+ ? Colors.white : Colors.white70,
                 ),
               ),
               onTap: () {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        MinhasTarefas(),
+                    builder: (context) => MinhasTarefas(),
                   ),
                 );
               },
             ),
           Divider(),
           Padding(
-            padding: const EdgeInsets.only(top:180),
+            padding: const EdgeInsets.only(top: 180),
             child: ListTile(
               leading: Icon(
                 Icons.logout,
-                color: widget.isDarkMode
+                color: themeNotifier.isDarkModeEnabled
                     ? darkenColor(Colors.white, 0.5)
                     : Colors.white,
               ),
               title: Text(
                 'Log Out',
                 style: TextStyle(
-                  color: widget.isDarkMode ? Colors.white : Colors.white70,
+                  color: themeNotifier.isDarkModeEnabled
+ ? Colors.white : Colors.white70,
                 ),
               ),
               onTap: () {

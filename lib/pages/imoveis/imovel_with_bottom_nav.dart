@@ -33,8 +33,8 @@ class _ImovelWithBottomNavState extends State<ImovelWithBottomNav> {
     // Atualize o valor de isDarkMode aqui
     
     _widgetOptions = [
-      ImovelGrid(false, false), // Página 1
-      ImovelListView(false,false), // Página 2
+      ImovelGrid(false), // Página 1
+      ImovelListView(false), // Página 2
       MapPageFlutter(),
       ImoveisFavoritos(isDarkMode: false),
       CadastroImovel(),

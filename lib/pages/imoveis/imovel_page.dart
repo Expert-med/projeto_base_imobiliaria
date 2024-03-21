@@ -4,14 +4,14 @@ import 'package:projeto_imobiliaria/models/imoveis/newImovelList.dart';
 import 'package:projeto_imobiliaria/pages/imoveis/imoveis_Favoritos.dart';
 import 'package:projeto_imobiliaria/pages/map/map_flutter.dart';
 import 'package:projeto_imobiliaria/util/app_bar_model.dart';
+import 'package:provider/provider.dart';
 import '../../components/imovel/imovel_grid.dart';
 import '../../components/imovel/imovel_list_view.dart';
+import '../../theme/appthemestate.dart';
 import 'cad_imovel_page.dart';
 
 class ImovelPage extends StatefulWidget {
-  bool isDarkMode;
-
-  ImovelPage(this.isDarkMode, {Key? key}) : super(key: key);
+  ImovelPage({Key? key}) : super(key: key);
 
   @override
   State<ImovelPage> createState() => _ImovelPageState();
@@ -36,11 +36,11 @@ class _ImovelPageState extends State<ImovelPage> {
   @override
   Widget build(BuildContext context) {
     bool isSmallScreen = MediaQuery.of(context).size.width < 900;
-
+ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
     return Scaffold(
       appBar: isSmallScreen
           ? CustomAppBar(
-              isDarkMode: widget.isDarkMode,
+              isDarkMode: false,
               subtitle: '',
               title: 'Imóveis',
             )
@@ -48,7 +48,7 @@ class _ImovelPageState extends State<ImovelPage> {
       body: LayoutBuilder(builder: (context, constraints) {
         return Row(
           children: [
-            if (!isSmallScreen) CustomMenu(isDarkMode: widget.isDarkMode),
+            if (!isSmallScreen) CustomMenu(),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -306,10 +306,9 @@ class _ImovelPageState extends State<ImovelPage> {
                   ),
                   Expanded(
                     child: _showGrid
-                        ? ImovelGrid(widget.isDarkMode, _showFavoriteOnly)
+                        ? ImovelGrid(_showFavoriteOnly)
                         : _showList
-                            ? ImovelListView(
-                                widget.isDarkMode, _showFavoriteOnly)
+                            ? ImovelListView(_showFavoriteOnly)
                             : _showMap
                                 ? MapPageFlutter()
                                 : ImoveisFavoritos(isDarkMode: false),
@@ -320,7 +319,7 @@ class _ImovelPageState extends State<ImovelPage> {
           ],
         );
       }),
-      drawer: isSmallScreen ? CustomMenu(isDarkMode: false) : null,
+      drawer: isSmallScreen ? CustomMenu() : null,
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -338,7 +337,7 @@ class _ImovelPageState extends State<ImovelPage> {
           FloatingActionButton(
             onPressed: () {
               setState(() {
-                widget.isDarkMode = !widget.isDarkMode;
+                themeNotifier.enableDarkMode(!themeNotifier.isDarkModeEnabled);
               });
             },
             child: Icon(Icons.lightbulb),

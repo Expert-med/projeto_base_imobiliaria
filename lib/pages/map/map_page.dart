@@ -123,7 +123,7 @@ class _MapPageState extends State<MapPage> {
       body: LayoutBuilder(builder: (context, constraints) {
         return Row(
           children: [
-            if (!isSmallScreen) CustomMenu(isDarkMode: isDarkMode),
+            if (!isSmallScreen) CustomMenu(),
             Expanded(child: Stack(
         children: [
           GoogleMap(
@@ -239,7 +239,7 @@ class _MapPageState extends State<MapPage> {
           ],
         );
       }),
-      drawer: CustomMenu(isDarkMode: false),
+      drawer: CustomMenu(),
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(right: 40.0),
         child: FloatingActionButton(

@@ -117,7 +117,7 @@ class _LandingPageState extends State<LandingPage> {
           );
         },
       ),
-      drawer: CustomMenu(isDarkMode: true),
+      drawer: CustomMenu(),
     );
   }
 }

@@ -51,10 +51,13 @@ class NegociacaoColuna extends StatelessWidget {
                   final negociacao = negociacoes[index];
                   return ChangeNotifierProvider<Negociacao>.value(
                     value: negociacao,
-                    child: NegociacaoItem(
-                      false, // Aqui você pode passar seus parâmetros necessários para o NegociacaoItem
-                      index,
-                      negociacoes.length,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 10),
+                      child: NegociacaoItem(
+                        false, // Aqui você pode passar seus parâmetros necessários para o NegociacaoItem
+                        index,
+                        negociacoes.length,
+                      ),
                     ),
                   );
                 },

@@ -115,7 +115,7 @@ class AgendamentoList with ChangeNotifier {
 
       final agendamento = Agendamento(
         id: novoId.toString(),
-        data: '',
+        data: formattedDate,
         hora_fim: '',
         hora_inicio: '',
         imoveis_visitados: imoveis,

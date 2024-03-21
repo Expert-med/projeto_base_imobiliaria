@@ -10,7 +10,7 @@ class Clientes with ChangeNotifier {
 
   final int tipoUsuario;
   final Map<String, dynamic> contato;
-  final List<Map<String, dynamic>> preferencias;
+  final List<String> preferencias;
   final List<String> historico;
   final List<String> historicoBusca;
   final List<String> imoveisFavoritos;

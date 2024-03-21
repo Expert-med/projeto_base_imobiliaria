@@ -9,8 +9,8 @@ import '../../models/clientes/Clientes.dart';
 import '../../theme/appthemestate.dart';
 
 class CorretorClientesPage extends StatefulWidget {
-  final bool isDarkMode;
-  CorretorClientesPage({required this.isDarkMode});
+  
+  CorretorClientesPage();
   @override
   _CorretorClientesPageState createState() => _CorretorClientesPageState();
 }
@@ -18,10 +18,10 @@ class CorretorClientesPage extends StatefulWidget {
 class _CorretorClientesPageState extends State<CorretorClientesPage> {
   List<Clientes> _clientes = [];
   TextEditingController _searchController = TextEditingController();
-  bool _isDarkMode = false;
+ 
   @override
   void initState() {
-    _isDarkMode = widget.isDarkMode;
+   
     super.initState();
   }
 
@@ -110,19 +110,19 @@ class _CorretorClientesPageState extends State<CorretorClientesPage> {
           ),
         ],
       ),
-      drawer: CustomMenu(isDarkMode: _isDarkMode),
+      drawer: CustomMenu(),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           FloatingActionButton(
-            onPressed: () {
-              setState(() {
-                _isDarkMode = !_isDarkMode;
-              });
-            },
-            child: Icon(Icons.lightbulb),
-          ),
+        onPressed: () {
+          setState(() {
+            themeNotifier.enableDarkMode(!themeNotifier.isDarkModeEnabled);
+          });
+        },
+        child: Icon(Icons.lightbulb),
+      ),
           SizedBox(height: 16), // Espaçamento entre os botões
           FloatingActionButton(
             onPressed: () {

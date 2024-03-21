@@ -30,7 +30,10 @@ class ClientesHomeLista extends StatelessWidget {
                   itemCount: clientesList.items.length,
                   itemBuilder: (context, index) {
                     final cliente = clientesList.items[index];
-                    return ClienteItem(  cliente);
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 10),
+                      child: ClienteItem(  cliente),
+                    );
                   },
                 );
               },

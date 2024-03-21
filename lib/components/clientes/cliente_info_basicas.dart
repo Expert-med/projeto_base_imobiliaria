@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import '../../models/clientes/Clientes.dart';
 
 class PessoaInfoBasica extends StatelessWidget {
-  final bool isDarkMode;
+  
   final Clientes cliente;
 
 
-  PessoaInfoBasica({required this.isDarkMode, required this.cliente});
+  PessoaInfoBasica({ required this.cliente});
 
   @override
   Widget build(BuildContext context) {
@@ -28,14 +28,14 @@ class PessoaInfoBasica extends StatelessWidget {
                     Text(
                       'Nome: ${cliente.name} ',
                       style: TextStyle(
-                        color: isDarkMode ? Colors.white : Colors.black,
+                        
                         fontSize: 15,
                       ),
                     ),
                     Text(
                       'Informações de contato',
                       style: TextStyle(
-                        color: isDarkMode ? Colors.white : Colors.black54,
+                        
                         fontWeight: FontWeight.bold,
                         fontSize: 15,
                       ),
@@ -45,7 +45,7 @@ class PessoaInfoBasica extends StatelessWidget {
                       child: Text(
                         'Telefone: ${cliente.contato['celular'] != '' ? cliente.contato['celular'] : 'Não informado'} ',
                         style: TextStyle(
-                          color: isDarkMode ? Colors.white : Colors.black,
+                          
                           fontSize: 15,
                         ),
                       ),
@@ -55,7 +55,7 @@ class PessoaInfoBasica extends StatelessWidget {
                       child: Text(
                         'Email: ${cliente.contato['email'] != '' ? cliente.contato['email'] : 'Não informado'} ',
                         style: TextStyle(
-                          color: isDarkMode ? Colors.white : Colors.black,
+                          
                           fontSize: 15,
                         ),
                       ),
@@ -73,7 +73,7 @@ class PessoaInfoBasica extends StatelessWidget {
                     Text(
                       'Endereço do cliente',
                       style: TextStyle(
-                        color: isDarkMode ? Colors.white : Colors.black54,
+                        
                         fontWeight: FontWeight.bold,
                         fontSize: 15,
                       ),
@@ -86,9 +86,7 @@ class PessoaInfoBasica extends StatelessWidget {
                             Text(
                               'CEP: ${cliente.contato['endereco']['cep']} ',
                               style: TextStyle(
-                                color: isDarkMode
-                                    ? Colors.white
-                                    : Colors.black,
+                                
                                 fontSize: 15,
                               ),
                             ),
@@ -96,9 +94,7 @@ class PessoaInfoBasica extends StatelessWidget {
                             Text(
                               'Estado: ${cliente.contato['endereco']['estado']} ',
                               style: TextStyle(
-                                color: isDarkMode
-                                    ? Colors.white
-                                    : Colors.black,
+                                
                                 fontSize: 15,
                               ),
                             ),
@@ -111,9 +107,7 @@ class PessoaInfoBasica extends StatelessWidget {
                         child: Text(
                           'Endereço: ${cliente.contato['endereco']['logradouro']} ',
                           style: TextStyle(
-                            color: isDarkMode
-                                ? Colors.white
-                                : Colors.black,
+                            
                             fontSize: 15,
                           ),
                         ),
@@ -123,9 +117,7 @@ class PessoaInfoBasica extends StatelessWidget {
                         child: Text(
                           'Bairro: ${cliente.contato['endereco']['bairro']} ',
                           style: TextStyle(
-                            color: isDarkMode
-                                ? Colors.white
-                                : Colors.black,
+                            
                             fontSize: 15,
                           ),
                         ),
@@ -135,9 +127,7 @@ class PessoaInfoBasica extends StatelessWidget {
                         child: Text(
                           'Cidade: ${cliente.contato['endereco']['cidade']} ',
                           style: TextStyle(
-                            color: isDarkMode
-                                ? Colors.white
-                                : Colors.black,
+                            
                             fontSize: 15,
                           ),
                         ),
@@ -148,9 +138,7 @@ class PessoaInfoBasica extends StatelessWidget {
                         child: Text(
                           'Não informado ',
                           style: TextStyle(
-                            color: isDarkMode
-                                ? Colors.white
-                                : Colors.black,
+                            
                             fontSize: 15,
                           ),
                         ),

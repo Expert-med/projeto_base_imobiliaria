@@ -41,14 +41,14 @@ class _TesteImovelPageState extends State<TesteImovelPage> {
       body: LayoutBuilder(builder: (context, constraints) {
         return Row(
           children: [
-            if (!isSmallScreen) CustomMenu(isDarkMode: widget.isDarkMode),
+            if (!isSmallScreen) CustomMenu(),
             Expanded(
               child: ImovelWithBottomNav(),
             ),
           ],
         );
       }),
-      drawer: isSmallScreen ? CustomMenu(isDarkMode: false) : null,
+      drawer: isSmallScreen ? CustomMenu() : null,
 
     );
   }

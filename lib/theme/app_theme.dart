@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 class AppTheme {
   static final lightTheme = ThemeData(
     scaffoldBackgroundColor: Colors.white,
@@ -30,6 +31,11 @@ class AppTheme {
       ),
     ),
     cardColor: Color(0xFFF2F2F2), // Cor de fundo do card para o tema claro
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all<Color>(Color(0xFF0230547)),
+      ),
+    ),
   );
 
   static final darkTheme = ThemeData(
@@ -37,7 +43,7 @@ class AppTheme {
     appBarTheme: const AppBarTheme(
       color: Color(0xFF0230547),
       iconTheme: IconThemeData(
-        color: Colors.white,
+        color: Color.fromARGB(255, 56, 56, 56),
       ),
     ),
     bottomAppBarTheme: BottomAppBarTheme(color: Color(0xFF0230547)),
@@ -47,5 +53,13 @@ class AppTheme {
       ),
     ),
     cardColor: Color.fromARGB(255, 41, 41, 41), // Cor de fundo do card para o tema escuro
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all<Color>(Color(0xFF0230547)),
+      ),
+    ),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: Color(0xFF0230547),
+    ),
   );
 }

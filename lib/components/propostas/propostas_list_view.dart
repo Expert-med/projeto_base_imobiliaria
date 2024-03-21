@@ -3,12 +3,13 @@ import 'package:projeto_imobiliaria/models/negociacao/negociacao.dart';
 import 'package:projeto_imobiliaria/models/negociacao/negociacaoList.dart';
 import 'package:provider/provider.dart';
 
+import '../../theme/appthemestate.dart';
 import 'negociacao_item.dart';
 
 class PropostaListView extends StatefulWidget {
-  final bool isDarkMode;
 
-  const PropostaListView(this.isDarkMode, {Key? key}) : super(key: key);
+
+  const PropostaListView( {Key? key}) : super(key: key);
 
   @override
   _PropostaListViewState createState() => _PropostaListViewState();
@@ -36,13 +37,13 @@ print('negociacoesEmAndamento: ${negociacoesEmAndamento}');
                 .toLowerCase()
                 .contains(_searchText.toLowerCase());
           }).toList();
-
+final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
 
 
 
 
     return Container(
-      color: widget.isDarkMode ? Colors.black : Colors.white,
+     
       child: Column(
         children: [
           Padding(
@@ -69,7 +70,7 @@ print('negociacoesEmAndamento: ${negociacoesEmAndamento}');
                   ),
                 ),
                 fillColor:
-                    widget.isDarkMode ? Colors.grey[800] : Colors.grey[200],
+                    themeNotifier.isDarkModeEnabled ? Colors.grey[800] : Colors.grey[200],
                 filled: true,
               ),
               onChanged: (value) {
@@ -87,7 +88,7 @@ print('negociacoesEmAndamento: ${negociacoesEmAndamento}');
                     children: [
                       Text('Não iniciada',
                           style: TextStyle(
-                              color: widget.isDarkMode
+                              color: themeNotifier.isDarkModeEnabled
                                   ? Colors.white
                                   : Colors.black)),
                       Expanded(
@@ -98,7 +99,7 @@ print('negociacoesEmAndamento: ${negociacoesEmAndamento}');
                             return ChangeNotifierProvider.value(
                               value: negociacoesNaoIniciado[i],
                               child: NegociacaoItem(
-                                  widget.isDarkMode, i, negociacoesNaoIniciado.length),
+                                  themeNotifier.isDarkModeEnabled, i, negociacoesNaoIniciado.length),
                             );
                           },
                         ),
@@ -118,7 +119,7 @@ print('negociacoesEmAndamento: ${negociacoesEmAndamento}');
                     children: [
                       Text('Em andamento',
                           style: TextStyle(
-                              color: widget.isDarkMode
+                              color: themeNotifier.isDarkModeEnabled
                                   ? Colors.white
                                   : Colors.black)),
                       Expanded(
@@ -128,7 +129,7 @@ print('negociacoesEmAndamento: ${negociacoesEmAndamento}');
                           itemBuilder: (ctx, i) {
                             return ChangeNotifierProvider.value(
                               value: negociacoesEmAndamento[i],
-                              child: NegociacaoItem(widget.isDarkMode, i,
+                              child: NegociacaoItem(themeNotifier.isDarkModeEnabled, i,
                                   negociacoesEmAndamento.length),
                             );
                           },
@@ -149,7 +150,7 @@ print('negociacoesEmAndamento: ${negociacoesEmAndamento}');
                     children: [
                       Text('Finalizada',
                           style: TextStyle(
-                              color: widget.isDarkMode
+                              color: themeNotifier.isDarkModeEnabled
                                   ? Colors.white
                                   : Colors.black)),
                       Expanded(
@@ -159,7 +160,7 @@ print('negociacoesEmAndamento: ${negociacoesEmAndamento}');
                           itemBuilder: (ctx, i) {
                             return ChangeNotifierProvider.value(
                               value: negociacoesConcluidas[i],
-                              child: NegociacaoItem(widget.isDarkMode, i,
+                              child: NegociacaoItem(themeNotifier.isDarkModeEnabled, i,
                                   negociacoesConcluidas.length),
                             );
                           },

@@ -16,7 +16,7 @@ class ClienteItem extends StatelessWidget {
     bool isSmallScreen = MediaQuery.of(context).size.width < 900;
 
     return Card(
-      elevation: 7,
+      elevation: 4,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),

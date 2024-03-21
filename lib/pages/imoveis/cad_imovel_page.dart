@@ -33,13 +33,7 @@ class _CadastroImovelState extends State<CadastroImovel> {
               //   ),
               Expanded(
                 child: Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('assets/images/fundo_add_imovel.png'), // Coloque o caminho da sua imagem aqui
-                      fit: BoxFit.cover,
-                    ),
-                    
-                  ),
+                  
                   padding: const EdgeInsets.all(20.0),
                   child: SingleChildScrollView(
                     child: Column(
@@ -56,7 +50,7 @@ class _CadastroImovelState extends State<CadastroImovel> {
         },
       ),
      
-      drawer: isSmallScreen ? CustomMenu(isDarkMode: isDarkMode) : null,
+      drawer: isSmallScreen ? CustomMenu() : null,
     );
   }
 }

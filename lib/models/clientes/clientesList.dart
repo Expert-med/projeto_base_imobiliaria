@@ -58,36 +58,35 @@ class ClientesList with ChangeNotifier {
 
         // Filtrar os clientes que não estão na lista de 'meus_clientes'
         todosClientesSnapshot.docs.forEach(
-          (doc) {
-            final resultado = doc.data();
-            final clienteId = resultado['id'];
+  (doc) {
+    final resultado = doc.data() as Map<String, dynamic>; // Convertendo para Map<String, dynamic>
+    final clienteId = resultado['id'] as String;
 
-            if (!clientesIds.contains(clienteId)) {
-              final imovel = Clientes(
-                email: resultado['email'],
-                id: clienteId,
-                logoUrl: resultado['imageUrl'],
-                name: resultado['name'],
-                tipoUsuario: resultado['tipo_usuario'],
-                contato: resultado['contato'],
-                UID: resultado['uid'],
-                historico: List<String>.from(resultado['historico'] ?? []),
-                historicoBusca:
-                    List<String>.from(resultado['historico_busca'] ?? []),
-                imoveisFavoritos:
-                    List<String>.from(resultado['imoveis_favoritos'] ?? []),
-                preferencias: resultado['preferencias'] ?? [],
-                visitas: resultado['visitas'] ?? [],
-              );
+    if (!clientesIds.contains(clienteId)) {
+      final imovel = Clientes(
+        id: resultado['id'] as String,
+        name: resultado['name'] as String,
+        email: resultado['email'] as String,
+        logoUrl: resultado['logoUrl'] as String,
+        tipoUsuario: resultado['tipo_usuario'] as int,
+        contato: resultado['contato'] ?? {},
+        UID: resultado['uid'] as String,
+        historico: List<String>.from(resultado['historico'] ?? []),
+        historicoBusca: List<String>.from(resultado['historico_busca'] ?? []),
+        imoveisFavoritos: List<String>.from(resultado['imoveis_favoritos'] ?? []),
+        preferencias: List<String>.from(resultado['preferencias'] ?? []),
+        visitas: List<String>.from(resultado['visitas'] ?? []),
+      );
 
-              clientes.add(imovel);
-            }
-          },
-        );
+      clientes.add(imovel);
+    }
+  },
+);
+
 
         return clientes;
       } catch (e) {
-        print('Erro ao buscar os clientes: $e');
+        print('Erro ao buscar os clientes NaoPertencemAoCorretor: $e');
         return []; // Retorna uma lista vazia em caso de erro
       }
     }
@@ -126,35 +125,23 @@ class ClientesList with ChangeNotifier {
   final clienteDoc = await firestore.collection('clientes').doc(clienteId).get();
 
   if (clienteDoc.exists) {
-    dynamic preferenciasData = clienteDoc['preferencias'];
-    List<Map<String, dynamic>> preferencias = [];
+   
 
-    if (preferenciasData is List<dynamic>) {
-      preferencias = preferenciasData
-          .map<Map<String, dynamic>>(
-              (etapa) => etapa as Map<String, dynamic>)
-          .toList();
-    } else if (preferenciasData is Map<String, dynamic>) {
-      // Se `preferenciasData` for um mapa, adiciona-o à lista `preferencias`
-      preferencias.add(preferenciasData);
-    }
+    final cliente = Clientes(
+  id: clienteDoc.id,
+  name: clienteDoc['name'],
+  email: clienteDoc['email'],
+  logoUrl: clienteDoc['logoUrl'],
+  tipoUsuario: clienteDoc['tipo_usuario'],
+  contato: clienteDoc['contato'],
+  UID: clienteDoc['uid'],
+  historico: List<String>.from(clienteDoc['historico'] ?? []),
+  historicoBusca: List<String>.from(clienteDoc['historico_busca'] ?? []),
+  imoveisFavoritos: List<String>.from(clienteDoc['imoveis_favoritos'] ?? []),
+  preferencias: List<String>.from(clienteDoc['preferencias'] ?? []),
+  visitas: List<String>.from(clienteDoc['visitas'] ?? []),
+);
 
-    Clientes cliente = Clientes(
-      id: clienteDoc.id,
-      name: clienteDoc['name'],
-      email: clienteDoc['email'],
-      logoUrl: clienteDoc['imageUrl'],
-      tipoUsuario: clienteDoc['tipo_usuario'],
-      contato: clienteDoc['contato'],
-      UID: clienteDoc['uid'],
-      historico: List<String>.from(clienteDoc['historico'] ?? []),
-      historicoBusca:
-          List<String>.from(clienteDoc['historico_busca'] ?? []),
-      imoveisFavoritos:
-          List<String>.from(clienteDoc['imoveis_favoritos'] ?? []),
-      preferencias: preferencias,
-      visitas:  List<String>.from(clienteDoc['visitas'] ?? []),
-    );
     clientesList.add(cliente);
   } else {
     print('Cliente com ID $clienteId não encontrado na coleção de clientes.');
@@ -202,19 +189,18 @@ class ClientesList with ChangeNotifier {
     }
         final cliente = Clientes(
           id: clienteDoc.id,
-      name: clienteDoc['name'],
-      email: clienteDoc['email'],
-      logoUrl: clienteDoc['imageUrl'],
-      tipoUsuario: clienteDoc['tipo_usuario'],
-      contato: clienteDoc['contato'],
-      UID: clienteDoc['uid'],
-      historico: List<String>.from(clienteDoc['historico'] ?? []),
-      historicoBusca:
-          List<String>.from(clienteDoc['historico_busca'] ?? []),
-      imoveisFavoritos:
-          List<String>.from(clienteDoc['imoveis_favoritos'] ?? []),
-      preferencias: preferencias,
-       visitas:  List<String>.from(clienteDoc['visitas'] ?? []),
+    
+        name: clienteDoc['name'] as String,
+        email: clienteDoc['email'] as String,
+        logoUrl: clienteDoc['logoUrl'] as String,
+        tipoUsuario: clienteDoc['tipo_usuario'] as int,
+        contato: clienteDoc['contato'] ?? {},
+        UID: clienteDoc['uid'] as String,
+        historico: List<String>.from(clienteDoc['historico'] ?? []),
+        historicoBusca: List<String>.from(clienteDoc['historico_busca'] ?? []),
+        imoveisFavoritos: List<String>.from(clienteDoc['imoveis_favoritos'] ?? []),
+        preferencias: List<String>.from(clienteDoc['preferencias'] ?? []),
+        visitas: List<String>.from(clienteDoc['visitas'] ?? []),
         );
         return cliente;
       } else {

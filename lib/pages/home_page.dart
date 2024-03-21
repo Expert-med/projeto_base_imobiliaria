@@ -117,11 +117,12 @@ class _MyHomePageState extends State<MyHomePage> {
           return Row(
             children: [
               if (!isSmallScreen)
-                Container(child: CustomMenu(isDarkMode: isDarkMode)),
+                Container(child: CustomMenu(
+                  
+                )),
               Expanded(
                 child: SingleChildScrollView(
                   child: Container(
-                 
                     padding: const EdgeInsets.all(20.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -133,15 +134,15 @@ class _MyHomePageState extends State<MyHomePage> {
                               style: TextStyle(
                                 fontSize: 30,
                                 fontWeight: FontWeight.bold,
-                               
                               ),
                             ),
                             Icon(
-  Icons.home_outlined,
-  color: themeNotifier.isDarkModeEnabled ? Colors.white : Colors.black,
-  size: 40,
-)
-
+                              Icons.home_outlined,
+                              color: themeNotifier.isDarkModeEnabled
+                                  ? Colors.white
+                                  : Colors.black,
+                              size: 40,
+                            )
                           ],
                         ),
                         Row(
@@ -151,7 +152,6 @@ class _MyHomePageState extends State<MyHomePage> {
                               style: TextStyle(
                                 fontSize: 25,
                                 fontWeight: FontWeight.bold,
-                                
                               ),
                             ),
                             Spacer(),
@@ -171,7 +171,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                   'Descubra sua residência ideal e a acompanhe!',
                                   style: TextStyle(
                                     fontSize: 18,
-                                    
                                   ),
                                 ),
                                 SizedBox(
@@ -213,13 +212,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                       height: 300,
                                       child: Card(
                                         elevation: 4,
-                                        
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(10),
                                         ),
-                                        child: TarefasColumn(
-                                         ),
+                                        child: TarefasColumn(),
                                       ),
                                     ),
                                   ),
@@ -231,7 +228,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                           300, // Altura fixa para a lista de clientes
                                       child: Card(
                                         elevation: 4,
-                                       
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(10),
@@ -249,7 +245,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                       height: 300,
                                       child: Card(
                                         elevation: 4,
-                                        
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(10),
@@ -271,7 +266,7 @@ class _MyHomePageState extends State<MyHomePage> {
           );
         },
       ),
-      drawer: isSmallScreen ? CustomMenu(isDarkMode: isDarkMode) : null,
+      drawer: isSmallScreen ? CustomMenu() : null,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {

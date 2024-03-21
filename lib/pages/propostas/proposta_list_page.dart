@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_imobiliaria/components/custom_menu.dart';
 import 'package:projeto_imobiliaria/components/imovel/imovel_carrousel.dart';
+import 'package:projeto_imobiliaria/pages/propostas/proposta_add_page.dart';
 import 'package:projeto_imobiliaria/util/app_bar_model.dart';
 import 'package:provider/provider.dart';
 import '../../components/imovel/imovel_grid.dart';
 import '../../components/imovel/imovel_list_view.dart';
 import '../../components/propostas/propostas_list_view.dart';
-
+import '../../theme/appthemestate.dart';
 
 class PropostaListPage extends StatefulWidget {
-  bool isDarkMode;
-
-  PropostaListPage(this.isDarkMode, {Key? key}) : super(key: key);
+  PropostaListPage({Key? key}) : super(key: key);
 
   @override
   State<PropostaListPage> createState() => _PropostaListPageState();
@@ -24,11 +23,11 @@ class _PropostaListPageState extends State<PropostaListPage> {
   @override
   Widget build(BuildContext context) {
     bool isSmallScreen = MediaQuery.of(context).size.width < 900;
-
+    final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
     return Scaffold(
       appBar: isSmallScreen
           ? CustomAppBar(
-              isDarkMode: widget.isDarkMode,
+              isDarkMode: false,
               subtitle: '',
               title: 'Propostas',
             )
@@ -36,24 +35,33 @@ class _PropostaListPageState extends State<PropostaListPage> {
       body: LayoutBuilder(builder: (context, constraints) {
         return Row(
           children: [
-            if (!isSmallScreen) CustomMenu(isDarkMode: widget.isDarkMode),
+            if (!isSmallScreen) CustomMenu(),
             Expanded(
-              child: PropostaListView(
-                widget.isDarkMode,
-              ),
+              child: PropostaListView(),
             ),
           ],
         );
       }),
-      drawer: isSmallScreen ? CustomMenu(isDarkMode: false) : null,
+      drawer: isSmallScreen ? CustomMenu() : null,
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           FloatingActionButton(
             onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                builder: (BuildContext context) {
+                  return CadastroProposta();
+                },
+              );
+            },
+            child: Icon(Icons.add),
+          ),
+          FloatingActionButton(
+            onPressed: () {
               setState(() {
-                widget.isDarkMode = !widget.isDarkMode;
+                themeNotifier.enableDarkMode(!themeNotifier.isDarkModeEnabled);
               });
             },
             child: Icon(Icons.lightbulb),

@@ -8,9 +8,7 @@ import '../../models/tarefas/tarefas.dart';
 import '../../models/tarefas/tarefasList.dart';
 
 class TarefasListView extends StatefulWidget {
-  final bool isDarkMode;
-
-  const TarefasListView(this.isDarkMode, {Key? key}) : super(key: key);
+  const TarefasListView({Key? key}) : super(key: key);
 
   @override
   _TarefasListViewState createState() => _TarefasListViewState();
@@ -27,8 +25,8 @@ class _TarefasListViewState extends State<TarefasListView> {
         Provider.of<TarefasLista>(context).items;
     final clientesList = Provider.of<TarefasLista>(context);
 
-    return Container(
-      color: widget.isDarkMode ? Colors.black : Colors.white,
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
       child: Column(
         children: [
           Expanded(
@@ -36,72 +34,95 @@ class _TarefasListViewState extends State<TarefasListView> {
               children: [
                 Expanded(
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text('Minhas tarefas',
-                            style: TextStyle(
-                                color: widget.isDarkMode
-                                    ? Colors.white
-                                    : Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20)),
+                      Container(
+                        width:
+                            double.infinity, // Define a largura como infinita
+                        child: Card(
+                          elevation: 4,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Padding(
+                             padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 5, right: 5),
+                              child: Text(
+                                'Minhas tarefas',
+                                style: TextStyle(
+                                 
+                                  fontSize: 30,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                       Expanded(
-                        child: FutureBuilder<List<TarefasCorretor>>(
-                          future: clientesList.buscarMinhasTarefas(),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            } else if (snapshot.hasError) {
-                              return Center(
-                                child:
-                                    Text('Erro ao carregar os seus clientes'),
-                              );
-                            } else {
-                              _tarefas = snapshot.data ?? [];
-                              if (_tarefas.isEmpty) {
+                        child: Card(
+                          elevation: 4,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: FutureBuilder<List<TarefasCorretor>>(
+                            future: clientesList.buscarMinhasTarefas(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
                                 return Center(
-                                  child: Text('Nenhum cliente adicionado'),
+                                  child: CircularProgressIndicator(),
+                                );
+                              } else if (snapshot.hasError) {
+                                return Center(
+                                  child:
+                                      Text('Erro ao carregar os seus clientes'),
                                 );
                               } else {
-                                // Filtrar os clientes com base na busca
-                                List<TarefasCorretor> clientesFiltrados =
-                                    _tarefas.where((cliente) {
-                                  String searchTerm =
-                                      _searchController.text.toLowerCase();
-                                  return cliente.titulo
-                                      .toLowerCase()
-                                      .contains(searchTerm);
-                                }).toList();
+                                _tarefas = snapshot.data ?? [];
+                                if (_tarefas.isEmpty) {
+                                  return Center(
+                                    child: Text('Nenhum cliente adicionado'),
+                                  );
+                                } else {
+                                  // Filtrar os clientes com base na busca
+                                  List<TarefasCorretor> clientesFiltrados =
+                                      _tarefas.where((cliente) {
+                                    String searchTerm =
+                                        _searchController.text.toLowerCase();
+                                    return cliente.titulo
+                                        .toLowerCase()
+                                        .contains(searchTerm);
+                                  }).toList();
 
-                                return ListView.builder(
-                                  padding: const EdgeInsets.all(10),
-                                  itemCount: clientesFiltrados.length,
-                                  itemBuilder: (ctx, i) {
-                                    final cliente = clientesFiltrados[i];
-                                    return TarefaItem(
-                                     
-                                      tarefa: cliente,
-                                      isChecked: cliente
-                                          .feita, // Passa o estado da tarefa para o isChecked
-                                      onTarefaStateChanged: (newValue) {
-                                        setState(() {
-                                          cliente.feita =
-                                              newValue; // Atualiza o estado da tarefa
-                                        });
-                                        TarefasLista().atualizarTarefaFirestore(
-                                            cliente); // Atualiza a tarefa no Firestore
-                                      },
-                                    );
-                                  },
-                                );
+                                  return ListView.separated(
+                                    padding: const EdgeInsets.all(10),
+                                    itemCount: clientesFiltrados.length,
+                                    separatorBuilder:
+                                        (BuildContext context, int index) {
+                                      return Divider(); // Adiciona um Divider entre cada item
+                                    },
+                                    itemBuilder: (ctx, i) {
+                                      final cliente = clientesFiltrados[i];
+                                      return TarefaItem(
+                                        tarefa: cliente,
+                                        isChecked: cliente.feita,
+                                        onTarefaStateChanged: (newValue) {
+                                          setState(() {
+                                            cliente.feita = newValue;
+                                          });
+                                          TarefasLista()
+                                              .atualizarTarefaFirestore(
+                                                  cliente);
+                                        },
+                                      );
+                                    },
+                                  );
+                                }
                               }
-                            }
-                          },
+                            },
+                          ),
                         ),
                       ),
                     ],

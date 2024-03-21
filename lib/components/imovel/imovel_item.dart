@@ -4,15 +4,16 @@ import 'package:projeto_imobiliaria/models/imoveis/newImovel.dart';
 import 'package:provider/provider.dart';
 
 import '../../pages/imobiliaria/imovel_info_page.dart';
+import '../../theme/appthemestate.dart';
 
 class ImovelItem extends StatefulWidget {
-  final bool isDarkMode;
+  
   final int index;
   final int count;
   final int tipo_pagina;
   final Function(String) onFavoriteClicked;
 
-  const ImovelItem(this.isDarkMode, this.index, this.count, this.tipo_pagina,
+  const ImovelItem( this.index, this.count, this.tipo_pagina,
       this.onFavoriteClicked,
       {Key? key})
       : super(key: key);
@@ -56,8 +57,9 @@ class _ImovelItemState extends State<ImovelItem> {
   }
 
   Widget _buildFooter(NewImovel product) {
+     final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
     Color containerColor =
-        widget.isDarkMode ? Colors.black : Color.fromARGB(255, 238, 238, 238);
+        themeNotifier.isDarkModeEnabled ? Colors.black : Color.fromARGB(255, 238, 238, 238);
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -77,7 +79,7 @@ class _ImovelItemState extends State<ImovelItem> {
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                         color:
-                            widget.isDarkMode ? Colors.white : Colors.black54,
+                             themeNotifier.isDarkModeEnabled ? Colors.white : Colors.black54,
                       ),
                     ),
                     IconButton(
@@ -150,13 +152,13 @@ class _ImovelItemState extends State<ImovelItem> {
                         Icon(
                           Icons.garage,
                           color:
-                              widget.isDarkMode ? Colors.white : Colors.black54,
+                               themeNotifier.isDarkModeEnabled ? Colors.white : Colors.black54,
                         ),
                         SizedBox(width: 3), // Espaço entre o ícone e o texto
                         SelectableText(
                           '${product.detalhes['vagas_garagem']}',
                           style: TextStyle(
-                            color: widget.isDarkMode
+                            color:  themeNotifier.isDarkModeEnabled
                                 ? Colors.white
                                 : Colors.black54,
                           ),
@@ -168,14 +170,14 @@ class _ImovelItemState extends State<ImovelItem> {
                         Icon(
                           Icons.area_chart,
                           color:
-                              widget.isDarkMode ? Colors.white : Colors.black54,
+                               themeNotifier.isDarkModeEnabled ? Colors.white : Colors.black54,
                         ),
                         SizedBox(
                             width: 3), // Espaço entre o texto "m²" e o valor
                         SelectableText(
                           '${product.detalhes['area_total']}',
                           style: TextStyle(
-                            color: widget.isDarkMode
+                            color:  themeNotifier.isDarkModeEnabled
                                 ? Colors.white
                                 : Colors.black54,
                           ),
@@ -194,7 +196,7 @@ class _ImovelItemState extends State<ImovelItem> {
                         children: [
                           Icon(
                             Icons.bed,
-                            color: widget.isDarkMode
+                            color:  themeNotifier.isDarkModeEnabled
                                 ? Colors.white
                                 : Colors.black54,
                           ),
@@ -205,7 +207,7 @@ class _ImovelItemState extends State<ImovelItem> {
                               '${product.detalhes['total_dormitorios'] ?? "N/A"}',
                               style: TextStyle(
                                 fontSize: 15,
-                                color: widget.isDarkMode
+                                color:  themeNotifier.isDarkModeEnabled
                                     ? Colors.white
                                     : Colors.black54,
                               ),
@@ -223,14 +225,14 @@ class _ImovelItemState extends State<ImovelItem> {
                       Icon(
                         Icons.place,
                         color:
-                            widget.isDarkMode ? Colors.white : Colors.black54,
+                             themeNotifier.isDarkModeEnabled ? Colors.white : Colors.black54,
                       ),
                       SizedBox(width: 4),
                       Flexible(
                         child: SelectableText(
                           _buildFooterLocation(product),
                           style: TextStyle(
-                            color: widget.isDarkMode
+                            color:  themeNotifier.isDarkModeEnabled
                                 ? Colors.white
                                 : Colors.black54,
                           ),

@@ -7,10 +7,10 @@ import '../../models/clientes/clientesList.dart';
 import '../../pages/agendamentos/info_agendamento.dart';
 
 class AgendamentoItem extends StatelessWidget {
-  final bool isDarkMode;
+  
   final Agendamento agendamento;
 
-  const AgendamentoItem(this.isDarkMode, this.agendamento, {Key? key})
+  const AgendamentoItem( this.agendamento, {Key? key})
       : super(key: key);
 
   @override
@@ -40,7 +40,7 @@ class AgendamentoItem extends StatelessWidget {
                         child: Text(
                           'Visita n° ${agendamento.id}',
                           style: TextStyle(
-                            color: !isDarkMode ? Colors.black : Colors.white,
+                            
                             fontSize: isSmallScreen ? 15 : 18,
                             fontWeight: FontWeight.bold,
                           ),
@@ -54,7 +54,7 @@ class AgendamentoItem extends StatelessWidget {
                           'Cliente: ${cliente!.name}',
                           style: TextStyle(
                             fontSize: 14,
-                            color: !isDarkMode ? Colors.black : Colors.white,
+                            
                           ),
                         ),
                       ),
@@ -70,7 +70,7 @@ class AgendamentoItem extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) => AgendamentoInfoComponent(
-                          isDarkMode: isDarkMode,
+                          
                           agendamento: agendamento,
                           cliente: cliente,
                         ),
@@ -82,7 +82,7 @@ class AgendamentoItem extends StatelessWidget {
                     decoration: BoxDecoration(
                       shape: BoxShape.rectangle,
                       borderRadius: BorderRadius.circular(10),
-                      color: !isDarkMode ? Colors.black : Colors.white,
+                      
                     ),
                     padding: EdgeInsets.all(5),
                     child: Icon(
