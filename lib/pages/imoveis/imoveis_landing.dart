@@ -6,7 +6,9 @@ import 'package:projeto_imobiliaria/pages/imoveis/imoveis_Favoritos.dart';
 import 'package:projeto_imobiliaria/pages/map/map_flutter.dart';
 import 'package:projeto_imobiliaria/util/app_bar_model.dart';
 import 'package:provider/provider.dart';
+
 import '../../components/imovel/imovel_grid.dart';
+import '../../components/imovel/imovel_grid_landing.dart';
 import '../../components/imovel/imovel_list_view.dart';
 import '../../theme/appthemestate.dart';
 import 'cad_imovel_page.dart';
@@ -45,7 +47,7 @@ class _ImovelLandingState extends State<ImovelLanding> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [ 
                   Expanded(
-                    child: ImovelGrid(false)
+                    child: GridLanding(false)
                   ),
                 ],
               ),

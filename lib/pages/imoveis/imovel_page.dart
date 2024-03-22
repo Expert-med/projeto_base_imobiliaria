@@ -19,7 +19,6 @@ class ImovelPage extends StatefulWidget {
 }
 
 class _ImovelPageState extends State<ImovelPage> {
-  late final NewImovelList _imovelList;
   bool _showFavoriteOnly = false;
   bool _showGrid = true;
   bool _showList = false;
@@ -32,8 +31,7 @@ class _ImovelPageState extends State<ImovelPage> {
   @override
   void initState() {
     super.initState();
-    _imovelList = Provider.of<NewImovelList>(context, listen: false);
-    _imovelList.carregarImoveis('');
+
   }
 
 
