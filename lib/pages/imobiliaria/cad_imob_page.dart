@@ -7,6 +7,7 @@ import '../../components/cad_imovel_form.dart';
 import '../../components/custom_menu.dart';
 import '../../components/imobiliaria/cad_imobiliaria_form.dart';
 import '../../main.dart';
+import '../home_page.dart';
 
 class CadastroImobiliaria extends StatefulWidget {
   const CadastroImobiliaria({Key? key});
@@ -35,7 +36,7 @@ Future<void> _handleSubmit(ImobiliariaFormData formData) async {
           context,
           MaterialPageRoute(
             builder: (context) =>
-                HomePage(), 
+                MyHomePage(), 
           ),
         );
       
@@ -72,7 +73,7 @@ Future<void> _handleSubmit(ImobiliariaFormData formData) async {
               if (!isSmallScreen)
                 SizedBox(
                   width: 250, // Largura mínima do CustomMenu
-                  child: CustomMenu(isDarkMode: isDarkMode),
+                  child: CustomMenu(),
                 ),
               Expanded(
                 child: Container(
@@ -100,7 +101,7 @@ Future<void> _handleSubmit(ImobiliariaFormData formData) async {
         },
         child: Icon(Icons.lightbulb),
       ),
-      drawer: isSmallScreen ? CustomMenu(isDarkMode: isDarkMode) : null,
+      drawer: isSmallScreen ? CustomMenu() : null,
     );
   }
 }

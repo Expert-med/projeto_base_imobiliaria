@@ -6,11 +6,13 @@ import '../../models/clientes/Clientes.dart';
 class UserPreferences extends StatefulWidget {
   final List<String> preferences;
   final Function(String) onAddPreference;
-    final Clientes cliente;
-    final bool isDarkMode;
+  final Clientes cliente;
 
   const UserPreferences(
-      {required this.preferences, required this.cliente,required this.onAddPreference, required this.isDarkMode,Key? key})
+      {required this.preferences,
+      required this.cliente,
+      required this.onAddPreference,
+      Key? key})
       : super(key: key);
 
   @override
@@ -18,7 +20,6 @@ class UserPreferences extends StatefulWidget {
 }
 
 class _UserPreferencesState extends State<UserPreferences> {
-  
   final TextEditingController _controller = TextEditingController();
   List<String> _availablePreferences = [];
   @override
@@ -27,76 +28,100 @@ class _UserPreferencesState extends State<UserPreferences> {
     _fetchPreferences();
   }
 
-void _removePreference(String preference) async {
-  setState(() {
-     widget.preferences.remove(preference);
-
-  });
-
-  try {
-    await FirebaseFirestore.instance
-        .collection('clientes')
-        .doc(widget.cliente.id)
-        .update({
-      'preferencias': FieldValue.arrayRemove([preference]),
+  void _removePreference(String preference) async {
+    setState(() {
+      widget.preferences.remove(preference);
     });
-  } catch (error) {
-    print('Erro ao remover preferência: $error');
+
+    try {
+      await FirebaseFirestore.instance
+          .collection('clientes')
+          .doc(widget.cliente.id)
+          .update({
+        'preferencias': FieldValue.arrayRemove([preference]),
+      });
+    } catch (error) {
+      print('Erro ao remover preferência: $error');
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
     return Container(
-  decoration: BoxDecoration(
-    color: widget.isDarkMode ? Colors.black87 : Colors.grey[200], // Cor de fundo da coluna
-    borderRadius: BorderRadius.circular(10), // Borda arredondada da coluna
-  ),
-  child: Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: Text(
-          'Preferências de Imóvel do Usuário',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: !widget.isDarkMode ? Colors.black :Colors.white),
-        ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10), // Borda arredondada da coluna
       ),
-      SizedBox(height: 8),
-      Container(
-        height: widget.preferences.length * 40,
-        child: ListView.builder(
-          itemCount: widget.preferences.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              title: Text('• ${widget.preferences[index]}',style: TextStyle( color: !widget.isDarkMode ? Colors.black :Colors.white)),
-              trailing: IconButton(
-                icon: Icon(Icons.delete, color: widget.isDarkMode ? Colors.white : Colors.black,),
-                onPressed: () => _removePreference(widget.preferences[index]),
+      child: Card(
+        elevation: 7,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
               ),
-            );
-          },
-        ),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          children: [
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () {
-                  _showAddPreferenceModal(context);
-                },
-                child: Text('Adicionar preferência'),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'Preferências de Imóvel do Usuário',
+                  style: TextStyle(
+                    fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
-            ),
-          ],
+              SizedBox(height: 8),
+              Container(
+                height: widget.preferences.length * 40,
+                child: ListView.builder(
+                  itemCount: widget.preferences.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text('• ${widget.preferences[index]}',
+                          style: TextStyle()),
+                      trailing: IconButton(
+                        icon: Icon(
+                          Icons.delete,
+                        ),
+                        onPressed: () =>
+                            _removePreference(widget.preferences[index]),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          _showAddPreferenceModal(context);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('Adicionar preferência'),
+                        ),
+                         style: ElevatedButton.styleFrom(
+                shadowColor: Colors.black,
+                elevation: 10.0,
+                
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
-    ],
-  ),
-);
-
+    );
   }
 
   void _showAddPreferenceModal(BuildContext context) {
@@ -128,7 +153,7 @@ void _removePreference(String preference) async {
                         return ListTile(
                           title: Text(_availablePreferences[index]),
                           onTap: () {
-                            widget.onAddPreference(_controller.text);
+                            widget.onAddPreference(_availablePreferences[index]);
                             Navigator.pop(context);
                           },
                         );

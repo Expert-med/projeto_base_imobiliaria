@@ -38,7 +38,7 @@ class _VirtualTourIFrameState extends State<VirtualTourIFrame> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(subtitle: '', title: 'VirtualTour', isDarkMode: false),
-      drawer: CustomMenu(isDarkMode: false),
+      drawer: CustomMenu(),
       body: SingleChildScrollView(
         child: Center(
           child: Column(

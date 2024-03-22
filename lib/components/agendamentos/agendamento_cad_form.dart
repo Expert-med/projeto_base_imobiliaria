@@ -5,16 +5,17 @@ import '../../core/data/user_repository.dart';
 import '../../core/models/User_firebase_service.dart';
 import '../../models/agendamento/agendamento_form_data.dart';
 import '../../models/clientes/clientesList.dart';
+import '../../theme/appthemestate.dart';
 import '../clientes/clientes_modal.dart';
 import '../imovel/imoveis_modal.dart';
 
 class CadAgendamentoForm extends StatefulWidget {
-  final bool isDarkMode;
+  
   final void Function(AgendamentoFormData) onSubmit;
 
   const CadAgendamentoForm({
     Key? key,
-    required this.isDarkMode,
+    
     required this.onSubmit,
   }) : super(key: key);
 
@@ -60,12 +61,10 @@ class _CadAgendamentoFormState extends State<CadAgendamentoForm> {
   Widget build(BuildContext context) {
     final clientesList = Provider.of<ClientesList>(context);
     final imoveisList = Provider.of<NewImovelList>(context);
-
+final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
     return SingleChildScrollView(
       child: Container(
-        decoration: BoxDecoration(
-          color: !widget.isDarkMode ? Colors.white : Colors.black38,
-        ),
+        
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Form(
@@ -87,7 +86,8 @@ class _CadAgendamentoFormState extends State<CadAgendamentoForm> {
                 ),
                 TextFormField(
                   style: TextStyle(
-                    color: !widget.isDarkMode ? Colors.black : Colors.white,
+                    color: themeNotifier.isDarkModeEnabled
+ ? Colors.black : Colors.white,
                   ),
                   decoration: InputDecoration(
                     filled: true,
@@ -143,7 +143,8 @@ class _CadAgendamentoFormState extends State<CadAgendamentoForm> {
                 TextFormField(
                   controller: nomeCliente,
                   style: TextStyle(
-                      color: !widget.isDarkMode ? Colors.black : Colors.white),
+                      color: themeNotifier.isDarkModeEnabled
+ ? Colors.black : Colors.white),
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.black12,
@@ -186,7 +187,8 @@ class _CadAgendamentoFormState extends State<CadAgendamentoForm> {
                 TextFormField(
                   controller: nomeCorretor,
                   style: TextStyle(
-                    color: !widget.isDarkMode ? Colors.black : Colors.white,
+                    color: themeNotifier.isDarkModeEnabled
+ ? Colors.black : Colors.white,
                   ),
                   enabled: false, // Isso tornará o campo somente leitura
                   decoration: InputDecoration(
@@ -212,7 +214,8 @@ class _CadAgendamentoFormState extends State<CadAgendamentoForm> {
                 TextFormField(
                   controller: obsControlller,
                   style: TextStyle(
-                    color: !widget.isDarkMode ? Colors.black : Colors.white,
+                    color: themeNotifier.isDarkModeEnabled
+ ? Colors.black : Colors.white,
                   ),
                   decoration: InputDecoration(
                     filled: true,
@@ -243,7 +246,8 @@ class _CadAgendamentoFormState extends State<CadAgendamentoForm> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                   ),
-                  dropdownColor: widget.isDarkMode
+                  dropdownColor: themeNotifier.isDarkModeEnabled
+
                       ? Colors.black
                       : Colors.white, // Set dropdown background color to white
                   value: selectedStatus,
@@ -254,7 +258,8 @@ class _CadAgendamentoFormState extends State<CadAgendamentoForm> {
                         status,
                         style: TextStyle(
                           color:
-                              widget.isDarkMode ? Colors.white : Colors.black,
+                              themeNotifier.isDarkModeEnabled
+ ? Colors.white : Colors.black,
                         ),
                       ),
                     );

@@ -62,7 +62,7 @@ class CorretorItem extends StatelessWidget {
           Spacer(),
           InkWell(
             onTap: () {
-              _showOptionsDialog(context);
+              Get.toNamed('/${corretor.name}');
             },
             child: Container(
               decoration: BoxDecoration(
@@ -81,7 +81,6 @@ class CorretorItem extends StatelessWidget {
           InkWell(
             onTap: () {
               Get.toNamed('/corretor/${corretor.id}');
-
             },
             child: Container(
               decoration: BoxDecoration(

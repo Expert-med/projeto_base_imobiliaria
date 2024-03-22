@@ -8,7 +8,6 @@ import 'package:projeto_imobiliaria/pages/user_config_page.dart';
 import 'package:projeto_imobiliaria/util/app_bar_model.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:provider/provider.dart';
-
 import '../../components/agendamentos/agendamento_cad_form.dart';
 import '../../components/agendamentos/agendamento_item.dart';
 import '../../components/custom_menu.dart';
@@ -16,11 +15,10 @@ import '../../core/data/user_repository.dart';
 import '../../core/models/UserProvider.dart';
 import '../../core/models/User_firebase_service.dart';
 import '../../models/agendamento/agendamento_form_data.dart';
+import '../../theme/appthemestate.dart';
 
 class GeralAgendamento extends StatefulWidget {
-  final bool isDarkMode;
-
-  GeralAgendamento({required this.isDarkMode});
+  GeralAgendamento();
 
   @override
   State<GeralAgendamento> createState() => _GeralAgendamentoState();
@@ -67,7 +65,7 @@ class _GeralAgendamentoState extends State<GeralAgendamento> {
   Widget build(BuildContext context) {
     bool isSmallScreen = MediaQuery.of(context).size.width < 900;
     final agendamentoList = Provider.of<AgendamentoList>(context);
-
+    final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
     return Scaffold(
       appBar: isSmallScreen
           ? CustomAppBar(
@@ -80,17 +78,18 @@ class _GeralAgendamentoState extends State<GeralAgendamento> {
         builder: (context, constraints) {
           return Row(
             children: [
-              if (!isSmallScreen)
-                Container(child: CustomMenu(isDarkMode: isDarkMode)),
+              if (!isSmallScreen) Container(child: CustomMenu()),
               Expanded(
                 child: Container(
-                  color: isDarkMode ? Colors.black : Colors.white,
                   padding: const EdgeInsets.all(20.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                        color: Colors.grey,
+                      Card(
+                        elevation: 4,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 10, vertical: 10),
@@ -100,17 +99,13 @@ class _GeralAgendamentoState extends State<GeralAgendamento> {
                               children: [
                                 Text(
                                   'Nova visita',
-                                  style: TextStyle(
-                                      color: widget.isDarkMode
-                                          ? Colors.white
-                                          : Colors.black,
-                                      fontSize: 30),
+                                  style: TextStyle(fontSize: 30),
                                 ),
                                 Spacer(),
                                 InkWell(
                                   child: Icon(
                                     Icons.add,
-                                    color: widget.isDarkMode
+                                    color: themeNotifier.isDarkModeEnabled
                                         ? Colors.white
                                         : Colors.black,
                                   ),
@@ -119,7 +114,6 @@ class _GeralAgendamentoState extends State<GeralAgendamento> {
                                       context: context,
                                       builder: (BuildContext context) {
                                         return CadAgendamentoForm(
-                                          isDarkMode: widget.isDarkMode,
                                           onSubmit: _handleSubmit,
                                         );
                                       },
@@ -136,9 +130,11 @@ class _GeralAgendamentoState extends State<GeralAgendamento> {
                         child: Row(
                           children: [
                             Expanded(
-                              child: Container(
-                                color:
-                                    Colors.grey, // Set background color to grey
+                              child: Card(
+                                elevation: 4,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
                                 child: Column(
                                   crossAxisAlignment:
                                       CrossAxisAlignment.stretch,
@@ -150,7 +146,6 @@ class _GeralAgendamentoState extends State<GeralAgendamento> {
                                         style: TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold,
-                                          color: Colors.white,
                                         ),
                                       ),
                                     ),
@@ -169,14 +164,14 @@ class _GeralAgendamentoState extends State<GeralAgendamento> {
                                           } else if (snapshot.hasError) {
                                             return Center(
                                               child: Text(
-                                                  'Erro ao carregar os corretores'),
+                                                  'Erro ao carregar as visitas'),
                                             );
                                           } else {
                                             _agendamentos = snapshot.data ?? [];
                                             if (_agendamentos.isEmpty) {
                                               return Center(
                                                 child: Text(
-                                                    'Nenhum corretor adicionado'),
+                                                    'Nenhuma visita adicionada'),
                                               );
                                             } else {
                                               List<Agendamento>
@@ -200,7 +195,7 @@ class _GeralAgendamentoState extends State<GeralAgendamento> {
                                                   final corretor =
                                                       corretoresFiltrados[i];
                                                   return AgendamentoItem(
-                                                      isDarkMode, corretor);
+                                                      corretor);
                                                 },
                                               );
                                             }
@@ -212,13 +207,13 @@ class _GeralAgendamentoState extends State<GeralAgendamento> {
                                 ),
                               ),
                             ),
-                            SizedBox(width: 10),
-                            Expanded(
-                              child: Container(
-                                color: Colors.grey,
-                                child: Center(child: Text('Agenda')),
-                              ),
-                            ),
+                            // SizedBox(width: 10),
+                            // Expanded(
+                            //   child: Container(
+                            //     color: Colors.grey,
+                            //     child: Center(child: Text('Agenda')),
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),
@@ -230,11 +225,11 @@ class _GeralAgendamentoState extends State<GeralAgendamento> {
           );
         },
       ),
-      drawer: isSmallScreen ? CustomMenu(isDarkMode: isDarkMode) : null,
+      drawer: isSmallScreen ? CustomMenu() : null,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
-            isDarkMode = !isDarkMode;
+            themeNotifier.enableDarkMode(!themeNotifier.isDarkModeEnabled);
           });
         },
         child: Icon(Icons.lightbulb),

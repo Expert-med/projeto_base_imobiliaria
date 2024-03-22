@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+
+import '../../theme/appthemestate.dart';
 
 class ImovelAgendamentoCard extends StatefulWidget {
-  final bool isDarkMode;
+  
   final Map<String, dynamic> imovel;
 
   final void Function(Map<String, dynamic>) onSubmitEtapa;
 
   const ImovelAgendamentoCard({
     Key? key,
-    required this.isDarkMode,
+    
     required this.imovel,
     required this.onSubmitEtapa,
   }) : super(key: key);
@@ -42,6 +45,7 @@ class _ImovelAgendamentoCardState extends State<ImovelAgendamentoCard> {
 
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
     double initialRating = 0.0;
     try {
       initialRating = double.parse(widget.imovel['satisfacao']);
@@ -66,7 +70,7 @@ class _ImovelAgendamentoCardState extends State<ImovelAgendamentoCard> {
                 Text(
                   '${widget.imovel['id_imovel']}',
                   style: TextStyle(
-                    color: widget.isDarkMode ? Colors.white : Colors.black,
+                    
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
                   ),
@@ -81,7 +85,7 @@ class _ImovelAgendamentoCardState extends State<ImovelAgendamentoCard> {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          backgroundColor: widget.isDarkMode
+                          backgroundColor: themeNotifier.isDarkModeEnabled
                               ? Colors.black
                               : Color.fromARGB(255, 209, 209, 209),
                           title: Text('Editar ${widget.imovel['id_imovel']}'),
@@ -233,16 +237,14 @@ class _ImovelAgendamentoCardState extends State<ImovelAgendamentoCard> {
                       Text(
                         'Status da visita: ',
                         style: TextStyle(
-                          color:
-                              widget.isDarkMode ? Colors.white : Colors.black87,
+                          
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
                         '${widget.imovel['status']}',
                         style: TextStyle(
-                          color:
-                              widget.isDarkMode ? Colors.white : Colors.black,
+                          
                         ),
                       ),
                     ],
@@ -252,16 +254,14 @@ class _ImovelAgendamentoCardState extends State<ImovelAgendamentoCard> {
                       Text(
                         'Feedback do Cliente: ',
                         style: TextStyle(
-                          color:
-                              widget.isDarkMode ? Colors.white : Colors.black87,
+                          
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
                         '${widget.imovel['feedback']}',
                         style: TextStyle(
-                          color:
-                              widget.isDarkMode ? Colors.white : Colors.black,
+                          
                         ),
                       ),
                     ],
@@ -271,8 +271,7 @@ class _ImovelAgendamentoCardState extends State<ImovelAgendamentoCard> {
                       Text(
                         'Satisfação do Cliente: ',
                         style: TextStyle(
-                          color:
-                              widget.isDarkMode ? Colors.white : Colors.black87,
+                          
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -326,16 +325,14 @@ class _ImovelAgendamentoCardState extends State<ImovelAgendamentoCard> {
                       Text(
                         'Comentários do Cliente: ',
                         style: TextStyle(
-                          color:
-                              widget.isDarkMode ? Colors.white : Colors.black87,
+                          
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
                         '${widget.imovel['comentarios']}',
                         style: TextStyle(
-                          color:
-                              widget.isDarkMode ? Colors.white : Colors.black,
+                          
                         ),
                       ),
                     ],

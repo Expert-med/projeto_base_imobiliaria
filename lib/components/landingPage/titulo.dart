@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_imobiliaria/components/imovel/imovel_grid.dart';
 
 class Titulo extends StatelessWidget {
   final Map<String, dynamic> variaveis;
@@ -60,6 +61,7 @@ class Titulo extends StatelessWidget {
                           child: Text(variaveis['titulo']!['texto_botao_1']!)),
                         SizedBox(width: 10),
                         Flexible(child: Text(variaveis['titulo']!['texto_1']!))
+                        
                     ]),
                   )
                   

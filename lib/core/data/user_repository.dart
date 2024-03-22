@@ -72,9 +72,7 @@ class UserRepository {
               List<String>.from(clienteSnapshot['historico_busca'] ?? []),
           imoveisFavoritos:
               List<String>.from(clienteSnapshot['imoveis_favoritos'] ?? []),
-          preferencias: clienteSnapshot['preferencias'] is List
-              ? List<Map<String, dynamic>>.from(clienteSnapshot['preferencias'])
-              : [clienteSnapshot['preferencias']],
+            preferencias: List<String>.from(clienteSnapshot['preferencias'] ?? []),
           visitas: List<String>.from(clienteSnapshot['visitas'] ?? []),
         );
       }

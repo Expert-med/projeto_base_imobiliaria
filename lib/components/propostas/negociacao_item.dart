@@ -42,73 +42,78 @@ class _NegociacaoItemState extends State<NegociacaoItem> {
           );
         } else {
           Clientes? cliente = snapshot.data;
-          
-          return Container(
-            margin: EdgeInsets.only(bottom: 10),
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            color: containerColor,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+
+          return Card(
+            
+             margin: EdgeInsets.only(bottom: 10),
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Padding(
+               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Negociação n° ${negociacao.id}',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: widget.isDarkMode
+                                ? Colors.white
+                                : Colors.black54,
+                          ),
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          'Cliente: ${cliente!.name}',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: widget.isDarkMode
+                                ? Colors.white
+                                : Colors.black54,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Column(
                     children: [
-                      Text(
-                        'Negociação n° ${negociacao.id}',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color:
-                              widget.isDarkMode ? Colors.white : Colors.black54,
-                        ),
+                      SizedBox(
+                        height: 3,
                       ),
-                      SizedBox(height: 4),
-                      Text(
-                        'Cliente: ${cliente!.name}',
-                        style: TextStyle(
-                                                 fontSize: 16,
-                          color:
-                              widget.isDarkMode ? Colors.white : Colors.black54,
-                        ),
+                      IconButton(
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => NegociacaoInfoComponent(
+                                isDarkMode: widget.isDarkMode,
+                                negociacao: negociacao,
+                                cliente: cliente,
+                              ),
+                              fullscreenDialog: true,
+                            ),
+                          );
+                        },
+                        icon: Icon(Icons.info),
+                        color: Theme.of(context).colorScheme.secondary,
                       ),
-                     
-                   
                     ],
                   ),
-                ),
-                Column(
-                  children: [
-                    SizedBox(
-                      height: 3,
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => NegociacaoInfoComponent(
-                              isDarkMode: widget.isDarkMode,
-                              negociacao: negociacao,
-                              cliente: cliente,
-                            ),
-                            fullscreenDialog: true,
-                          ),
-                        );
-                      },
-                      icon: Icon(Icons.info),
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                  ],
-                ),
-              ],
+                ],
+              ),
             ),
           );
         }
       },
     );
   }
-
 
   Future<Clientes?> buscaCliente(String idcliente) async {
     Clientes? cliente = await ClientesList().buscarClientePorId(idcliente);

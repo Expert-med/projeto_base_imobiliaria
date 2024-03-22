@@ -42,7 +42,7 @@ class _NegociacaoInfoComponentState extends State<NegociacaoInfoComponent> {
       body: LayoutBuilder(builder: (context, constraints) {
         return Row(
           children: [
-            if (!isSmallScreen) CustomMenu(isDarkMode: widget.isDarkMode),
+            if (!isSmallScreen) CustomMenu(),
             Expanded(
                 child: Container(
               color: widget.isDarkMode ? Colors.black : Colors.white,
@@ -72,7 +72,7 @@ class _NegociacaoInfoComponentState extends State<NegociacaoInfoComponent> {
                   ),
                   PessoaInfoBasica(
                     cliente: widget.cliente,
-                    isDarkMode: widget.isDarkMode,
+                   
                   ),
                   Text(
                     'Imóvel:',
@@ -215,7 +215,7 @@ class _NegociacaoInfoComponentState extends State<NegociacaoInfoComponent> {
           ],
         );
       }),
-      drawer: isSmallScreen ? CustomMenu(isDarkMode: false) : null,
+      drawer: isSmallScreen ? CustomMenu() : null,
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.end,

@@ -21,7 +21,7 @@ bool isSmallScreen = MediaQuery.of(context).size.width < 900;
       body: LayoutBuilder(builder: (context, constraints) {
         return Row(
           children: [
-            if (!isSmallScreen) CustomMenu(isDarkMode: isDarkMode),
+            if (!isSmallScreen) CustomMenu(),
             Expanded(child: FutureBuilder(
         future: Provider.of<ImobiliariaList>(context, listen: false).lerImobiliarias(),
         builder: (context, snapshot) {
@@ -55,7 +55,7 @@ bool isSmallScreen = MediaQuery.of(context).size.width < 900;
           ],
         );
       }),
-      drawer: CustomMenu(isDarkMode: false),
+      drawer: CustomMenu(),
     );
   }
 }

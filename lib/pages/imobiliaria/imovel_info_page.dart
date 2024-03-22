@@ -70,7 +70,7 @@ class _ImoveisInfoPageState extends State<ImoveisInfoPage> {
               if (!isSmallScreen)
                 SizedBox(
                   width: 250, // Largura mínima do CustomMenu
-                  child: CustomMenu(isDarkMode: isDarkMode),
+                  child: CustomMenu(),
                 ),
               Expanded(
                 child: Container(

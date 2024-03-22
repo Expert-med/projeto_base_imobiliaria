@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_imobiliaria/models/imoveis/newImovel.dart';
+import 'package:provider/provider.dart';
 import '../../pages/imobiliaria/imovel_info_page.dart';
+import '../../theme/appthemestate.dart';
 import 'imovel_info_component.dart';
 
 class ImovelListMap extends StatelessWidget {
   final NewImovel imovel;
-  final bool isDarkMode;
+ 
 
   const ImovelListMap({
     required this.imovel,
-    required this.isDarkMode,
+    
   });
 
   @override
   Widget build(BuildContext context) {
+     final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
     return ListTile(
       title: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,7 +53,7 @@ class ImovelListMap extends StatelessWidget {
                   children: [
                     Icon(
                       Icons.place,
-                      color: isDarkMode ? Colors.white : Colors.black54,
+                      color: themeNotifier.isDarkModeEnabled ? Colors.white : Colors.black54,
                     ),
                     SizedBox(width: 4),
                     Expanded(
@@ -77,7 +80,7 @@ class ImovelListMap extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.bed,
-                        color: isDarkMode ? Colors.white : Colors.black54,
+                        color: themeNotifier.isDarkModeEnabled ? Colors.white : Colors.black54,
                       ),
                       SizedBox(width: 4),
                       Expanded(

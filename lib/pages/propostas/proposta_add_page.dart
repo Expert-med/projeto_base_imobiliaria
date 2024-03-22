@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_imobiliaria/models/negociacao/negociacaoList.dart';
 import 'package:projeto_imobiliaria/util/app_bar_model.dart';
+import 'package:provider/provider.dart';
 import '../../components/custom_menu.dart';
 import '../../components/propostas/proposta_cad_form.dart';
 import '../../main.dart';
 import '../../models/negociacao/negociacao_form_data.dart';
+import '../home_page.dart';
 
 class CadastroProposta extends StatefulWidget {
   const CadastroProposta({Key? key});
@@ -18,19 +20,13 @@ class _CadastroPropostaState extends State<CadastroProposta> {
   Future<void> _handleSubmit(NegociacaoFormData formData) async {
     try {
       // Login
-      await NegociacaoList().adicionarNegociacao(
+      await Provider.of<NegociacaoList>(context, listen:false).adicionarNegociacao(
         formData.imovel,
         formData.cliente,
         formData.corretor
       );
-
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) =>
-              HomePage(), 
-        ),
-      );
+Navigator.of(context).pop();
+    
     } catch (error) {
     
       showDialog(
@@ -57,40 +53,25 @@ class _CadastroPropostaState extends State<CadastroProposta> {
 
   @override
   Widget build(BuildContext context) {
-    bool isSmallScreen = MediaQuery.of(context).size.width < 900;
-
+  
     return Scaffold(
-      appBar: isSmallScreen
-          ? CustomAppBar(
-              subtitle: '',
-              title: 'Criar nova proposta',
-              isDarkMode: isDarkMode,
-            )
-          : null,
+     
       body: LayoutBuilder(
         builder: (context, constraints) {
           return Row(
             children: [
-              if (!isSmallScreen)
-                SizedBox(
-                  width: 250, // Largura mínima do CustomMenu
-                  child: CustomMenu(isDarkMode: isDarkMode),
-                ),
+             
               Expanded(
-                child: Container(
-                  color: isDarkMode ? Colors.black : Colors.white,
-                  padding: const EdgeInsets.all(20.0),
-                  child: SingleChildScrollView(
-                    // Adicionando SingleChildScrollView aqui
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CadPropostaForm(
-                          onSubmit: _handleSubmit,
-                          isDarkMode: isDarkMode,
-                        )
-                      ],
-                    ),
+                child: SingleChildScrollView(
+                  // Adicionando SingleChildScrollView aqui
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CadPropostaForm(
+                        onSubmit: _handleSubmit,
+                        isDarkMode: isDarkMode,
+                      )
+                    ],
                   ),
                 ),
               ),
@@ -98,15 +79,7 @@ class _CadastroPropostaState extends State<CadastroProposta> {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            isDarkMode = !isDarkMode;
-          });
-        },
-        child: Icon(Icons.lightbulb),
-      ),
-      drawer: isSmallScreen ? CustomMenu(isDarkMode: isDarkMode) : null,
+      
     );
   }
 }

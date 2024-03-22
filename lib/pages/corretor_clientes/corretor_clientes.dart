@@ -6,10 +6,11 @@ import 'package:provider/provider.dart';
 import '../../components/clientes/cliente_item.dart';
 import '../../components/clientes/clientes_modal.dart';
 import '../../models/clientes/Clientes.dart';
+import '../../theme/appthemestate.dart';
 
 class CorretorClientesPage extends StatefulWidget {
-  final bool isDarkMode;
-  CorretorClientesPage({required this.isDarkMode});
+  
+  CorretorClientesPage();
   @override
   _CorretorClientesPageState createState() => _CorretorClientesPageState();
 }
@@ -17,24 +18,23 @@ class CorretorClientesPage extends StatefulWidget {
 class _CorretorClientesPageState extends State<CorretorClientesPage> {
   List<Clientes> _clientes = [];
   TextEditingController _searchController = TextEditingController();
-  bool _isDarkMode = false;
+ 
   @override
   void initState() {
-    _isDarkMode = widget.isDarkMode;
+   
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final clientesList = Provider.of<ClientesList>(context);
+ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
 
     return Scaffold(
       appBar: AppBar(
         title: Text('Meus Clientes'),
       ),
-      backgroundColor: _isDarkMode
-          ? Colors.black87
-          : Colors.white, // Alteração de cor com base no modo escuro
+     
       body: Column(
         children: [
           Padding(
@@ -44,18 +44,21 @@ class _CorretorClientesPageState extends State<CorretorClientesPage> {
               decoration: InputDecoration(
                 labelText: 'Procurar',
                 labelStyle: TextStyle(
-                    color: !_isDarkMode ? Colors.black : Colors.white),
+                    color: !themeNotifier.isDarkModeEnabled
+ ? Colors.black : Colors.white),
                 prefixIcon: Icon(
                   Icons.search,
                 ),
                 filled: true,
-                fillColor: !_isDarkMode
+                fillColor: !themeNotifier.isDarkModeEnabled
+
                     ? Colors.grey[200]
                     : Colors.black, // Defina a cor de fundo como cinza
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: BorderSide(
-                      color: !_isDarkMode ? Colors.grey : Colors.black),
+                      color: !themeNotifier.isDarkModeEnabled
+ ? Colors.grey : Colors.black),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
@@ -97,7 +100,7 @@ class _CorretorClientesPageState extends State<CorretorClientesPage> {
                       itemCount: clientesFiltrados.length,
                       itemBuilder: (ctx, i) {
                         final cliente = clientesFiltrados[i];
-                        return ClienteItem(_isDarkMode, cliente);
+                        return ClienteItem(cliente);
                       },
                     );
                   }
@@ -107,19 +110,19 @@ class _CorretorClientesPageState extends State<CorretorClientesPage> {
           ),
         ],
       ),
-      drawer: CustomMenu(isDarkMode: _isDarkMode),
+      drawer: CustomMenu(),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           FloatingActionButton(
-            onPressed: () {
-              setState(() {
-                _isDarkMode = !_isDarkMode;
-              });
-            },
-            child: Icon(Icons.lightbulb),
-          ),
+        onPressed: () {
+          setState(() {
+            themeNotifier.enableDarkMode(!themeNotifier.isDarkModeEnabled);
+          });
+        },
+        child: Icon(Icons.lightbulb),
+      ),
           SizedBox(height: 16), // Espaçamento entre os botões
           FloatingActionButton(
             onPressed: () {

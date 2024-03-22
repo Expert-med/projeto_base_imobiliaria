@@ -50,11 +50,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
     return AppBar(
       toolbarHeight: 50,
       flexibleSpace: Container(
-        decoration: BoxDecoration(
-          color: widget.isDarkMode
-              ? Colors.black
-              : Color.fromARGB(255, 238, 238, 238),
-        ),
+       
         child: Padding(
           padding: EdgeInsets.only(left: 50, bottom: 20, right: 50),
           child: Row(

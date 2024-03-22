@@ -75,13 +75,13 @@ class _ImoveisFavoritosState extends State<ImoveisFavoritos> {
             color: widget.isDarkMode ? Colors.black : Colors.white,
             child: Row(
               children: [
-                if (!isSmallScreen) CustomMenu(isDarkMode: widget.isDarkMode),
+                //if (!isSmallScreen) CustomMenu(isDarkMode: widget.isDarkMode),
                 
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: FavoriteImoveisGrid(
-                        false, widget.isDarkMode, imoveisFavoritos),
+                        false, imoveisFavoritos),
                   ),
                 ),
               ],
@@ -89,7 +89,7 @@ class _ImoveisFavoritosState extends State<ImoveisFavoritos> {
           );
         },
       ),
-      drawer: isSmallScreen ? CustomMenu(isDarkMode: widget.isDarkMode) : null,
+      drawer: isSmallScreen ? CustomMenu() : null,
     );
   }
 }

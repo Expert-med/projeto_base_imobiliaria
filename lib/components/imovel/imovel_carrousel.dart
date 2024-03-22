@@ -40,7 +40,7 @@ class ImovelCarousel extends StatelessWidget {
           itemBuilder: (BuildContext context, int index, int realIndex) {
             return ChangeNotifierProvider.value(
               value: loadedProducts[index],
-              child: ImovelItem(isDarkMode, index,loadedProducts.length,0, (String productCode) {}),
+              child: ImovelItem( index,loadedProducts.length,0, (String productCode) {}),
             );
           },
         );

@@ -4,7 +4,7 @@ import 'package:projeto_imobiliaria/util/app_bar_model.dart';
 import '../../components/imovel/imovel_grid_favorites.dart';
 import '../../models/corretores/corretor.dart';
 import '../../util/new_app_bar_model.dart';
-import '../corretores/lista_corretores_page.dart';
+
 import '../imoveis/imoveis_Favoritos.dart';
 import '../map/map_page.dart';
 
@@ -124,7 +124,7 @@ class _CorretorInfoPageState extends State<CorretorInfoPage> {
                     0.5, // Defina a altura desejada aqui
                 child: FavoriteImoveisGrid(
                   false,
-                  widget.isDarkMode,
+                 
                   widget.corretor.imoveisCadastrados,
                 ),
               ),

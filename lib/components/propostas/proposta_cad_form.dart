@@ -55,139 +55,134 @@ class _CadPropostaFormState extends State<CadPropostaForm> {
     final clientesList = Provider.of<ClientesList>(context);
 
     return SingleChildScrollView(
-      child: Card(
-        margin: const EdgeInsets.all(20),
-        child: Container(
-          decoration: BoxDecoration(
-            color: !widget.isDarkMode ? Colors.white : Colors.black38,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.all(
-                        5), // Reduzindo o padding para o campo "Código Imóvel"
-                    child: Text(
-                      "Código Imóvel",
-                      style: TextStyle(
-                        color: Color(0xFF6e58e9),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                  TextFormField(
+      child: Container(
+        
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(
+                      5), // Reduzindo o padding para o campo "Código Imóvel"
+                  child: Text(
+                    "Código Imóvel",
                     style: TextStyle(
-                        color:
-                            !widget.isDarkMode ? Colors.black : Colors.white),
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.black12,
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                    onSaved: (value) => _formData.imovel = value ?? '',
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsets.all(15), //apply padding to all four sides
-                    child: Text(
-                      "Cliente",
-                      style: TextStyle(
-                        color: Color(0xFF6e58e9),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
+                      color: Color(0xFF6e58e9),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
                     ),
                   ),
-                  TextFormField(
-                    controller: nomeCliente,
+                ),
+                TextFormField(
+                  style: TextStyle(
+                      color:
+                          !widget.isDarkMode ? Colors.black : Colors.white),
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.black12,
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  onSaved: (value) => _formData.imovel = value ?? '',
+                ),
+                Padding(
+                  padding:
+                      EdgeInsets.all(15), //apply padding to all four sides
+                  child: Text(
+                    "Cliente",
                     style: TextStyle(
-                        color:
-                            !widget.isDarkMode ? Colors.black : Colors.white),
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.black12,
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                    onTap: () {
-                      showModalBottomSheet(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return ClientesModal(
-                            clientesList: clientesList,
-                            parametro_clientes_do_corretor: 1,
-                            onClienteAdicionado: (cliente) {
-                              print('nome');
-                              print(cliente.name);
-                              setState(() {
-                                nomeCliente.text = cliente.name;
-                                _formData.cliente = cliente.id;
-                              });
-                            },
-                          );
-                        },
-                      );
-                    },
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsets.all(15), //apply padding to all four sides
-                    child: Text(
-                      "Corretor",
-                      style: TextStyle(
-                        color: Color(0xFF6e58e9),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
+                      color: Color(0xFF6e58e9),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
                     ),
                   ),
-                  TextFormField(
-                    controller: nomeCorretor,
+                ),
+                TextFormField(
+                  controller: nomeCliente,
+                  style: TextStyle(
+                      color:
+                          !widget.isDarkMode ? Colors.black : Colors.white),
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.black12,
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return ClientesModal(
+                          clientesList: clientesList,
+                          parametro_clientes_do_corretor: 1,
+                          onClienteAdicionado: (cliente) {
+                            print('nome');
+                            print(cliente.name);
+                            setState(() {
+                              nomeCliente.text = cliente.name;
+                              _formData.cliente = cliente.id;
+                            });
+                          },
+                        );
+                      },
+                    );
+                  },
+                ),
+                Padding(
+                  padding:
+                      EdgeInsets.all(15), //apply padding to all four sides
+                  child: Text(
+                    "Corretor",
                     style: TextStyle(
-                      color: !widget.isDarkMode ? Colors.black : Colors.white,
-                    ),
-                    enabled: false, // Isso tornará o campo somente leitura
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.black12,
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
+                      color: Color(0xFF6e58e9),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
                     ),
                   ),
-                  SizedBox(
-                    height: 10,
+                ),
+                TextFormField(
+                  controller: nomeCorretor,
+                  style: TextStyle(
+                    color: !widget.isDarkMode ? Colors.black : Colors.white,
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      _formKey.currentState?.save();
-                      print(_formData.cliente);
-                      widget.onSubmit(_formData);
-                    },
-                    child: Text('Salvar'),
-                    style: ElevatedButton.styleFrom(
-                      elevation: 10.0,
-                      backgroundColor: Color(0xFF6e58e9),
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 20.0, vertical: 20.0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
+                  enabled: false, // Isso tornará o campo somente leitura
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.black12,
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: BorderRadius.circular(20),
                     ),
                   ),
-                ],
-              ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    _formKey.currentState?.save();
+                    print(_formData.cliente);
+                    widget.onSubmit(_formData);
+                  },
+                  child: Text('Salvar'),
+                  style: ElevatedButton.styleFrom(
+                    elevation: 10.0,
+                    backgroundColor: Color(0xFF6e58e9),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 20.0, vertical: 20.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
