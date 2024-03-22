@@ -309,6 +309,7 @@ class NewImovelList with ChangeNotifier {
           );
 
           _items.add(imovel);
+          salvarImoveisFavoritos(_items);
           notifyListeners();
         }
       });
@@ -319,6 +320,52 @@ class NewImovelList with ChangeNotifier {
       return []; // Retorna uma lista vazia em caso de erro
     }
   }
+
+ Future<List<String>> fetchImoveisFavoritos() async {
+  User? user = FirebaseAuth.instance.currentUser;
+  List<String> imoveisFavoritos = [];
+
+  if (user != null) {
+    try {
+      print('Buscando clientes');
+      final snapshot = await FirebaseFirestore.instance
+          .collection('clientes')
+          .where('uid', isEqualTo: user.uid)
+          .get();
+
+      if (snapshot.docs.isNotEmpty) {
+        imoveisFavoritos =
+            List<String>.from(snapshot.docs.first['imoveis_favoritos']);
+        return imoveisFavoritos; // Retorna os dados dos clientes
+      }
+    } catch (error) {
+      print('Erro ao buscar informações do cliente: $error');
+    }
+
+    try {
+      print('Buscando corretores');
+      final snapshot = await FirebaseFirestore.instance
+          .collection('corretores')
+          .where('uid', isEqualTo: user.uid)
+          .get();
+
+      if (snapshot.docs.isNotEmpty) {
+        imoveisFavoritos =
+            List<String>.from(snapshot.docs.first['imoveis_favoritos']);
+        return imoveisFavoritos; // Retorna os dados dos corretores
+      }
+    } catch (error) {
+      print('Erro ao buscar informações do corretor: $error');
+    }
+  } else {
+    print('Usuário não está logado.');
+  }
+
+  // Retorna uma lista vazia se nenhum dado for encontrado
+  return imoveisFavoritos;
+}
+
+
 
   List<Map<String, dynamic>> _convertToListMap(dynamic value) {
     if (value is Iterable) {
@@ -354,36 +401,65 @@ class NewImovelList with ChangeNotifier {
     }
   }
 
-  Future<void> salvarImoveisFavoritos(List<NewImovel> imoveis) async {
-    final user = FirebaseAuth.instance.currentUser;
-    final email = user?.email;
+Future<void> salvarImoveisFavoritos(List<NewImovel> imoveis) async {
+  final user = FirebaseAuth.instance.currentUser;
+  final email = user?.email;
 
-    if (email != null) {
-      final clientesRef = FirebaseFirestore.instance.collection('clientes');
-      final querySnapshot =
-          await clientesRef.where('email', isEqualTo: email).get();
+  if (email != null) {
+    final clientesRef = FirebaseFirestore.instance.collection('clientes');
+    final querySnapshot =
+        await clientesRef.where('email', isEqualTo: email).get();
 
-      if (querySnapshot.docs.isNotEmpty) {
-        final userData =
-            querySnapshot.docs.first.data() as Map<String, dynamic>;
-        final List<dynamic> imoveisFavoritos = userData['imoveis_favoritos'];
+    if (querySnapshot.docs.isNotEmpty) {
+      final userData =
+          querySnapshot.docs.first.data() as Map<String, dynamic>;
+      final List<dynamic> imoveisFavoritos = userData['imoveis_favoritos'];
 
-        List<String> listaImoveisString = [];
+      List<String> listaImoveisString = [];
 
-        for (var imovel in imoveisFavoritos) {
-          listaImoveisString.add(imovel.toString());
-        }
-        print('listaImoveisString $listaImoveisString');
-        // Agora você tem todos os imóveis favoritos do usuário como strings
-        // na lista listaImoveisString. Você pode fazer o que quiser com ela.
-        marcarImoveisFavoritos(imoveis, listaImoveisString);
-      } else {
-        print('Usuário não encontrado na coleção "clientes"');
+      for (var imovel in imoveisFavoritos) {
+        listaImoveisString.add(imovel.toString());
       }
+      print('listaImoveisString $listaImoveisString');
+      // Agora você tem todos os imóveis favoritos do usuário como strings
+      // na lista listaImoveisString. Você pode fazer o que quiser com ela.
+      marcarImoveisFavoritos(imoveis, listaImoveisString);
     } else {
-      print('Usuário não autenticado.');
+      print('Usuário não encontrado na coleção "clientes"');
+      // Se o usuário não for encontrado na coleção "clientes", busque na coleção "corretores"
+      await _buscarImoveisFavoritosCorretor(user, imoveis);
     }
+  } else {
+    // Se o usuário não estiver logado, busque na coleção "corretores"
+    await _buscarImoveisFavoritosCorretor(user, imoveis);
   }
+}
+
+Future<void> _buscarImoveisFavoritosCorretor(
+    User? user, List<NewImovel> imoveis) async {
+  final corretoresRef =
+      FirebaseFirestore.instance.collection('corretores');
+  final querySnapshot =
+      await corretoresRef.where('uid', isEqualTo: user?.uid).get();
+
+  if (querySnapshot.docs.isNotEmpty) {
+    final userData = querySnapshot.docs.first.data() as Map<String, dynamic>;
+    final List<dynamic> imoveisFavoritos = userData['imoveis_favoritos'];
+
+    List<String> listaImoveisString = [];
+
+    for (var imovel in imoveisFavoritos) {
+      listaImoveisString.add(imovel.toString());
+    }
+    print('listaImoveisString $listaImoveisString');
+    // Agora você tem todos os imóveis favoritos do usuário como strings
+    // na lista listaImoveisString. Você pode fazer o que quiser com ela.
+    marcarImoveisFavoritos(imoveis, listaImoveisString);
+  } else {
+    print('Usuário não encontrado na coleção "corretores"');
+  }
+}
+
 
   Future<void> marcarImoveisFavoritos(
       List<NewImovel> imoveis, List<String> imoveisFavoritos) async {

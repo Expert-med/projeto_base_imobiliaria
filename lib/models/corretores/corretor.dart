@@ -12,6 +12,7 @@ class Corretor with ChangeNotifier {
   final String permissoes;
   final String uid;
   final List<String> imoveisCadastrados;
+  final List<String> imoveisFavoritos;
   final List<String> visitas;
   final List<String> negociacoes;
   final Map<String, dynamic> contato;
@@ -29,6 +30,7 @@ class Corretor with ChangeNotifier {
       required this.permissoes,
       required this.uid,
       required this.tipoUsuario,
+      required this.imoveisFavoritos,
       required this.imoveisCadastrados,
       required this.visitas,
       required this.negociacoes,

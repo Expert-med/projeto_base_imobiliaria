@@ -26,7 +26,7 @@ class _ImovelItemState extends State<ImovelItem> {
   @override
   Widget build(BuildContext context) {
     final product = Provider.of<NewImovel>(context, listen: false,);
-
+  print("entrou em imovelItem");
     return AspectRatio(
       aspectRatio: 25 / 13,
       child: ClipRRect(
@@ -34,7 +34,7 @@ class _ImovelItemState extends State<ImovelItem> {
         child: GridTile(
           child: product.imagens.isNotEmpty && product.imagens[0] != null
               ? CachedNetworkImage(
-                  imageUrl: product.imagens[0].toString(),
+                  imageUrl: product.imagens[0].toString() ?? '',
                   fit: BoxFit.cover,
                   placeholder: (context, url) => CircularProgressIndicator(),
                   errorWidget: (context, url, error) => _buildNoImageWidget(),

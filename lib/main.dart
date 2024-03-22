@@ -180,6 +180,7 @@ class MyApp extends StatelessWidget {
           Map<String, dynamic> data =
               docSnapshot.data() as Map<String, dynamic>;
           Corretor corretor = Corretor(
+             imoveisFavoritos: List<String>.from(data['imoveis_favoritos'] ?? []),
             id: corretorId,
             name: data['name'] ?? '',
             tipoUsuario: data['tipoUsuario'] ?? 0,

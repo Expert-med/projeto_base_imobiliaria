@@ -26,6 +26,7 @@ class UserRepository {
         DocumentSnapshot corretorSnapshot = corretorQuery.docs.first;
 
         return Corretor(
+           imoveisFavoritos: List<String>.from(corretorSnapshot['imoveis_favoritos'] ?? []),
           id: corretorSnapshot['id'] ?? '',
           name: corretorSnapshot['name'] ?? '',
           email: corretorSnapshot['email'] ?? '',

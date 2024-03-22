@@ -39,6 +39,7 @@ class CorretorList with ChangeNotifier {
           uid: data['uid'] ?? '',
           permissoes: data['permissoes'] ?? '',
           imoveisCadastrados: List<String>.from(data['imoveis_cadastrados'] ?? []),
+          imoveisFavoritos: List<String>.from(data['imoveis_favoritos'] ?? []),
           visitas: List<String>.from(data['visitas'] ?? []),
           negociacoes: List<String>.from(data['negociacoes'] ?? []),
           contato: data['contato'] ?? {},

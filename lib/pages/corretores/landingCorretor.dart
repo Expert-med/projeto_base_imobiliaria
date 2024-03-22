@@ -7,7 +7,9 @@ import 'package:projeto_imobiliaria/components/imovel/imovel_list_view.dart';
 import 'package:projeto_imobiliaria/pages/corretores/editarLanding.dart';
 import 'package:projeto_imobiliaria/pages/map/map_flutter.dart';
 
+import '../../components/imovel/imovel_carousel_favorites.dart';
 import '../../components/imovel/imovel_grid.dart';
+import '../../components/imovel/imovel_grid_favorites.dart';
 import '../../components/landingPage/beneficio.dart';
 import '../../components/landingPage/footer.dart';
 import '../../components/landingPage/landingAppBar.dart';
@@ -28,9 +30,11 @@ class LandingPage extends StatefulWidget {
 
 class _LandingPageState extends State<LandingPage> {
   Map<String, dynamic> variaveis = {};
+ 
   @override
   void initState() {
     super.initState();
+  
     buscaLanding(widget.nome);
   }
 
@@ -72,7 +76,6 @@ class _LandingPageState extends State<LandingPage> {
     }
   }
 
- 
   @override
   Widget build(BuildContext context) {
     int corPrincipal = Colors.white.value; // Cor padrão
@@ -103,6 +106,7 @@ class _LandingPageState extends State<LandingPage> {
                         
                         Titulo(variaveis: variaveis, nome:widget.nome),
                         Solucao(variaveis: variaveis),
+                        
                         Beneficio(tipoPagina: 0, variaveis: variaveis),
                         Beneficio(tipoPagina: 1, variaveis: variaveis),
                         Perguntas(variaveis: variaveis),

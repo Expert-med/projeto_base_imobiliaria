@@ -8,6 +8,13 @@ import 'package:projeto_imobiliaria/util/app_bar_model.dart';
 
 import '../../components/custom_menu.dart';
 
+import 'package:flutter/material.dart';
+import 'package:projeto_imobiliaria/components/custom_menu.dart';
+import 'package:projeto_imobiliaria/models/imoveis/newImovelList.dart';
+import 'package:provider/provider.dart';
+
+
+
 class ImoveisFavoritos extends StatefulWidget {
   final bool isDarkMode;
 
@@ -18,73 +25,42 @@ class ImoveisFavoritos extends StatefulWidget {
 }
 
 class _ImoveisFavoritosState extends State<ImoveisFavoritos> {
-  List<String> imoveisFavoritos = [];
-
-  List<String> userPreferences = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchImoveisFavoritos();
-  }
-
-  Future<void> _fetchImoveisFavoritos() async {
-    User? user = FirebaseAuth.instance.currentUser;
-
-    try {
-      final snapshot = await FirebaseFirestore.instance
-          .collection('clientes')
-          .where('uid', isEqualTo: user!.uid)
-          .get();
-
-      if (snapshot.docs.isNotEmpty) {
-        setState(() {
-          imoveisFavoritos =
-              List<String>.from(snapshot.docs.first['imoveis_favoritos']);
-          userPreferences =
-              List<String>.from(snapshot.docs.first['preferencias']) ?? [];
-        });
-      }
-    } catch (error) {
-      final snapshot = await FirebaseFirestore.instance
-          .collection('corretores')
-          .where('uid', isEqualTo: user!.uid)
-          .get();
-
-      if (snapshot.docs.isNotEmpty) {
-        setState(() {
-          imoveisFavoritos =
-              List<String>.from(snapshot.docs.first['imoveis_favoritos']);
-          userPreferences =
-              List<String>.from(snapshot.docs.first['preferencias']) ?? [];
-        });
-      }
-      print('Erro ao buscar informações do cliente: $error');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     bool isSmallScreen = MediaQuery.of(context).size.width < 900;
 
     return Scaffold(
-      appBar: isSmallScreen ? CustomAppBar(subtitle: '', title: 'Meus imoveis favoritos', isDarkMode: widget.isDarkMode) : null,
+      appBar: isSmallScreen
+          ? CustomAppBar(
+              subtitle: '',
+              title: 'Meus imóveis favoritos',
+              isDarkMode: widget.isDarkMode)
+          : null,
       body: LayoutBuilder(
         builder: (context, constraints) {
           return Container(
             color: widget.isDarkMode ? Colors.black : Colors.white,
-            child: Row(
-              children: [
-                //if (!isSmallScreen) CustomMenu(isDarkMode: widget.isDarkMode),
-                
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: FavoriteImoveisGrid(
-                        false, imoveisFavoritos),
-                  ),
-                ),
-              ],
+            child: FutureBuilder<List<String>>(
+              future: Provider.of<NewImovelList>(context).fetchImoveisFavoritos(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Erro ao carregar dados: ${snapshot.error}'));
+                } else {
+                  List<String> imoveis = snapshot.data ?? [];
+                  return Row(
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: FavoriteImoveisGrid(false, imoveis),
+                        ),
+                      ),
+                    ],
+                  );
+                }
+              },
             ),
           );
         },
@@ -93,3 +69,4 @@ class _ImoveisFavoritosState extends State<ImoveisFavoritos> {
     );
   }
 }
+

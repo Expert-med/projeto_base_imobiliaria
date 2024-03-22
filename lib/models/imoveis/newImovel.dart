@@ -40,64 +40,79 @@ class NewImovel with ChangeNotifier {
   });
 
   void toggleFavorite() async {
-    // Obter o usuário atual
-    User? user = FirebaseAuth.instance.currentUser;
+  // Obter o usuário atual
+  User? user = FirebaseAuth.instance.currentUser;
 
-    if (user != null) {
-      try {
-        QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-            .collection('clientes')
-            .where('email', isEqualTo: user.email)
-            .get();
+  if (user != null) {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('clientes')
+          .where('uid', isEqualTo: user.uid)
+          .get();
 
-        if (querySnapshot.docs.isNotEmpty) {
-          DocumentReference userDocRef = querySnapshot.docs[0].reference;
+      if (querySnapshot.docs.isNotEmpty) {
+        DocumentReference userDocRef = querySnapshot.docs[0].reference;
 
-          // Adicionar ou remover o código do produto na lista 'imoveis_favoritos' do documento do usuário
-          if (isFavorite) {
-            // Se for favorito, remover o código do produto da lista
-            await userDocRef.update({
-              'imoveis_favoritos': FieldValue.arrayRemove([id]),
-            });
-          } else {
-            // Se não for favorito, adicionar o código do produto à lista
-            await userDocRef.update({
-              'imoveis_favoritos': FieldValue.arrayUnion([id]),
-            });
-          }
-          isFavorite = !isFavorite;
-          notifyListeners();
+        // Adicionar ou remover o código do produto na lista 'imoveis_favoritos' do documento do usuário
+        if (isFavorite) {
+          // Se for favorito, remover o código do produto da lista
+          await userDocRef.update({
+            'imoveis_favoritos': FieldValue.arrayRemove([id]),
+          });
         } else {
-          print('Nenhum usuário encontrado com o email ${user.email}');
+          // Se não for favorito, adicionar o código do produto à lista
+          await userDocRef.update({
+            'imoveis_favoritos': FieldValue.arrayUnion([id]),
+          });
         }
-      } catch (error) {
-        print('Erro ao acessar o documento do usuário: $error');
-        QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-            .collection('corretores')
-            .where('email', isEqualTo: user.email)
-            .get();
-
-        if (querySnapshot.docs.isNotEmpty) {
-          DocumentReference userDocRef = querySnapshot.docs[0].reference;
-
-          if (isFavorite) {
-            await userDocRef.update({
-              'imoveis_favoritos': FieldValue.arrayRemove([id]),
-            });
-          } else {
-            await userDocRef.update({
-              'imoveis_favoritos': FieldValue.arrayUnion([id]),
-            });
-          }
-
-          isFavorite = !isFavorite;
-          notifyListeners();
-        } else {
-          print('Nenhum usuário encontrado com o email ${user.email}');
-        }
+        isFavorite = !isFavorite;
+        notifyListeners();
+      } else {
+        print('Nenhum cliente encontrado com o uid ${user.uid}');
+        
+        // Se não encontrou cliente, buscar em corretores
+        await _toggleFavoriteForCorretores(user);
       }
+    } catch (error) {
+      print('Erro ao acessar o documento do usuário: $error');
+      
+      // Se ocorrer um erro ao buscar em clientes, buscar em corretores
+      await _toggleFavoriteForCorretores(user);
     }
   }
+}
+
+Future<void> _toggleFavoriteForCorretores(User user) async {
+  print('Buscando em corretores...');
+  try {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('corretores')
+        .where('uid', isEqualTo: user.uid)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      DocumentReference userDocRef = querySnapshot.docs[0].reference;
+
+      if (isFavorite) {
+        await userDocRef.update({
+          'imoveis_favoritos': FieldValue.arrayRemove([id]),
+        });
+      } else {
+        await userDocRef.update({
+          'imoveis_favoritos': FieldValue.arrayUnion([id]),
+        });
+      }
+
+      isFavorite = !isFavorite;
+      notifyListeners();
+    } else {
+      print('Nenhum corretor encontrado com o uid ${user.uid}');
+    }
+  } catch (error) {
+    print('Erro ao buscar em corretores: $error');
+  }
+}
+
 
   Object? toJson() {}
 }
