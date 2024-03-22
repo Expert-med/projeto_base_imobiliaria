@@ -18,14 +18,15 @@ import '../models/cep/via_cep_model.dart';
 import '../models/imoveis/imovelCaracteristicas.dart';
 import '../pages/home_page.dart';
 import '../repositories/via_cep_repository.dart';
+import '../theme/appthemestate.dart';
 import '../util/drop_down_button.dart';
 
 class CadImovelForm extends StatefulWidget {
-  final bool isDarkMode;
+  
 
   const CadImovelForm({
     Key? key,
-    required this.isDarkMode,
+  
   }) : super(key: key);
 
   @override
@@ -154,6 +155,10 @@ class _CadImovelFormState extends State<CadImovelForm> {
 
   @override
   Widget build(BuildContext context) {
+    bool isSmallScreen = MediaQuery.of(context).size.width < 600;
+
+int numberOfColumns = isSmallScreen ? 1 : 3; 
+
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -165,7 +170,7 @@ class _CadImovelFormState extends State<CadImovelForm> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Card(
-                  color: !widget.isDarkMode ? Colors.white : Colors.black38,
+                  
                   elevation: 5,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
@@ -189,9 +194,7 @@ class _CadImovelFormState extends State<CadImovelForm> {
                           ),
                           TextFormField(
                             style: TextStyle(
-                              color: !widget.isDarkMode
-                                  ? Colors.black
-                                  : Colors.white,
+                              
                             ),
                             decoration: InputDecoration(
                               labelText: 'Valor do Imóvel',
@@ -217,9 +220,7 @@ class _CadImovelFormState extends State<CadImovelForm> {
                           ),
                           TextFormField(
                             style: TextStyle(
-                                color: !widget.isDarkMode
-                                    ? Colors.black
-                                    : Colors.white),
+                                ),
                             decoration: InputDecoration(
                               labelText: 'Nome do imóvel',
                               labelStyle: TextStyle(
@@ -245,7 +246,7 @@ class _CadImovelFormState extends State<CadImovelForm> {
                   ),
                 ),
                 Card(
-                  color: !widget.isDarkMode ? Colors.white : Colors.black38,
+                  
                   elevation: 5,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
@@ -330,7 +331,7 @@ class _CadImovelFormState extends State<CadImovelForm> {
                   ),
                 ),
                 Card(
-                  color: !widget.isDarkMode ? Colors.white : Colors.black38,
+                  
                   elevation: 5,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
@@ -359,9 +360,7 @@ class _CadImovelFormState extends State<CadImovelForm> {
                                   TextFormField(
                                     controller: cepController,
                                     style: TextStyle(
-                                      color: !widget.isDarkMode
-                                          ? Colors.black
-                                          : Colors.white,
+                                      
                                     ),
                                     decoration: InputDecoration(
                                       labelText: 'CEP',
@@ -417,9 +416,7 @@ class _CadImovelFormState extends State<CadImovelForm> {
                                   TextFormField(
                                     controller: bairroController,
                                     style: TextStyle(
-                                      color: !widget.isDarkMode
-                                          ? Colors.black
-                                          : Colors.white,
+                                      
                                     ),
                                     decoration: InputDecoration(
                                       labelText: 'Bairro',
@@ -451,9 +448,7 @@ class _CadImovelFormState extends State<CadImovelForm> {
                                   TextFormField(
                                     controller: localidadeController,
                                     style: TextStyle(
-                                      color: !widget.isDarkMode
-                                          ? Colors.black
-                                          : Colors.white,
+                                      
                                     ),
                                     decoration: InputDecoration(
                                       labelText: 'Cidade',
@@ -485,9 +480,7 @@ class _CadImovelFormState extends State<CadImovelForm> {
                                   TextFormField(
                                     controller: ufController,
                                     style: TextStyle(
-                                      color: !widget.isDarkMode
-                                          ? Colors.black
-                                          : Colors.white,
+                                      
                                     ),
                                     decoration: InputDecoration(
                                       labelText: 'Estado',
@@ -518,9 +511,7 @@ class _CadImovelFormState extends State<CadImovelForm> {
                         ),
                         TextFormField(
                           style: TextStyle(
-                            color: !widget.isDarkMode
-                                ? Colors.black
-                                : Colors.white,
+                            
                           ),
                           controller: logradouroController,
                           decoration: InputDecoration(
@@ -549,7 +540,7 @@ class _CadImovelFormState extends State<CadImovelForm> {
                   height: 10,
                 ),
                 Card(
-                  color: !widget.isDarkMode ? Colors.white : Colors.black38,
+                  
                   elevation: 5,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
@@ -577,9 +568,7 @@ class _CadImovelFormState extends State<CadImovelForm> {
                                 children: [
                                   TextFormField(
                                     style: TextStyle(
-                                        color: !widget.isDarkMode
-                                            ? Colors.black
-                                            : Colors.white),
+                                        ),
                                     decoration: InputDecoration(
                                       labelText: 'Área privativa (m²)',
                                       labelStyle: TextStyle(
@@ -615,9 +604,7 @@ class _CadImovelFormState extends State<CadImovelForm> {
                                   children: [
                                     TextFormField(
                                       style: TextStyle(
-                                          color: !widget.isDarkMode
-                                              ? Colors.black
-                                              : Colors.white),
+                                           ),
                                       decoration: InputDecoration(
                                         labelText: 'Área Privativa Casa (m²)',
                                         labelStyle: TextStyle(
@@ -657,9 +644,7 @@ class _CadImovelFormState extends State<CadImovelForm> {
                                   children: [
                                     TextFormField(
                                       style: TextStyle(
-                                          color: !widget.isDarkMode
-                                              ? Colors.black
-                                              : Colors.white),
+                                           ),
                                       decoration: InputDecoration(
                                         labelText: 'Área Total (m²)',
                                         labelStyle: TextStyle(
@@ -741,9 +726,7 @@ class _CadImovelFormState extends State<CadImovelForm> {
                                 children: [
                                   TextFormField(
                                     style: TextStyle(
-                                      color: !widget.isDarkMode
-                                          ? Colors.black
-                                          : Colors.white,
+                                      
                                     ),
                                     decoration: InputDecoration(
                                       labelText: 'Total de dormitórios',
@@ -778,9 +761,7 @@ class _CadImovelFormState extends State<CadImovelForm> {
                                 children: [
                                   TextFormField(
                                     style: TextStyle(
-                                        color: !widget.isDarkMode
-                                            ? Colors.black
-                                            : Colors.white),
+                                        ),
                                     decoration: InputDecoration(
                                       labelText: 'Vagas Garagem',
                                       labelStyle: TextStyle(
@@ -813,9 +794,7 @@ class _CadImovelFormState extends State<CadImovelForm> {
                                 children: [
                                   TextFormField(
                                     style: TextStyle(
-                                        color: !widget.isDarkMode
-                                            ? Colors.black
-                                            : Colors.white),
+                                        ),
                                     decoration: InputDecoration(
                                       labelText: 'Terreno',
                                       labelStyle: TextStyle(
@@ -852,7 +831,7 @@ class _CadImovelFormState extends State<CadImovelForm> {
                   height: 10,
                 ),
                 Card(
-                  color: !widget.isDarkMode ? Colors.white : Colors.black38,
+                  
                   elevation: 5,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
@@ -873,44 +852,33 @@ class _CadImovelFormState extends State<CadImovelForm> {
                         SizedBox(
                             height:
                                 2), // Adiciona espaçamento entre o texto e a lista
-                        ListView(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          children: [
-                            Wrap(
-                              spacing:
-                                  2, // Espaçamento horizontal entre os itens
-                              runSpacing:
-                                  2, // Espaçamento vertical entre os itens
-                              children: List.generate(
-                                characteristics.length,
-                                (index) => SizedBox(
-                                  width: (MediaQuery.of(context).size.width -
-                                          40 -
-                                          4) /
-                                      3, // Largura igualmente dividida em 3 colunas
-                                  child: CheckboxListTile(
-                                    contentPadding: EdgeInsets
-                                        .zero, // Remove qualquer padding interno
-                                    title: Text(
-                                      "${characteristics[index][0].toUpperCase()}${characteristics[index].substring(1).toLowerCase()}",
-                                      textAlign: TextAlign
-                                          .center, // Centraliza o texto
-                                    ),
-                                    value: checkedValues[index],
-                                    onChanged: (bool? value) {
-                                      setState(() {
-                                        checkedValues[index] = value!;
-                                        atualizarCaracteristicasDoImovel(
-                                            characteristics[index], value!);
-                                      });
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                       ListView(
+  shrinkWrap: true,
+  
+  physics: NeverScrollableScrollPhysics(),
+  children: [
+    Row(
+      children: List.generate(
+        numberOfColumns,
+        (columnIndex) {
+          int startIndex = (characteristics.length ~/ numberOfColumns) * columnIndex;
+          int endIndex = (characteristics.length ~/ numberOfColumns) * (columnIndex + 1);
+          if (columnIndex == numberOfColumns - 1) {
+            endIndex = characteristics.length; // Ajuste para a última coluna
+          }
+          return Expanded(
+            child: Column(
+              children: List.generate(
+                endIndex - startIndex,
+                (index) => _buildCheckboxListTile(startIndex + index),
+              ),
+            ),
+          );
+        },
+      ),
+    ),
+  ],
+),
                       ],
                     ),
                   ),
@@ -919,7 +887,7 @@ class _CadImovelFormState extends State<CadImovelForm> {
                   height: 10,
                 ),
                 Card(
-                  color: !widget.isDarkMode ? Colors.white : Colors.black38,
+                  
                   elevation: 5,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
@@ -1037,4 +1005,85 @@ class _CadImovelFormState extends State<CadImovelForm> {
       ),
     );
   }
+Widget _buildCheckboxListTile(int index) {
+  final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
+  if (characteristics[index] == 'banheiros') {
+    return SizedBox(
+      width: double.infinity,
+      child: CheckboxListTile(
+        controlAffinity: ListTileControlAffinity.leading,
+        contentPadding: EdgeInsets.zero,
+        title: Text(
+          "${characteristics[index][0].toUpperCase()}${characteristics[index].substring(1).toLowerCase()}",
+          textAlign: TextAlign.center,
+          style: TextStyle(color:  themeNotifier.isDarkModeEnabled
+
+                    ? Colors.white
+                    : Colors.black,)
+        ),
+        value: checkedValues[index],
+        onChanged: (bool? value) {
+          setState(() {
+            checkedValues[index] = value!;
+            if (value!) {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  int quantidade = 1;
+                  return AlertDialog(
+                    title: Text('Quantidade de Banheiros'),
+                    content: TextFormField(
+                      decoration: InputDecoration(labelText: 'Quantidade'),
+                      keyboardType: TextInputType.number,
+                      onChanged: (value) {
+                        setState(() {
+                          quantidade = int.tryParse(value) ?? 1;
+                        });
+                      },
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          atualizarCaracteristicasDoImovel('${quantidade} Banheiros', true);
+                        },
+                        child: Text('OK'),
+                      ),
+                    ],
+                  );
+                },
+              );
+            } else {
+              atualizarCaracteristicasDoImovel(characteristics[index], value);
+            }
+          });
+        },
+      ),
+    );
+  } else {
+    return SizedBox(
+      width: double.infinity,
+      child: CheckboxListTile(
+        controlAffinity: ListTileControlAffinity.leading,
+        contentPadding: EdgeInsets.zero,
+       title: Text(
+  "${characteristics[index][0].toUpperCase()}${characteristics[index].substring(1).toLowerCase()}",
+  textAlign: TextAlign.center,
+  style: TextStyle(color:  themeNotifier.isDarkModeEnabled
+
+                    ? Colors.white
+                    : Colors.black,)
+),
+
+        value: checkedValues[index],
+        onChanged: (bool? value) {
+          setState(() {
+            checkedValues[index] = value!;
+            atualizarCaracteristicasDoImovel(characteristics[index], value!);
+          });
+        },
+      ),
+    );
+  }
+}
 }

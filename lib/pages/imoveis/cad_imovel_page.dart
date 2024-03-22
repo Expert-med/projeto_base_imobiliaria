@@ -14,14 +14,14 @@ class CadastroImovel extends StatefulWidget {
 }
 
 class _CadastroImovelState extends State<CadastroImovel> {
-  late bool isDarkMode = false;
+
 
   @override
   Widget build(BuildContext context) {
     bool isSmallScreen = MediaQuery.of(context).size.width < 900;
 
     return Scaffold(
-      appBar: isSmallScreen ? CustomAppBar(subtitle: '', title: 'Cadastro de Imoveis',isDarkMode: isDarkMode,) : null,
+      appBar: isSmallScreen ? CustomAppBar(subtitle: '', title: 'Cadastro de Imoveis',isDarkMode: false,) : null,
       body: LayoutBuilder(
         builder: (context, constraints) {
           return Row(
@@ -39,7 +39,7 @@ class _CadastroImovelState extends State<CadastroImovel> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CadImovelForm(isDarkMode: isDarkMode)
+                        CadImovelForm()
                       ],
                     ),
                   ),

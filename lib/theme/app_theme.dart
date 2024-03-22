@@ -4,6 +4,13 @@ class AppTheme {
   static final lightTheme = ThemeData(
     scaffoldBackgroundColor: Colors.white,
     bottomAppBarTheme: BottomAppBarTheme(color: Color(0xFF0230547)),
+     checkboxTheme: CheckboxThemeData(
+  side: BorderSide(
+    color: Colors.black, // Define a cor do contorno como branco
+    width: 2.0, // Define a largura do contorno
+  ),
+  // Outras propriedades do CheckboxThemeData aqui...
+),
     iconButtonTheme: IconButtonThemeData(
       style: ButtonStyle(
         foregroundColor: MaterialStateProperty.resolveWith<Color>(
@@ -40,6 +47,14 @@ class AppTheme {
 
   static final darkTheme = ThemeData(
     scaffoldBackgroundColor: Colors.black,
+      checkboxTheme: CheckboxThemeData(
+  side: BorderSide(
+    color: Colors.white, // Define a cor do contorno como branco
+    width: 2.0, // Define a largura do contorno
+  ),
+  // Outras propriedades do CheckboxThemeData aqui...
+),
+
     appBarTheme: const AppBarTheme(
       color: Color(0xFF0230547),
       iconTheme: IconThemeData(
