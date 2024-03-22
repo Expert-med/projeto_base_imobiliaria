@@ -7,6 +7,8 @@ import 'package:projeto_imobiliaria/models/imobiliarias/imobiliariasList.dart';
 import 'package:projeto_imobiliaria/models/imoveis/newImovelList.dart';
 import 'package:projeto_imobiliaria/pages/corretores/landingCorretor.dart';
 import 'package:projeto_imobiliaria/pages/home_page.dart';
+import 'package:projeto_imobiliaria/pages/imoveis/imoveis_landing.dart';
+import 'package:projeto_imobiliaria/pages/imoveis/imovel_page.dart';
 import 'package:projeto_imobiliaria/theme/appthemestate.dart';
 import 'package:provider/provider.dart';
 import 'checkPage.dart';
@@ -83,10 +85,23 @@ class MyApp extends StatelessWidget {
               GetPage(
                 name: '/:nome',
                 page: () {
-                  // Essa função é chamada sempre que a rota '/corretor/:id' for acessada
                   return FutureBuilder(
                     builder: (context, snapshot) {
-                        return LandingPage();
+                      final nome = Get.parameters['nome'] ?? ''; 
+                      final String corretorNome = nome.toLowerCase().replaceAll('-', ' ');
+                        return LandingPage(nome: corretorNome);
+                    },
+                  );
+                },
+              ),
+              GetPage(
+                name: '/:nome/imoveis',
+                page: () {
+                  return FutureBuilder(
+                    builder: (context, snapshot) {
+                      final nome = Get.parameters['nome'] ?? ''; 
+                      final String corretorNome = nome.toLowerCase().replaceAll('-', ' ');
+                      return ImovelLanding(nome: corretorNome); 
                     },
                   );
                 },

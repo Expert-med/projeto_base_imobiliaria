@@ -36,7 +36,7 @@ class _ImovelPageState extends State<ImovelPage> {
   @override
   Widget build(BuildContext context) {
     bool isSmallScreen = MediaQuery.of(context).size.width < 900;
- final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
+    final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
     return Scaffold(
       appBar: isSmallScreen
           ? CustomAppBar(

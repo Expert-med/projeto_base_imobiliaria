@@ -109,7 +109,7 @@ class CorretorItem extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LandingPage()));
+                
               },
               child: Text("Ir para landing page"),
             ),

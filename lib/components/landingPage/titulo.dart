@@ -1,54 +1,82 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_imobiliaria/components/imovel/imovel_grid.dart';
 
-class Titulo extends StatelessWidget {
+import '../../pages/imoveis/imoveis_landing.dart';
+import '../../pages/map/map_flutter.dart';
+import '../imovel/imovel_list_view.dart';
+
+class Titulo extends StatefulWidget {
   final Map<String, dynamic> variaveis;
+  final String nome;
 
   const Titulo({
     Key? key,
     required this.variaveis,
+    required this.nome,
   }) : super(key: key);
 
-  
+  @override
+  State<Titulo> createState() => _TituloState();
+}
 
+class _TituloState extends State<Titulo> {
+  bool _showGrid = true;
+  bool _showList = false;
+  bool _isHoveredG = true;
+  bool _isHoveredL = false;
+  bool _isHoveredM = false;
   @override
   Widget build(BuildContext context) {
+    
     return Container(
-      height: 500,
+      height: 1500,
       color: Colors.white,
-      alignment: Alignment.center,
-      child: Padding(
-        padding: EdgeInsets.all(20), // Adiciona margem em todos os lados dos childrens
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    variaveis['titulo']!['titulo_1']!,
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 0, 0, 0),
-                      fontSize: 50,
-                      fontWeight: FontWeight.bold,
+      alignment: Alignment.centerLeft,
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.all(20),
+            child: Stack(
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: 450,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: NetworkImage(widget.variaveis['titulo']!['link_imagem']!),
+                      fit: BoxFit.cover,
                     ),
+                    borderRadius: BorderRadius.circular(8.0),
                   ),
-                  SizedBox(height: 10),
-                  Text(
-                    variaveis['titulo']!['subtitulo_1']!,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
-                    ),
-                  ),
-                  SizedBox(height: 15),
-                  Flexible(
-                    child: Row(
-                      children: [
-                        ElevatedButton(
-                            onPressed: () => {},
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 40), // Preenchimento apenas à esquerda
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start, // Alinhado à esquerda
+                    children: [
+                      Text(
+                        widget.variaveis['titulo']!['titulo_1']!,
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 0, 0, 0),
+                          fontSize: 50,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        widget.variaveis['titulo']!['subtitulo_1']!,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 15,
+                        ),
+                      ),
+                      SizedBox(height: 15),
+                      Row(
+                        children: [
+                          SizedBox(width: 10,),
+                          ElevatedButton(
+                            onPressed: () {},
                             style: ElevatedButton.styleFrom(
                               shadowColor: Colors.black,
                               elevation: 10.0,
@@ -57,35 +85,211 @@ class Titulo extends StatelessWidget {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(0),
                               ),
+                            ),
+                            child: Text(
+                              widget.variaveis['titulo']!['texto_botao_1']!,
+                              style: TextStyle(fontSize: 18),
+                            ),
                           ),
-                          child: Text(variaveis['titulo']!['texto_botao_1']!)),
-                        SizedBox(width: 10),
-                        Flexible(child: Text(variaveis['titulo']!['texto_1']!))
-                        
-                    ]),
-                  )
-                  
-                ],
-              ),
+                          SizedBox(width: 10),
+                        ],
+                      ),  
+                      SizedBox(height: 10),
+                      Text(
+                        widget.variaveis['titulo']!['texto_1']!,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            SizedBox(width: 20), 
-            Container(
-              width: 500, // Define a largura da coluna da foto
-              height: 450,
-              decoration: BoxDecoration(
-                color: Color.fromARGB(255, 201, 4, 4), // Cor de fundo da foto
-                borderRadius: BorderRadius.circular(8.0), // Adiciona bordas arredondadas à foto
+          ),
+          Row(
+            children: [
+              SizedBox(width: 10),
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50),
+                  border: Border.all(
+                    color: Color(0xFF6e58e9),
+                    width: 2, // largura da borda
+                  ),
+                ),
+                child: Material(
+                  borderRadius: BorderRadius.circular(50),
+                  color: _isHoveredG
+                      ? Colors.white
+                      : Color(0xFF6e58e9),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(50),
+                    onTap: () {
+                      setState(() {
+                        _showGrid = true;
+                        _showList = false;
+                      });
+                    },
+                    onHover: (hovering) {
+                      setState(() {
+                        _isHoveredG = hovering;
+                      });
+                    },
+                    child: AnimatedContainer(
+                      duration: Duration(milliseconds: 300),
+                      width: _isHoveredL ? 125 : 55,
+                      height: 55,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 8),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment
+                            .center, // Centralizar o ícone verticalmente
+                        children: [
+                          AnimatedContainer(
+                            duration: Duration(milliseconds: 300),
+                            width: 30,
+                            child: Icon(Icons.grid_on_sharp,
+                                color: _isHoveredG
+                                    ? Color(0xFF6e58e9)
+                                    : Colors.white),
+                          ),
+                          Expanded(
+                            child: AnimatedOpacity(
+                              duration:
+                                  Duration(milliseconds: 300),
+                              opacity: 1.0,
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(
+                                        horizontal: 8),
+                                child: Text(
+                                  'GRID',
+                                  style: TextStyle(
+                                      color: _isHoveredG
+                                          ? Color(0xFF6e58e9)
+                                          : Colors.white,
+                                      fontSize: 16),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
               ),
-              child: Image.network(
-              variaveis['titulo']!['link_imagem']!,
-                fit: BoxFit.cover, // Adicionando BoxFit.cover para a imagem ocupar todo o espaço do container
+              SizedBox(width: 10),
+              Material(
+                borderRadius: BorderRadius.circular(50),
+                color: Color(0xFF6e58e9),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(50),
+                  onTap: () {
+                    setState(() {
+                      _showGrid = false;
+                      _showList = true;
+                    });
+                  },
+                  onHover: (hovering) {
+                    setState(() {
+                      _isHoveredL = hovering;
+                    });
+                  },
+                  child: AnimatedContainer(
+                    duration: Duration(milliseconds: 300),
+                    width: _isHoveredL ? 125 : 55,
+                    height: 55,
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment
+                          .center, // Centralizar o ícone verticalmente
+                      children: [
+                        AnimatedContainer(
+                          duration: Duration(milliseconds: 300),
+                          width: _isHoveredL ? 30 : 0,
+                          child: Icon(Icons.list,
+                              color: Colors.white),
+                        ),
+                        Expanded(
+                          child: AnimatedOpacity(
+                            duration: Duration(milliseconds: 300),
+                            opacity: _isHoveredL ? 1.0 : 0.0,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8),
+                              child: Text(
+                                'Lista',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
-            ),
-          ],
-        ),
+              SizedBox(width: 10),
+              Material(
+                borderRadius: BorderRadius.circular(50),
+                color: Color(0xFF6e58e9),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(50),
+                  onTap: () {
+                    setState(() {
+                      _showGrid = false;
+                      _showList = false;
+                    });
+                  },
+                  onHover: (hovering) {
+                    setState(() {
+                      _isHoveredM = hovering;
+                    });
+                  },
+                  child: AnimatedContainer(
+                    duration: Duration(milliseconds: 300),
+                    width: _isHoveredM ? 125 : 55,
+                    height: 55,
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment
+                          .center, // Centralizar o ícone verticalmente
+                      children: [
+                        AnimatedContainer(
+                          duration: Duration(milliseconds: 300),
+                          width: _isHoveredM ? 30 : 0,
+                          child: Icon(Icons.place,
+                              color: Colors.white),
+                        ),
+                        Expanded(
+                          child: AnimatedOpacity(
+                            duration: Duration(milliseconds: 300),
+                            opacity: _isHoveredM ? 1.0 : 0.0,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8),
+                              child: Text(
+                                'MAPA',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),    
+            ],
+          ),
+          Expanded(
+            child: ImovelLanding(nome: widget.nome),   
+          ),
+        ],
       ),
     );
   }
 }
-
-

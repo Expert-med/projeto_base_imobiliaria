@@ -19,6 +19,9 @@ import '../../components/landingPage/titulo.dart';
 
 
 class LandingPage extends StatefulWidget {
+  final String nome;
+  LandingPage({required this.nome, Key? key}) : super(key: key);
+
   @override
   _LandingPageState createState() => _LandingPageState();
 }
@@ -28,7 +31,7 @@ class _LandingPageState extends State<LandingPage> {
   @override
   void initState() {
     super.initState();
-    buscaLanding();
+    buscaLanding(widget.nome);
   }
 
   @override
@@ -38,38 +41,36 @@ class _LandingPageState extends State<LandingPage> {
   }
 
   
-  void buscaLanding() async {
-  try {
-    final store = FirebaseFirestore.instance;
-    final User = FirebaseAuth.instance.currentUser;
+  void buscaLanding(String nome) async {
+    try {
+      final store = FirebaseFirestore.instance;
+      
+      final querySnapshot = await store
+          .collection('corretores')
+          .where('name', isEqualTo: nome)
+          .get();
 
-    final corretorId = User?.uid ?? '';
-    final querySnapshot = await store
-        .collection('corretores')
-        .where('uid', isEqualTo: corretorId)
-        .get();
+      if (querySnapshot.docs.isNotEmpty) {
+        final docId = querySnapshot.docs[0].id;
+        final landingDoc = await store.collection('corretores').doc(docId).collection('landing').doc(docId).get();
 
-    if (querySnapshot.docs.isNotEmpty) {
-      final docId = querySnapshot.docs[0].id;
-      final landingDoc = await store.collection('corretores').doc(docId).collection('landing').doc(docId).get();
-
-      if (landingDoc.exists) {
-        final data = landingDoc.data();
-        if (data != null) {
-          setState(() {
-            variaveis = data;
-          });
-        } else {
-          print('Documento da landing page está vazio.');
+        if (landingDoc.exists) {
+          final data = landingDoc.data();
+          if (data != null) {
+            setState(() {
+              variaveis = data;
+            });
+          } else {
+            print('Documento da landing page está vazio.');
+          }
         }
+      } else {
+        print('Nenhum corretor encontrado com o ID atual.');
       }
-    } else {
-      print('Nenhum corretor encontrado com o ID atual.');
+    } catch (error) {
+      print('Erro ao buscar as variáveis da landing page: $error');
     }
-  } catch (error) {
-    print('Erro ao buscar as variáveis da landing page: $error');
   }
-}
 
  
   @override
@@ -100,14 +101,14 @@ class _LandingPageState extends State<LandingPage> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         
-                        Titulo(variaveis: variaveis),
-                        //Solucao(variaveis: variaveis),
-                        //Beneficio(tipoPagina: 0, variaveis: variaveis),
-                        //Beneficio(tipoPagina: 1, variaveis: variaveis),
-                        //Perguntas(variaveis: variaveis),
-                        //Porque(variaveis: variaveis),
-                        //Navegacao(variaveis: variaveis),
-                        //Footer(variaveis: variaveis),
+                        Titulo(variaveis: variaveis, nome:widget.nome),
+                        Solucao(variaveis: variaveis),
+                        Beneficio(tipoPagina: 0, variaveis: variaveis),
+                        Beneficio(tipoPagina: 1, variaveis: variaveis),
+                        Perguntas(variaveis: variaveis),
+                        Porque(variaveis: variaveis),
+                        Navegacao(variaveis: variaveis),
+                        Footer(variaveis: variaveis),
                       ],
                     ),
                   ),

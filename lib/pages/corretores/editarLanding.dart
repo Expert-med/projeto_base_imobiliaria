@@ -74,6 +74,7 @@ class _EditarLandingPageState extends State<EditarLandingPage> {
   String politica = '';
   String cookies = '';
   String termos = '';
+  String nome = '';
 
   @override
   void initState() {
@@ -131,6 +132,7 @@ class _EditarLandingPageState extends State<EditarLandingPage> {
 
     
         final docId = querySnapshot.docs[0].id;
+
 
         DocumentReference userRef = store.collection('corretores').doc(docId);
 
@@ -318,7 +320,7 @@ class _EditarLandingPageState extends State<EditarLandingPage> {
         final docId = querySnapshot.docs[0].id;
 
         DocumentReference userRef = store.collection('corretores').doc(docId);
-
+        
         DocumentReference docRef = userRef.collection('landing').doc(docId);
 
         await docRef.set(jsonString);
@@ -351,7 +353,7 @@ class _EditarLandingPageState extends State<EditarLandingPage> {
                       ExpansionTile(
                             title: Text(
                               "Cores",
-                              style: TextStyle(color: Color.fromARGB(255, 255, 254, 254)),
+                              style: TextStyle(color: Colors.black),
                             ),
                             children: [
                               TextField(
@@ -366,7 +368,7 @@ class _EditarLandingPageState extends State<EditarLandingPage> {
                       ExpansionTile(
                             title: Text(
                               "Menu",
-                              style: TextStyle(color: Color.fromARGB(255, 255, 254, 254)),
+                              style: TextStyle(color: Colors.black),
                             ),
                             children: [
                               TextField(
@@ -429,7 +431,7 @@ class _EditarLandingPageState extends State<EditarLandingPage> {
                       ExpansionTile(
                             title: Text(
                               "Título",
-                              style: TextStyle(color: Color.fromARGB(255, 255, 254, 254)),
+                              style: TextStyle(color: Colors.black),
                             ),
                             children: [
                               TextField(
@@ -476,7 +478,7 @@ class _EditarLandingPageState extends State<EditarLandingPage> {
                       ExpansionTile(
                             title: Text(
                               "Beneficios 1",
-                              style: TextStyle(color: Color.fromARGB(255, 255, 254, 254)),
+                              style: TextStyle(color: Colors.black),
                             ),
                             children: [
                               TextField(
@@ -547,7 +549,7 @@ class _EditarLandingPageState extends State<EditarLandingPage> {
                       ExpansionTile(
                             title: Text(
                               "Beneficios 2",
-                              style: TextStyle(color: Color.fromARGB(255, 255, 254, 254)),
+                              style: TextStyle(color: Colors.black),
                             ),
                             children: [
                               TextField(
@@ -618,7 +620,7 @@ class _EditarLandingPageState extends State<EditarLandingPage> {
                       ExpansionTile(
                             title: Text(
                               "Solução",
-                              style: TextStyle(color: Color.fromARGB(255, 255, 254, 254)),
+                              style: TextStyle(color: Colors.black),
                             ),
                             children: [
                               TextField(
@@ -682,7 +684,7 @@ class _EditarLandingPageState extends State<EditarLandingPage> {
                       ExpansionTile(
                             title: Text(
                               "Pergunta",
-                              style: TextStyle(color: Color.fromARGB(255, 255, 254, 254)),
+                              style: TextStyle(color: Colors.black),
                             ),
                             children: [
                                 TextField(
@@ -754,7 +756,7 @@ class _EditarLandingPageState extends State<EditarLandingPage> {
                       ExpansionTile(
                             title: Text(
                               "Porque",
-                              style: TextStyle(color: Color.fromARGB(255, 255, 254, 254)),
+                              style: TextStyle(color: Colors.black),
                             ),
                             children: [
                               TextField(
@@ -785,7 +787,7 @@ class _EditarLandingPageState extends State<EditarLandingPage> {
                       ExpansionTile(
                             title: Text(
                               "Link",
-                              style: TextStyle(color: Color.fromARGB(255, 255, 254, 254)),
+                              style: TextStyle(color: Colors.black),
                             ),
                             children: [
                               TextField(
@@ -800,7 +802,7 @@ class _EditarLandingPageState extends State<EditarLandingPage> {
                       ExpansionTile(
                             title: Text(
                               "Rodapé",
-                              style: TextStyle(color: Color.fromARGB(255, 255, 254, 254)),
+                              style: TextStyle(color: Colors.black),
                             ),
                             children: [
                               TextField(
@@ -852,7 +854,7 @@ class _EditarLandingPageState extends State<EditarLandingPage> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     CustomAppBar(variaveis: variaveis),
-                    Titulo(variaveis: variaveis),
+                    //Titulo(variaveis: variaveis, nome: ,),
                     Solucao(variaveis: variaveis),
                     Beneficio(tipoPagina: 0, variaveis: variaveis),
                     Beneficio(tipoPagina: 1, variaveis: variaveis),

@@ -17,7 +17,7 @@ class ImovelCarousel extends StatelessWidget {
   final provider = Provider.of<NewImovelList>(context);
   final List<NewImovel> loadedProducts = provider.items.take(50).toList();
   bool isSmallScreen = MediaQuery.of(context).size.width < 800;
-  print('loadedProducts $loadedProducts');
+  
 
   return loadedProducts.isEmpty
       ? Container() // ou outro widget de fallback

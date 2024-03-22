@@ -13,18 +13,28 @@ import '../../core/models/imovel_form_data.dart';
 
 class NewImovelList with ChangeNotifier {
   late final List<NewImovel> _items;
+  late String nome;
 
   NewImovelList() {
     _items = [];
-    _carregarImoveis();
+    nome = "";
+    _carregarImoveis(nome);
   }
 
-  Future<void> _carregarImoveis() async {
+  Future<void> _carregarImoveis(String nome) async {
     //updateImoveisWithDetalhes();
-    final List<NewImovel> imoveis = await buscarImoveis();
-    _items.addAll(imoveis);
-    notifyListeners();
+    print("object");
+    if(nome == ""){
+      final List<NewImovel> imoveis = await buscarImoveis();
+      _items.addAll(imoveis);
+      notifyListeners();
+    }else{
+      final List<NewImovel> imoveis = await buscarImoveisLanding(nome);
+      _items.addAll(imoveis);
+      notifyListeners();
+    } 
   }
+
 
    Future<void> updateImoveisWithDetalhes() async { 
     print('updateImoveisWithDetalhes');
@@ -104,6 +114,82 @@ class NewImovelList with ChangeNotifier {
 
   List<NewImovel> get favoriteItems =>
       _items.where((prod) => prod.isFavorite).toList();
+
+
+  Future<List<NewImovel>> buscarImoveisLanding(String nome) async {
+      print(nome);
+      final store = FirebaseFirestore.instance;
+      final querySnapshot = await store
+          .collection('corretores')
+          .where('name', isEqualTo: nome)
+          .get();
+
+      final docId = querySnapshot.docs[0].id;
+      
+ 
+      DocumentReference userRef = store.collection('corretores').doc(docId);
+
+      CollectionReference<Map<String, dynamic>> imoveisRef = userRef.collection('imoveis');
+
+    try {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await imoveisRef.get();
+
+      List<NewImovel> imoveis = [];
+
+       
+      querySnapshot.docs
+          .forEach((QueryDocumentSnapshot<Map<String, dynamic>> doc) {
+        final resultado = doc.data();
+        final infoList = resultado['detalhes'] ?? <String, dynamic>{};
+
+        if (resultado['codigo_imovel'] != null &&
+            resultado['data'] != null &&
+            resultado['link'] != null &&
+            resultado['codigo_imobiliaria'] != null &&
+            resultado['curtidas'] != null &&
+            resultado['data_cadastro'] != null &&
+            resultado['finalidade'] != null &&
+            resultado['imagens'] != null &&
+            resultado['tipo'] != null) {
+          // Convert each field to the correct type
+          final caracteristicas =
+              _convertToListMap(resultado['caracteristicas']);
+          final atualizacoes = _convertToListMap(resultado['atualizacoes']);
+          final localizacao = _convertToListMap(resultado['localizacao']);
+
+          final imovel = NewImovel(
+            id: resultado['codigo_imovel'] ?? '',
+            data: resultado['data'] ?? '',
+            detalhes: resultado['detalhes'] != null
+                ? Map<String, dynamic>.from(resultado['detalhes'])
+                : {},
+            link_imovel: resultado['link'] ??
+                '', // Provide a default value if 'link' is null
+            link_virtual_tour: resultado['link_virtual_tour'] ?? '',
+            caracteristicas: resultado['caracteristicas'] ?? '',
+            atualizacoes: resultado['atualizacoes'] ?? '',
+            codigo_imobiliaria: resultado['codigo_imobiliaria'] ?? '',
+            curtidas: resultado['curtidas'] ?? '',
+            data_cadastro: resultado['data_cadastro'] ?? '',
+            finalidade: resultado['finalidade'] ?? 0,
+            imagens: List<String>.from(resultado['imagens'] ?? []),
+            localizacao: resultado['localizacao'] ?? {},
+            preco: resultado['preco'] ?? '',
+            tipo: resultado['tipo'] ?? 0,
+          );
+          
+          _items.add(imovel);
+          notifyListeners();
+        }
+      });
+     
+      return imoveis;
+    } catch (e) {
+      print('Erro ao buscar os imóveis: $e');
+      return []; // Retorna uma lista vazia em caso de erro
+    }
+  }
 
   Future<List<NewImovel>> buscarImoveis() async {
       final store = FirebaseFirestore.instance;
@@ -361,7 +447,7 @@ class NewImovelList with ChangeNotifier {
   void addProduct(NewImovel product) {
     _items.add(product);
     notifyListeners();
-    _carregarImoveis();
+    _carregarImoveis(nome);
   }
 
   List<NewImovel> get items => [..._items];

@@ -73,7 +73,8 @@ class _CustomMenuState extends State<CustomMenu> {
     if (querySnapshot.docs.isNotEmpty) {
       setState(() {
         final corretorData = querySnapshot.docs.first.data();
-        corretorNome = corretorData['name'];
+        String nome = corretorData['name'];
+        corretorNome = nome.toLowerCase().replaceAll(' ', '-');
       });
     }
     setState(() {
@@ -327,8 +328,7 @@ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
                 title: Text(
                   'Ver minha página',
                   style: TextStyle(
-                    color: themeNotifier.isDarkModeEnabled
- ? Colors.white : Colors.white70,
+                    color: themeNotifier.isDarkModeEnabled? Colors.white : Colors.white70,
                   ),
                 ),
                 onTap: () {
