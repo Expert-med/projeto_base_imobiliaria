@@ -7,6 +7,7 @@ import 'package:projeto_imobiliaria/util/app_bar_model.dart';
 import 'package:provider/provider.dart';
 import '../../components/imovel/imovel_grid.dart';
 import '../../components/imovel/imovel_list_view.dart';
+import '../../models/imoveis/newImovel.dart';
 import '../../theme/appthemestate.dart';
 import 'cad_imovel_page.dart';
 
@@ -18,6 +19,7 @@ class ImovelPage extends StatefulWidget {
 }
 
 class _ImovelPageState extends State<ImovelPage> {
+  late final NewImovelList _imovelList;
   bool _showFavoriteOnly = false;
   bool _showGrid = true;
   bool _showList = false;
@@ -30,8 +32,11 @@ class _ImovelPageState extends State<ImovelPage> {
   @override
   void initState() {
     super.initState();
-    NewImovelList().buscarImoveis();
+    _imovelList = Provider.of<NewImovelList>(context, listen: false);
+    _imovelList.carregarImoveis('');
   }
+
+
 
   @override
   Widget build(BuildContext context) {

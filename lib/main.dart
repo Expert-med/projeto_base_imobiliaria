@@ -35,9 +35,12 @@ class MyApp extends StatelessWidget {
 
   FirebaseFirestore db = FirebaseFirestore.instance;
   List<Map<String, dynamic>> embalagens = [];
+  final String nome = Get.parameters['nome'] ?? ''; 
+  
 
   @override
   Widget build(BuildContext context) {
+  
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -65,7 +68,7 @@ class MyApp extends StatelessWidget {
           create: (_) => TarefasLista(),
         ),
         ChangeNotifierProvider(
-          create: (_) => AppThemeStateNotifier(), // Adicione um provedor para o estado do tema
+          create: (_) => AppThemeStateNotifier(), 
         ),
       ],
       child: Builder(

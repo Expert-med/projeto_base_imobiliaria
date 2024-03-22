@@ -17,23 +17,24 @@ class NewImovelList with ChangeNotifier {
 
   NewImovelList() {
     _items = [];
-    nome = "";
-    _carregarImoveis(nome);
+    nome = '';
+    carregarImoveis(nome);
   }
 
-  Future<void> _carregarImoveis(String nome) async {
-    //updateImoveisWithDetalhes();
-    print("object");
-    if(nome == ""){
-      final List<NewImovel> imoveis = await buscarImoveis();
-      _items.addAll(imoveis);
-      notifyListeners();
-    }else{
-      final List<NewImovel> imoveis = await buscarImoveisLanding(nome);
-      _items.addAll(imoveis);
-      notifyListeners();
-    } 
-  }
+    Future<void> carregarImoveis(String nome) async {
+      print("nome");
+      print(nome);
+      if (nome == "") {
+        final List<NewImovel> imoveis = await buscarImoveis();
+        _items.addAll(imoveis);
+        notifyListeners();
+      } else {
+        final List<NewImovel> imoveis = await buscarImoveisLanding(nome);
+        _items.addAll(imoveis);
+        notifyListeners();
+      }
+    }
+
 
 
    Future<void> updateImoveisWithDetalhes() async { 
@@ -447,7 +448,7 @@ class NewImovelList with ChangeNotifier {
   void addProduct(NewImovel product) {
     _items.add(product);
     notifyListeners();
-    _carregarImoveis(nome);
+    carregarImoveis(nome);
   }
 
   List<NewImovel> get items => [..._items];

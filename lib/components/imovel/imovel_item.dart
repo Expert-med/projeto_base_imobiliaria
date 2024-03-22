@@ -25,7 +25,7 @@ class ImovelItem extends StatefulWidget {
 class _ImovelItemState extends State<ImovelItem> {
   @override
   Widget build(BuildContext context) {
-    final product = Provider.of<NewImovel>(context, listen: false);
+    final product = Provider.of<NewImovel>(context, listen: false,);
 
     return AspectRatio(
       aspectRatio: 25 / 13,

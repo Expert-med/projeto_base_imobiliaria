@@ -23,7 +23,6 @@ class _TesteImovelPageState extends State<TesteImovelPage> {
   @override
   void initState() {
     super.initState();
-    NewImovelList().buscarImoveis();
   }
 
   @override
