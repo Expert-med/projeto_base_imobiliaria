@@ -372,7 +372,7 @@ class NewImovelList with ChangeNotifier {
         'status': 1,
         'valor': _formData.precoOriginal ?? 0, 
       },
-      'caracteristicas': {},
+      'caracteristicas': _formData.caracteristicasDoImovel ?? {},
       'codigo_imobiliaria': user.id,
       'codigo_imovel': codigo_imovel,
       'curtidas': 'N/A',

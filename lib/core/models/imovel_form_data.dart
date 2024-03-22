@@ -22,5 +22,6 @@ class ImovelFormData {
   String? totalSuites;
   String? totalGaragem;
   String? numero_residencia;
+  Map<String, dynamic>? caracteristicasDoImovel;
 
 }

@@ -15,6 +15,7 @@ import '../core/data/user_repository.dart';
 import '../core/models/User_firebase_service.dart';
 import '../core/models/imovel_form_data.dart';
 import '../models/cep/via_cep_model.dart';
+import '../models/imoveis/imovelCaracteristicas.dart';
 import '../pages/home_page.dart';
 import '../repositories/via_cep_repository.dart';
 import '../util/drop_down_button.dart';
@@ -48,9 +49,18 @@ class _CadImovelFormState extends State<CadImovelForm> {
   String codigo_imovel = '';
   String? selectedPerfil;
   String? selectedMobilia;
+
+  late ImovelCaracteristicas property;
+  late List<String> characteristics;
+
+  // Lista para armazenar os valores das checkboxes
+  List<bool> checkedValues = List<bool>.filled(100, false);
+  Map<String, dynamic> caracteristicasDoImovel = {};
   void initState() {
     super.initState();
-
+    property = ImovelCaracteristicas();
+    characteristics = property.characteristics;
+    print(characteristics);
     Provider.of<UserProvider>(context, listen: false).initializeUser();
     UserRepository().loadCurrentUser().then((currentUser) {
       if (currentUser != null) {
@@ -64,6 +74,22 @@ class _CadImovelFormState extends State<CadImovelForm> {
       }
     }).catchError((error) {
       print('Erro ao carregar o usuário atual: $error');
+    });
+  }
+
+  void atualizarCaracteristicasDoImovel(String caracteristica, bool valor) {
+    setState(() {
+      if (valor) {
+        // Se a característica estiver marcada, adicionamos ao Map
+        caracteristicasDoImovel['Caracteristicas Gerais'] ??= [];
+        caracteristicasDoImovel['Caracteristicas Gerais'].add(caracteristica);
+
+        print(caracteristicasDoImovel);
+      } else {
+        // Se a característica estiver desmarcada, removemos do Map
+        caracteristicasDoImovel['Caracteristicas Gerais']
+            ?.remove(caracteristica);
+      }
     });
   }
 
@@ -312,7 +338,6 @@ class _CadImovelFormState extends State<CadImovelForm> {
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: Column(
-                      
                       children: [
                         Text(
                           "Endereço do Imóvel",
@@ -532,7 +557,6 @@ class _CadImovelFormState extends State<CadImovelForm> {
                   child: Padding(
                     padding: const EdgeInsets.all(20),
                     child: Column(
-                      
                       children: [
                         Text(
                           "Detalhes do Imóvel",
@@ -745,7 +769,6 @@ class _CadImovelFormState extends State<CadImovelForm> {
                                             .totalDormitorios =
                                         value?.isEmpty ?? true ? "N/A" : value!,
                                   ),
-                                  
                                 ],
                               ),
                             ),
@@ -781,7 +804,6 @@ class _CadImovelFormState extends State<CadImovelForm> {
                                     onSaved: (value) => _formData.totalGaragem =
                                         value?.isEmpty ?? true ? "N/A" : value!,
                                   ),
-                                 
                                 ],
                               ),
                             ),
@@ -817,8 +839,74 @@ class _CadImovelFormState extends State<CadImovelForm> {
                                     onSaved: (value) => _formData.terreno =
                                         value?.isEmpty ?? true ? "N/A" : value!,
                                   ),
-                                 
                                 ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Card(
+                  color: !widget.isDarkMode ? Colors.white : Colors.black38,
+                  elevation: 5,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Características do Imóvel",
+                          style: TextStyle(
+                            color: Color(0xFF6e58e9),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 25,
+                          ),
+                        ),
+                        SizedBox(
+                            height:
+                                2), // Adiciona espaçamento entre o texto e a lista
+                        ListView(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          children: [
+                            Wrap(
+                              spacing:
+                                  2, // Espaçamento horizontal entre os itens
+                              runSpacing:
+                                  2, // Espaçamento vertical entre os itens
+                              children: List.generate(
+                                characteristics.length,
+                                (index) => SizedBox(
+                                  width: (MediaQuery.of(context).size.width -
+                                          40 -
+                                          4) /
+                                      3, // Largura igualmente dividida em 3 colunas
+                                  child: CheckboxListTile(
+                                    contentPadding: EdgeInsets
+                                        .zero, // Remove qualquer padding interno
+                                    title: Text(
+                                      "${characteristics[index][0].toUpperCase()}${characteristics[index].substring(1).toLowerCase()}",
+                                      textAlign: TextAlign
+                                          .center, // Centraliza o texto
+                                    ),
+                                    value: checkedValues[index],
+                                    onChanged: (bool? value) {
+                                      setState(() {
+                                        checkedValues[index] = value!;
+                                        atualizarCaracteristicasDoImovel(
+                                            characteristics[index], value!);
+                                      });
+                                    },
+                                  ),
+                                ),
                               ),
                             ),
                           ],
@@ -920,6 +1008,11 @@ class _CadImovelFormState extends State<CadImovelForm> {
                 ),
                 ElevatedButton(
                   onPressed: () {
+                    setState(() {
+                      _formData.caracteristicasDoImovel =
+                          caracteristicasDoImovel;
+                    });
+
                     _formKey.currentState?.save();
                     Provider.of<NewImovelList>(context, listen: false)
                         .cadastrarImovel(_user, _formData, codigo_imovel);
