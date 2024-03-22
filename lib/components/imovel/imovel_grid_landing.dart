@@ -6,13 +6,19 @@ import '../../theme/appthemestate.dart';
 import 'imovel_item.dart';
 
 class GridLanding extends StatefulWidget {
+  final String nome;
   final bool showFavoriteOnly;
 
-  const GridLanding(this.showFavoriteOnly, {Key? key}) : super(key: key);
+  const GridLanding({
+    required this.nome,
+    required this.showFavoriteOnly,
+    Key? key,
+  }) : super(key: key);
 
   @override
   _GridLandingState createState() => _GridLandingState();
 }
+
 
 class _GridLandingState extends State<GridLanding> {
   late ScrollController _scrollController;
@@ -46,13 +52,14 @@ class _GridLandingState extends State<GridLanding> {
     }
   }
 
-  void _loadMoreItems() {
-    final provider = Provider.of<NewImovelList>(context, listen: false);
-    final List<NewImovel> additionalProducts = provider.items.skip(_loadedProducts.length).take(50).toList();
-    setState(() {
-      _loadedProducts.addAll(additionalProducts);
-    });
-  }
+ void _loadMoreItems() async {
+  final provider = Provider.of<NewImovelList>(context, listen: false);
+  final additionalProducts = await provider.buscarImoveisLanding(widget.nome); // Chame a função do provedor para carregar mais itens
+  setState(() {
+    _loadedProducts.addAll(additionalProducts);
+  });
+}
+
 
   void filtrarAluguel() {
     setState(() {

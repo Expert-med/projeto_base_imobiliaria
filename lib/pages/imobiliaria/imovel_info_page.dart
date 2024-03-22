@@ -76,7 +76,7 @@ class _ImoveisInfoPageState extends State<ImoveisInfoPage> {
                 child: Container(
                   color: isDarkMode ? Colors.black : Colors.white,
                   padding: const EdgeInsets.all(20.0),
-                  child: ImovelInfoComponent(isDarkMode, widget.tipo_pagina,
+                  child: ImovelInfoComponent( widget.tipo_pagina,
                       widget.caracteristicas, widget.imovel),
                 ),
               ),

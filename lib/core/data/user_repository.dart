@@ -47,7 +47,7 @@ class UserRepository {
           dadosProfissionais: corretorSnapshot['dados_profissionais'] ?? [],
           metas: corretorSnapshot['metas'] ?? [],
           desempenhoAtualMetas: corretorSnapshot['desempenho_atual'] ?? {},
-          infoBanner: corretorSnapshot['info_banner'] ?? {},
+          infoBanner: corretorSnapshot['infoBanner'] ?? {},
         );
       }
 

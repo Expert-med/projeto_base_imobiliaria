@@ -155,7 +155,7 @@ class _MapPageState extends State<MapPage> {
                         });
                       },
                       child: ImovelInfoComponent(
-                                                       isDarkMode,
+                                                   
                                                         1,
                                                         selectedCaracteristicas,
                                                         imovelAtual,
@@ -215,7 +215,7 @@ class _MapPageState extends State<MapPage> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>  ImovelInfoComponent(
-                                                       isDarkMode,
+                                                    
                                                         1,
                                                         selectedCaracteristicas,
                                                         imovelAtual,

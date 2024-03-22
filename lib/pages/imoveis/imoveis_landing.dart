@@ -47,7 +47,7 @@ class _ImovelLandingState extends State<ImovelLanding> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [ 
                   Expanded(
-                    child: GridLanding(false)
+                    child: GridLanding(nome: widget.nome,showFavoriteOnly: false,)
                   ),
                 ],
               ),

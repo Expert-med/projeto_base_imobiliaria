@@ -482,7 +482,7 @@ class _MapPageFlutterState extends State<MapPageFlutter> {
                                       });
                                     },
                                     child: ImovelInfoComponent(
-                                      isDarkMode,
+                                   
                                       1,
                                       selectedCaracteristicas,
                                       imovelAtual,

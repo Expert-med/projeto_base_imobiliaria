@@ -12,11 +12,13 @@ import 'package:projeto_imobiliaria/pages/imoveis/imovel_page.dart';
 import 'package:projeto_imobiliaria/theme/appthemestate.dart';
 import 'package:provider/provider.dart';
 import 'checkPage.dart';
+import 'components/imovel/imovel_info_component.dart';
 import 'core/models/User_firebase_service.dart';
 import 'core/services/firebase/firebase_options.dart';
 import 'models/agendamento/agendamentoList.dart';
 import 'models/clientes/clientesList.dart';
 import 'models/corretores/corretor.dart';
+import 'models/imoveis/newImovel.dart';
 import 'models/negociacao/negociacaoList.dart';
 import 'models/tarefas/tarefasList.dart';
 import 'theme/app_theme.dart';
@@ -35,12 +37,10 @@ class MyApp extends StatelessWidget {
 
   FirebaseFirestore db = FirebaseFirestore.instance;
   List<Map<String, dynamic>> embalagens = [];
-  final String nome = Get.parameters['nome'] ?? ''; 
-  
+  final String nome = Get.parameters['nome'] ?? '';
 
   @override
   Widget build(BuildContext context) {
-  
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -68,17 +68,21 @@ class MyApp extends StatelessWidget {
           create: (_) => TarefasLista(),
         ),
         ChangeNotifierProvider(
-          create: (_) => AppThemeStateNotifier(), 
+          create: (_) => AppThemeStateNotifier(),
         ),
       ],
       child: Builder(
         builder: (context) {
-          final appThemeState = context.watch<AppThemeStateNotifier>(); // Obtenha o estado do tema do provedor
+          final appThemeState = context.watch<
+              AppThemeStateNotifier>(); // Obtenha o estado do tema do provedor
           return GetMaterialApp(
             title: 'LarHub',
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
-            themeMode: appThemeState.isDarkModeEnabled ? ThemeMode.dark : ThemeMode.light, // Defina o tema com base no estado de isDarkModeEnabled
+            themeMode: appThemeState.isDarkModeEnabled
+                ? ThemeMode.dark
+                : ThemeMode
+                    .light, // Defina o tema com base no estado de isDarkModeEnabled
             initialRoute: '/',
             getPages: [
               GetPage(
@@ -90,9 +94,10 @@ class MyApp extends StatelessWidget {
                 page: () {
                   return FutureBuilder(
                     builder: (context, snapshot) {
-                      final nome = Get.parameters['nome'] ?? ''; 
-                      final String corretorNome = nome.toLowerCase().replaceAll('-', ' ');
-                        return LandingPage(nome: corretorNome);
+                      final nome = Get.parameters['nome'] ?? '';
+                      final String corretorNome =
+                          nome.toLowerCase().replaceAll('-', ' ');
+                      return LandingPage(nome: corretorNome);
                     },
                   );
                 },
@@ -102,9 +107,49 @@ class MyApp extends StatelessWidget {
                 page: () {
                   return FutureBuilder(
                     builder: (context, snapshot) {
-                      final nome = Get.parameters['nome'] ?? ''; 
-                      final String corretorNome = nome.toLowerCase().replaceAll('-', ' ');
-                      return ImovelLanding(nome: corretorNome); 
+                      final nome = Get.parameters['nome'] ?? '';
+                      final String corretorNome =
+                          nome.toLowerCase().replaceAll('-', ' ');
+                      return ImovelLanding(nome: corretorNome);
+                    },
+                  );
+                },
+              ),
+              GetPage(
+                name: '/:nome/imoveis/:id',
+                page: () {
+                  final nome = Get.parameters['nome'] ?? '';
+                      final String corretorNome =
+                          nome.toLowerCase().replaceAll('-', ' ');
+                  return FutureBuilder<NewImovel?>(
+                    
+                    future: Provider.of<NewImovelList>(context, listen: false)
+                        .buscarImoveisLandingPorId(corretorNome,
+                            Get.parameters['id'] ?? ''),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else if (snapshot.hasError) {
+                        return Center(
+                          child: Text('Erro ao carregar o imóvel'),
+                        );
+                      } else {
+                        final newImovel = snapshot.data;
+                        if (newImovel != null) {
+                          return ImovelInfoComponent(
+                            1,
+                            newImovel
+                                .caracteristicas, // Passando as características do imóvel
+                            newImovel,
+                          );
+                        } else {
+                          return Center(
+                            child: Text('Imóvel não encontrado'),
+                          );
+                        }
+                      }
                     },
                   );
                 },

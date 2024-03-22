@@ -5,16 +5,17 @@ import 'package:projeto_imobiliaria/models/imoveis/newImovel.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../theme/appthemestate.dart';
 import 'info_caracteristicas_component.dart';
 
 class ImovelInfoComponent extends StatefulWidget {
-  bool isDarkMode;
+ 
   Map<String, dynamic> caracteristicas;
   final NewImovel imovel;
   final int tipo_pagina;
 
   ImovelInfoComponent(
-      this.isDarkMode, this.tipo_pagina, this.caracteristicas, this.imovel);
+       this.tipo_pagina, this.caracteristicas, this.imovel);
 
   @override
   _ImovelInfoComponentState createState() => _ImovelInfoComponentState();
@@ -37,13 +38,14 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
 
   @override
   Widget build(BuildContext context) {
-    Color backgroundColor = widget.isDarkMode ? Colors.black45 : Colors.white;
-    Color textColor = !widget.isDarkMode ? Colors.black87 : Colors.white;
+final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
+
+   
 
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
-          color: backgroundColor,
+          
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -72,7 +74,7 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
                                           style: TextStyle(
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold,
-                                            color: textColor,
+                                           
                                           ),
                                         ),
                                         TextSpan(
@@ -104,13 +106,13 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
                           children: [
                             Icon(
                               Icons.place,
-                              color: widget.isDarkMode ? Colors.white : Colors.black54,
+                              color:  themeNotifier.isDarkModeEnabled ? Colors.white : Colors.black54,
                             ),
                             SizedBox(width: 4),
                             Flexible(
                               child: Text(
                                 '${widget.imovel.localizacao['endereco']['cidade']}',
-                                style: TextStyle(fontSize: 15, color: textColor),
+                                style: TextStyle(fontSize: 15, ),
                               ),
                             ),
                           ],
@@ -225,7 +227,7 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
                                   children: [
                                     IconButton(
                                       icon: Icon(Icons.arrow_back,
-                                          color: textColor),
+                                          ),
                                       onPressed: () {
                                         if (_currentIndex > 0) {
                                           _carouselController.previousPage();
@@ -234,11 +236,11 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
                                     ),
                                     Text(
                                       '${_currentIndex + 1} / ${widget.imovel.imagens.length}',
-                                      style: TextStyle(color: textColor),
+                                      style: TextStyle(),
                                     ),
                                     IconButton(
                                       icon: Icon(Icons.arrow_forward,
-                                          color: textColor),
+                                          ),
                                       onPressed: () {
                                         if (_currentIndex <
                                             widget.imovel.imagens.length - 1) {
@@ -277,7 +279,7 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
                                                   SelectableText(
                                                     'A partir de ',
                                                     style: TextStyle(
-                                                      color: widget.isDarkMode
+                                                      color:  themeNotifier.isDarkModeEnabled
                                                           ? Colors.white
                                                           : Colors.black54,
                                                     ),
@@ -303,7 +305,7 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
                                     children: [
                                       Expanded(
                                         child: Card(
-                                          color: widget.isDarkMode
+                                          color:  themeNotifier.isDarkModeEnabled
                                               ? Colors.black54
                                               : Colors.white,
                                           shape: RoundedRectangleBorder(
@@ -318,7 +320,7 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
                                                 Icon(
                                                   Icons.bed,
                                                   size: 32,
-                                                  color: widget.isDarkMode
+                                                  color:  themeNotifier.isDarkModeEnabled
                                                       ? Colors.white
                                                       : Colors.black54,
                                                 ),
@@ -327,7 +329,7 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
                                                   '${widget.imovel.detalhes['total_dormitorios']}',
                                                   style: TextStyle(
                                                     fontSize: 18,
-                                                    color: widget.isDarkMode
+                                                    color:  themeNotifier.isDarkModeEnabled
                                                         ? Colors.white
                                                         : Colors.black54,
                                                   ),
@@ -342,7 +344,7 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
                                               16), // Adicione um espaço entre os dois Cards
                                       Expanded(
                                         child: Card(
-                                          color: widget.isDarkMode
+                                          color:  themeNotifier.isDarkModeEnabled
                                               ? Colors.black54
                                               : Colors.white,
                                           shape: RoundedRectangleBorder(
@@ -357,7 +359,7 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
                                                 Icon(
                                                   Icons.garage,
                                                   size: 32,
-                                                  color: widget.isDarkMode
+                                                  color:  themeNotifier.isDarkModeEnabled
                                                       ? Colors.white
                                                       : Colors.black54,
                                                 ),
@@ -366,7 +368,7 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
                                                   '${widget.imovel.detalhes['vagas_garagem']}',
                                                   style: TextStyle(
                                                     fontSize: 18,
-                                                    color: widget.isDarkMode
+                                                    color:  themeNotifier.isDarkModeEnabled
                                                         ? Colors.white
                                                         : Colors.black54,
                                                   ),
@@ -382,7 +384,7 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
                                     children: [
                                       Expanded(
                                         child: Card(
-                                          color: widget.isDarkMode
+                                          color:  themeNotifier.isDarkModeEnabled
                                               ? Colors.black54
                                               : Colors.white,
                                           shape: RoundedRectangleBorder(
@@ -397,7 +399,7 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
                                                 Icon(
                                                   Icons.aspect_ratio,
                                                   size: 32,
-                                                  color: widget.isDarkMode
+                                                  color:  themeNotifier.isDarkModeEnabled
                                                       ? Colors.white
                                                       : Colors.black54,
                                                 ),
@@ -406,7 +408,7 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
                                                   ' ${widget.imovel.detalhes['area_total']}',
                                                   style: TextStyle(
                                                     fontSize: 18,
-                                                    color: widget.isDarkMode
+                                                    color:  themeNotifier.isDarkModeEnabled
                                                         ? Colors.white
                                                         : Colors.black54,
                                                   ),
@@ -416,7 +418,7 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
                                                   'Área total',
                                                   style: TextStyle(
                                                     fontSize: 18,
-                                                    color: widget.isDarkMode
+                                                    color:  themeNotifier.isDarkModeEnabled
                                                         ? Colors.white
                                                         : Colors.black54,
                                                   ),
@@ -431,7 +433,7 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
                                               16), // Adicione um espaço entre os dois Cards
                                       Expanded(
                                         child: Card(
-                                          color: widget.isDarkMode
+                                          color:  themeNotifier.isDarkModeEnabled
                                               ? Colors.black54
                                               : Colors.white,
                                           shape: RoundedRectangleBorder(
@@ -446,7 +448,7 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
                                                 Icon(
                                                   Icons.aspect_ratio,
                                                   size: 32,
-                                                  color: widget.isDarkMode
+                                                  color:  themeNotifier.isDarkModeEnabled
                                                       ? Colors.white
                                                       : Colors.black54,
                                                 ),
@@ -455,7 +457,7 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
                                                   '${widget.imovel.detalhes['area_privativa']}',
                                                   style: TextStyle(
                                                     fontSize: 18,
-                                                    color: widget.isDarkMode
+                                                    color:  themeNotifier.isDarkModeEnabled
                                                         ? Colors.white
                                                         : Colors.black54,
                                                   ),
@@ -465,7 +467,7 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
                                                   'Área privativa',
                                                   style: TextStyle(
                                                     fontSize: 18,
-                                                    color: widget.isDarkMode
+                                                    color:  themeNotifier.isDarkModeEnabled
                                                         ? Colors.white
                                                         : Colors.black54,
                                                   ),
@@ -487,7 +489,7 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
                       children: [
                         ImovelCaracteristicasWidget(
                           caracteristicas: widget.caracteristicas,
-                          isDarkMode: widget.isDarkMode,
+                          isDarkMode:  themeNotifier.isDarkModeEnabled,
                         ),
                       ],
                     ),
@@ -500,7 +502,7 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
                         'Localização do imóvel:',
                         style: TextStyle(
                           color:
-                              widget.isDarkMode ? Colors.white : Colors.black54,
+                               themeNotifier.isDarkModeEnabled ? Colors.white : Colors.black54,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -511,7 +513,7 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
                           color:
-                              widget.isDarkMode ? Colors.black : Colors.white,
+                               themeNotifier.isDarkModeEnabled ? Colors.black : Colors.white,
                         ),
                       ),
                       /*
