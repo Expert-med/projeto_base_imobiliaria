@@ -31,87 +31,70 @@ class _BuscaImoveisState extends State<BuscaImoveis> {
   bool checkOutFocused = false;
   bool guestsFocused = false;
 
-   @override
+  @override
   Widget build(BuildContext context) {
     return Center(
-      child: Column(
-        children: [
-          Container(
-            margin: EdgeInsets.all(40),
-            height: 70,
-            width: 1000,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(50),
-              color: Color.fromARGB(255, 233, 6, 6),
+      child: Container(
+        margin: EdgeInsets.all(40),
+        height: 70,
+        width: 1000,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(50),
+          color: Color.fromARGB(255, 233, 6, 6),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            _buildExpandedTextField(
+              hintText: 'Check-in Insira as datas',
+              isFocused: checkInFocused,
+              onTap: () {
+                setState(() {
+                  checkInFocused = true;
+                  checkOutFocused = false;
+                  guestsFocused = false;
+                });
+              },
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                _buildExpandedTextField(
-                  hintText: 'Check-in Insira as datas',
-                  isFocused: checkInFocused,
-                  onTap: () {
-                    setState(() {
-                      checkInFocused = true;
-                      checkOutFocused = false;
-                      guestsFocused = false;
-                    });
-                  },
-                ),
-                _buildExpandedTextField(
-                  hintText: 'Checkout Insira as datas',
-                  isFocused: checkOutFocused,
-                  onTap: () {
-                    setState(() {
-                      checkInFocused = false;
-                      checkOutFocused = true;
-                      guestsFocused = false;
-                    });
-                  },
-                ),
-                _buildExpandedTextField(
-                  hintText: 'Quem Hóspedes?',
-                  isFocused: guestsFocused,
-                  onTap: () {
-                    setState(() {
-                      checkInFocused = false;
-                      checkOutFocused = false;
-                      guestsFocused = true;
-                    });
-                  },
-                ),
-                ClipOval(
-                  child: Material(
-                    color: Color.fromARGB(255, 255, 255, 255),
-                    child: InkWell(
-                      onTap: () {},
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Icon(
-                          Icons.search,
-                          color: Color.fromARGB(255, 255, 0, 0),
-                        ),
-                      ),
+            _buildExpandedTextField(
+              hintText: 'Checkout Insira as datas',
+              isFocused: checkOutFocused,
+              onTap: () {
+                setState(() {
+                  checkInFocused = false;
+                  checkOutFocused = true;
+                  guestsFocused = false;
+                });
+              },
+            ),
+            _buildExpandedTextField(
+              hintText: 'Quem Hóspedes?',
+              isFocused: guestsFocused,
+              onTap: () {
+                setState(() {
+                  checkInFocused = false;
+                  checkOutFocused = false;
+                  guestsFocused = true;
+                });
+              },
+            ),
+            ClipOval(
+              child: Material(
+                color: Color.fromARGB(255, 255, 255, 255),
+                child: InkWell(
+                  onTap: () {},
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Icon(
+                      Icons.search,
+                      color: Color.fromARGB(255, 255, 0, 0),
                     ),
                   ),
                 ),
-              ],
-            ),
-          ),
-          SizedBox(height: 20), // Espaçamento entre os Containers
-          Container(
-            // Novo Container abaixo do anterior
-            height: 200,
-            width: 1000,
-            color: Colors.blue,
-            child: Center(
-              child: Text(
-                'Novo Container',
-                style: TextStyle(color: Colors.white, fontSize: 20),
               ),
             ),
-          ),
-        ],
+          ], 
+        ),
       ),
     );
   }
