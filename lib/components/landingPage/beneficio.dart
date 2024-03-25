@@ -12,7 +12,7 @@ class Beneficio extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return variaveis["beneficio_0"]!["titulo_beneficio_0"]!  != 'Título beneficio 1' ?Container(
       height: 500,
       color: Colors.white,
       alignment: Alignment.center,
@@ -25,11 +25,12 @@ class Beneficio extends StatelessWidget {
               : _buildInvertedLayout(),
         ),
       ),
-    );
+    ) : Container();
   }
 
   List<Widget> _buildNormalLayout() {
     return [
+    
       Expanded(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

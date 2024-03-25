@@ -36,6 +36,7 @@ class Navegacao extends StatelessWidget {
                     ],
                   ),
                 ),
+                if(variaveis['links']!["link"] != 'Link')
                 Expanded(
                   flex: 1,
                   child: Column(
@@ -52,6 +53,7 @@ class Navegacao extends StatelessWidget {
                     ],
                   ),
                 ),
+                if(variaveis['links']!["link"] != 'Link')
                 Expanded(
                   flex: 1,
                   child: Column(
@@ -69,7 +71,7 @@ class Navegacao extends StatelessWidget {
                     ],
                   ),
                 ),
-                
+                if(variaveis['links']!["link"] != 'Link')
                 Expanded(
                   flex: 1,
                   child: Column(

@@ -10,7 +10,8 @@ import '../../main.dart';
 import '../home_page.dart';
 
 class AuthPage extends StatefulWidget {
-  const AuthPage({Key? key});
+   const AuthPage({Key? key}) : super(key: key);
+
 
   @override
   State<AuthPage> createState() => _AuthPageState();
@@ -115,6 +116,7 @@ class _AuthPageState extends State<AuthPage> {
                 child: Center(
                   child: SingleChildScrollView(
                     child: AuthForm(
+                       key: GlobalKey(),
                       onSubmit: _handleSubmit,
                       isDarkMode: isDarkMode,
                     ),

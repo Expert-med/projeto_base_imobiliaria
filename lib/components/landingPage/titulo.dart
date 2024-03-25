@@ -4,6 +4,7 @@ import 'package:projeto_imobiliaria/components/imovel/imovel_grid.dart';
 
 import '../../pages/imoveis/imoveis_landing.dart';
 import '../../pages/map/map_flutter.dart';
+import '../../util/redes_sociais_util.dart';
 import '../imovel/imovel_carousel_favorites.dart';
 import '../imovel/imovel_list_view.dart';
 
@@ -23,19 +24,23 @@ class Titulo extends StatefulWidget {
 
 class _TituloState extends State<Titulo> {
   List<String> imoveis = [];
-
+  String facebook = '';
+  String instagram = '';
+  String linkedin = '';
+  String celular = '';
   @override
   void initState() {
     super.initState();
     // Chama a função fetchImoveisFavoritos quando o widget é inicializado
     fetchImoveisFavoritos();
+    saveRedesSociais();
   }
 
   Future<List<String>> fetchImoveisFavoritos() async {
     List<String> imoveisFavoritos = [];
 
     try {
-      print('Buscando corretor ${widget.nome}');
+
       final snapshot = await FirebaseFirestore.instance
           .collection('corretores')
           .where('name',
@@ -64,23 +69,54 @@ class _TituloState extends State<Titulo> {
     } catch (error) {
       print('Erro ao buscar informações do corretor: $error');
     }
-  print(imoveis);
+    print(imoveis);
     return imoveisFavoritos;
+  }
+
+  Future<void> saveRedesSociais() async {
+    try {
+      final store = FirebaseFirestore.instance;
+
+      final querySnapshot = await store
+          .collection('corretores')
+          .where('name', isEqualTo: widget.nome)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        final docId = querySnapshot.docs[0].id;
+        final contato = querySnapshot.docs[0].data()['contato'];
+
+        if (contato != null && contato['redes_sociais'] != null) {
+          final redesSociais = contato['redes_sociais'];
+          setState(() {
+            facebook = redesSociais['facebook'] ?? '';
+            instagram = redesSociais['instagram'] ?? '';
+            linkedin = redesSociais['linkedin'] ?? '';
+            celular = contato['celular'] ?? '';
+          });
+          print(
+              'Informações das redes sociais salvas nas variáveis com sucesso!');
+        } else {
+          print(
+              'O corretor não possui informações de contato ou redes sociais.');
+        }
+      } else {
+        print('Nenhum corretor encontrado com o nome ${widget.nome}.');
+      }
+    } catch (error) {
+      print('Erro ao buscar as variáveis da landing page: $error');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 1500,
+      height: 1200,
       color: Colors.white,
       alignment: Alignment.centerLeft,
       child: Column(
         children: [
-          Text('Imoveis favoritos'),
-          FavoriteImoveisCarousel(
-            false,
-            imoveis,
-          ),
+          
           Padding(
             padding: EdgeInsets.all(20),
             child: Stack(
@@ -147,18 +183,22 @@ class _TituloState extends State<Titulo> {
                         ],
                       ),
                       SizedBox(height: 10),
-                      Text(
-                        widget.variaveis['titulo']!['texto_1']!,
-                      ),
+                      RedesSociaisRow(
+                          celular: celular,
+                          facebook: facebook,
+                          instagram: instagram,
+                          linkedin: linkedin),
                     ],
                   ),
                 ),
               ],
             ),
           ),
-          
           Expanded(
-            child: ImovelLanding(nome: widget.nome, fav: 0,),
+            child: ImovelLanding(
+              nome: widget.nome,
+              fav: 0,
+            ),
           ),
         ],
       ),

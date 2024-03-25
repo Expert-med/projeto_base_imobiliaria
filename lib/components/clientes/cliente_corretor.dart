@@ -354,63 +354,31 @@ class _ClienteInfoCorretorState extends State<ClienteInfoCorretor> {
             cliente: widget.cliente,
           ),
           SizedBox(height: 8),
-          Container(
-            width: double.infinity,
-            child: Card(
-              elevation: 7,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'Imoveis favoritos do cliente',
-                        style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: imoveisFavoritos.isEmpty
+                  ? Center(
+                      child: Card(
+                        elevation: 7,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'Nenhum imóvel favorito adicionado',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                   
-                    
-                    
-                  ],
-                ),
-              ),
+                    )
+                  : FavoriteImoveisGrid(false, imoveisFavoritos),
             ),
           ),
-         
-          Expanded(
-  child: Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: imoveisFavoritos.isEmpty
-        ? Center(
-            child: Card(
-               elevation: 7,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'Nenhum imóvel favorito adicionado',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-          )
-        : FavoriteImoveisGrid(false, imoveisFavoritos),
-  ),
-),
-
         ],
       ),
       floatingActionButton: FloatingActionButton(

@@ -26,12 +26,12 @@ class Footer extends StatelessWidget {
               children: [
                 SizedBox(width: 20),
                 Text('© 2024 . Todos os direitos reservados Expert Vision', style: TextStyle(fontSize: 16)),
-                SizedBox(width: 20),
-                Text(variaveis['footer']!["politica"]!, style: TextStyle(fontSize: 16)),
-                SizedBox(width: 20),
-                Text(variaveis['footer']!["cookies"]!, style: TextStyle(fontSize: 16)),
-                SizedBox(width: 20),
-                Text(variaveis['footer']!["termos"]!, style: TextStyle(fontSize: 16)),
+                // SizedBox(width: 20),
+                // Text(variaveis['footer']!["politica"]!, style: TextStyle(fontSize: 16)),
+                // SizedBox(width: 20),
+                // Text(variaveis['footer']!["cookies"]!, style: TextStyle(fontSize: 16)),
+                // SizedBox(width: 20),
+                // Text(variaveis['footer']!["termos"]!, style: TextStyle(fontSize: 16)),
               ],
             )    
           ],

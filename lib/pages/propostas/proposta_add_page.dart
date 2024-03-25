@@ -68,6 +68,7 @@ Navigator.of(context).pop();
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CadPropostaForm(
+                        key: GlobalKey(),
                         onSubmit: _handleSubmit,
                         isDarkMode: isDarkMode,
                       )

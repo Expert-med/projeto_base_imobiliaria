@@ -39,7 +39,7 @@ class _CadastroImovelState extends State<CadastroImovel> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CadImovelForm()
+                        CadImovelForm(key: GlobalKey(),)
                       ],
                     ),
                   ),

@@ -40,7 +40,7 @@ class _BuscaImoveisState extends State<BuscaImoveis> {
         width: 1000,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(50),
-          color: Color.fromARGB(255, 233, 6, 6),
+          color:Color.fromARGB(255, 238, 238, 238)
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -56,6 +56,13 @@ class _BuscaImoveisState extends State<BuscaImoveis> {
                 });
               },
             ),
+            VerticalDivider(
+                  color: Colors.grey, // Cor do divisor
+                  thickness: 1, // Espessura do divisor
+                  width: 20, // Largura do divisor
+                  indent: 10, // Espaçamento superior do divisor
+                  endIndent: 10, // Espaçamento inferior do divisor
+                ),
             _buildExpandedTextField(
               hintText: 'Checkout Insira as datas',
               isFocused: checkOutFocused,
@@ -67,6 +74,13 @@ class _BuscaImoveisState extends State<BuscaImoveis> {
                 });
               },
             ),
+            VerticalDivider(
+                  color: Colors.grey, // Cor do divisor
+                  thickness: 1, // Espessura do divisor
+                  width: 20, // Largura do divisor
+                  indent: 10, // Espaçamento superior do divisor
+                  endIndent: 10, // Espaçamento inferior do divisor
+                ),
             _buildExpandedTextField(
               hintText: 'Quem Hóspedes?',
               isFocused: guestsFocused,
@@ -110,7 +124,7 @@ class _BuscaImoveisState extends State<BuscaImoveis> {
         child: Container(
           height: 70,
           decoration: BoxDecoration(
-            color: isFocused ? Color.fromARGB(139, 235, 235, 235) : Colors.transparent,
+            color: isFocused ? Colors.white : Colors.transparent,
             borderRadius: BorderRadius.circular(50),
           ),
           child: TextField(

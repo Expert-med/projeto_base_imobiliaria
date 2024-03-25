@@ -114,6 +114,7 @@ class _GeralAgendamentoState extends State<GeralAgendamento> {
                                       context: context,
                                       builder: (BuildContext context) {
                                         return CadAgendamentoForm(
+                                          key: GlobalKey(),
                                           onSubmit: _handleSubmit,
                                         );
                                       },

@@ -10,7 +10,7 @@ class Solucao extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return  variaveis['solucao']!["titulo_1"] != 'Título Solução' ? Container(
       height: 300,
       color: Colors.white,
       alignment: Alignment.center,
@@ -94,7 +94,7 @@ class Solucao extends StatelessWidget {
           ],
         ),
       ),
-    );
+    ) : Container();
   }
 }
 

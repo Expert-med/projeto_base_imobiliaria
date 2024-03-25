@@ -321,8 +321,8 @@ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
             Padding(
               padding: const EdgeInsets.only(left: 8, right: 8),
               child: ListTile(
-                leading: FaIcon(
-                  FontAwesomeIcons.scroll,
+                leading: Icon(
+                 Icons.pageview,
                   color: Colors.white,
                 ),
                 title: Text(
@@ -334,7 +334,7 @@ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
                 onTap: () {
                   print("object");
                   print(corretorNome);
-                  Get.toNamed('/$corretorNome');
+                  Get.toNamed('/corretor/$corretorNome');
                 },
               ),
             ),
@@ -343,7 +343,7 @@ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
               padding: const EdgeInsets.only(left: 8, right: 8),
               child: ListTile(
                 leading: FaIcon(
-                  FontAwesomeIcons.scroll,
+                  FontAwesomeIcons.edit,
                   color: Colors.white,
                 ),
                 title: Text(
@@ -414,7 +414,7 @@ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
           if (_user?.tipoUsuario == 1)
             ListTile(
               leading: FaIcon(
-                FontAwesomeIcons.calendar,
+                FontAwesomeIcons.tasks,
                 color: Colors.white,
               ),
               title: Text(
@@ -434,32 +434,34 @@ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
               },
             ),
           Divider(),
-          Padding(
-            padding: const EdgeInsets.only(top: 180),
-            child: ListTile(
-              leading: Icon(
-                Icons.logout,
-                color: themeNotifier.isDarkModeEnabled
-                    ? darkenColor(Colors.white, 0.5)
-                    : Colors.white,
-              ),
-              title: Text(
-                'Log Out',
-                style: TextStyle(
-                  color: themeNotifier.isDarkModeEnabled
- ? Colors.white : Colors.white70,
-                ),
-              ),
-              onTap: () {
-                AuthService().logout;
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => AuthPage()),
-                  (route) => false,
-                );
-              },
-            ),
-          ),
+         Padding(
+  padding: const EdgeInsets.only(top: 180),
+  child: ListTile(
+    leading: Icon(
+      Icons.logout,
+      color: themeNotifier.isDarkModeEnabled
+          ? darkenColor(Colors.white, 0.5)
+          : Colors.white,
+    ),
+    title: Text(
+      'Log Out',
+      style: TextStyle(
+        color: themeNotifier.isDarkModeEnabled
+            ? Colors.white
+            : Colors.white70,
+      ),
+    ),
+    onTap: () async {
+      await AuthService().logout(); // Chame o método logout() com parênteses
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => AuthPage()),
+        (route) => false,
+      );
+    },
+  ),
+),
+
         ],
       ),
     );

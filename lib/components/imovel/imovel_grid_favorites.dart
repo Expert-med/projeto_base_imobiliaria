@@ -12,7 +12,7 @@ import 'imovel_item_sem_barra.dart';
 
 class FavoriteImoveisGrid extends StatefulWidget {
   final bool showFavoriteOnly;
-  final List<String> idsToShow; 
+  final List<String> idsToShow;
 
   const FavoriteImoveisGrid(this.showFavoriteOnly, this.idsToShow, {Key? key})
       : super(key: key);
@@ -22,7 +22,6 @@ class FavoriteImoveisGrid extends StatefulWidget {
 }
 
 class _FavoriteImoveisGridState extends State<FavoriteImoveisGrid> {
-
   late List<NewImovel> _loadedProducts;
   late List<NewImovel> imoveisFiltrados;
   bool showFiltradas = false;
@@ -34,7 +33,7 @@ class _FavoriteImoveisGridState extends State<FavoriteImoveisGrid> {
   void initState() {
     super.initState();
 
-     _loadedProducts = Provider.of<NewImovelList>(context, listen: false)
+    _loadedProducts = Provider.of<NewImovelList>(context, listen: false)
         .items
         .where((imovel) => widget.idsToShow.contains(imovel.id))
         .toList();
@@ -52,15 +51,6 @@ class _FavoriteImoveisGridState extends State<FavoriteImoveisGrid> {
     }
     return filteredProducts;
   }
-
-
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -104,25 +94,45 @@ class _FavoriteImoveisGridState extends State<FavoriteImoveisGrid> {
               },
             ),
           ),
-          BuscaImoveis(),
+          // Exibe o texto se a lista de imóveis favoritos estiver vazia
+          _loadedProducts.isEmpty
+              ? Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Card(
+                  elevation: 5,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Text(
+                        'Nenhum imóvel favorito adicionado, veja todos os imóveis do corretor!',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                ),
+              )
+              : SizedBox(),
           Expanded(
             child: GridView.builder(
-           
               padding: const EdgeInsets.all(10),
-              itemCount: _filterProducts().length +
-                  1,
+              itemCount: _filterProducts().length + 1,
               itemBuilder: (ctx, i) {
                 if (i == _filterProducts().length) {
                   return _buildLoadMoreButton();
                 } else {
                   return ChangeNotifierProvider.value(
                     value: _filterProducts()[i],
-                    child: ImovelItem( i,
-                        _filterProducts().length, 0, (String productCode) {}),
+                    child: ImovelItem(
+                        i,
+                        _filterProducts().length,
+                        0, (String productCode) {}),
                   );
                 }
               },
-
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: isSmallScreen ? 1 : 4,
                 childAspectRatio: isSmallScreen ? 3 / 2 : 3 / 3,
@@ -136,33 +146,16 @@ class _FavoriteImoveisGridState extends State<FavoriteImoveisGrid> {
     );
   }
 
-  Widget _buildFilterButton(String text, VoidCallback onPressed) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ElevatedButton(
-        onPressed: onPressed,
-        child: Text(text),
-        style: ElevatedButton.styleFrom(
-          elevation: 10.0,
-          backgroundColor: Color(0xFF6e58e9),
-          padding: EdgeInsets.symmetric(horizontal: 20.0,   vertical: 20.0),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-        ),
-      ),
-    );
-  }
   Widget _buildLoadMoreButton() {
     return Container(
       alignment: Alignment.center,
       padding: const EdgeInsets.symmetric(vertical: 20),
       child: ElevatedButton(
-        onPressed:(){
-          final currentRoute = Get.currentRoute; 
+        onPressed: () {
+          final currentRoute = Get.currentRoute;
           Get.toNamed('$currentRoute/imoveis');
         },
-        child: Text('Ver todos os imoveis'),
+        child: Text('Ver todos os imóveis'),
       ),
     );
   }

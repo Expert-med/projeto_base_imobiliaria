@@ -83,7 +83,7 @@ Future<void> _handleSubmit(ImobiliariaFormData formData) async {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CadImobiliariaForm(isDarkMode: isDarkMode,onSubmit: _handleSubmit,)
+                        CadImobiliariaForm(key: GlobalKey(),isDarkMode: isDarkMode,onSubmit: _handleSubmit,)
                       ],
                     ),
                   ),

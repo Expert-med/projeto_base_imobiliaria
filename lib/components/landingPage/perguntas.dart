@@ -12,7 +12,7 @@ class Perguntas extends StatelessWidget {
   Widget build(BuildContext context) {
     int corInt = int.parse(variaveis["cores"]!["corPrincipal"]!);
     Color cor = Color(corInt);
-    return Container(
+    return variaveis['perguntas']!["titulo_1"]! != 'Título perguntas' ? Container(
       height: 500,
       color: cor,
       alignment: Alignment.center,
@@ -97,6 +97,6 @@ class Perguntas extends StatelessWidget {
           ],
         ),
       ),
-    );
+    ) : Container();
   }
 }

@@ -403,14 +403,14 @@ class _EditarLandingPageState extends State<EditarLandingPage> {
                                 },
                                 decoration: InputDecoration(labelText: 'Link 3'),
                               ),
-                              TextField(
-                                onChanged: (value) {
-                                  setState(() {
-                                    link4 = value;
-                                  });
-                                },
-                                decoration: InputDecoration(labelText: 'Link 4'),
-                              ),
+                              // TextField(
+                              //   onChanged: (value) {
+                              //     setState(() {
+                              //       link4 = value;
+                              //     });
+                              //   },
+                              //   decoration: InputDecoration(labelText: 'Link 4'),
+                              // ),
                               TextField(
                                 onChanged: (value) {
                                   setState(() {
@@ -853,7 +853,7 @@ class _EditarLandingPageState extends State<EditarLandingPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    CustomAppBar(variaveis: variaveis),
+                    CustomAppBar(variaveis: variaveis,nome: ''),
                     //Titulo(variaveis: variaveis, nome: ,),
                     Solucao(variaveis: variaveis),
                     Beneficio(tipoPagina: 0, variaveis: variaveis),

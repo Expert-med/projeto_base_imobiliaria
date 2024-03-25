@@ -12,7 +12,7 @@ class Porque extends StatelessWidget {
   Widget build(BuildContext context) {
     int corInt = int.parse(variaveis["cores"]!["corPrincipal"]!);
     Color cor = Color(corInt);
-    return Container(
+    return variaveis['porque']!["titulo_1"]! != 'Título focado no problema que você resolve' ? Container(
       height: 300,
       color: Color.fromARGB(255, 134, 133, 133),
       alignment: Alignment.center,
@@ -56,6 +56,6 @@ class Porque extends StatelessWidget {
           ],
         ),
       ),
-    );
+    ) : Container();
   }
 }
