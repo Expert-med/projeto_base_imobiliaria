@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:projeto_imobiliaria/components/custom_menu.dart';
 import 'package:projeto_imobiliaria/components/imovel/imovel_grid_favorites.dart';
 import 'package:projeto_imobiliaria/models/imoveis/newImovelList.dart';
@@ -15,7 +16,9 @@ import 'cad_imovel_page.dart';
 
 class ImovelLanding extends StatefulWidget {
   final String nome;
-  ImovelLanding({required this.nome, Key? key}) : super(key: key);
+  final int fav;
+
+  ImovelLanding({required this.nome, required this.fav, Key? key}) : super(key: key);
 
   @override
   State<ImovelLanding> createState() => _ImovelLandingState();
@@ -47,7 +50,7 @@ class _ImovelLandingState extends State<ImovelLanding> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [ 
                   Expanded(
-                    child: GridLanding(nome: widget.nome,showFavoriteOnly: false,)
+                    child: widget.fav == 0 ? ImoveisFavoritos(isDarkMode: false) : GridLanding(nome: widget.nome,showFavoriteOnly: false,),
                   ),
                 ],
               ),

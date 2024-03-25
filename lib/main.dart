@@ -110,7 +110,7 @@ class MyApp extends StatelessWidget {
                       final nome = Get.parameters['nome'] ?? '';
                       final String corretorNome =
                           nome.toLowerCase().replaceAll('-', ' ');
-                      return ImovelLanding(nome: corretorNome);
+                      return ImovelLanding(nome: corretorNome, fav: 1,);
                     },
                   );
                 },

@@ -175,7 +175,7 @@ class _GridLandingState extends State<GridLanding> {
               controller: _scrollController,
               padding: const EdgeInsets.all(10),
               itemCount: _filterProducts().length +
-                  1, // Add 1 for the load more button
+                  1, 
               itemBuilder: (ctx, i) {
                 if (i == _filterProducts().length) {
                   return _buildLoadMoreButton();
