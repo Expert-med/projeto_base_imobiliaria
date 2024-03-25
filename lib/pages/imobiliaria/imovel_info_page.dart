@@ -4,9 +4,11 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:projeto_imobiliaria/models/imoveis/newImovel.dart';
 import 'package:projeto_imobiliaria/util/app_bar_model.dart';
+import 'package:provider/provider.dart';
 
 import '../../components/custom_menu.dart';
 import '../../components/imovel/imovel_info_component.dart';
+import '../../theme/appthemestate.dart';
 
 class ImoveisInfoPage extends StatefulWidget {
   final String nome_imovel;
@@ -53,12 +55,11 @@ class ImoveisInfoPage extends StatefulWidget {
 }
 
 class _ImoveisInfoPageState extends State<ImoveisInfoPage> {
-  bool isDarkMode = false;
-
+  
   @override
   Widget build(BuildContext context) {
     bool isSmallScreen = MediaQuery.of(context).size.width < 900;
-
+final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('${widget.nome_imovel}'),
@@ -74,7 +75,7 @@ class _ImoveisInfoPageState extends State<ImoveisInfoPage> {
                 ),
               Expanded(
                 child: Container(
-                  color: isDarkMode ? Colors.black : Colors.white,
+                 
                   padding: const EdgeInsets.all(20.0),
                   child: ImovelInfoComponent( widget.tipo_pagina,
                       widget.caracteristicas, widget.imovel),
@@ -87,7 +88,7 @@ class _ImoveisInfoPageState extends State<ImoveisInfoPage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
-            isDarkMode = !isDarkMode;
+            themeNotifier.enableDarkMode(!themeNotifier.isDarkModeEnabled);
           });
         },
         child: Icon(Icons.lightbulb),

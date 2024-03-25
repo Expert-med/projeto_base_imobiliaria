@@ -2,7 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_imobiliaria/components/custom_menu.dart';
+import 'package:provider/provider.dart';
 
+import '../../theme/appthemestate.dart';
 import '../../util/app_bar_model.dart';
 import '../../util/funcoes/buscas.dart';
 import '../imobiliaria/imovel_info_page.dart';
@@ -45,6 +47,8 @@ class _ImovelGridCompletaSemComponenteState
   @override
   Widget build(BuildContext context) {
     bool isSmallScreen = MediaQuery.of(context).size.width < 900;
+    
+    final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
 
     if (searchTerm.isEmpty) {
       filteredInstru = showFiltradas ? filteredInstru : filteredInstrumentais;
@@ -389,7 +393,7 @@ class _ImovelGridCompletaSemComponenteState
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
-            isDarkMode = !isDarkMode;
+            themeNotifier.enableDarkMode(!themeNotifier.isDarkModeEnabled);
           });
         },
         child: Icon(Icons.lightbulb),

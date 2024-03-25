@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:projeto_imobiliaria/models/imoveis/newImovel.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../theme/appthemestate.dart';
 import 'info_caracteristicas_component.dart';
+import 'package:latlong2/latlong.dart';
 
 class ImovelInfoComponent extends StatefulWidget {
- 
   Map<String, dynamic> caracteristicas;
   final NewImovel imovel;
   final int tipo_pagina;
 
-  ImovelInfoComponent(
-       this.tipo_pagina, this.caracteristicas, this.imovel);
+  ImovelInfoComponent(this.tipo_pagina, this.caracteristicas, this.imovel);
 
   @override
   _ImovelInfoComponentState createState() => _ImovelInfoComponentState();
@@ -24,7 +25,7 @@ class ImovelInfoComponent extends StatefulWidget {
 class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
   // Indice da imagem atual
   int _currentIndex = 0;
-  late GoogleMapController mapController;
+  //late GoogleMapController mapController;
   // Controlador do CarouselSlider
   final CarouselController _carouselController = CarouselController();
 
@@ -38,14 +39,11 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
 
   @override
   Widget build(BuildContext context) {
-final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
-
-   
+    final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
 
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
-          
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -53,39 +51,45 @@ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10), // Adicionando bordas arredondadas
-                    color: Color.fromARGB(255, 238, 238, 238),
+                    borderRadius: BorderRadius.circular(
+                        10), // Adicionando bordas arredondadas
+                    color: !themeNotifier.isDarkModeEnabled
+                        ? Color.fromARGB(255, 238, 238, 238)
+                        : Colors.black,
                   ),
                   child: Column(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 5, vertical: 5),
                         child: Row(
                           children: [
                             Expanded(
                               child: Container(
                                 child: Padding(
-                                  padding: const EdgeInsets.only(left: 10, right: 10, top: 8, bottom: 8),
+                                  padding: const EdgeInsets.only(
+                                      left: 10, right: 10, top: 8, bottom: 8),
                                   child: Text.rich(
                                     TextSpan(
                                       children: [
                                         TextSpan(
-                                          text: '${widget.imovel.detalhes['nome_imovel']}',
+                                          text:
+                                              '${widget.imovel.detalhes['nome_imovel']}  ',
                                           style: TextStyle(
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold,
-                                           
                                           ),
                                         ),
                                         TextSpan(
-                                          text: 'Cód',
+                                          text: 'Cód.',
                                           style: TextStyle(
                                             fontSize: 18,
                                             color: Colors.grey,
                                           ),
                                         ),
                                         TextSpan(
-                                          text: '${widget.imovel.detalhes['nome_imovel'].substring(widget.imovel.detalhes['nome_imovel'].indexOf('Cód') + 3)}',
+                                          text:
+                                              '${widget.imovel.detalhes['nome_imovel'].substring(widget.imovel.detalhes['nome_imovel'].indexOf('Cód') + 3)}',
                                           style: TextStyle(
                                             fontSize: 18,
                                             color: Colors.grey,
@@ -101,18 +105,23 @@ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 10, right: 10, top: 8, bottom: 8),
+                        padding: const EdgeInsets.only(
+                            left: 10, right: 10, top: 8, bottom: 8),
                         child: Row(
                           children: [
                             Icon(
                               Icons.place,
-                              color:  themeNotifier.isDarkModeEnabled ? Colors.white : Colors.black54,
+                              color: themeNotifier.isDarkModeEnabled
+                                  ? Colors.white
+                                  : Colors.black54,
                             ),
                             SizedBox(width: 4),
                             Flexible(
                               child: Text(
                                 '${widget.imovel.localizacao['endereco']['cidade']}',
-                                style: TextStyle(fontSize: 15, ),
+                                style: TextStyle(
+                                  fontSize: 15,
+                                ),
                               ),
                             ),
                           ],
@@ -122,7 +131,6 @@ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
                   ),
                 ),
               ),
-
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
@@ -279,7 +287,8 @@ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
                                                   SelectableText(
                                                     'A partir de ',
                                                     style: TextStyle(
-                                                      color:  themeNotifier.isDarkModeEnabled
+                                                      color: themeNotifier
+                                                              .isDarkModeEnabled
                                                           ? Colors.white
                                                           : Colors.black54,
                                                     ),
@@ -305,7 +314,7 @@ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
                                     children: [
                                       Expanded(
                                         child: Card(
-                                          color:  themeNotifier.isDarkModeEnabled
+                                          color: themeNotifier.isDarkModeEnabled
                                               ? Colors.black54
                                               : Colors.white,
                                           shape: RoundedRectangleBorder(
@@ -320,7 +329,8 @@ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
                                                 Icon(
                                                   Icons.bed,
                                                   size: 32,
-                                                  color:  themeNotifier.isDarkModeEnabled
+                                                  color: themeNotifier
+                                                          .isDarkModeEnabled
                                                       ? Colors.white
                                                       : Colors.black54,
                                                 ),
@@ -329,7 +339,8 @@ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
                                                   '${widget.imovel.detalhes['total_dormitorios']}',
                                                   style: TextStyle(
                                                     fontSize: 18,
-                                                    color:  themeNotifier.isDarkModeEnabled
+                                                    color: themeNotifier
+                                                            .isDarkModeEnabled
                                                         ? Colors.white
                                                         : Colors.black54,
                                                   ),
@@ -344,7 +355,7 @@ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
                                               16), // Adicione um espaço entre os dois Cards
                                       Expanded(
                                         child: Card(
-                                          color:  themeNotifier.isDarkModeEnabled
+                                          color: themeNotifier.isDarkModeEnabled
                                               ? Colors.black54
                                               : Colors.white,
                                           shape: RoundedRectangleBorder(
@@ -359,7 +370,8 @@ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
                                                 Icon(
                                                   Icons.garage,
                                                   size: 32,
-                                                  color:  themeNotifier.isDarkModeEnabled
+                                                  color: themeNotifier
+                                                          .isDarkModeEnabled
                                                       ? Colors.white
                                                       : Colors.black54,
                                                 ),
@@ -368,7 +380,8 @@ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
                                                   '${widget.imovel.detalhes['vagas_garagem']}',
                                                   style: TextStyle(
                                                     fontSize: 18,
-                                                    color:  themeNotifier.isDarkModeEnabled
+                                                    color: themeNotifier
+                                                            .isDarkModeEnabled
                                                         ? Colors.white
                                                         : Colors.black54,
                                                   ),
@@ -384,7 +397,7 @@ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
                                     children: [
                                       Expanded(
                                         child: Card(
-                                          color:  themeNotifier.isDarkModeEnabled
+                                          color: themeNotifier.isDarkModeEnabled
                                               ? Colors.black54
                                               : Colors.white,
                                           shape: RoundedRectangleBorder(
@@ -399,7 +412,8 @@ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
                                                 Icon(
                                                   Icons.aspect_ratio,
                                                   size: 32,
-                                                  color:  themeNotifier.isDarkModeEnabled
+                                                  color: themeNotifier
+                                                          .isDarkModeEnabled
                                                       ? Colors.white
                                                       : Colors.black54,
                                                 ),
@@ -408,7 +422,8 @@ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
                                                   ' ${widget.imovel.detalhes['area_total']}',
                                                   style: TextStyle(
                                                     fontSize: 18,
-                                                    color:  themeNotifier.isDarkModeEnabled
+                                                    color: themeNotifier
+                                                            .isDarkModeEnabled
                                                         ? Colors.white
                                                         : Colors.black54,
                                                   ),
@@ -418,7 +433,8 @@ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
                                                   'Área total',
                                                   style: TextStyle(
                                                     fontSize: 18,
-                                                    color:  themeNotifier.isDarkModeEnabled
+                                                    color: themeNotifier
+                                                            .isDarkModeEnabled
                                                         ? Colors.white
                                                         : Colors.black54,
                                                   ),
@@ -433,7 +449,7 @@ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
                                               16), // Adicione um espaço entre os dois Cards
                                       Expanded(
                                         child: Card(
-                                          color:  themeNotifier.isDarkModeEnabled
+                                          color: themeNotifier.isDarkModeEnabled
                                               ? Colors.black54
                                               : Colors.white,
                                           shape: RoundedRectangleBorder(
@@ -448,7 +464,8 @@ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
                                                 Icon(
                                                   Icons.aspect_ratio,
                                                   size: 32,
-                                                  color:  themeNotifier.isDarkModeEnabled
+                                                  color: themeNotifier
+                                                          .isDarkModeEnabled
                                                       ? Colors.white
                                                       : Colors.black54,
                                                 ),
@@ -457,7 +474,8 @@ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
                                                   '${widget.imovel.detalhes['area_privativa']}',
                                                   style: TextStyle(
                                                     fontSize: 18,
-                                                    color:  themeNotifier.isDarkModeEnabled
+                                                    color: themeNotifier
+                                                            .isDarkModeEnabled
                                                         ? Colors.white
                                                         : Colors.black54,
                                                   ),
@@ -467,7 +485,8 @@ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
                                                   'Área privativa',
                                                   style: TextStyle(
                                                     fontSize: 18,
-                                                    color:  themeNotifier.isDarkModeEnabled
+                                                    color: themeNotifier
+                                                            .isDarkModeEnabled
                                                         ? Colors.white
                                                         : Colors.black54,
                                                   ),
@@ -489,7 +508,7 @@ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
                       children: [
                         ImovelCaracteristicasWidget(
                           caracteristicas: widget.caracteristicas,
-                          isDarkMode:  themeNotifier.isDarkModeEnabled,
+                          isDarkMode: themeNotifier.isDarkModeEnabled,
                         ),
                       ],
                     ),
@@ -501,8 +520,9 @@ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
                       child: SelectableText(
                         'Localização do imóvel:',
                         style: TextStyle(
-                          color:
-                               themeNotifier.isDarkModeEnabled ? Colors.white : Colors.black54,
+                          color: themeNotifier.isDarkModeEnabled
+                              ? Colors.white
+                              : Colors.black54,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -512,48 +532,80 @@ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                          color:
-                               themeNotifier.isDarkModeEnabled ? Colors.black : Colors.white,
+                          color: themeNotifier.isDarkModeEnabled
+                              ? Colors.black
+                              : Colors.white,
                         ),
                       ),
-                      /*
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(15),
-                        child: GoogleMap(
-                          initialCameraPosition: CameraPosition(
-                            target: LatLng(
-                              double.parse(
-                                  widget.imovel.localizacao['latitude']),
-                              double.parse(
-                                  widget.imovel.localizacao['longitude']),
+                        child: FlutterMap(
+                          options: MapOptions(
+                              center: LatLng(
+                                double.parse(
+                                    widget.imovel.localizacao['latitude']),
+                                double.parse(
+                                    widget.imovel.localizacao['longitude']),
+                              ),
+                              zoom: 13.0,
+                              maxZoom: 18.0),
+                          children: <Widget>[
+                            TileLayer(
+                              urlTemplate:
+                                  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                              subdomains: ['a', 'b', 'c'],
                             ),
-                            zoom: 15,
-                          ),
-                          onMapCreated: (controller) =>
-                              mapController = controller,
-                          onTap: (LatLng latLng) {},
-                          markers: Set<Marker>.of(
-                            [
-                              Marker(
-                                markerId: MarkerId(
-                                    widget.imovel.detalhes['nome_imovel']),
-                                position: LatLng(
-                                  double.parse(
-                                      widget.imovel.localizacao['latitude']),
-                                  double.parse(
-                                      widget.imovel.localizacao['longitude']),
+                            MarkerClusterLayerWidget(
+                              options: MarkerClusterLayerOptions(
+                                maxClusterRadius: 120,
+                                size: Size(40, 40),
+                                markers: [
+                                  Marker(
+                                    point: LatLng(
+                                      double.parse(widget
+                                          .imovel.localizacao['latitude']),
+                                      double.parse(widget
+                                          .imovel.localizacao['longitude']),
+                                    ),
+                                    width: 40,
+                                    height: 40,
+                                    builder: (context) => GestureDetector(
+                                      onTap: () {
+                                        setState(() {});
+                                      },
+                                      child: Icon(
+                                        Icons.location_on,
+                                        size: 40,
+                                        color: Color.fromARGB(255, 255, 17, 0),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                                polygonOptions: PolygonOptions(
+                                  borderColor: Color.fromARGB(255, 255, 1, 1),
+                                  color: Colors.black12,
+                                  borderStrokeWidth: 3,
                                 ),
-                                infoWindow: InfoWindow(
-                                    title:
-                                        widget.imovel.detalhes['nome_imovel']),
-                                onTap: () {
-                                  setState(() {});
+                                builder: (context, markers) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: Color.fromARGB(255, 255, 0, 0),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        markers.length.toString(),
+                                        style: const TextStyle(
+                                            color: Colors.white),
+                                      ),
+                                    ),
+                                  );
                                 },
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ),*/
+                      ),
                     ),
                     SizedBox(
                       height: 10,
