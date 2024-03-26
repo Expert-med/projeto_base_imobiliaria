@@ -35,6 +35,8 @@ class _GridLandingState extends State<GridLanding> {
   late bool guestsFocused;
   String selectedTipo = ''; 
   String selectedFin = '';
+  double _minPrice = 0;
+  double _maxPrice = 1000000;
 
   @override
   void initState() {
@@ -61,6 +63,17 @@ class _GridLandingState extends State<GridLanding> {
         _scrollController.position.maxScrollExtent) {
       _loadMoreItems();
     }
+  }
+
+  void resetFilters() {
+  setState(() {
+    _searchController.clear();
+    _searchText = '';
+    selectedTipo = '';
+    selectedFin = '';
+    _minPrice = 0;
+    _maxPrice = 1000000;
+  });
   }
 
  void _loadMoreItems() async {
@@ -121,7 +134,7 @@ void mostrarTodasEmbalagens() {
   List<NewImovel> _filterProducts() {
     List<NewImovel> filteredProducts = _loadedProducts;
 
-    // Aplicar filtro por texto de busca
+    
     if (_searchText.isNotEmpty) {
       filteredProducts = filteredProducts
           .where((imovel) =>
@@ -129,8 +142,8 @@ void mostrarTodasEmbalagens() {
           .toList();
     }
 
-    // Aplicar filtro por finalidade
-    if (selectedFin != null) {
+    
+    if (selectedFin != "") {
       final int finalidadeValue = selectedFin == 'Compra' ? 0 : 1;
       filteredProducts = filteredProducts
           .where((imovel) => imovel.finalidade == finalidadeValue)
@@ -229,18 +242,8 @@ void mostrarTodasEmbalagens() {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   _buildTipoTextField(),
-                  _buildExpandedTextField(
-                    hintText: 'Preço máximo',
-                    isFocused: checkOutFocused,
-                    onTap: () {
-                      setState(() {
-                        checkInFocused = false;
-                        checkOutFocused = true;
-                        guestsFocused = false;
-                      });
-                    },
-                  ),
                   _buildFinalidadeTextField(),
+                  _buildResetButton(),
                 ],
               ),
             ),
@@ -418,6 +421,24 @@ void mostrarTodasEmbalagens() {
         ),
       ),
     ),
+    
   );
 }
+Widget _buildResetButton() {
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ElevatedButton(
+          onPressed: resetFilters,
+          child: Text('Resetar Filtros'),
+          style: ElevatedButton.styleFrom(
+            elevation: 10.0,
+            backgroundColor: Colors.red, // Adjust color as needed
+            padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+          ),
+        ),
+      );
+    }
 }
