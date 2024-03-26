@@ -38,7 +38,7 @@ class _LandingPageState extends State<LandingPage> {
   @override
   void initState() {
     super.initState();
-   
+
     buscaLanding(widget.nome);
   }
 
@@ -59,6 +59,30 @@ class _LandingPageState extends State<LandingPage> {
 
       if (querySnapshot.docs.isNotEmpty) {
         final docId = querySnapshot.docs[0].id;
+        final docSnapshot = querySnapshot.docs[0];
+
+        final desempenho_atual = docSnapshot['desempenho_atual'];
+        if (desempenho_atual != null &&
+            desempenho_atual['views_page'] != null) {
+          final viewsPage = desempenho_atual['views_page'];
+          print('Valor de views_page: $viewsPage');
+        } else {
+          print(
+              'O campo "desempenho_atual" ou "views_page" não está presente nos dados.');
+        }
+
+        // Verifica se há usuário logado e se o nome é diferente do nome recebido
+        // Verifica se há usuário logado e se o nome é diferente do nome recebido
+        final user = FirebaseAuth.instance.currentUser;
+print('firebase: ${user?.displayName}, parametro: $nome ');
+if (user == null || user.displayName != nome) {
+  // Incrementa views_page
+  await store
+    .collection('corretores')
+    .doc(docId)
+    .update({'desempenho_atual.views_page': FieldValue.increment(1)});
+}
+
         final landingDoc = await store
             .collection('corretores')
             .doc(docId)
@@ -88,8 +112,7 @@ class _LandingPageState extends State<LandingPage> {
   Widget build(BuildContext context) {
     int corPrincipal = Colors.white.value; // Cor padrão
     Color corPrincipalColor = Color(corPrincipal);
-final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
-
+    final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
 
     if (variaveis.containsKey("cores") &&
         variaveis["cores"] != null &&
@@ -140,7 +163,7 @@ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
                 );
               },
             ),
-            floatingActionButton:  FloatingActionButton(
+      floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
             themeNotifier.enableDarkMode(!themeNotifier.isDarkModeEnabled);
@@ -148,7 +171,7 @@ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
         },
         child: Icon(Icons.lightbulb),
       ),
-     // drawer: FirebaseAuth.instance.currentUser != null ? CustomMenu() : null,
+      // drawer: FirebaseAuth.instance.currentUser != null ? CustomMenu() : null,
     );
   }
 }

@@ -257,6 +257,7 @@ final NegociacaoList negociacoes = NegociacaoList();
           },
         },
         'desempenho_atual': {
+          'views_page': 0,
           'mensal': {
             'vendas': 0,
             'aluguel': 0,

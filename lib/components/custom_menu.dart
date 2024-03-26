@@ -25,6 +25,7 @@ import '../pages/imoveis/teste_imove_with_bottom.dart';
 import '../pages/imoveis/virtual_imovel_tour/virtual_iframe.dart';
 import '../pages/map/map_flutter.dart';
 import '../pages/map/map_page.dart';
+import '../pages/metas/minhas_metas_page.dart';
 import '../pages/propostas/proposta_add_page.dart';
 import '../pages/propostas/proposta_list_page.dart';
 import '../pages/tarefas/minhas_tarefas_page.dart';
@@ -34,8 +35,6 @@ import '../util/dark_color_util.dart';
 import 'cad_imovel_form.dart';
 
 class CustomMenu extends StatefulWidget {
-  
-
   CustomMenu();
 
   @override
@@ -115,10 +114,11 @@ class _CustomMenuState extends State<CustomMenu> {
   @override
   Widget build(BuildContext context) {
     bool isSmallScreen = MediaQuery.of(context).size.width < 900;
-final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
+    final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
     return Drawer(
       backgroundColor: themeNotifier.isDarkModeEnabled
- ? Color.fromARGB(179, 24, 24, 24) : Color(0xFF0230547),
+          ? Color.fromARGB(179, 24, 24, 24)
+          : Color(0xFF0230547),
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
@@ -128,7 +128,6 @@ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
               leading: Icon(
                 Icons.home,
                 color: themeNotifier.isDarkModeEnabled
-
                     ? darkenColor(Colors.white, 0.5)
                     : Colors.white,
                 size: 40,
@@ -138,7 +137,8 @@ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: themeNotifier.isDarkModeEnabled
- ? Colors.white : Colors.white70,
+                      ? Colors.white
+                      : Colors.white70,
                 ),
               ),
               onTap: () {
@@ -182,7 +182,8 @@ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
               'Imoveis',
               style: TextStyle(
                 color: themeNotifier.isDarkModeEnabled
- ? Colors.white : Colors.white70,
+                    ? Colors.white
+                    : Colors.white70,
               ),
             ),
             onTap: () {
@@ -280,16 +281,15 @@ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
                 'Meus Clientes',
                 style: TextStyle(
                   color: themeNotifier.isDarkModeEnabled
- ? Colors.white : Colors.white70,
+                      ? Colors.white
+                      : Colors.white70,
                 ),
               ),
               onTap: () {
-                
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        CorretorClientesPage(),
+                    builder: (context) => CorretorClientesPage(),
                   ),
                 );
               },
@@ -322,13 +322,15 @@ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
               padding: const EdgeInsets.only(left: 8, right: 8),
               child: ListTile(
                 leading: Icon(
-                 Icons.pageview,
+                  Icons.pageview,
                   color: Colors.white,
                 ),
                 title: Text(
                   'Ver minha página',
                   style: TextStyle(
-                    color: themeNotifier.isDarkModeEnabled? Colors.white : Colors.white70,
+                    color: themeNotifier.isDarkModeEnabled
+                        ? Colors.white
+                        : Colors.white70,
                   ),
                 ),
                 onTap: () {
@@ -350,7 +352,8 @@ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
                   'Editar pagina',
                   style: TextStyle(
                     color: themeNotifier.isDarkModeEnabled
- ? Colors.white : Colors.white70,
+                        ? Colors.white
+                        : Colors.white70,
                   ),
                 ),
                 onTap: () {
@@ -362,8 +365,6 @@ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
               ),
             ),
           if (_user?.tipoUsuario == 1)
-           
-          
             ListTile(
               leading: FaIcon(
                 FontAwesomeIcons.scroll,
@@ -373,7 +374,8 @@ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
                 'Propostas',
                 style: TextStyle(
                   color: themeNotifier.isDarkModeEnabled
- ? Colors.white : Colors.white70,
+                      ? Colors.white
+                      : Colors.white70,
                 ),
               ),
               onTap: () {
@@ -387,7 +389,7 @@ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
                 );
               },
             ),
-        
+
           if (_user?.tipoUsuario == 1)
             ListTile(
               leading: FaIcon(
@@ -398,15 +400,15 @@ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
                 'Agendamentos',
                 style: TextStyle(
                   color: themeNotifier.isDarkModeEnabled
- ? Colors.white : Colors.white70,
+                      ? Colors.white
+                      : Colors.white70,
                 ),
               ),
               onTap: () {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        GeralAgendamento(),
+                    builder: (context) => GeralAgendamento(),
                   ),
                 );
               },
@@ -421,7 +423,8 @@ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
                 'Minhas Tarefas',
                 style: TextStyle(
                   color: themeNotifier.isDarkModeEnabled
- ? Colors.white : Colors.white70,
+                      ? Colors.white
+                      : Colors.white70,
                 ),
               ),
               onTap: () {
@@ -433,35 +436,58 @@ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
                 );
               },
             ),
+          if (_user?.tipoUsuario == 1)
+            ListTile(
+              leading: FaIcon(
+                FontAwesomeIcons.chartBar,
+                color: Colors.white,
+              ),
+              title: Text(
+                'Minhas Estatisticas',
+                style: TextStyle(
+                  color: themeNotifier.isDarkModeEnabled
+                      ? Colors.white
+                      : Colors.white70,
+                ),
+              ),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MinhasEstatisticas(),
+                  ),
+                );
+              },
+            ),
           Divider(),
-         Padding(
-  padding: const EdgeInsets.only(top: 180),
-  child: ListTile(
-    leading: Icon(
-      Icons.logout,
-      color: themeNotifier.isDarkModeEnabled
-          ? darkenColor(Colors.white, 0.5)
-          : Colors.white,
-    ),
-    title: Text(
-      'Log Out',
-      style: TextStyle(
-        color: themeNotifier.isDarkModeEnabled
-            ? Colors.white
-            : Colors.white70,
-      ),
-    ),
-    onTap: () async {
-      await AuthService().logout(); // Chame o método logout() com parênteses
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => AuthPage()),
-        (route) => false,
-      );
-    },
-  ),
-),
-
+          Padding(
+            padding: const EdgeInsets.only(top: 180),
+            child: ListTile(
+              leading: Icon(
+                Icons.logout,
+                color: themeNotifier.isDarkModeEnabled
+                    ? darkenColor(Colors.white, 0.5)
+                    : Colors.white,
+              ),
+              title: Text(
+                'Log Out',
+                style: TextStyle(
+                  color: themeNotifier.isDarkModeEnabled
+                      ? Colors.white
+                      : Colors.white70,
+                ),
+              ),
+              onTap: () async {
+                await AuthService()
+                    .logout(); // Chame o método logout() com parênteses
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => AuthPage()),
+                  (route) => false,
+                );
+              },
+            ),
+          ),
         ],
       ),
     );
