@@ -35,8 +35,7 @@ class _GridLandingState extends State<GridLanding> {
   late bool guestsFocused;
   String selectedTipo = ''; 
   String selectedFin = '';
-  double _minPrice = 0;
-  double _maxPrice = 1000000;
+  String selectedPreco = ''; 
 
   @override
   void initState() {
@@ -71,8 +70,7 @@ class _GridLandingState extends State<GridLanding> {
     _searchText = '';
     selectedTipo = '';
     selectedFin = '';
-    _minPrice = 0;
-    _maxPrice = 1000000;
+    selectedPreco = ''; 
   });
   }
 
@@ -176,6 +174,20 @@ void mostrarTodasEmbalagens() {
             .toList();
       }
     }
+
+    if (selectedPreco.isNotEmpty) {
+  double precoMaximo = double.parse(selectedPreco);
+  filteredProducts = filteredProducts
+      .where((imovel) {
+        if (imovel.preco.containsKey('preco_original')) {
+          double precoOriginal = double.parse(imovel.preco['preco_original']);
+          return precoOriginal < precoMaximo;
+        } else {
+          return false;
+        }
+      })
+      .toList();
+}
     return filteredProducts;
   }
 
@@ -242,6 +254,7 @@ void mostrarTodasEmbalagens() {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   _buildTipoTextField(),
+                  _buildPrecoTextField(),
                   _buildFinalidadeTextField(),
                   _buildResetButton(),
                 ],
@@ -379,6 +392,34 @@ void mostrarTodasEmbalagens() {
     ),
   );
 }
+Widget _buildPrecoTextField() {
+  return Expanded(
+    child: Padding(
+      padding: const EdgeInsets.all(10),
+      child: Container(
+        height: 70,
+        decoration: BoxDecoration(
+          color: checkInFocused ? Colors.white : Colors.transparent,
+          borderRadius: BorderRadius.circular(50),
+        ),
+        child: TextField(
+          keyboardType: TextInputType.number, // Allow only numeric input
+          onChanged: (value) {
+            setState(() {
+              selectedPreco = value;
+            });
+          },
+          decoration: InputDecoration(
+            hintText: 'Preço máximo',
+            contentPadding: EdgeInsets.symmetric(horizontal: 15),
+            border: InputBorder.none,
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
  Widget _buildFinalidadeTextField() {
   return Expanded(
     child: Padding(
