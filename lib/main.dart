@@ -154,7 +154,7 @@ void defineRoutes(FluroRouter router) {
               final newImovel = snapshot.data;
               if (newImovel != null) {
                 return ImovelInfoComponent(
-                  1,
+                  0,
                   newImovel.caracteristicas,
                   newImovel,
                 );

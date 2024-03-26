@@ -317,7 +317,7 @@ class _ImovelGridState extends State<ImovelGrid> {
                 } else {
                   return ChangeNotifierProvider.value(
                     value: _filterProducts()[i],
-                    child: ImovelItem( i,
+                    child: ImovelItem(0,  i,
                         _filterProducts().length, 0, (String productCode) {}),
                   );
                 }

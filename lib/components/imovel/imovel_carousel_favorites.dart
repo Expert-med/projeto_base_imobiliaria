@@ -57,7 +57,7 @@ print(' widget.favoriteIds ${ widget.favoriteIds}');
         scrollDirection: Axis.horizontal, // Direção do carousel
           ),
           itemBuilder: (BuildContext context, int index, int realIndex) {
-            return ImovelItem( index,_loadedProducts.length,0, (String productCode) {});
+            return ImovelItem(0, index,_loadedProducts.length,0, (String productCode) {});
           },
         );
 

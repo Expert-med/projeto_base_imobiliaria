@@ -1,59 +1,113 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
-import 'package:flutter_map/flutter_map.dart';
-import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
-import 'package:projeto_imobiliaria/models/imoveis/newImovel.dart';
-import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
+  import 'package:flutter_map/flutter_map.dart';
+  import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
+import 'package:get/get.dart';
+  import 'package:projeto_imobiliaria/components/landingPage/landingAppBar.dart';
+  import 'package:projeto_imobiliaria/models/imoveis/newImovel.dart';
+  import 'package:provider/provider.dart';
+  import 'package:url_launcher/url_launcher.dart';
 
-import '../../theme/appthemestate.dart';
+  import '../../theme/appthemestate.dart';
+  import '../landingPage/footer.dart';
+import '../landingPage/navegacao.dart';
 import 'info_caracteristicas_component.dart';
-import 'package:latlong2/latlong.dart';
+  import 'package:latlong2/latlong.dart';
 
-class ImovelInfoComponent extends StatefulWidget {
-  Map<String, dynamic> caracteristicas;
-  final NewImovel imovel;
-  final int tipo_pagina;
+  class ImovelInfoComponent extends StatefulWidget {
+    Map<String, dynamic> caracteristicas;
+    final NewImovel imovel;
+    final int tipo_pagina;
 
-  ImovelInfoComponent(this.tipo_pagina, this.caracteristicas, this.imovel);
+    ImovelInfoComponent(this.tipo_pagina, this.caracteristicas, this.imovel);
 
-  @override
-  _ImovelInfoComponentState createState() => _ImovelInfoComponentState();
-}
-
-class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
-  // Indice da imagem atual
-  int _currentIndex = 0;
-  //late GoogleMapController mapController;
-  // Controlador do CarouselSlider
-  final CarouselController _carouselController = CarouselController();
-
-  void _launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Não foi possível abrir o link: $url';
-    }
+    @override
+    _ImovelInfoComponentState createState() => _ImovelInfoComponentState();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
+  class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
+    // Indice da imagem atual
+    int _currentIndex = 0;
+    Map<String, dynamic> variaveis = {};
+    late String nomeComEspacos = "";
+    //late GoogleMapController mapController;
+    // Controlador do CarouselSlider
+    final CarouselController _carouselController = CarouselController();
 
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(
-                        10), // Adicionando bordas arredondadas
-                    color: !themeNotifier.isDarkModeEnabled
+    @override
+    void initState() {
+      super.initState();
+      final currentRoute = Get.currentRoute;
+      final nome = currentRoute.split('/corretor/')[1];
+      final sem = nome.split("/imoveis")[0];
+      nomeComEspacos = sem.replaceAll('-', ' ');
+      buscaLanding(nomeComEspacos);
+    }
+
+    void _launchURL(String url) async {
+      if (await canLaunch(url)) {
+        await launch(url);
+      } else {
+        throw 'Não foi possível abrir o link: $url';
+      }
+    }
+
+    void buscaLanding(String nome) async {
+      try {
+        final store = FirebaseFirestore.instance;
+
+        final querySnapshot = await store
+            .collection('corretores')
+            .where('name', isEqualTo: nome)
+            .get();
+
+        if (querySnapshot.docs.isNotEmpty) {
+          final docId = querySnapshot.docs[0].id;
+          final landingDoc = await store
+              .collection('corretores')
+              .doc(docId)
+              .collection('landing')
+              .doc(docId)
+              .get();
+
+          if (landingDoc.exists) {
+            final data = landingDoc.data();
+            if (data != null) {
+              setState(() {
+                variaveis = data;
+              });
+            } else {
+              print('Documento da landing page está vazio.');
+            }
+          }
+        } else {
+          print('Nenhum corretor encontrado com o ID atual.');
+        }
+      } catch (error) {
+        print('Erro ao buscar as variáveis da landing page: $error');
+      }
+    }
+
+    @override
+    Widget build(BuildContext context) {
+      final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
+
+      return Scaffold(
+        appBar: CustomAppBar(variaveis: variaveis, nome: nomeComEspacos),
+        body: SingleChildScrollView(
+          child: Container(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(
+                          10), // Adicionando bordas arredondadas
+                      color: !themeNotifier.isDarkModeEnabled
                         ? Color.fromARGB(255, 238, 238, 238)
                         : Colors.black,
                   ),
@@ -649,6 +703,8 @@ class _ImovelInfoComponentState extends State<ImovelInfoComponent> {
               SizedBox(
                 height: 8,
               ),
+              Navegacao(variaveis: variaveis),
+              Footer(variaveis: variaveis),
             ],
           ),
         ),

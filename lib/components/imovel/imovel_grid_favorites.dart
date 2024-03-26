@@ -93,8 +93,7 @@ class _FavoriteImoveisGridState extends State<FavoriteImoveisGrid> {
                 });
               },
             ),
-          ),
-          // Exibe o texto se a lista de imóveis favoritos estiver vazia
+          ),  
           _loadedProducts.isEmpty
               ? Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -126,7 +125,7 @@ class _FavoriteImoveisGridState extends State<FavoriteImoveisGrid> {
                 } else {
                   return ChangeNotifierProvider.value(
                     value: _filterProducts()[i],
-                    child: ImovelItem(
+                    child: ImovelItem(2, 
                         i,
                         _filterProducts().length,
                         0, (String productCode) {}),

@@ -75,7 +75,6 @@ final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
                 ),
               Expanded(
                 child: Container(
-                 
                   padding: const EdgeInsets.all(20.0),
                   child: ImovelInfoComponent( widget.tipo_pagina,
                       widget.caracteristicas, widget.imovel),

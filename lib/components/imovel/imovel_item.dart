@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:projeto_imobiliaria/models/imoveis/newImovel.dart';
 import 'package:provider/provider.dart';
 
@@ -7,13 +9,13 @@ import '../../pages/imobiliaria/imovel_info_page.dart';
 import '../../theme/appthemestate.dart';
 
 class ImovelItem extends StatefulWidget {
-  
+  final int landing;
   final int index;
   final int count;
   final int tipo_pagina;
   final Function(String) onFavoriteClicked;
 
-  const ImovelItem( this.index, this.count, this.tipo_pagina,
+  const ImovelItem(this.landing, this.index, this.count, this.tipo_pagina,
       this.onFavoriteClicked,
       {Key? key})
       : super(key: key);
@@ -92,7 +94,14 @@ class _ImovelItemState extends State<ImovelItem> {
                         imageUrls
                             .addAll(rawImageUrls.map((url) => url.toString()));
 
-                        Navigator.push(
+                        if(widget.landing == 1){
+                          final currentRoute = Get.currentRoute;
+                          Get.toNamed('$currentRoute/${product.id}');
+                        }else if(widget.landing == 2){
+                          final currentRoute = Get.currentRoute;
+                          Get.toNamed('$currentRoute/imoveis/${product.id}');            
+                        }else{
+                          Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => ImoveisInfoPage(
@@ -121,6 +130,7 @@ class _ImovelItemState extends State<ImovelItem> {
                             ),
                           ),
                         );
+                        }  
                       },
                       icon: Icon(Icons.info),
                       color: Theme.of(context).colorScheme.secondary,

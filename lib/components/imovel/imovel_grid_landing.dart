@@ -3,11 +3,13 @@ import 'package:projeto_imobiliaria/models/imoveis/newImovelList.dart';
 import 'package:provider/provider.dart';
 import '../../models/imoveis/newImovel.dart';
 import '../../theme/appthemestate.dart';
+import 'buscaImoveis.dart';
 import 'imovel_item.dart';
 
 class GridLanding extends StatefulWidget {
   final String nome;
   final bool showFavoriteOnly;
+  
 
   const GridLanding({
     required this.nome,
@@ -28,6 +30,11 @@ class _GridLandingState extends State<GridLanding> {
   int _numberOfItemsToShow = 50;
   TextEditingController _searchController = TextEditingController();
   String _searchText = '';
+  late bool checkInFocused;
+  late bool checkOutFocused;
+  late bool guestsFocused;
+  String selectedTipo = ''; 
+  String selectedFin = '';
 
   @override
   void initState() {
@@ -36,6 +43,10 @@ class _GridLandingState extends State<GridLanding> {
     _loadedProducts = [];
     _loadMoreItems();
     _scrollController.addListener(_scrollListener);
+    imoveisFiltrados = [];
+    checkInFocused = false;
+    checkOutFocused = false;
+    guestsFocused = false;
   }
 
   @override
@@ -62,54 +73,95 @@ class _GridLandingState extends State<GridLanding> {
 
 
   void filtrarAluguel() {
-    setState(() {
-      imoveisFiltrados = [];
-      imoveisFiltrados = _loadedProducts.where((imovel) {
-        final int finalidade = imovel.finalidade ?? 0;
-        return finalidade == 1;
-      }).toList();
-    });
-  }
+  showFiltradas = true;
+  setState(() {
+    imoveisFiltrados = [];
+    imoveisFiltrados = _loadedProducts.where((imovel) {
+      final int finalidade = imovel.finalidade ?? 0;
+      return finalidade == 1;
+    }).toList();
+  });
+}
 
-  void filtrarCompra() {
-    setState(() {
-      imoveisFiltrados = [];
-      imoveisFiltrados = _loadedProducts.where((imovel) {
-        final int finalidade = imovel.finalidade ?? 0;
-        return finalidade == 0;
-      }).toList();
-    });
-  }
+void filtrarCompra() {
+  print('Filtrando imóveis para compra');
+  setState(() {
+    showFiltradas = true;
+    imoveisFiltrados = [];
+    imoveisFiltrados = _loadedProducts.where((imovel) {
+      final int finalidade = imovel.finalidade ?? 0;
+      return finalidade == 0;
+    }).toList();
+  });
+}
 
-  void filtrarTipo(int n) {
-    setState(() {
-      imoveisFiltrados = [];
-      imoveisFiltrados = _loadedProducts.where((imovel) {
-        final int tipo = imovel.tipo ?? 0;
-        return tipo == n;
-      }).toList();
-    });
-  }
+void filtrarTipo(int n) {
+  print('Filtrando imóveis pelo tipo $n');
+  setState(() {
+    showFiltradas = true;
+    imoveisFiltrados.addAll(_loadedProducts.where((imovel) {
+      final int tipo = imovel.tipo ?? 0;
+      return tipo == n;
+    }).toList());
+  });
+}
 
-  void mostrarTodasEmbalagens() {
-    setState(() {
-      imoveisFiltrados = [];
-      imoveisFiltrados = _loadedProducts.where((imovel) {
-        final int finalidade = imovel.finalidade ?? 0;
-        return finalidade != null;
-      }).toList();
-    });
-  }
+void mostrarTodasEmbalagens() {
+  print('Mostrando todos os imóveis');
+  setState(() {
+    showFiltradas = false;
+    imoveisFiltrados = [];
+    imoveisFiltrados = _loadedProducts.where((imovel) {
+      final int finalidade = imovel.finalidade ?? 0;
+      return finalidade != null;
+    }).toList();
+  });
+}
 
   List<NewImovel> _filterProducts() {
-    List<NewImovel> filteredProducts;
+    List<NewImovel> filteredProducts = _loadedProducts;
+
+    // Aplicar filtro por texto de busca
     if (_searchText.isNotEmpty) {
-      filteredProducts = _loadedProducts
+      filteredProducts = filteredProducts
           .where((imovel) =>
               imovel.id.toLowerCase().contains(_searchText.toLowerCase()))
           .toList();
-    } else {
-      filteredProducts = showFiltradas ? imoveisFiltrados : _loadedProducts;
+    }
+
+    // Aplicar filtro por finalidade
+    if (selectedFin != null) {
+      final int finalidadeValue = selectedFin == 'Compra' ? 0 : 1;
+      filteredProducts = filteredProducts
+          .where((imovel) => imovel.finalidade == finalidadeValue)
+          .toList();
+    }
+
+    // Aplicar filtro por tipo
+    if (selectedTipo.isNotEmpty) {
+      int tipoValue;
+      switch (selectedTipo) {
+        case 'Casa':
+          tipoValue = 0;
+          break;
+        case 'Apartamento':
+          tipoValue = 1;
+          break;
+        case 'Terreno':
+          tipoValue = 2;
+          break;
+        case 'Comercial':
+          tipoValue = 3;
+          break;
+        default:
+          tipoValue = -1;
+          break;
+      }
+      if (tipoValue != -1) {
+        filteredProducts = filteredProducts
+            .where((imovel) => imovel.tipo == tipoValue)
+            .toList();
+      }
     }
     return filteredProducts;
   }
@@ -156,18 +208,41 @@ class _GridLandingState extends State<GridLanding> {
               },
             ),
           ),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                _buildFilterButton('Mostrar todos os imoveis', mostrarTodasEmbalagens),
-                _buildFilterButton('Mostrar imoveis a venda', filtrarCompra),
-                _buildFilterButton('Mostrar imoveis para alugar', filtrarAluguel),
-                _buildFilterButton('Mostrar apartamentos', () => filtrarTipo(0)),
-                _buildFilterButton('Mostrar casas', () => filtrarTipo(1)),
-                _buildFilterButton('Mostrar terrenos', () => filtrarTipo(2)),
-                _buildFilterButton('Mostrar imoveis comerciais', () => filtrarTipo(3)),
-              ],
+          Center(
+            child: Container(
+              margin: EdgeInsets.all(40),
+              height: 70,
+              width: 1000,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(50),
+                color: Color.fromARGB(255, 255, 255, 255),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 20,
+                    offset: Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  _buildTipoTextField(),
+                  _buildExpandedTextField(
+                    hintText: 'Preço máximo',
+                    isFocused: checkOutFocused,
+                    onTap: () {
+                      setState(() {
+                        checkInFocused = false;
+                        checkOutFocused = true;
+                        guestsFocused = false;
+                      });
+                    },
+                  ),
+                  _buildFinalidadeTextField(),
+                ],
+              ),
             ),
           ),
           Expanded(
@@ -182,7 +257,7 @@ class _GridLandingState extends State<GridLanding> {
                 } else {
                   return ChangeNotifierProvider.value(
                     value: _filterProducts()[i],
-                    child: ImovelItem( i,
+                    child: ImovelItem(1, i,
                         _filterProducts().length, 0, (String productCode) {}),
                   );
                 }
@@ -228,4 +303,121 @@ class _GridLandingState extends State<GridLanding> {
       ),
     );
   }
+
+  Widget _buildExpandedTextField({
+    required String hintText,
+    required bool isFocused,
+    required VoidCallback onTap,
+  }) {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.all(0),
+        child: Container(
+          height: 70,
+          decoration: BoxDecoration(
+            color: isFocused ? Colors.white : Colors.transparent,
+            borderRadius: BorderRadius.circular(50),
+          ),
+          child: TextField(
+            onTap: onTap,
+            decoration: InputDecoration(
+              alignLabelWithHint: true,
+              hintText: hintText,
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.symmetric(horizontal: 15),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+ Widget _buildTipoTextField() {
+  return Expanded(
+    child: Padding(
+      padding: const EdgeInsets.all(0),
+      child: Container(
+        height: 70,
+        decoration: BoxDecoration(
+          color: checkInFocused ? Colors.white : Colors.transparent,
+          borderRadius: BorderRadius.circular(50),
+        ),
+        child: PopupMenuButton<String>(
+          initialValue: selectedTipo,
+          onSelected: (value) {
+            setState(() {
+              selectedTipo = value;
+              checkInFocused = true;
+              checkOutFocused = false;
+              guestsFocused = false;
+            });
+          },
+          offset: Offset(0, 70), // Ajuste o deslocamento vertical conforme necessário
+          itemBuilder: (BuildContext context) {
+            return ['Casa', 'Apartamento', 'Terreno', 'Comercial']
+                .map<PopupMenuItem<String>>((String value) {
+              return PopupMenuItem<String>(
+                value: value,
+                child: SizedBox( // Defina um tamanho fixo para os itens do menu
+                  width: 200, // Largura desejada para os itens do menu
+                  child: Text(value),
+                ),     
+              );
+            }).toList();
+          },
+          child: ListTile(
+            title: Text(
+              selectedTipo.isNotEmpty ? selectedTipo : 'Tipo de imóvel',
+            ),
+            trailing: Icon(Icons.keyboard_arrow_down),
+          ),
+        ),
+      ),
+    ),
+  );
+}
+ Widget _buildFinalidadeTextField() {
+  return Expanded(
+    child: Padding(
+      padding: const EdgeInsets.all(0),
+      child: Container(
+        height: 70,
+        decoration: BoxDecoration(
+          color: checkInFocused ? Colors.white : Colors.transparent,
+          borderRadius: BorderRadius.circular(50),
+        ),
+        child: PopupMenuButton<String>(
+          initialValue: selectedFin,
+          onSelected: (value) {
+            setState(() {
+              selectedFin = value;
+              checkInFocused = true;
+              checkOutFocused = false;
+              guestsFocused = false;
+            });
+          },
+          offset: Offset(0, 70), // Ajuste o deslocamento vertical conforme necessário
+          itemBuilder: (BuildContext context) {
+            return ['Compra', 'Aluguel']
+                .map<PopupMenuItem<String>>((String value) {
+              return PopupMenuItem<String>(
+                value: value,
+                child: SizedBox( // Defina um tamanho fixo para os itens do menu
+                  width: 200, // Largura desejada para os itens do menu
+                  child: Text(value),
+                ),     
+              );
+            }).toList();
+          },
+          child: ListTile(
+            title: Text(
+              selectedFin.isNotEmpty ? selectedFin : 'Finalidade',
+            ),
+            trailing: Icon(Icons.keyboard_arrow_down),
+          ),
+        ),
+      ),
+    ),
+  );
+}
 }

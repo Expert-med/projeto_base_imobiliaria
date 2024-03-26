@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Map<String, dynamic> variaveis;
   final String nome;
-  final bool showBackButton; // Adicione o parâmetro showBackButton
+  final bool showBackButton; 
 
   const CustomAppBar({
     Key? key,
@@ -107,7 +107,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               shadowColor: Color.fromARGB(255, 255, 253, 253),
               fixedSize: Size(110, 10),
               elevation: 10.0,
-              backgroundColor: Color.fromARGB(255, 231, 231, 231),
+              backgroundColor: Color.fromARGB(255, 0, 0, 0),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(0),
                 side: BorderSide(color: Colors.black),
