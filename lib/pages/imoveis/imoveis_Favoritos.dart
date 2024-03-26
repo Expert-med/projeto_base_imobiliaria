@@ -13,12 +13,11 @@ import 'package:projeto_imobiliaria/components/custom_menu.dart';
 import 'package:projeto_imobiliaria/models/imoveis/newImovelList.dart';
 import 'package:provider/provider.dart';
 
-
-
 class ImoveisFavoritos extends StatefulWidget {
+  final String? nome;
   final bool isDarkMode;
 
-  ImoveisFavoritos({required this.isDarkMode});
+  ImoveisFavoritos({this.nome, required this.isDarkMode});
 
   @override
   State<ImoveisFavoritos> createState() => _ImoveisFavoritosState();
@@ -33,7 +32,7 @@ class _ImoveisFavoritosState extends State<ImoveisFavoritos> {
       appBar: isSmallScreen
           ? CustomAppBar(
               subtitle: '',
-              title: 'Meus imóveis favoritos',
+              title: 'Meus Imóveis Favoritos',
               isDarkMode: widget.isDarkMode)
           : null,
       body: LayoutBuilder(
@@ -41,12 +40,17 @@ class _ImoveisFavoritosState extends State<ImoveisFavoritos> {
           return Container(
             color: widget.isDarkMode ? Colors.black : Colors.white,
             child: FutureBuilder<List<String>>(
-              future: Provider.of<NewImovelList>(context).fetchImoveisFavoritos(),
+              future: widget.nome != ''
+                  ? Provider.of<NewImovelList>(context)
+                      .fetchImoveisFavoritosComNome(widget.nome!)
+                  : Provider.of<NewImovelList>(context)
+                      .fetchImoveisFavoritosSemNome(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
-                  return Center(child: Text('Erro ao carregar dados: ${snapshot.error}'));
+                  return Center(
+                      child: Text('Erro ao carregar dados: ${snapshot.error}'));
                 } else {
                   List<String> imoveis = snapshot.data ?? [];
                   return Row(
@@ -54,7 +58,8 @@ class _ImoveisFavoritosState extends State<ImoveisFavoritos> {
                       Expanded(
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: FavoriteImoveisGrid(false, imoveis),
+                          child: FavoriteImoveisGrid(false, imoveis,
+                              nome: widget.nome),
                         ),
                       ),
                     ],
@@ -69,4 +74,3 @@ class _ImoveisFavoritosState extends State<ImoveisFavoritos> {
     );
   }
 }
-

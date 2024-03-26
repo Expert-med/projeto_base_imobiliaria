@@ -13,9 +13,14 @@ import 'imovel_item_sem_barra.dart';
 class FavoriteImoveisGrid extends StatefulWidget {
   final bool showFavoriteOnly;
   final List<String> idsToShow;
+  final String? nome; // Parâmetro não obrigatório String nome
 
-  const FavoriteImoveisGrid(this.showFavoriteOnly, this.idsToShow, {Key? key})
-      : super(key: key);
+  const FavoriteImoveisGrid(
+    this.showFavoriteOnly,
+    this.idsToShow, {
+    Key? key,
+    this.nome, // Adicionando o parâmetro nome ao construtor
+  }) : super(key: key);
 
   @override
   _FavoriteImoveisGridState createState() => _FavoriteImoveisGridState();
@@ -32,11 +37,25 @@ class _FavoriteImoveisGridState extends State<FavoriteImoveisGrid> {
   @override
   void initState() {
     super.initState();
+    _loadedProducts = [];
+    if (widget.nome == '') {
+      _loadedProducts = Provider.of<NewImovelList>(context, listen: false)
+          .items
+          .where((imovel) => widget.idsToShow.contains(imovel.id))
+          .toList();
+    } else {
+      _loadMoreItems();
+    }
+  }
 
-    _loadedProducts = Provider.of<NewImovelList>(context, listen: false)
-        .items
-        .where((imovel) => widget.idsToShow.contains(imovel.id))
-        .toList();
+  void _loadMoreItems() async {
+    final provider = Provider.of<NewImovelList>(context, listen: false);
+    List<NewImovel> additionalProducts = await provider.buscarImoveisLanding(
+        widget.nome!); // Chame a função do provedor para carregar mais itens
+    setState(() {
+      _loadedProducts.addAll(additionalProducts
+          .where((imovel) => widget.idsToShow.contains(imovel.id)));
+    });
   }
 
   List<NewImovel> _filterProducts() {
@@ -93,16 +112,16 @@ class _FavoriteImoveisGridState extends State<FavoriteImoveisGrid> {
                 });
               },
             ),
-          ),  
+          ),
           _loadedProducts.isEmpty
               ? Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Card(
-                  elevation: 5,
+                  padding: const EdgeInsets.all(8.0),
+                  child: Card(
+                    elevation: 5,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),
-                  child: Padding(
+                    child: Padding(
                       padding: const EdgeInsets.all(20),
                       child: Text(
                         'Nenhum imóvel favorito adicionado, veja todos os imóveis do corretor!',
@@ -112,8 +131,8 @@ class _FavoriteImoveisGridState extends State<FavoriteImoveisGrid> {
                         ),
                       ),
                     ),
-                ),
-              )
+                  ),
+                )
               : SizedBox(),
           Expanded(
             child: GridView.builder(
@@ -125,10 +144,8 @@ class _FavoriteImoveisGridState extends State<FavoriteImoveisGrid> {
                 } else {
                   return ChangeNotifierProvider.value(
                     value: _filterProducts()[i],
-                    child: ImovelItem(2, 
-                        i,
-                        _filterProducts().length,
-                        0, (String productCode) {}),
+                    child: ImovelItem(2, i, _filterProducts().length, 0,
+                        (String productCode) {}),
                   );
                 }
               },

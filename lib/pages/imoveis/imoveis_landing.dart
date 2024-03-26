@@ -22,7 +22,8 @@ class ImovelLanding extends StatefulWidget {
   final String nome;
   final int fav;
 
-  ImovelLanding({required this.nome, required this.fav, Key? key}) : super(key: key);
+  ImovelLanding({required this.nome, required this.fav, Key? key})
+      : super(key: key);
 
   @override
   State<ImovelLanding> createState() => _ImovelLandingState();
@@ -84,7 +85,9 @@ class _ImovelLandingState extends State<ImovelLanding> {
     bool isSmallScreen = MediaQuery.of(context).size.width < 900;
     final themeNotifier = Provider.of<AppThemeStateNotifier>(context);
     return Scaffold(
-      appBar: widget.fav == 1 ? CustomAppBar(variaveis: variaveis, nome: nomeComEspacos) : null,
+      appBar: widget.fav == 1
+          ? CustomAppBar(variaveis: variaveis, nome: nomeComEspacos)
+          : null,
       body: LayoutBuilder(builder: (context, constraints) {
         return Row(
           children: [
@@ -93,8 +96,12 @@ class _ImovelLandingState extends State<ImovelLanding> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Expanded(
-                    child: widget.fav == 0 ? ImoveisFavoritos(isDarkMode: false) : GridLanding(nome: nomeComEspacos, showFavoriteOnly: false),
-                  ),   
+                    child: widget.fav == 0
+                        ? ImoveisFavoritos(
+                            nome: nomeComEspacos, isDarkMode: false)
+                        : GridLanding(
+                            nome: nomeComEspacos, showFavoriteOnly: false),
+                  ),
                   if (widget.fav == 1)
                     Column(
                       children: [
@@ -105,7 +112,6 @@ class _ImovelLandingState extends State<ImovelLanding> {
               ),
             ),
           ],
-          
         );
       }),
     );
